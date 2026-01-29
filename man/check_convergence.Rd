@@ -4,10 +4,10 @@
 \alias{check_convergence}
 \title{Convergence test for mixed effects models}
 \usage{
-check_convergence(x, tolerance = 0.001, ...)
+check_convergence(model, tolerance = 0.001, ...)
 }
 \arguments{
-\item{x}{A \code{merMod} or \code{glmmTMB}-object.}
+\item{model}{A \code{merMod} or \code{glmmTMB}-object.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}

@@ -5,10 +5,10 @@
 \alias{check_predictions.default}
 \title{Posterior predictive checks}
 \usage{
-check_predictions(object, ...)
+check_predictions(model, ...)
 
 \method{check_predictions}{default}(
-  object,
+  model,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -19,7 +19,7 @@ check_predictions(object, ...)
 )
 }
 \arguments{
-\item{object}{A statistical model.}
+\item{model}{A statistical model.}
 
 \item{...}{Passed down to \code{simulate()}.}
 

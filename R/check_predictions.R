@@ -14,7 +14,7 @@
 #'   If `check_predictions()` doesn't work as expected, try setting
 #'   `verbose = TRUE` to get hints about possible problems.
 #'
-#' @param object A statistical model.
+#' @param model A statistical model.
 #' @param iterations The number of draws to simulate/bootstrap.
 #' @param check_range Logical, if `TRUE`, includes a plot with the minimum
 #'   value of the original response against the minimum values of the replicated
@@ -92,14 +92,14 @@
 #' check_predictions(model, type = "discrete_both")
 #'
 #' @export
-check_predictions <- function(object, ...) {
+check_predictions <- function(model, ...) {
   UseMethod("check_predictions")
 }
 
 #' @rdname check_predictions
 #' @export
 check_predictions.default <- function(
-  object,
+  model,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -108,18 +108,18 @@ check_predictions.default <- function(
   verbose = TRUE,
   ...
 ) {
-  .is_model_valid(object)
+  .is_model_valid(model)
   # check_predictions() can't handle exotic formula notation
   if (verbose) {
     insight::formula_ok(
-      object,
+      model,
       action = "error",
       prefix_msg = "Posterior predictive checks failed due to an incompatible model formula." # nolint
     )
   }
 
   # retrieve model information
-  minfo <- insight::model_info(object, verbose = FALSE)
+  minfo <- insight::model_info(model, verbose = FALSE)
 
   # try to find sensible default for "type" argument
   suggest_dots <- (minfo$is_bernoulli ||
@@ -138,7 +138,7 @@ check_predictions.default <- function(
   )
 
   pp_check.lm(
-    object,
+    model,
     iterations = iterations,
     check_range = check_range,
     re_formula = re_formula,
@@ -153,7 +153,7 @@ check_predictions.default <- function(
 
 #' @export
 check_predictions.stanreg <- function(
-  object,
+  model,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -163,7 +163,7 @@ check_predictions.stanreg <- function(
   ...
 ) {
   # retrieve model information
-  minfo <- insight::model_info(object, verbose = FALSE)
+  minfo <- insight::model_info(model, verbose = FALSE)
 
   # try to find sensible default for "type" argument
   suggest_dots <- (minfo$is_bernoulli ||
@@ -190,15 +190,15 @@ check_predictions.stanreg <- function(
   )
 
   # for plotting
-  resp_string <- insight::find_terms(object)$response
+  resp_string <- insight::find_terms(model)$response
 
-  if (inherits(object, "brmsfit")) {
+  if (inherits(model, "brmsfit")) {
     out <- as.data.frame(
-      bayesplot::pp_check(object, type = pp_type, ndraws = iterations, ...)$data
+      bayesplot::pp_check(model, type = pp_type, ndraws = iterations, ...)$data
     )
   } else {
     out <- as.data.frame(
-      bayesplot::pp_check(object, plotfun = pp_type, nreps = iterations, ...)$data
+      bayesplot::pp_check(model, plotfun = pp_type, nreps = iterations, ...)$data
     )
   }
 
@@ -247,7 +247,7 @@ check_predictions.brmsfit <- check_predictions.stanreg
 
 #' @export
 check_predictions.BFBayesFactor <- function(
-  object,
+  model,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -255,7 +255,7 @@ check_predictions.BFBayesFactor <- function(
   verbose = TRUE,
   ...
 ) {
-  everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
+  everything_we_need <- .get_bfbf_predictions(model, iterations = iterations)
 
   y <- everything_we_need[["y"]]
   sig <- everything_we_need[["sigma"]]
@@ -284,7 +284,7 @@ pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
 
 #' @export
-check_predictions.lme <- function(object, ...) {
+check_predictions.lme <- function(model, ...) {
   insight::format_error(
     "`check_predictions()` does currently not work for models of class `lme`."
   )
