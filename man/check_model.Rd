@@ -28,6 +28,7 @@ check_model(model, ...)
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 )
 }
@@ -104,6 +105,8 @@ for dots, and third color for outliers or extreme values.}
 \code{theme = ggplot2::theme_dark()}.}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
+
+\item{x}{Deprecated, please use \code{model} instead.}
 }
 \value{
 The data frame that is used for plotting.

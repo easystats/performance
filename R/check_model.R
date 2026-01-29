@@ -56,6 +56,8 @@
 #' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Arguments passed down to the individual check functions, especially
 #' to `check_predictions()` and `binned_residuals()`.
+#' @param x Deprecated, please use `model` instead.
+#'
 #' @inheritParams check_predictions
 #'
 #' @return The data frame that is used for plotting.
@@ -221,8 +223,17 @@ check_model.default <- function(
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 ) {
+  ## TODO deprecate later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead.",
+    )
+    model <- x
+  }
+
   # check model formula
   if (verbose) {
     insight::formula_ok(model)
