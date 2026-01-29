@@ -226,7 +226,7 @@ check_model.default <- function(
   x = NULL,
   ...
 ) {
-  ## TODO deprecate later
+  ## TODO remove deprecation warning later
   if (!is.null(x) && is.null(model)) {
     insight::format_warning(
       "Argument `x` is deprecated; please use `model` instead.",
@@ -408,6 +408,7 @@ check_model.stanreg <- function(
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 ) {
   check_model(
@@ -430,6 +431,7 @@ check_model.stanreg <- function(
     residual_type = residual_type,
     maximum_dots = maximum_dots,
     verbose = verbose,
+    x = x,
     ...
   )
 }
@@ -461,6 +463,7 @@ check_model.model_fit <- function(
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 ) {
   check_model(
@@ -483,6 +486,7 @@ check_model.model_fit <- function(
     type = type,
     residual_type = residual_type,
     verbose = verbose,
+    x = x,
     ...
   )
 }
@@ -510,6 +514,7 @@ check_model.performance_simres <- function(
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 ) {
   check_model(
@@ -532,6 +537,7 @@ check_model.performance_simres <- function(
     type = type,
     residual_type = "simulated",
     verbose = verbose,
+    x = x,
     ...
   )
 }

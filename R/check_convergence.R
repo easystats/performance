@@ -53,13 +53,11 @@
 #' @export
 check_convergence <- function(model = NULL, tolerance = 0.001, x = NULL, ...) {
   ## TODO remove deprecation warning later
-  if (!missing(x)) {
-    if (is.null(model)) {
-      insight::format_warning(
-        "Argument `x` is deprecated; please use `model` instead.",
-      )
-      model <- x
-    }
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead.",
+    )
+    model <- x
   }
   out <- .safe(insight::is_converged(model, tolerance = tolerance, ...))
   if (is.null(out)) {
