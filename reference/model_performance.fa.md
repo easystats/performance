@@ -29,8 +29,8 @@ model_performance(model, metrics = "all", verbose = TRUE, ...)
 - metrics:
 
   Can be `"all"` or a character vector of metrics to be computed (some
-  of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSA"`,
-  `"RMSA_corrected"`, `"TLI"`, `"RMSEA"`, and `"BIC"`. For omega-models,
+  of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSR"`,
+  `"RMSR_corrected"`, `"TLI"`, `"RMSEA"`, and `"BIC"`. For omega-models,
   can also include `"R2"` and `"Correlation"`.
 
 - verbose:
@@ -47,6 +47,10 @@ A data frame (with one row) and one column per "index" (see `metrics`).
 
 ## Details
 
+The `RMSR_corrected` metric is the Root Mean Square Residual corrected
+for degrees of freedom (i.e., dividing by degrees of freedom rather than
+the number of observations).
+
 For omega-models, the columns `R2` and `Correlation` are measures of
 factor score adequacy. `R2` refers to the multiple R square of scores
 with factors, while `Correlation` indicates the correlation of scores
@@ -59,7 +63,7 @@ out <- psych::fa(psychTools::bfi[, 1:25], 5)
 model_performance(out)
 #> # Indices of model performance
 #> 
-#> Chi2(185) | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC
+#> Chi2(185) | p (Chi2) |  RMSR | RMSR_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC
 #> --------------------------------------------------------------------------------------
 #> 1808.943  |   < .001 | 0.029 |          0.037 | 0.867 | 0.056 | [0.054, 0.058] | 340.5
 
@@ -67,7 +71,7 @@ out <- item_omega(mtcars, n = 3)
 model_performance(out)
 #> # Indices of model performance
 #> 
-#> Model             |    Chi2 | df | p (Chi2) |  RMSA | RMSA_corrected |   TLI
+#> Model             |    Chi2 | df | p (Chi2) |  RMSR | RMSR_corrected |   TLI
 #> ----------------------------------------------------------------------------
 #> 3-factor solution |  31.796 | 25 |   0.164  | 0.015 |          0.023 |      
 #> g-model           | 264.781 | 44 |   < .001 | 0.393 |          0.440 | 0.195
@@ -78,8 +82,8 @@ model_performance(out)
 #> g-model           | 0.395 | [0.356, 0.450] | 112.3 | 0.761 |       0.873
 #> 
 #> Compare the model fit of the 3-factor solution with the g-only model.
-#>   If the g-model has smaller RMSA and RMSEA then your items are more
+#>   If the g-model has smaller RMSR and RMSEA then your items are more
 #>   likely to describe a single unidimensional construct. If the 3-factor
-#>   model has smaller RMSA and RMSEA then your construct is more likely to
+#>   model has smaller RMSR and RMSEA then your construct is more likely to
 #>   be made up of 3 sub-constructs.
 ```
