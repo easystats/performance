@@ -36,7 +36,9 @@
 #' options are appropriate for models with discrete - binary, integer or ordinal
 #' etc. - outcomes).
 #' @param verbose Toggle warnings.
-#' @param ... Passed down to `simulate()`.
+#' @param ... Additional arguments passed on to downstream functions. For
+#' frequentist models, these are forwarded to `simulate()`; for Bayesian models
+#' (e.g., `stanreg`, `brmsfit`), they are forwarded to `bayesplot::pp_check()`.
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'

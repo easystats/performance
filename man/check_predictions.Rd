@@ -21,7 +21,9 @@ check_predictions(model, ...)
 \arguments{
 \item{model}{A statistical model.}
 
-\item{...}{Passed down to \code{simulate()}.}
+\item{...}{Additional arguments passed on to downstream functions. For
+frequentist models, these are forwarded to \code{simulate()}; for Bayesian models
+(e.g., \code{stanreg}, \code{brmsfit}), they are forwarded to \code{bayesplot::pp_check()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
