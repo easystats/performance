@@ -15,6 +15,7 @@ check_predictions(model, ...)
   bandwidth = "nrd",
   type = "density",
   verbose = TRUE,
+  object = NULL,
   ...
 )
 }
@@ -51,6 +52,8 @@ options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
 \item{verbose}{Toggle warnings.}
+
+\item{object}{Deprecated, please use \code{model} instead.}
 }
 \value{
 A data frame of simulated responses and the original response vector.

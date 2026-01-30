@@ -39,6 +39,7 @@
 #' @param ... Additional arguments passed on to downstream functions. For
 #' frequentist models, these are forwarded to `simulate()`; for Bayesian models
 #' (e.g., `stanreg`, `brmsfit`), they are forwarded to `bayesplot::pp_check()`.
+#' @param object Deprecated, please use `model` instead.
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
@@ -108,9 +109,19 @@ check_predictions.default <- function(
   bandwidth = "nrd",
   type = "density",
   verbose = TRUE,
+  object = NULL,
   ...
 ) {
   .is_model_valid(model)
+
+  ## TODO remove deprecation warning later
+  if (!is.null(object) && is.null(model)) {
+    insight::format_warning(
+      "Argument `object` is deprecated; please use `model` instead."
+    )
+    model <- object
+  }
+
   # check_predictions() can't handle exotic formula notation
   if (verbose) {
     insight::formula_ok(
@@ -162,8 +173,17 @@ check_predictions.stanreg <- function(
   bandwidth = "nrd",
   type = "density",
   verbose = TRUE,
+  object = NULL,
   ...
 ) {
+  ## TODO remove deprecation warning later
+  if (!is.null(object) && is.null(model)) {
+    insight::format_warning(
+      "Argument `object` is deprecated; please use `model` instead."
+    )
+    model <- object
+  }
+
   # retrieve model information
   minfo <- insight::model_info(model, verbose = FALSE)
 
@@ -255,8 +275,17 @@ check_predictions.BFBayesFactor <- function(
   re_formula = NULL,
   bandwidth = "nrd",
   verbose = TRUE,
+  object = NULL,
   ...
 ) {
+  ## TODO remove deprecation warning later
+  if (!is.null(object) && is.null(model)) {
+    insight::format_warning(
+      "Argument `object` is deprecated; please use `model` instead."
+    )
+    model <- object
+  }
+
   everything_we_need <- .get_bfbf_predictions(model, iterations = iterations)
 
   y <- everything_we_need[["y"]]

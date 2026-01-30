@@ -55,7 +55,7 @@ check_convergence <- function(model = NULL, tolerance = 0.001, x = NULL, ...) {
   ## TODO remove deprecation warning later
   if (!is.null(x) && is.null(model)) {
     insight::format_warning(
-      "Argument `x` is deprecated; please use `model` instead.",
+      "Argument `x` is deprecated; please use `model` instead."
     )
     model <- x
   }
