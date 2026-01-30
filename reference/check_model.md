@@ -10,11 +10,11 @@ If `check_model()` doesn't work as expected, try setting
 ## Usage
 
 ``` r
-check_model(x, ...)
+check_model(model = NULL, ...)
 
 # Default S3 method
 check_model(
-  x,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -34,13 +34,14 @@ check_model(
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 )
 ```
 
 ## Arguments
 
-- x:
+- model:
 
   A model object.
 
@@ -152,6 +153,10 @@ check_model(
 - verbose:
 
   If `FALSE` (default), suppress most warning messages.
+
+- x:
+
+  Deprecated, please use `model` instead.
 
 ## Value
 

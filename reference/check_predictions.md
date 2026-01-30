@@ -17,30 +17,35 @@ If `check_predictions()` doesn't work as expected, try setting
 ## Usage
 
 ``` r
-check_predictions(object, ...)
+check_predictions(model = NULL, ...)
 
 # Default S3 method
 check_predictions(
-  object,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
   bandwidth = "nrd",
   type = "density",
   verbose = TRUE,
+  object = NULL,
   ...
 )
 ```
 
 ## Arguments
 
-- object:
+- model:
 
   A statistical model.
 
 - ...:
 
-  Passed down to [`simulate()`](https://rdrr.io/r/stats/simulate.html).
+  Additional arguments passed on to downstream functions. For
+  frequentist models, these are forwarded to
+  [`simulate()`](https://rdrr.io/r/stats/simulate.html); for Bayesian
+  models (e.g., `stanreg`, `brmsfit`), they are forwarded to
+  [`bayesplot::pp_check()`](https://mc-stan.org/bayesplot/reference/pp_check.html).
 
 - iterations:
 
@@ -81,6 +86,10 @@ check_predictions(
 - verbose:
 
   Toggle warnings.
+
+- object:
+
+  Deprecated, please use `model` instead.
 
 ## Value
 

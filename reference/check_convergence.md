@@ -6,12 +6,12 @@
 ## Usage
 
 ``` r
-check_convergence(x, tolerance = 0.001, ...)
+check_convergence(model = NULL, tolerance = 0.001, x = NULL, ...)
 ```
 
 ## Arguments
 
-- x:
+- model:
 
   A `merMod` or `glmmTMB`-object.
 
@@ -19,6 +19,10 @@ check_convergence(x, tolerance = 0.001, ...)
 
   Indicates up to which value the convergence result is accepted. The
   smaller `tolerance` is, the stricter the test will be.
+
+- x:
+
+  Deprecated, please use `model` instead.
 
 - ...:
 
