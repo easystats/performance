@@ -16,7 +16,7 @@
   argument.
 
 * `check_model()` can now show or hide confidence intervals using the `show_ci`
-  argument. For models with only categorical predictors, cnmfidence intervals
+  argument. For models with only categorical predictors, confidence intervals
   are not shown by default.
 
 ## Bug fixes
