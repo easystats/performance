@@ -59,6 +59,7 @@ check_convergence <- function(model = NULL, tolerance = 0.001, x = NULL, ...) {
     )
     model <- x
   }
+  .is_model_valid(model)
   out <- .safe(insight::is_converged(model, tolerance = tolerance, ...))
   if (is.null(out)) {
     insight::format_alert("Could not compute convergence information.")

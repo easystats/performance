@@ -5,10 +5,10 @@
 \alias{check_model.default}
 \title{Visual check of model assumptions}
 \usage{
-check_model(model, ...)
+check_model(model = NULL, ...)
 
 \method{check_model}{default}(
-  model,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,

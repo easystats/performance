@@ -6,8 +6,8 @@
   `RMSR` (Root Mean Square Residual) instead of `RMSA`. The `RMSR_corrected`
   column (previously `RMSA_corrected`) is also renamed accordingly.
 
-* First argument in `check_model()`, `check_predictions()` and `check_convergence()`
-  were renamed into `model`.
+* The first argument in `check_model()`, `check_predictions()` and
+  `check_convergence()` was renamed to `model`.
 
 ## Changes
 

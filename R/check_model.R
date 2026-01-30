@@ -193,7 +193,7 @@
 #' check_model(m, panel = FALSE)
 #' }
 #' @export
-check_model <- function(model, ...) {
+check_model <- function(model = NULL, ...) {
   UseMethod("check_model")
 }
 
@@ -203,7 +203,7 @@ check_model <- function(model, ...) {
 #' @rdname check_model
 #' @export
 check_model.default <- function(
-  model,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -388,7 +388,7 @@ plot.check_model <- function(x, ...) {
 
 #' @export
 check_model.stanreg <- function(
-  model,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -411,8 +411,16 @@ check_model.stanreg <- function(
   x = NULL,
   ...
 ) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
-    bayestestR::bayesian_as_frequentist(model),
+    model = .safe(bayestestR::bayesian_as_frequentist(model)),
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -431,7 +439,6 @@ check_model.stanreg <- function(
     residual_type = residual_type,
     maximum_dots = maximum_dots,
     verbose = verbose,
-    x = x,
     ...
   )
 }
@@ -443,7 +450,7 @@ check_model.brmsfit <- check_model.stanreg
 
 #' @export
 check_model.model_fit <- function(
-  model,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -466,6 +473,14 @@ check_model.model_fit <- function(
   x = NULL,
   ...
 ) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
     model$fit,
     size_dot = size_dot,
@@ -486,7 +501,6 @@ check_model.model_fit <- function(
     type = type,
     residual_type = residual_type,
     verbose = verbose,
-    x = x,
     ...
   )
 }
@@ -494,7 +508,7 @@ check_model.model_fit <- function(
 
 #' @export
 check_model.performance_simres <- function(
-  model,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -517,6 +531,14 @@ check_model.performance_simres <- function(
   x = NULL,
   ...
 ) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
     model$fittedModel,
     size_dot = size_dot,
@@ -537,7 +559,6 @@ check_model.performance_simres <- function(
     type = type,
     residual_type = "simulated",
     verbose = verbose,
-    x = x,
     ...
   )
 }
