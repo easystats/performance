@@ -47,7 +47,7 @@ test_that("compare_performance", {
 
   # table split
   expect_identical(
-    capture.output(print(compare_performance(lm1, lm2, lm3))),
+    capture.output(print(compare_performance(lm1, lm2, lm3), table_width = 85)),
     c(
       "# Comparison of Model Performance Indices",
       "",
