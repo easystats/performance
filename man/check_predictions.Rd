@@ -5,23 +5,26 @@
 \alias{check_predictions.default}
 \title{Posterior predictive checks}
 \usage{
-check_predictions(object, ...)
+check_predictions(model = NULL, ...)
 
 \method{check_predictions}{default}(
-  object,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
   bandwidth = "nrd",
   type = "density",
   verbose = TRUE,
+  object = NULL,
   ...
 )
 }
 \arguments{
-\item{object}{A statistical model.}
+\item{model}{A statistical model.}
 
-\item{...}{Passed down to \code{simulate()}.}
+\item{...}{Additional arguments passed on to downstream functions. For
+frequentist models, these are forwarded to \code{simulate()}; for Bayesian models
+(e.g., \code{stanreg}, \code{brmsfit}), they are forwarded to \code{bayesplot::pp_check()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
@@ -49,6 +52,8 @@ options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
 \item{verbose}{Toggle warnings.}
+
+\item{object}{Deprecated, please use \code{model} instead.}
 }
 \value{
 A data frame of simulated responses and the original response vector.

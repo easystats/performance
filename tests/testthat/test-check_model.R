@@ -113,6 +113,11 @@ suppressWarnings({
 test_that("`check_model()` works if convergence issues", {
   x <- check_model(m, verbose = FALSE)
   expect_s3_class(x, "check_model")
+  expect_warning(
+    check_model(x = m, verbose = FALSE),
+    regex = "Argument `x` is deprecated",
+    fixed = TRUE
+  )
 })
 
 test_that("`check_outliers()` works if convergence issues", {

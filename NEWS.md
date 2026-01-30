@@ -6,6 +6,9 @@
   `RMSR` (Root Mean Square Residual) instead of `RMSA`. The `RMSR_corrected`
   column (previously `RMSA_corrected`) is also renamed accordingly.
 
+* The first argument in `check_model()`, `check_predictions()` and
+  `check_convergence()` was renamed to `model`.
+
 ## Changes
 
 * `check_model()` now limits the number of data points for models with many
@@ -13,7 +16,7 @@
   argument.
 
 * `check_model()` can now show or hide confidence intervals using the `show_ci`
-  argument. For models with only categorical predictors, cnmfidence intervals
+  argument. For models with only categorical predictors, confidence intervals
   are not shown by default.
 
 ## Bug fixes

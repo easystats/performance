@@ -5,10 +5,10 @@
 \alias{check_model.default}
 \title{Visual check of model assumptions}
 \usage{
-check_model(x, ...)
+check_model(model = NULL, ...)
 
 \method{check_model}{default}(
-  x,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -28,11 +28,12 @@ check_model(x, ...)
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{A model object.}
+\item{model}{A model object.}
 
 \item{...}{Arguments passed down to the individual check functions, especially
 to \code{check_predictions()} and \code{binned_residuals()}.}
@@ -104,6 +105,8 @@ for dots, and third color for outliers or extreme values.}
 \code{theme = ggplot2::theme_dark()}.}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
+
+\item{x}{Deprecated, please use \code{model} instead.}
 }
 \value{
 The data frame that is used for plotting.

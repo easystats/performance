@@ -205,7 +205,19 @@ test_that("check_collinearity, ci = NULL", {
       "Tolerance_CI_low", "Tolerance_CI_high"
     )
   )
-  expect_snapshot(out)
+  expect_identical(
+    capture.output(print(out)),
+    c(
+      "# Check for Multicollinearity",
+      "",
+      "Low Correlation",
+      "",
+      " Term VIF adj. VIF Tolerance",
+      "    N   1        1         1",
+      "    P   1        1         1",
+      "    K   1        1         1"
+    )
+  )
 })
 
 test_that("check_collinearity, ci are NA", {
