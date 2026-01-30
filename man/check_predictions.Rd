@@ -5,10 +5,10 @@
 \alias{check_predictions.default}
 \title{Posterior predictive checks}
 \usage{
-check_predictions(model, ...)
+check_predictions(model = NULL, ...)
 
 \method{check_predictions}{default}(
-  model,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,

@@ -95,14 +95,14 @@
 #' check_predictions(model, type = "discrete_both")
 #'
 #' @export
-check_predictions <- function(model, ...) {
+check_predictions <- function(model = NULL, ...) {
   UseMethod("check_predictions")
 }
 
 #' @rdname check_predictions
 #' @export
 check_predictions.default <- function(
-  model,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -112,8 +112,6 @@ check_predictions.default <- function(
   object = NULL,
   ...
 ) {
-  .is_model_valid(model)
-
   ## TODO remove deprecation warning later
   if (!is.null(object) && is.null(model)) {
     insight::format_warning(
@@ -121,6 +119,8 @@ check_predictions.default <- function(
     )
     model <- object
   }
+
+  .is_model_valid(model)
 
   # check_predictions() can't handle exotic formula notation
   if (verbose) {
@@ -166,7 +166,7 @@ check_predictions.default <- function(
 
 #' @export
 check_predictions.stanreg <- function(
-  model,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -269,7 +269,7 @@ check_predictions.brmsfit <- check_predictions.stanreg
 
 #' @export
 check_predictions.BFBayesFactor <- function(
-  model,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
@@ -315,7 +315,7 @@ pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
 
 #' @export
-check_predictions.lme <- function(model, ...) {
+check_predictions.lme <- function(model = NULL, ...) {
   insight::format_error(
     "`check_predictions()` does currently not work for models of class `lme`."
   )
