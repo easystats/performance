@@ -206,7 +206,7 @@ test_that("check_collinearity, ci = NULL", {
     )
   )
   expect_identical(
-    print(out),
+    capture.output(print(out)),
     c(
       "# Check for Multicollinearity",
       "",

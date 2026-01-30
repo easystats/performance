@@ -47,7 +47,7 @@ test_that("compare_performance", {
 
   # table split
   expect_identical(
-    print(compare_performance(lm1, lm2, lm3)),
+    capture.output(print(compare_performance(lm1, lm2, lm3))),
     c(
       "# Comparison of Model Performance Indices",
       "",
@@ -65,7 +65,7 @@ test_that("compare_performance", {
     )
   )
   expect_identical(
-    print(compare_performance(lm1, lm2, lm3), table_width = Inf),
+    capture.output(print(compare_performance(lm1, lm2, lm3), table_width = Inf)),
     c(
       "# Comparison of Model Performance Indices",
       "",
@@ -78,7 +78,7 @@ test_that("compare_performance", {
   )
   # vertical layout
   expect_identical(
-    print(compare_performance(lm1, lm2, lm3), layout = "vertical"),
+    capture.output(print(compare_performance(lm1, lm2, lm3), layout = "vertical")),
     c(
       "# Comparison of Model Performance Indices",
       "",
@@ -95,11 +95,11 @@ test_that("compare_performance", {
     )
   )
   expect_identical(
-    print(
+    capture.output(print(
       compare_performance(lm1, lm2, lm3, lm4),
       layout = "vertical",
       table_width = 50
-    ),
+    )),
     c(
       "# Comparison of Model Performance Indices",
       "",
