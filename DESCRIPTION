@@ -150,7 +150,7 @@ Suggests:
     rstanarm,
     rstantools,
     sandwich,
-    see (>= 0.9.0),
+    see (>= 0.13.0),
     survey,
     survival,
     testthat (>= 3.2.1),
