@@ -305,10 +305,20 @@
   predicted <- simres$fittedPredictedResponse
   d <- data.frame(Predicted = predicted)
 
+  # extract sigma, we scale the residuals by dividing by sigma
+  sig <- if (faminfo$is_mixed) {
+    sqrt(insight::get_variance_residual(model))
+  } else if (inherits(model, "glmmTMB")) {
+    .sigma_glmmTMB_nonmixed(model, faminfo)
+  } else {
+    insight::get_sigma(model)
+  }
+
   # residuals based on simulated residuals - but we want normally distributed residuals
   d$Residuals <- stats::residuals(simres, quantile_function = stats::qnorm, ...)
   d$Res2 <- d$Residuals^2
-  d$StdRes <- insight::get_residuals(model, type = "pearson")
+  # d$StdRes <- insight::get_residuals(model, type = "pearson")
+  d$StdRes <- d$Residuals / sig
 
   # data for poisson models
   if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
@@ -379,6 +389,13 @@
 
 
 .model_diagnostic_overdispersion <- function(model, ...) {
+  ## TODO: remove this code later -it's just to test the ".new_diag_overdispersion"
+  ## function. Set options(performance_new_overdispersion = TRUE) to use the new
+  ## function.
+  if (isTRUE(getOption("performance_new_overdispersion"))) {
+    return(.new_diag_overdispersion(model, ...))
+  }
+
   faminfo <- insight::model_info(model)
 
   # data for poisson models
