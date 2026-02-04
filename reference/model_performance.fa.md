@@ -73,13 +73,13 @@ model_performance(out)
 #> 
 #> Model             |    Chi2 | df | p (Chi2) |  RMSR | RMSR_corrected |   TLI
 #> ----------------------------------------------------------------------------
-#> 3-factor solution |  31.796 | 25 |   0.164  | 0.015 |          0.023 |      
-#> g-model           | 264.781 | 44 |   < .001 | 0.393 |          0.440 | 0.195
+#> 3-factor solution |  31.796 | 25 |   0.164  | 0.011 |          0.016 |      
+#> g-model           | 264.781 | 44 |   < .001 | 0.278 |          0.311 | 0.195
 #> 
 #> Model             | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
 #> ------------------------------------------------------------------------
 #> 3-factor solution | 0.087 | [0.000, 0.181] | -54.8 |       |            
-#> g-model           | 0.395 | [0.356, 0.450] | 112.3 | 0.761 |       0.873
+#> g-model           | 0.395 | [0.356, 0.450] | 112.3 | 0.886 |       0.941
 #> 
 #> Compare the model fit of the 3-factor solution with the g-only model.
 #>   If the g-model has smaller RMSR and RMSEA then your items are more

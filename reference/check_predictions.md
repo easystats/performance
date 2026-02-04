@@ -100,8 +100,8 @@ A data frame of simulated responses and the original response vector.
 An example how posterior predictive checks can also be used for model
 comparison is Figure 6 from *Gabry et al. 2019, Figure 6*.
 
-  
-![Posterior Predictive Check](figures/pp_check.png)  
+\
+![Posterior Predictive Check](figures/pp_check.png)\
 The model shown in the right panel (b) can simulate new data that are
 more similar to the observed outcome than the model in the left panel
 (a). Thus, model (b) is likely to be preferred over model (a).

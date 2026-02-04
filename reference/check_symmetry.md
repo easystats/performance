@@ -2,8 +2,8 @@
 
 Uses Hotelling and Solomons test of symmetry by testing if the
 standardized nonparametric skew (\\\frac{(Mean - Median)}{SD}\\) is
-different than 0.  
-  
+different than 0.\
+\
 This is an underlying assumption of Wilcoxon signed-rank test.
 
 ## Usage

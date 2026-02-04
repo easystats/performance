@@ -98,8 +98,8 @@ A data frame with Group, Variable, Variation and Design columns.
 This function attempt to identify the variability of a set of variables
 (`select`) with respect to one or more grouping variables (`by`). If `x`
 is a (mixed effect) model, the variability of the fixed effects
-predictors are checked with respect to the random grouping variables.  
-  
+predictors are checked with respect to the random grouping variables.\
+\
 Generally, a variable is considered to vary *between* groups if is
 correlated with those groups, and to vary *within* groups if it not a
 constant within at least one group.

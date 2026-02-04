@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,24 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16.0" id="performance-0160">performance 0.16.0<a class="anchor" aria-label="anchor" href="#performance-0160"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-16-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-16-0"></a></h3>
+<ul><li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> for psych FA objects now correctly names the metric as <code>RMSR</code> (Root Mean Square Residual) instead of <code>RMSA</code>. The <code>RMSR_corrected</code> column (previously <code>RMSA_corrected</code>) is also renamed accordingly.</p></li>
+<li><p>The first argument in <code><a href="../reference/check_model.html">check_model()</a></code>, <code><a href="../reference/check_predictions.html">check_predictions()</a></code> and <code><a href="../reference/check_convergence.html">check_convergence()</a></code> was renamed to <code>model</code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-16-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-16-0"></a></h3>
+<ul><li><p><code><a href="../reference/check_model.html">check_model()</a></code> now limits the number of data points for models with many observations, to reduce the time for rendering the plot via the <code>maximum_dots</code> argument.</p></li>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> can now show or hide confidence intervals using the <code>show_ci</code> argument. For models with only categorical predictors, confidence intervals are not shown by default.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-16-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-0"></a></h3>
+<ul><li><p>Fixed issue in <code><a href="../reference/check_dag.html">check_dag()</a></code> with multiple colliders.</p></li>
+<li><p>Fixed CRAN check issues.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.15.3" id="performance-0153">performance 0.15.3<a class="anchor" aria-label="anchor" href="#performance-0153"></a></h2><p class="text-muted">CRAN release: 2025-12-01</p>
 <div class="section level3">

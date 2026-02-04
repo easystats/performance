@@ -30,13 +30,13 @@ following): `"bernoulli"`, `"beta"`, `"beta-binomial"`, `"binomial"`,
 `"cauchy"`, `"chi"`, `"exponential"`, `"F"`, `"gamma"`, `"half-cauchy"`,
 `"inverse-gamma"`, `"lognormal"`, `"normal"`, `"negative binomial"`,
 `"negative binomial (zero-inflated)"`, `"pareto"`, `"poisson"`,
-`"poisson (zero-inflated)"`, `"tweedie"`, `"uniform"` and `"weibull"`.  
-  
+`"poisson (zero-inflated)"`, `"tweedie"`, `"uniform"` and `"weibull"`.\
+\
 Note the similarity between certain distributions according to shape,
 skewness, etc. Thus, the predicted distribution may not be perfectly
 representing the distributional family of the underlying fitted model,
-or the response value.  
-  
+or the response value.\
+\
 There is a [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
 method, which shows the probabilities of all predicted distributions,
 however, only if the probability is greater than zero.
@@ -45,9 +45,8 @@ however, only if the probability is greater than zero.
 
 This function is somewhat experimental and might be improved in future
 releases. The final decision on the model-family should also be based on
-theoretical aspects and other information about the data and the
-model.  
-  
+theoretical aspects and other information about the data and the model.\
+\
 There is also a
 [[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [see-package](https://easystats.github.io/see/).

@@ -75,15 +75,15 @@ score ranges from 0\\ performance. Note that all score value do not
 necessarily sum up to 100\\ Rather, calculation is based on normalizing
 all indices (i.e. rescaling them to a range from 0 to 1), and taking the
 mean value of all indices for each model. This is a rather quick
-heuristic, but might be helpful as exploratory index.  
-  
+heuristic, but might be helpful as exploratory index.\
+\
 In particular when models are of different types (e.g. mixed models,
 classical linear models, logistic regression, ...), not all indices will
 be computed for each model. In case where an index can't be calculated
 for a specific model type, this model gets an `NA` value. All indices
 that have any `NA`s are excluded from calculating the performance
-score.  
-  
+score.\
+\
 There is a
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method for
 `compare_performance()`, which creates a "spiderweb" plot, where the
