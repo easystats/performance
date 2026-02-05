@@ -10,6 +10,7 @@
 ^\_pkgdown.yml
 ^\_pkgdown.yaml
 ^paper.bib$
+^GEMINI\.md$
 
 ^data/.
 ^docs/.
