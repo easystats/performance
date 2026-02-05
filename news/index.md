@@ -2,6 +2,8 @@
 
 ## performance 0.16.0
 
+CRAN release: 2026-02-04
+
 ### Breaking Changes
 
 - [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
