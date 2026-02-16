@@ -91,7 +91,7 @@ check_homogeneity.default <- function(x, method = "bartlett", ...) {
   } else if (method == "levene") {
     insight::check_if_installed("car")
     r <- car::leveneTest(x, ...)
-    p.val <- r$`Pr(>F)`
+    p.val <- r[1, "Pr(>F)"]
   }
 
   method.string <- switch(

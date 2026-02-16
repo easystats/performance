@@ -1,3 +1,14 @@
+
+test_that("check_homogeneity | levene", {
+  data("mtcars")
+  mtcars$am_f <- factor(mtcars$am)
+  mtcars$cyl_f <- factor(mtcars$cyl)
+  m <- lm(mpg ~ am_f * cyl_f, data = mtcars)
+
+  pm <- check_homogeneity(m, method = "levene")
+  expect_equal(pm, 0.04086063, tolerance = 0.0001, ignore_attr = TRUE)
+})
+
 test_that("check_homogeneity | afex", {
   skip_if_not_installed("afex")
 
