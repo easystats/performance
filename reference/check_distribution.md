@@ -48,7 +48,7 @@ releases. The final decision on the model-family should also be based on
 theoretical aspects and other information about the data and the model.\
 \
 There is also a
-[[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/performance.html)
+[`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [see-package](https://easystats.github.io/see/).
 
 ## Examples

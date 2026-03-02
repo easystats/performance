@@ -81,7 +81,7 @@ The code to compute the confidence intervals for the VIF and tolerance
 values was adapted from the Appendix B from the Marcoulides et al.
 paper. Thus, credits go to these authors the original algorithm. There
 is also a
-[[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/performance.html)
+[`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [see-package](https://easystats.github.io/see/).
 
 ## Multicollinearity

@@ -41,7 +41,7 @@ indicates a significant difference in the variance between the groups.
 ## Note
 
 There is also a
-[[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/performance.html)
+[`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [see-package](https://easystats.github.io/see/).
 
 ## See also

@@ -166,7 +166,7 @@ The data frame that is used for plotting.
 
 For Bayesian models from packages **rstanarm** or **brms**, models will
 be "converted" to their frequentist counterpart, using
-[[`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html)](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
+[`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.
 

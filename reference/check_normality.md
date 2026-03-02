@@ -50,7 +50,7 @@ changes in `plot.lm()` for R 4.3+).
 
 For mixed-effects models, studentized residuals, and *not* standardized
 residuals, are used for the test. There is also a
-[[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/performance.html)
+[`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [**see**-package](https://easystats.github.io/see/).
 
 ## See also

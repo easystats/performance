@@ -144,7 +144,7 @@ by at least half of the methods used."*
 ## Note
 
 There is also a
-[[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/performance.html)
+[`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [**see** package](https://easystats.github.io/see/).
 **Please note** that the range of the distance-values along the y-axis
 is re-scaled to range from 0 to 1.
