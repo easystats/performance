@@ -142,7 +142,7 @@ test_that("test_likelihoodratio - Criterion values (lm)", {
   expect_equal(rez$Criterion, -2 * c(ll2, ll1), tolerance = 1e-3)
 
   # Check that the difference in Criterion matches Chi2 exactly
-  expect_equal(rez$Chi2[2], rez$Criterion[1] - rez$Criterion[2], tolerance = 1e-3)
+  expect_equal(rez$Chi2[2], abs(diff(rez$Criterion)), tolerance = 1e-3)
 })
 
 test_that("test_likelihoodratio - Criterion values (lme4)", {
@@ -169,7 +169,7 @@ test_that("test_likelihoodratio - Criterion values (lme4)", {
   expect_equal(rez$Criterion, -2 * c(ll1, ll2), tolerance = 1e-3)
 
   # Check math
-  expect_equal(rez$Chi2[2], rez$Criterion[1] - rez$Criterion[2], tolerance = 1e-3)
+  expect_equal(rez$Chi2[2], abs(diff(rez$Criterion)), tolerance = 1e-3)
 })
 
 test_that("test_likelihoodratio - Criterion values (lavaan)", {
