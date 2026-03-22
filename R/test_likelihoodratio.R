@@ -255,8 +255,8 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   # Bind all data
   out <- merge(names_types, out[c("Model", "df", "df_diff", "Chi2", "p")], by = "Model")
 
-  # Reorder columns so Criterion is next to Chi2
   out <- out[c("Model", "Type", "df", "df_diff", "Criterion", "Chi2", "p")]
+  out <- out[order(out$df), ]
 
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
