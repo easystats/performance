@@ -234,7 +234,9 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   names_types <- data.frame(
     Model = names(objects),
     Type = sapply(objects, function(x) class(x)[1]),
-    Criterion = sapply(objects, function(x) -2 * as.numeric(lavaan::fitMeasures(x, "logl"))),
+    Criterion = sapply(objects, function(x) {
+      -2 * as.numeric(lavaan::fitMeasures(x, "logl"))
+    }),
     stringsAsFactors = FALSE
   )
 
