@@ -248,7 +248,7 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"
   colnames(out)[names(out) == "Df diff"] <- "df_diff"
-  colnames(out)[names(out) == "Chisq"] <- "Chi2"
+  colnames(out)[names(out) == "Chisq diff"] <- "Chi2"
   colnames(out)[startsWith(names(out), "Pr(>")] <- "p"
   out$Model <- row.names(out)
 

@@ -191,10 +191,8 @@ test_that("test_likelihoodratio - Criterion values (lavaan)", {
 
   expect_true("Criterion" %in% colnames(rez))
 
-  expect_equal(rez$Criterion, -2 * c(ll1, ll2), tolerance = 1e-3)
-  expect_equal(rez$Chi2[2], abs(rez$Criterion[2] - rez$Criterion[1]), tolerance = 1e-3)
-
   ll1 <- as.numeric(lavaan::fitMeasures(m1, "logl"))
   ll2 <- as.numeric(lavaan::fitMeasures(m2, "logl"))
   expect_equal(rez$Criterion, -2 * c(ll1, ll2), tolerance = 1e-3)
+  expect_equal(rez$Chi2[2], abs(rez$Criterion[2] - rez$Criterion[1]), tolerance = 1e-3)
 })
