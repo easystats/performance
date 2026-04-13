@@ -9,7 +9,9 @@
 #'
 #'   **performance** provides posterior predictive check methods for a variety
 #'   of frequentist models (e.g., `lm`, `merMod`, `glmmTMB`, ...). For Bayesian
-#'   models, the model is passed to [`bayesplot::pp_check()`].
+#'   models, posterior predictions are computed with
+#'   `modelbased::estimate_prediction()` and plotted with the same machinery as
+#'   for other supported models.
 #'
 #'   If `check_predictions()` doesn't work as expected, try setting
 #'   `verbose = TRUE` to get hints about possible problems.
@@ -38,7 +40,8 @@
 #' @param verbose Toggle warnings.
 #' @param ... Additional arguments passed on to downstream functions. For
 #' frequentist models, these are forwarded to `simulate()`; for Bayesian models
-#' (e.g., `stanreg`, `brmsfit`), they are forwarded to `bayesplot::pp_check()`.
+#' (e.g., `stanreg`, `brmsfit`), they are forwarded to
+#' `modelbased::estimate_prediction()`.
 #' @param object Deprecated, please use `model` instead.
 #'
 #' @return A data frame of simulated responses and the original response vector.
@@ -203,57 +206,50 @@ check_predictions.stanreg <- function(
     c("density", "discrete_dots", "discrete_interval", "discrete_both")
   )
 
-  # convert to type-argument for pp_check
-  pp_type <- switch(type, density = "dens", "bars")
-
   insight::check_if_installed(
-    "bayesplot",
-    "to create posterior prediction plots for Stan models"
+    "modelbased",
+    "to create posterior predictive checks for Bayesian models"
   )
 
-  # for plotting
+  out <- modelbased::estimate_prediction(
+    model,
+    iterations = iterations,
+    keep_iterations = TRUE,
+    re_formula = re_formula,
+    verbose = verbose,
+    ...
+  )
+
+  iter_columns <- startsWith(colnames(out), "iter_")
+  if (!any(iter_columns)) {
+    insight::format_error(
+      "Could not retrieve posterior predictive draws for the Bayesian model."
+    )
+  }
+
+  out <- as.data.frame(out[iter_columns])
+  colnames(out) <- sub("^iter_", "sim_", colnames(out))
+
   resp_string <- insight::find_terms(model)$response
+  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
-  if (inherits(model, "brmsfit")) {
-    out <- as.data.frame(
-      bayesplot::pp_check(model, type = pp_type, ndraws = iterations, ...)$data
-    )
-  } else {
-    out <- as.data.frame(
-      bayesplot::pp_check(model, plotfun = pp_type, nreps = iterations, ...)$data
-    )
+  if (
+    !is.null(resp_string) &&
+      length(resp_string) == 1 &&
+      grepl(paste0(pattern, "\\("), resp_string)
+  ) {
+    out <- .backtransform_sims(out, resp_string)
   }
 
-  # bring data into shape, like we have for other models with `check_predictions()`
-  if (pp_type == "dens") {
-    d_filter <- out[!out$is_y, ]
-    d_filter <- datawizard::data_to_wide(
-      d_filter,
-      id_cols = "y_id",
-      values_from = "value",
-      names_from = "rep_id"
-    )
-    d_filter$y_id <- NULL
-    colnames(d_filter) <- paste0("sim_", colnames(d_filter))
-    d_filter$y <- out$value[out$is_y]
-    out <- d_filter
-  } else {
-    colnames(out) <- c("x", "y", "CI_low", "Mean", "CI_high")
-    # to long, for plotting
-    out <- datawizard::data_to_long(
-      out,
-      select = c("y", "Mean"),
-      names_to = "Group",
-      values_to = "Count"
+  response <- insight::get_response(model)
+  if (is.data.frame(response)) {
+    response <- eval(
+      str2lang(insight::find_response(model)),
+      envir = insight::get_response(model)
     )
   }
+  out$y <- response
 
-  # make x cateogorical for bernoulli/categorical/multinomial models
-  if (minfo$is_bernoulli || minfo$is_categorical || minfo$is_multinomial) {
-    out$x <- as.factor(out$x)
-  }
-
-  attr(out, "is_stan") <- TRUE
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
   attr(out, "bandwidth") <- bandwidth

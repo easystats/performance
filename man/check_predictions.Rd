@@ -24,7 +24,8 @@ check_predictions(model = NULL, ...)
 
 \item{...}{Additional arguments passed on to downstream functions. For
 frequentist models, these are forwarded to \code{simulate()}; for Bayesian models
-(e.g., \code{stanreg}, \code{brmsfit}), they are forwarded to \code{bayesplot::pp_check()}.}
+(e.g., \code{stanreg}, \code{brmsfit}), they are forwarded to
+\code{modelbased::estimate_prediction()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
@@ -67,7 +68,9 @@ simulated data" (\emph{Gelman et al. 2014, p. 169}).
 
 \strong{performance} provides posterior predictive check methods for a variety
 of frequentist models (e.g., \code{lm}, \code{merMod}, \code{glmmTMB}, ...). For Bayesian
-models, the model is passed to \code{\link[bayesplot:pp_check]{bayesplot::pp_check()}}.
+models, posterior predictions are computed with
+\code{modelbased::estimate_prediction()} and plotted with the same machinery as
+for other supported models.
 
 If \code{check_predictions()} doesn't work as expected, try setting
 \code{verbose = TRUE} to get hints about possible problems.
