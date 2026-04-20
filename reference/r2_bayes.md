@@ -118,7 +118,7 @@ model <- suppressWarnings(rstanarm::stan_glm(
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.817 (95% CI [0.724, 0.898])
+#>   Conditional R2: 0.811 (95% CI [0.681, 0.884])
 
 model <- suppressWarnings(rstanarm::stan_lmer(
   Petal.Length ~ Petal.Width + (1 | Species),
@@ -130,8 +130,8 @@ model <- suppressWarnings(rstanarm::stan_lmer(
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.954 (95% CI [0.950, 0.957])
-#>      Marginal R2: 0.407 (95% CI [0.203, 0.616])
+#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
+#>      Marginal R2: 0.387 (95% CI [0.174, 0.611])
 # }
 
 # \donttest{
@@ -147,8 +147,8 @@ model <- suppressWarnings(brms::brm(
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.954 (95% CI [0.950, 0.957])
-#>      Marginal R2: 0.407 (95% CI [0.203, 0.616])
+#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
+#>      Marginal R2: 0.387 (95% CI [0.174, 0.611])
 
 model <- suppressWarnings(brms::brm(
   Petal.Length ~ Petal.Width + (1 | Species),
@@ -162,7 +162,7 @@ model <- suppressWarnings(brms::brm(
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.954 (95% CI [0.950, 0.957])
-#>      Marginal R2: 0.407 (95% CI [0.203, 0.616])
+#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
+#>      Marginal R2: 0.387 (95% CI [0.174, 0.611])
 # }
 ```

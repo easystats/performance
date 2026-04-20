@@ -40,7 +40,7 @@ check_multimodal(x)
 #> 
 #> The Ameijeiras-Alonso et al. (2018) excess mass test suggests that the
 #>   hypothesis of a multimodal distribution cannot be rejected (excess mass
-#>   = 0.02, p = 0.174).
+#>   = 0.02, p = 0.208).
 #> 
 
 x <- c(rnorm(1000), rnorm(1000, 2))

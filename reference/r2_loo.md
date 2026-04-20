@@ -80,5 +80,5 @@ r2_loo(model)
 #> Warning: Some Pareto k diagnostic values are too high. See help('pareto-k-diagnostic') for details.
 #> # LOO-adjusted R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.786 (95% CI [0.684, 0.880])
+#>   Conditional R2: 0.799 (95% CI [0.697, 0.884])
 ```

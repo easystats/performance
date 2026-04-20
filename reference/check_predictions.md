@@ -8,8 +8,9 @@ et al. 2014, p. 169*).
 
 **performance** provides posterior predictive check methods for a
 variety of frequentist models (e.g., `lm`, `merMod`, `glmmTMB`, ...).
-For Bayesian models, the model is passed to
-[`bayesplot::pp_check()`](https://mc-stan.org/bayesplot/reference/pp_check.html).
+For Bayesian models, posterior predictions are computed with
+[`modelbased::estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.html)
+and plotted with the same machinery as for other supported models.
 
 If `check_predictions()` doesn't work as expected, try setting
 `verbose = TRUE` to get hints about possible problems.
@@ -45,7 +46,7 @@ check_predictions(
   frequentist models, these are forwarded to
   [`simulate()`](https://rdrr.io/r/stats/simulate.html); for Bayesian
   models (e.g., `stanreg`, `brmsfit`), they are forwarded to
-  [`bayesplot::pp_check()`](https://mc-stan.org/bayesplot/reference/pp_check.html).
+  [`modelbased::estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.html).
 
 - iterations:
 

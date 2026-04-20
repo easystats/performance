@@ -1,5 +1,15 @@
 # Changelog
 
+## performance 0.16.0.1
+
+### Changes
+
+- [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  for Bayesian models now uses
+  [`modelbased::estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.html)
+  and returns posterior predictive data in the same format as for other
+  supported models.
+
 ## performance 0.16.0
 
 CRAN release: 2026-02-04

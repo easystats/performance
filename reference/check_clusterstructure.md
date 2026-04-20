@@ -68,7 +68,7 @@ library(performance)
 check_clusterstructure(iris[, 1:4])
 #> # Clustering tendency
 #> 
-#> The dataset is suitable for clustering (Hopkins' H = 0.19).
+#> The dataset is suitable for clustering (Hopkins' H = 0.20).
 #> 
 plot(check_clusterstructure(iris[, 1:4]))
 
