@@ -3,7 +3,7 @@
 ## Changes
 
 * `test_likelihoodratio()` now has a new 'Criterion' column containing the 
-  -2 * log-likehlihood (-2LL) value for each model.
+  -2 * log-likelihood (-2LL) value for each model.
 
 ## Bug fixes
 
