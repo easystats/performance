@@ -486,6 +486,9 @@ test_that("check_predictions, Bayesian discrete models use standard predictive-c
   model <- insight::download_model("brms_ordinal_1")
   skip_if(is.null(model))
 
+  data(mtcars)
+  mtcars$cyl_ord <- as.ordered(mtcars$cyl)
+
   set.seed(123)
   out <- check_predictions(model, iterations = 5, type = "discrete_interval")
 
