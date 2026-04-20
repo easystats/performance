@@ -1,6 +1,6 @@
 # performance 0.16.0.1
 
-## Bug fixes
+## Changes
 
 * `check_predictions()` for Bayesian models now uses
   `modelbased::estimate_prediction()` and returns posterior predictive data in
