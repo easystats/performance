@@ -23,9 +23,6 @@ This document outlines the common coding conventions observed in the
 - **Spacing:**
   - Use spaces around all infix operators (`<-`, `==`, `+`, etc.).
   - Place a space after a comma, but not before.
-- **Curly Braces:**
-  - For function definitions, the opening `{` should be on its own line.
-  - For `if`/`else` statements, the opening `{` can be on the same line.
 - **Line Length:** Keep lines to a reasonable length (e.g., under 80-100
   characters) to improve readability.
 
