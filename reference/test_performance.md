@@ -163,21 +163,18 @@ explicitely to override the default behaviour.
   LRT instead of the Wald test for small sample sizes (under or
   about 30) or if the parameters are large.
 
+  The test statistic is calculated by comparing the -2 \* log-likelihood
+  (-2LL) values for each model. In the output table, the `Criterion`
+  column represents this -2LL value. The difference in the criterion
+  values between the nested models corresponds to the `Chi2` statistic.
+  This Chi-square value is then used to compute the p-value based on the
+  difference in degrees of freedom (`df_diff`).
+
   Note: for regression models, this is similar to
   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`,
   depending on the `estimator` argument. For **lavaan** models (SEM,
   CFA), the function calls
   [`lavaan::lavTestLRT()`](https://rdrr.io/pkg/lavaan/man/lavTestLRT.html).
-
-  For models with transformed response variables (like `log(x)` or
-  `sqrt(x)`), [`logLik()`](https://rdrr.io/r/stats/logLik.html) returns
-  a wrong log-likelihood. However, `test_likelihoodratio()` calls
-  [`insight::get_loglikelihood()`](https://easystats.github.io/insight/reference/get_loglikelihood.html)
-  with `check_response=TRUE`, which returns a corrected log-likelihood
-  value for models with transformed response variables. Furthermore,
-  since the LRT only accepts nested models (i.e. models that differ in
-  their fixed effects), the computed log-likelihood is always based on
-  the ML estimator, not on the REML fits.
 
 - **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can be used
   both for nested and non-nested models, and actually consists of two
@@ -245,11 +242,11 @@ test_wald(m1, m2, m3) # Equivalent to anova(m1, m2, m3)
 test_likelihoodratio(m1, m2, m3, estimator = "ML")
 #> # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)
 #> 
-#> Name | Model | df | df_diff | Chi2 |     p
-#> ------------------------------------------
-#> m1   |    lm |  3 |         |      |      
-#> m2   |    lm |  5 |       2 | 0.15 | 0.926
-#> m3   |    lm |  7 |       2 | 3.41 | 0.182
+#> Name | Model | df | df_diff | Criterion | Chi2 |     p
+#> ------------------------------------------------------
+#> m1   |    lm |  3 |         |    202.22 |      |      
+#> m2   |    lm |  5 |       2 |    202.07 | 0.15 | 0.926
+#> m3   |    lm |  7 |       2 |    198.66 | 3.41 | 0.182
 
 # Equivalent to anova(m1, m2, m3, test='LRT')
 test_likelihoodratio(m1, m2, m3, estimator = "OLS")

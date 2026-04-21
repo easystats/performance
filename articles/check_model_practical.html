@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -351,10 +351,10 @@ first model.</p>
 <span><span class="fu"><a href="../reference/test_performance.html">test_likelihoodratio</a></span><span class="op">(</span><span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Name   |   Model | df | df_diff |   Chi2 |      p</span></span>
-<span><span class="co">#&gt; -------------------------------------------------</span></span>
-<span><span class="co">#&gt; model2 | glmmTMB | 17 |         |        |       </span></span>
-<span><span class="co">#&gt; model3 | glmmTMB | 18 |       1 | 133.83 | &lt; .001</span></span></code></pre></div>
+<span><span class="co">#&gt; Name   |   Model | df | df_diff | Criterion |   Chi2 |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; model2 | glmmTMB | 17 |         |   1751.49 |        |       </span></span>
+<span><span class="co">#&gt; model3 | glmmTMB | 18 |       1 |   1617.66 | 133.83 | &lt; .001</span></span></code></pre></div>
 <p>We see that both the Bayes factor and likelihood ratio test suggest
 that the third model is significantly better than the second model.</p>
 <p>What does this mean for our inference?</p>
@@ -438,10 +438,10 @@ might find a better distributional family for our model, and try
 <span><span class="co">#&gt;   their random effects.</span></span>
 <span><span class="co">#&gt; # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Name   |   Model | df | df_diff |  Chi2 |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------</span></span>
-<span><span class="co">#&gt; model3 | glmmTMB | 18 |         |       |       </span></span>
-<span><span class="co">#&gt; model4 | glmmTMB | 18 |       0 | 16.64 | &lt; .001</span></span>
+<span><span class="co">#&gt; Name   |   Model | df | df_diff | Criterion |  Chi2 |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; model3 | glmmTMB | 18 |         |   1617.66 |       |       </span></span>
+<span><span class="co">#&gt; model4 | glmmTMB | 18 |       0 |   1634.30 | 16.64 | &lt; .001</span></span>
 <span></span>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects (Count Model)</span></span>

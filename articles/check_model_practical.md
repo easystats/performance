@@ -321,10 +321,10 @@ test_performance(model2, model3)
 test_likelihoodratio(model2, model3)
 #> # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)
 #> 
-#> Name   |   Model | df | df_diff |   Chi2 |      p
-#> -------------------------------------------------
-#> model2 | glmmTMB | 17 |         |        |       
-#> model3 | glmmTMB | 18 |       1 | 133.83 | < .001
+#> Name   |   Model | df | df_diff | Criterion |   Chi2 |      p
+#> -------------------------------------------------------------
+#> model2 | glmmTMB | 17 |         |   1751.49 |        |       
+#> model3 | glmmTMB | 18 |       1 |   1617.66 | 133.83 | < .001
 ```
 
 We see that both the Bayes factor and likelihood ratio test suggest that
@@ -420,10 +420,10 @@ test_likelihoodratio(model3, model4)
 #>   their random effects.
 #> # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)
 #> 
-#> Name   |   Model | df | df_diff |  Chi2 |      p
-#> ------------------------------------------------
-#> model3 | glmmTMB | 18 |         |       |       
-#> model4 | glmmTMB | 18 |       0 | 16.64 | < .001
+#> Name   |   Model | df | df_diff | Criterion |  Chi2 |      p
+#> ------------------------------------------------------------
+#> model3 | glmmTMB | 18 |         |   1617.66 |       |       
+#> model4 | glmmTMB | 18 |       0 |   1634.30 | 16.64 | < .001
 
 model_parameters(model4)
 #> # Fixed Effects (Count Model)

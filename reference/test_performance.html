@@ -25,7 +25,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -234,17 +234,16 @@ than method of moments tests like the F-test, and in turn are more
 efficient. Agresti (1990) suggests that you should use the LRT instead of
 the Wald test for small sample sizes (under or about 30) or if the
 parameters are large.</p>
+<p>The test statistic is calculated by comparing the -2 * log-likelihood
+(-2LL) values for each model. In the output table, the <code>Criterion</code> column
+represents this -2LL value. The difference in the criterion values
+between the nested models corresponds to the <code>Chi2</code> statistic. This
+Chi-square value is then used to compute the p-value based on the
+difference in degrees of freedom (<code>df_diff</code>).</p>
 <p>Note: for regression models, this is similar to
 <code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>, depending
 on the <code>estimator</code> argument. For <strong>lavaan</strong> models (SEM, CFA), the function
-calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>.</p>
-<p>For models with transformed response variables (like <code>log(x)</code> or <code>sqrt(x)</code>),
-<code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood. However, <code>test_likelihoodratio()</code>
-calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with <code>check_response=TRUE</code>, which
-returns a corrected log-likelihood value for models with transformed
-response variables. Furthermore, since the LRT only accepts nested
-models (i.e. models that differ in their fixed effects), the computed
-log-likelihood is always based on the ML estimator, not on the REML fits.</p></li>
+calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>.</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.</p><ul><li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and
@@ -311,11 +310,11 @@ many different models.</p></div>
 <span class="r-in"><span><span class="fu">test_likelihoodratio</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, estimator <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | df | df_diff | Chi2 |     p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |    lm |  3 |         |      |      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m2   |    lm |  5 |       2 | 0.15 | 0.926</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m3   |    lm |  7 |       2 | 3.41 | 0.182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | df | df_diff | Criterion | Chi2 |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |    lm |  3 |         |    202.22 |      |      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m2   |    lm |  5 |       2 |    202.07 | 0.15 | 0.926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m3   |    lm |  7 |       2 |    198.66 | 3.41 | 0.182</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Equivalent to anova(m1, m2, m3, test='LRT')</span></span></span>
 <span class="r-in"><span><span class="fu">test_likelihoodratio</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, estimator <span class="op">=</span> <span class="st">"OLS"</span><span class="op">)</span></span></span>
