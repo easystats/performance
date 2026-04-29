@@ -135,6 +135,8 @@
 <strong>Package Functions:</strong> Always use the <code>::</code> operator to call functions from other packages (e.g., <code><a href="https://rdrr.io/r/stats/shapiro.test.html" class="external-link">stats::shapiro.test</a></code>, <code><a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">insight::model_info</a></code>). Do not use <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> or <code><a href="https://rdrr.io/r/base/library.html" class="external-link">require()</a></code> at the top of a file (no full import, only selective import of functions).</li>
 <li>
 <strong>Conditional Checks:</strong> Use <code>insight::check_if_installed("pkg_name")</code> to check if a package is available before using it, especially for optional (“Suggests”) dependencies.</li>
+<li>
+<strong>Argument validation:</strong> Use <code><a href="https://easystats.github.io/insight/reference/validate_argument.html" class="external-link">insight::validate_argument()</a></code> instead of <code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code> to validate correct input of arguments, unless you need <code>several.ok</code>. In this case, rely on <code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code>.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="s3-object-system">S3 Object System<a class="anchor" aria-label="anchor" href="#s3-object-system"></a></h2>
@@ -148,10 +150,13 @@
 <h2 id="error-handling-and-messaging">Error Handling and Messaging<a class="anchor" aria-label="anchor" href="#error-handling-and-messaging"></a></h2>
 <ul><li>Use <code>tryCatch</code> for operations that might fail. The internal <code>.safe()</code> helper is a good example.</li>
 <li>Use the <code>insight</code> package’s functions for user-facing messages:
-<ul><li><code><a href="https://easystats.github.io/insight/reference/format_message.html" class="external-link">insight::format_error()</a></code></li>
-<li><code><a href="https://easystats.github.io/insight/reference/format_message.html" class="external-link">insight::format_warning()</a></code></li>
-<li><code><a href="https://easystats.github.io/insight/reference/format_message.html" class="external-link">insight::format_alert()</a></code></li>
-<li><code><a href="https://easystats.github.io/insight/reference/print_color.html" class="external-link">insight::print_color()</a></code></li>
+<ul><li>For errors: <code><a href="https://easystats.github.io/insight/reference/format_message.html" class="external-link">insight::format_error()</a></code>
+</li>
+<li>For warnings: <code><a href="https://easystats.github.io/insight/reference/format_message.html" class="external-link">insight::format_warning()</a></code>
+</li>
+<li>For messages: <code><a href="https://easystats.github.io/insight/reference/format_message.html" class="external-link">insight::format_alert()</a></code>
+</li>
+<li>To highlight messages: <code><a href="https://easystats.github.io/insight/reference/print_color.html" class="external-link">insight::print_color()</a></code> Note that character vectors are not pasted together, unlike in <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>, thus you usually want to use something like <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste()</a></code> to concatenate the string. Character vectors will add a new paragraph for each string element, not paste them together.</li>
 </ul></li>
 </ul></div>
 </div>
