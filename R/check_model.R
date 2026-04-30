@@ -181,6 +181,31 @@
 #' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
 #' get hints about possible problems.
 #'
+#' If your plots are not rendering correctly in your IDE or you receive an error
+#' stating that the viewport is too small, try the following steps to resolve
+#' the issue:
+#'
+#' - *Enlarge the plotting window:* The most common cause is that the plotting
+#'   pane is simply too small. If you are using RStudio, click and drag the
+#'   edges of the 'Plots' pane to increase its dimensions, then try plotting
+#'   again.
+#' - *Reset your IDE zoom settings:* If resizing the window doesn't help, your
+#'   IDE's zoom level might be causing scaling issues. In RStudio, navigate to
+#'   the menu bar and select *View > Actual Size* to reset the zoom. If you are
+#'   using a different IDE, look for a similar zoom reset option.
+#' - *Adjust Windows display scaling:* On Windows, system-wide display scaling can
+#'   sometimes interfere with graphical outputs in R. You can adjust this in
+#'   your system settings: Go to *Start > Settings > System > Display* and locate
+#'   the `"Scale and layout"` section. Try reducing the scaling percentage (e.g.,
+#'   to 100%) and restart your IDE.
+#' - *Decrease the base font size:* As a code-level workaround, you can reduce the
+#'   base font size of your plots to help them fit into smaller viewports. If
+#'   you are using `{ggplot2}`, load the library and adjust your theme before
+#'   plotting. For example: `theme_set(theme_classic(base_size = 6))`.
+#' - *Update relevant packages:* Finally, ensure your graphics and layout packages
+#'   are up to date. You can update your packages (paying special attention to
+#'   `{ggplot2}` and `{patchwork}`) by running `update.packages(ask = FALSE)`.
+#'
 #' @family functions to check model assumptions and and assess model quality
 #'
 #' @examplesIf require("lme4") && FALSE

@@ -1,14 +1,17 @@
-# performance 0.16.0.2
+# performance (devel)
 
 ## Changes
 
-* `test_likelihoodratio()` now has a new 'Criterion' column containing the 
+* `test_likelihoodratio()` now has a new 'Criterion' column containing the
   -2 * log-likelihood (-2LL) value for each model.
+
+* Added more details to the troubleshooting-section to the documentation of
+  `check_model()`.
 
 ## Bug fixes
 
 * Fixed issue in `test_likelihoodratio_ListLavaan()` that was extracting the
-  absolute model fit (Chisq) from the lavTestLRT output instead of the actual 
+  absolute model fit (Chisq) from the lavTestLRT output instead of the actual
   LRT test statistic (Chisq diff).
 
 # performance 0.16.0.1
