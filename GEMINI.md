@@ -12,6 +12,8 @@ This document outlines the common coding conventions observed in the `easystats`
 
 *   If pull requests include user-visible changes, the "developer" version number should be increased (e.g. from 0.10.1.5 to 0.10.1.6). This ensures that `easystats::install_latest()` will download the latest versions.
 
+* For the NEWS file, the current development version should not be indicated by a version number, but rather with `(devel)`.
+
 ## Code Style & Formatting
 
 *   **Assignment:** Use the `<-` operator for assignment, not `=`.
@@ -64,7 +66,7 @@ All exported functions must be documented using `roxygen2`-style comments (`#'`)
 
 *   Use base-R wherever possible (to reduce hard dependencies)
 *   Make sure R-version requirements are not too strict
-*   **Package Functions:** Always use the `::` operator to call functions from other packages (e.g., `stats::shapiro.test`, `insight::model_info`). Do not use `library()` or `require()` at the top of a file (no full import, only selective import of functions).
+*   **Package Functions:** Always use the `::` operator to call functions from other packages (e.g., `stats::shapiro.test`, `insight::model_info`). Do not use `library()` or `require()` at the top of a file (no full import, only selective import of functions). However, in test files, package vignettes (.rmd), or in the package documentation, `::` is not required for core R packages like `stats` or `tools`.
 *   **Conditional Checks:** Use `insight::check_if_installed("pkg_name")` to check if a package is available before using it, especially for optional ("Suggests") dependencies.
 *   **Argument validation:** Use `insight::validate_argument()` instead of `match.arg()` to validate correct input of arguments, unless you need `several.ok`. In this case, rely on `match.arg()`.
 
