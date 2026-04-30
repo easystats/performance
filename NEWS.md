@@ -5,7 +5,7 @@
 * `test_likelihoodratio()` now has a new 'Criterion' column containing the
   -2 * log-likelihood (-2LL) value for each model.
 
-* Added more details to the troubleshooting-section to the documentation of
+* Added more details to the troubleshooting section to the documentation of
   `check_model()`.
 
 ## Bug fixes
