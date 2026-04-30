@@ -17,6 +17,9 @@ This document outlines the common coding conventions observed in the
   ensures that `easystats::install_latest()` will download the latest
   versions.
 
+- For the NEWS file, the current development version should not be
+  indicated by a version number, but rather with `(devel)`.
+
 ## Code Style & Formatting
 
 - **Assignment:** Use the `<-` operator for assignment, not `=`.
@@ -111,7 +114,9 @@ comments (`#'`). The documentation should include:
   [`insight::model_info`](https://easystats.github.io/insight/reference/model_info.html)).
   Do not use [`library()`](https://rdrr.io/r/base/library.html) or
   [`require()`](https://rdrr.io/r/base/library.html) at the top of a
-  file (no full import, only selective import of functions).
+  file (no full import, only selective import of functions). However, in
+  test files, package vignettes (.rmd), or in the package documentation,
+  `::` is not required for core R packages like `stats` or `tools`.
 - **Conditional Checks:** Use `insight::check_if_installed("pkg_name")`
   to check if a package is available before using it, especially for
   optional (“Suggests”) dependencies.

@@ -64,6 +64,7 @@
 <h2 id="package-versioning">Package versioning<a class="anchor" aria-label="anchor" href="#package-versioning"></a></h2>
 <ul><li><p>Package versions follow Semantic Versioning conventions.</p></li>
 <li><p>If pull requests include user-visible changes, the “developer” version number should be increased (e.g. from 0.10.1.5 to 0.10.1.6). This ensures that <code>easystats::install_latest()</code> will download the latest versions.</p></li>
+<li><p>For the NEWS file, the current development version should not be indicated by a version number, but rather with <code>(devel)</code>.</p></li>
 </ul></div>
 <div class="section level2">
 <h2 id="code-style--formatting">Code Style &amp; Formatting<a class="anchor" aria-label="anchor" href="#code-style--formatting"></a></h2>
@@ -132,7 +133,7 @@
 <ul><li>Use base-R wherever possible (to reduce hard dependencies)</li>
 <li>Make sure R-version requirements are not too strict</li>
 <li>
-<strong>Package Functions:</strong> Always use the <code>::</code> operator to call functions from other packages (e.g., <code><a href="https://rdrr.io/r/stats/shapiro.test.html" class="external-link">stats::shapiro.test</a></code>, <code><a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">insight::model_info</a></code>). Do not use <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> or <code><a href="https://rdrr.io/r/base/library.html" class="external-link">require()</a></code> at the top of a file (no full import, only selective import of functions).</li>
+<strong>Package Functions:</strong> Always use the <code>::</code> operator to call functions from other packages (e.g., <code><a href="https://rdrr.io/r/stats/shapiro.test.html" class="external-link">stats::shapiro.test</a></code>, <code><a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">insight::model_info</a></code>). Do not use <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> or <code><a href="https://rdrr.io/r/base/library.html" class="external-link">require()</a></code> at the top of a file (no full import, only selective import of functions). However, in test files, package vignettes (.rmd), or in the package documentation, <code>::</code> is not required for core R packages like <code>stats</code> or <code>tools</code>.</li>
 <li>
 <strong>Conditional Checks:</strong> Use <code>insight::check_if_installed("pkg_name")</code> to check if a package is available before using it, especially for optional (“Suggests”) dependencies.</li>
 <li>
