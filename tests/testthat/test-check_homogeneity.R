@@ -1,5 +1,6 @@
-
 test_that("check_homogeneity | levene", {
+  skip_if_not_installed("car")
+
   data("mtcars")
   mtcars$am_f <- factor(mtcars$am)
   mtcars$cyl_f <- factor(mtcars$cyl)
