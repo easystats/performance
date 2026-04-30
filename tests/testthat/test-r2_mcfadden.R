@@ -1,3 +1,5 @@
+skip_if_not_installed("withr")
+
 test_that("r2_mcfadden", {
   skip_if_not_installed("MASS")
   withr::with_options(
@@ -27,8 +29,6 @@ test_that("r2_mcfadden", {
     }
   )
 })
-
-skip_if_not_installed("withr")
 
 withr::with_environment(
   new.env(),
