@@ -492,7 +492,54 @@ check_outliers(group_iris)
 # \donttest{
 # You can also run all the methods
 check_outliers(data, method = "all", verbose = FALSE)
-#> Error in solve.default(cov, ...): system is computationally singular: reciprocal condition number = 2.93158e-18
+#> Package `parallel` is installed, but `check_outliers()` will run on a
+#>   single core.
+#>   To use multiple cores, set `options(mc.cores = 4)` (for example).
+#> 3 outliers detected: cases 9, 29, 31.
+#> - Based on the following methods and thresholds: zscore_robust (3.291),
+#>   iqr (2), ci (1), cook (1), pareto (0.7), mahalanobis (31.264),
+#>   mahalanobis_robust (31.264), mcd (31.264), ics (0.001), optics (22), lof
+#>   (0.05), optics_xi (0.001).
+#> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.
+#> Note: Outliers were classified as such by at least half of the selected methods. 
+#> 
+#> -----------------------------------------------------------------------------
+#>  
+#> The following observations were considered outliers for two or more
+#>   variables by at least one of the selected methods:
+#> 
+#>    Row n_Zscore_robust n_IQR n_ci n_Mahalanobis_robust          n_MCD
+#> 1    3               2     0    0                    0              0
+#> 2    9               2     1    1       (Multivariate) (Multivariate)
+#> 3   18               2     0    0                    0              0
+#> 4   19               2     0    2                    0 (Multivariate)
+#> 5   20               2     0    2                    0              0
+#> 6   26               2     0    0                    0              0
+#> 7   28               2     0    1       (Multivariate) (Multivariate)
+#> 8   31               2     2    2       (Multivariate) (Multivariate)
+#> 9   32               2     0    0                    0              0
+#> 10  21               1     0    0       (Multivariate) (Multivariate)
+#> 11  27               1     0    0       (Multivariate) (Multivariate)
+#> 12  29               1     0    1       (Multivariate) (Multivariate)
+#> 13  30               1     0    0                    0 (Multivariate)
+#> 14   7               0     0    0       (Multivariate)              0
+#> 15  24               0     0    0       (Multivariate)              0
+#>             n_ICS
+#> 1               0
+#> 2  (Multivariate)
+#> 3               0
+#> 4               0
+#> 5               0
+#> 6               0
+#> 7               0
+#> 8               0
+#> 9               0
+#> 10              0
+#> 11              0
+#> 12 (Multivariate)
+#> 13              0
+#> 14              0
+#> 15              0
 
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
