@@ -300,3 +300,113 @@ test_that("check_collinearity, validate adjusted vif against car", {
   expect_equal(out1[, 1], out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
   expect_equal(out1[, 3], out2$SE_factor, tolerance = 1e-3, ignore_attr = TRUE)
 })
+
+test_that("check_collinearity, ordinal clmm models", {
+  skip_if_not_installed("ordinal")
+  set.seed(999)
+  n <- 500
+  x_continuous <- rnorm(n, mean = 0, sd = 1)
+  x_binary <- sample(c(-0.5, 0.5), size = n, replace = TRUE, prob = c(0.85, 0.15))
+  subject_id <- factor(rep(1:50, each = 10))
+  random_intercepts <- rnorm(50, 0, 1)
+  latent_y <- 2 *
+    x_continuous +
+    3 * x_binary +
+    random_intercepts[as.numeric(subject_id)] +
+    rlogis(n)
+  y_ordinal <- cut(
+    latent_y,
+    breaks = 15,
+    ordered_result = TRUE
+  )
+  dat <- data.frame(y_ordinal, x_continuous, x_binary, subject_id)
+  mod_clmm <- ordinal::clmm(
+    y_ordinal ~ x_continuous + x_binary + (1 | subject_id),
+    data = dat
+  )
+  out <- check_collinearity(mod_clmm)
+  expect_s3_class(out, "check_collinearity")
+  expect_identical(out$Term, c("x_continuous", "x_binary"))
+  expect_equal(out$VIF, c(1.12, 1.12), tolerance = 0.05)
+})
+
+test_that("check_collinearity, ordinal clm models", {
+  skip_if_not_installed("ordinal")
+  set.seed(999)
+  n <- 500
+  x_continuous <- rnorm(n, mean = 0, sd = 1)
+  x_binary <- sample(c(-0.5, 0.5), size = n, replace = TRUE, prob = c(0.85, 0.15))
+  latent_y <- 2 * x_continuous + 3 * x_binary + rlogis(n)
+  y_ordinal <- cut(
+    latent_y,
+    breaks = 15,
+    ordered_result = TRUE
+  )
+  dat <- data.frame(y_ordinal, x_continuous, x_binary)
+  mod_clm <- ordinal::clm(
+    y_ordinal ~ x_continuous + x_binary,
+    data = dat
+  )
+  out <- check_collinearity(mod_clm)
+  expect_s3_class(out, "check_collinearity")
+  expect_identical(out$Term, c("x_continuous", "x_binary"))
+  expect_equal(out$VIF, c(1.11, 1.11), tolerance = 0.05)
+})
+
+test_that("check_collinearity, ordinal clmm models with offset", {
+  skip_if_not_installed("ordinal")
+  set.seed(999)
+  n <- 500
+  x_continuous <- rnorm(n, mean = 0, sd = 1)
+  x_binary <- sample(c(-0.5, 0.5), size = n, replace = TRUE, prob = c(0.85, 0.15))
+  x_offset <- rnorm(n, mean = 0, sd = 0.5)
+  subject_id <- factor(rep(1:50, each = 10))
+  random_intercepts <- rnorm(50, 0, 1)
+
+  latent_y <- 2 *
+    x_continuous +
+    3 * x_binary +
+    random_intercepts[as.numeric(subject_id)] +
+    x_offset +
+    rlogis(n)
+  y_ordinal <- cut(latent_y, breaks = 15, ordered_result = TRUE)
+  dat <- data.frame(y_ordinal, x_continuous, x_binary, x_offset, subject_id)
+  mod_clmm_offset <- ordinal::clmm(
+    y_ordinal ~ x_continuous + x_binary + offset(x_offset) + (1 | subject_id),
+    data = dat
+  )
+  out <- check_collinearity(mod_clmm_offset)
+  expect_s3_class(out, "check_collinearity")
+  expect_identical(out$Term, c("x_continuous", "x_binary"))
+  expect_equal(out$VIF, c(1.12, 1.12), tolerance = 0.05)
+})
+
+test_that("check_collinearity, ordinal clm models with offset", {
+  skip_if_not_installed("ordinal")
+  set.seed(999)
+  n <- 500
+  x_continuous <- rnorm(n, mean = 0, sd = 1)
+  x_binary <- sample(c(-0.5, 0.5), size = n, replace = TRUE, prob = c(0.85, 0.15))
+  x_offset <- rnorm(n, mean = 0, sd = 0.5)
+  latent_y <- 2 * x_continuous + 3 * x_binary + x_offset + rlogis(n)
+  y_ordinal <- cut(latent_y, breaks = 15, ordered_result = TRUE)
+  dat <- data.frame(y_ordinal, x_continuous, x_binary, x_offset)
+  mod_clm_offset <- ordinal::clm(
+    y_ordinal ~ x_continuous + x_binary + offset(x_offset),
+    data = dat
+  )
+  out <- check_collinearity(mod_clm_offset)
+  expect_s3_class(out, "check_collinearity")
+  expect_identical(out$Term, c("x_continuous", "x_binary"))
+  expect_equal(out$VIF, c(1.11, 1.11), tolerance = 0.05)
+})
+
+test_that("check_collinearity, standard lm models with offset", {
+  # Standard linear model with an offset
+  m_lm_offset <- lm(mpg ~ wt + cyl + offset(disp), data = mtcars)
+  out <- check_collinearity(m_lm_offset)
+  expect_s3_class(out, "check_collinearity")
+  # The offset should not be evaluated for collinearity
+  expect_identical(out$Term, c("wt", "cyl"))
+  expect_false("disp" %in% out$Term)
+})
