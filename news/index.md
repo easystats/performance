@@ -1,5 +1,14 @@
 # Changelog
 
+## performance 0.16.0.3
+
+### Bug fixes
+
+- Fixed issue in
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  that was causing inflated VIF values when applied to clm and clmm
+  models from the ordinal package.
+
 ## performance 0.16.0.2
 
 ### Changes
