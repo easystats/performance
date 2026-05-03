@@ -29,3 +29,5 @@
 ^CRAN-SUBMISSION$
 ^[.]?air[.]toml$
 ^\.vscode$
+^\.positai$
+^\.claude$

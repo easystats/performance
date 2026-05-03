@@ -1,3 +1,10 @@
+# performance 0.16.0.3
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` that was causing inflated VIF values 
+  when applied to clm and clmm models from the ordinal package.
+
 # performance 0.16.0.2
 
 ## Changes
