@@ -54,33 +54,6 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.16.0.3" id="performance-01603">performance 0.16.0.3<a class="anchor" aria-label="anchor" href="#performance-01603"></a></h2>
-<div class="section level3">
-<h3 id="bug-fixes-0-16-0-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-0-3"></a></h3>
-<ul><li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> that was causing inflated VIF values when applied to clm and clmm models from the ordinal package.</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.16.0.2" id="performance-01602">performance 0.16.0.2<a class="anchor" aria-label="anchor" href="#performance-01602"></a></h2>
-<div class="section level3">
-<h3 id="changes-0-16-0-2">Changes<a class="anchor" aria-label="anchor" href="#changes-0-16-0-2"></a></h3>
-<ul><li>
-<code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> now has a new ‘Criterion’ column containing the -2 * log-likelihood (-2LL) value for each model.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="bug-fixes-0-16-0-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-0-2"></a></h3>
-<ul><li>Fixed issue in <code>test_likelihoodratio_ListLavaan()</code> that was extracting the absolute model fit (Chisq) from the lavTestLRT output instead of the actual LRT test statistic (Chisq diff).</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.16.0.1" id="performance-01601">performance 0.16.0.1<a class="anchor" aria-label="anchor" href="#performance-01601"></a></h2>
-<div class="section level3">
-<h3 id="changes-0-16-0-1">Changes<a class="anchor" aria-label="anchor" href="#changes-0-16-0-1"></a></h3>
-<ul><li>
-<code><a href="../reference/check_predictions.html">check_predictions()</a></code> for Bayesian models now uses <code><a href="https://easystats.github.io/modelbased/reference/estimate_expectation.html" class="external-link">modelbased::estimate_prediction()</a></code> and returns posterior predictive data in the same format as for other supported models.</li>
-</ul></div>
-</div>
-    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.0" id="performance-0160">performance 0.16.0<a class="anchor" aria-label="anchor" href="#performance-0160"></a></h2><p class="text-muted">CRAN release: 2026-02-04</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-16-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-16-0"></a></h3>
