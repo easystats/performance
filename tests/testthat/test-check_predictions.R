@@ -476,27 +476,32 @@ test_that("check_predictions, Bayesian models use standard predictive-check data
   expect_identical(attr(out, "type"), "density")
 })
 
+skip_if_not_installed("withr")
+withr::with_environment(
+  new.env(),
+  {
+    test_that("check_predictions, Bayesian discrete models use standard predictive-check data", {
+      skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+      skip_if_not_installed("curl")
+      skip_if_not_installed("httr2")
+      skip_if_offline()
 
-test_that("check_predictions, Bayesian discrete models use standard predictive-check data", {
-  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
-  skip_if_not_installed("curl")
-  skip_if_not_installed("httr2")
-  skip_if_offline()
+      model <- insight::download_model("brms_ordinal_1")
+      skip_if(is.null(model))
 
-  model <- insight::download_model("brms_ordinal_1")
-  skip_if(is.null(model))
+      data(mtcars)
+      mtcars$cyl_ord <- as.ordered(mtcars$cyl)
 
-  data(mtcars)
-  mtcars$cyl_ord <- as.ordered(mtcars$cyl)
+      set.seed(123)
+      out <- check_predictions(model, iterations = 5, type = "discrete_interval")
 
-  set.seed(123)
-  out <- check_predictions(model, iterations = 5, type = "discrete_interval")
-
-  expect_s3_class(out, "performance_pp_check")
-  expect_named(out, c(paste0("sim_", 1:5), "y"))
-  expect_false("x" %in% names(out))
-  expect_false("Group" %in% names(out))
-  expect_false(isTRUE(attr(out, "is_stan")))
-  expect_identical(attr(out, "type"), "discrete_interval")
-  expect_true(attr(out, "model_info")$is_ordinal)
-})
+      expect_s3_class(out, "performance_pp_check")
+      expect_named(out, c(paste0("sim_", 1:5), "y"))
+      expect_false("x" %in% names(out))
+      expect_false("Group" %in% names(out))
+      expect_false(isTRUE(attr(out, "is_stan")))
+      expect_identical(attr(out, "type"), "discrete_interval")
+      expect_true(attr(out, "model_info")$is_ordinal)
+    })
+  }
+)

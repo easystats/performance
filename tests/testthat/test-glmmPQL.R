@@ -1,4 +1,6 @@
 skip_if_not_installed("MASS")
+skip_if_not_installed("reformulas")
+
 test_that("r2", {
   example_dat <- data.frame(
     prop = c(0.2, 0.2, 0.5, 0.7, 0.1, 1, 1, 1, 0.1),

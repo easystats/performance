@@ -260,6 +260,32 @@ skipped, which also increases performance.
 
 If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
 get hints about possible problems.
+
+If your plots are not rendering correctly in your IDE or you receive an error
+stating that the viewport is too small, try the following steps to resolve
+the issue:
+\itemize{
+\item \emph{Enlarge the plotting window:} The most common cause is that the plotting
+pane is simply too small. If you are using RStudio, click and drag the
+edges of the 'Plots' pane to increase its dimensions, then try plotting
+again.
+\item \emph{Reset your IDE zoom settings:} If resizing the window doesn't help, your
+IDE's zoom level might be causing scaling issues. In RStudio, navigate to
+the menu bar and select \emph{View > Actual Size} to reset the zoom. If you are
+using a different IDE, look for a similar zoom reset option.
+\item \emph{Adjust Windows display scaling:} On Windows, system-wide display scaling can
+sometimes interfere with graphical outputs in R. You can adjust this in
+your system settings: Go to \emph{Start > Settings > System > Display} and locate
+the \code{"Scale and layout"} section. Try reducing the scaling percentage (e.g.,
+to 100\%) and restart your IDE.
+\item \emph{Decrease the base font size:} As a code-level workaround, you can reduce the
+base font size of your plots to help them fit into smaller viewports. If
+you are using \code{{ggplot2}}, load the library and adjust your theme before
+plotting. For example: \code{theme_set(theme_classic(base_size = 6))}.
+\item \emph{Update relevant packages:} Finally, ensure your graphics and layout packages
+are up to date. You can update your packages (paying special attention to
+\code{{ggplot2}} and \code{{patchwork}}) by running \code{update.packages(ask = FALSE)}.
+}
 }
 
 \examples{
