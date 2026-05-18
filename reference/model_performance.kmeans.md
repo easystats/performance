@@ -38,5 +38,5 @@ model_performance(model)
 #> 
 #> Sum_Squares_Total | Sum_Squares_Within | Sum_Squares_Between | Iterations
 #> -------------------------------------------------------------------------
-#> 71.530            |             16.523 |              55.007 |          1
+#> 62.721            |             16.731 |              45.989 |          1
 ```

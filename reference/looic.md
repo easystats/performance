@@ -39,7 +39,7 @@ model <- suppressWarnings(rstanarm::stan_glm(
 looic(model)
 #> # LOOIC and ELPD with Standard Error
 #> 
-#>   LOOIC: 155.91 [8.79]
-#>    ELPD: -77.95 [4.40]
+#>   LOOIC: 156.01 [9.11]
+#>    ELPD: -78.01 [4.56]
 # }
 ```

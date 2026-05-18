@@ -71,13 +71,13 @@ model <- lm(mpg ~ wt + cyl, data = mtcars)
 performance_accuracy(model)
 #> # Accuracy of Model Predictions
 #> 
-#> Accuracy (95% CI): 95.79% [92.14%, 99.11%]
+#> Accuracy (95% CI): 90.64% [86.07%, 96.97%]
 #> Method: Correlation between observed and predicted
 
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 performance_accuracy(model)
 #> # Accuracy of Model Predictions
 #> 
-#> Accuracy (95% CI): 87.56% [78.00%, 100.00%]
+#> Accuracy (95% CI): 89.11% [68.89%, 100.00%]
 #> Method: Area under Curve
 ```
