@@ -12,9 +12,12 @@
   `modelbased::estimate_prediction()` and returns posterior predictive data in
   the same format as for other supported models.
 
+* Updated tests to work with the next release of the *DHARMa* package
+  (version 0.5.0).
+
 ## Bug fixes
 
-* Fixed issue in `check_collinearity()` that was causing inflated VIF values 
+* Fixed issue in `check_collinearity()` that was causing inflated VIF values
   when applied to clm and clmm models from the ordinal package.
 
 * Fixed issue in `test_likelihoodratio_ListLavaan()` that was extracting the

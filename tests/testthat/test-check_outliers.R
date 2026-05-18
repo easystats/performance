@@ -415,7 +415,7 @@ test_that("check_outliers on numeric data only", {
 
 
 test_that("check_outliers with DHARMa", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   mt1 <- mtcars[, c(1, 3, 4)]
   # create some fake outliers and attach outliers to main df
   mt2 <- rbind(

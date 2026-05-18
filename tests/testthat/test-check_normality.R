@@ -83,7 +83,7 @@ test_that("check_normality | t-test", {
 
 
 test_that("check_normality | simulated residuals", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
   res <- simulate_residuals(m)
   out <- check_normality(res)

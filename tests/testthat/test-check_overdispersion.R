@@ -77,7 +77,7 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
 
 test_that("check_overdispersion, zero-inflated and negbin", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -141,7 +141,7 @@ test_that("check_overdispersion, zero-inflated and negbin", {
 
 test_that("check_overdispersion, MASS::negbin", {
   skip_if_not_installed("MASS")
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   set.seed(3)
   mu <- rpois(500, lambda = 3)
   x <- rnorm(500, mu, mu * 3)
@@ -181,7 +181,7 @@ test_that("check_overdispersion, MASS::negbin", {
 
 test_that("check_overdispersion, genpois", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -193,13 +193,9 @@ test_that("check_overdispersion, genpois", {
   expect_equal(
     check_overdispersion(model),
     structure(
-      list(
-        dispersion_ratio = 0.971975646955856,
-        p_value = 0.88
-      ),
-      class = c("check_overdisp", "see_check_overdisp")
-    ),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
+      list(dispersion_ratio = 1.13005481966618, p_value = 0.408),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "model"
+    )
   )
 })
