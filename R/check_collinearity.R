@@ -450,6 +450,11 @@ check_collinearity.zerocount <- function(
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
   v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
 
+  # fix class for fixest, which returns a "fixest_vcov" here
+  if (inherits(v, "fixest_vcov")) {
+    v <- array(v, dim = dim(v), dimnames = dimnames(v))
+  }
+
   # sanity check
   if (is.null(v)) {
     if (isTRUE(verbose)) {

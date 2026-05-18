@@ -1,5 +1,5 @@
 test_that("check_autocorrelation works with simulated residuals", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
 
@@ -30,7 +30,7 @@ test_that("check_autocorrelation works with simulated residuals", {
 
 
 test_that("check_autocorrelation.DHARMa works", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
 
   # Test that the DHARMa method works
   data(mtcars)
