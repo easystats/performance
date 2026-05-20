@@ -11,9 +11,9 @@
 #' @param method Character string, indicating the cross-validation method to use:
 #'   whether holdout (`"holdout"`, aka train-test), k-fold (`"k_fold"`), or
 #'   leave-one-out (`"loo"`). If `data` is supplied, this argument is ignored.
-#' @param metrics Can be `"all"`, `"common"` or a character vector of metrics to be
-#'   computed (some of `"ELPD"`, `"MSE"`, `"RMSE"`, `"R2"`). `"common"` will
-#'   compute R2 and RMSE.
+#' @param metrics Can be `"all"`, `"common"` or a character vector of metrics to
+#'   be computed (some of `"MSE"`, `"RMSE"`, `"R2"`). `"common"` will compute R2
+#'   and RMSE.
 #' @param prop If `method = "holdout"`, what proportion of the sample to hold
 #'   out as the test sample?
 #' @param k If `method = "k_fold"`, the number of folds to use.
