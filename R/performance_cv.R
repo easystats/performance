@@ -144,13 +144,10 @@ performance_cv <- function(
 
     # Catch misconfigured k values
     if (k > nrow(model_data)) {
-      message(insight::color_text(
-        insight::format_message(
-          "Requested number of folds (k) larger than the sample size.",
-          "'k' set equal to the sample size (leave-one-out [LOO])."
-        ),
-        color = "yellow"
-      ))
+      insight::format_alert(
+        "Requested number of folds (k) larger than the sample size.",
+        "'k' set equal to the sample size (leave-one-out [LOO])."
+      )
       k <- nrow(model_data)
     }
 
