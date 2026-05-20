@@ -159,7 +159,6 @@ Suggests:
     withr (>= 3.0.0)
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
@@ -169,3 +168,4 @@ Config/Needs/website:
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
 Remotes: easystats/insight, easystats/modelbased
+Config/roxygen2/version: 8.0.0
