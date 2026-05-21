@@ -344,10 +344,14 @@ resolve the issue:
   your theme before plotting. For example:
   `theme_set(theme_classic(base_size = 6))`.
 
-- *Update relevant packages:* Finally, ensure your graphics and layout
-  packages are up to date. You can update your packages (paying special
-  attention to `{ggplot2}` and `{patchwork}`) by running
+- *Update relevant packages:* Ensure your graphics and layout packages
+  are up to date. You can update your packages (paying special attention
+  to `{ggplot2}` and `{patchwork}`) by running
   `update.packages(ask = FALSE)`.
+
+- *Update relevant software:* Finally, ensure your R version, and the
+  IDE you use, are up to date. Running the most recent versions of R
+  and, e.g., RStudio or Positron can resolve any remaining issues.
 
 ## See also
 
