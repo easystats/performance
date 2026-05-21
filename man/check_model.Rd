@@ -282,9 +282,12 @@ to 100\%) and restart your IDE.
 base font size of your plots to help them fit into smaller viewports. If
 you are using \code{{ggplot2}}, load the library and adjust your theme before
 plotting. For example: \code{theme_set(theme_classic(base_size = 6))}.
-\item \emph{Update relevant packages:} Finally, ensure your graphics and layout packages
-are up to date. You can update your packages (paying special attention to
+\item \emph{Update relevant packages:} Ensure your graphics and layout packages are up
+to date. You can update your packages (paying special attention to
 \code{{ggplot2}} and \code{{patchwork}}) by running \code{update.packages(ask = FALSE)}.
+\item \emph{Update relevant software:} Finally, ensure your R version, and the IDE
+you use, are up to date. Running the most recent versions of R and, e.g.,
+RStudio or Positron can resolve any remaining issues.
 }
 }
 
@@ -301,16 +304,16 @@ check_model(m, panel = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}
