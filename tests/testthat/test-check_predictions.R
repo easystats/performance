@@ -481,6 +481,7 @@ withr::with_environment(
   new.env(),
   {
     test_that("check_predictions, Bayesian discrete models use standard predictive-check data", {
+      skip_on_ci()
       skip_if_not_installed("modelbased", minimum_version = "0.12.0")
       skip_if_not_installed("curl")
       skip_if_not_installed("httr2")

@@ -335,13 +335,9 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 # We can run the function stratified by groups using `{datawizard}` package:
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
-# nolint start
-\dontshow{if (all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
-# nolint end
-\donttest{
-# You can also run all the methods
-check_outliers(data, method = "all", verbose = FALSE)
 
+\dontshow{if (all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\donttest{
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
 mt1 <- mtcars[, c(1, 3, 4)]
