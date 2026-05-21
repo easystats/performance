@@ -17,4 +17,22 @@ test_that("performance, chapter 10.3", {
       "3293.7 | 3293.8 | 3314.2 | 0.377 |     0.373 | 9.931 | 9.976"
     )
   )
+
+  expect_message(
+    {
+      out <- test_wald(m)
+    },
+    regex = "Only one model was provided",
+    fixed = TRUE
+  )
+  expect_identical(
+    capture.output(print(out, table_width = Inf)),
+    c(
+      "Name       | Model |  df | df_diff |     F |      p",
+      "---------------------------------------------------",
+      "Null model |    lm | 441 |         |       |       ",
+      "Full model |    lm | 438 |       3 | 88.46 | < .001",
+      "Models were detected as nested (in terms of fixed parameters) and are compared in sequential order."
+    )
+  )
 })
