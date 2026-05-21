@@ -1,4 +1,4 @@
-# performance (devel)
+# performance 0.17.0
 
 ## Changes
 
@@ -22,7 +22,7 @@
 * Fixed issue in `check_collinearity()` that was causing inflated VIF values
   when applied to clm and clmm models from the ordinal package.
 
-* Fixed issue in `test_likelihoodratio_ListLavaan()` that was extracting the
+* Fixed issue in `test_likelihoodratio.ListLavaan()` that was extracting the
   absolute model fit (Chisq) from the lavTestLRT output instead of the actual
   LRT test statistic (Chisq diff).
 
