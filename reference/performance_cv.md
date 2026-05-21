@@ -41,8 +41,8 @@ performance_cv(
 - metrics:
 
   Can be `"all"`, `"common"` or a character vector of metrics to be
-  computed (some of `c("ELPD", "Deviance", "MSE", "RMSE", "R2")`).
-  "common" will compute R2 and RMSE.
+  computed (some of `"MSE"`, `"RMSE"`, `"R2"`). `"common"` will compute
+  R2 and RMSE.
 
 - prop:
 
