@@ -487,13 +487,8 @@ check_outliers(group_iris)
 #> - For variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width
 #> 
 #> 
-# nolint start
-# nolint end
-# \donttest{
-# You can also run all the methods
-check_outliers(data, method = "all", verbose = FALSE)
-#> Error in solve.default(cov, ...): system is computationally singular: reciprocal condition number = 2.93158e-18
 
+# \donttest{
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
 mt1 <- mtcars[, c(1, 3, 4)]

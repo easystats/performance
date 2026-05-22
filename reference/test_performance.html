@@ -25,7 +25,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -292,11 +292,11 @@ many different models.</p></div>
 <span class="r-in"><span><span class="fu">test_bf</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Bayes Factors for Model Comparison</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Model                       BF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [m2] Petal.Width + Species    0.007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [m3] Petal.Width * Species 2.64e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Model                       BF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2] Petal.Width + Species    0.007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] Petal.Width * Species 2.64e-04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Against Denominator: <span style="color: #00BBBB;">[m1] Petal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Against Denominator: <span style="color: #00BBBB;">[1] Petal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> *   Bayes Factor Type: <span style="color: #00BBBB;">BIC approximation</span></span>
 <span class="r-in"><span><span class="fu">test_wald</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span><span class="op">)</span> <span class="co"># Equivalent to anova(m1, m2, m3)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model |  df | df_diff |    F |     p</span>

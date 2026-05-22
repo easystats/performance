@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,22 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.17.0" id="performance-0170">performance 0.17.0<a class="anchor" aria-label="anchor" href="#performance-0170"></a></h2><p class="text-muted">CRAN release: 2026-05-21</p>
+<div class="section level3">
+<h3 id="changes-0-17-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-17-0"></a></h3>
+<ul><li><p><code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> now has a new ‘Criterion’ column containing the -2 * log-likelihood (-2LL) value for each model.</p></li>
+<li><p>Added more details to the troubleshooting section to the documentation of <code><a href="../reference/check_model.html">check_model()</a></code>.</p></li>
+<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> for Bayesian models now uses <code><a href="https://easystats.github.io/modelbased/reference/estimate_expectation.html" class="external-link">modelbased::estimate_prediction()</a></code> and returns posterior predictive data in the same format as for other supported models.</p></li>
+<li><p>Updated tests to work with the next release of the <em>DHARMa</em> package (version 0.5.0).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-17-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-17-0"></a></h3>
+<ul><li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for models from the <em>fixest</em> package.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> that was causing inflated VIF values when applied to clm and clmm models from the ordinal package.</p></li>
+<li><p>Fixed issue in <code>test_likelihoodratio.ListLavaan()</code> that was extracting the absolute model fit (Chisq) from the lavTestLRT output instead of the actual LRT test statistic (Chisq diff).</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.0" id="performance-0160">performance 0.16.0<a class="anchor" aria-label="anchor" href="#performance-0160"></a></h2><p class="text-muted">CRAN release: 2026-02-04</p>
 <div class="section level3">

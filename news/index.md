@@ -1,5 +1,43 @@
 # Changelog
 
+## performance 0.17.0
+
+CRAN release: 2026-05-21
+
+### Changes
+
+- [`test_likelihoodratio()`](https://easystats.github.io/performance/reference/test_performance.md)
+  now has a new ‘Criterion’ column containing the -2 \* log-likelihood
+  (-2LL) value for each model.
+
+- Added more details to the troubleshooting section to the documentation
+  of
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md).
+
+- [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  for Bayesian models now uses
+  [`modelbased::estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.html)
+  and returns posterior predictive data in the same format as for other
+  supported models.
+
+- Updated tests to work with the next release of the *DHARMa* package
+  (version 0.5.0).
+
+### Bug fixes
+
+- Fixed issue in
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  for models from the *fixest* package.
+
+- Fixed issue in
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  that was causing inflated VIF values when applied to clm and clmm
+  models from the ordinal package.
+
+- Fixed issue in `test_likelihoodratio.ListLavaan()` that was extracting
+  the absolute model fit (Chisq) from the lavTestLRT output instead of
+  the actual LRT test statistic (Chisq diff).
+
 ## performance 0.16.0
 
 CRAN release: 2026-02-04

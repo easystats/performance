@@ -224,11 +224,11 @@ test_performance(m1, m2, m3)
 test_bf(m1, m2, m3)
 #> Bayes Factors for Model Comparison
 #> 
-#>      Model                       BF
-#> [m2] Petal.Width + Species    0.007
-#> [m3] Petal.Width * Species 2.64e-04
+#>     Model                       BF
+#> [2] Petal.Width + Species    0.007
+#> [3] Petal.Width * Species 2.64e-04
 #> 
-#> * Against Denominator: [m1] Petal.Width
+#> * Against Denominator: [1] Petal.Width
 #> *   Bayes Factor Type: BIC approximation
 test_wald(m1, m2, m3) # Equivalent to anova(m1, m2, m3)
 #> Name | Model |  df | df_diff |    F |     p
