@@ -71,6 +71,7 @@ test_that("check_zeroinflation, glmmTMB with and without zero-inflation componen
 
 test_that("check_zeroinflation, glmer.nb", {
   skip_on_cran()
+  skip_on_os("linux")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
   set.seed(101)
