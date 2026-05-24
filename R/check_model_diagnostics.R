@@ -28,7 +28,9 @@
 # prepare data for QQ plot ----------------------------------
 
 .model_diagnostic_qq <- function(model, model_info = NULL, verbose = TRUE) {
-  if (inherits(model, c("lme", "lmerMod", "merMod", "gam"))) {
+  if (
+    inherits(model, c("lme", "lmerMod", "merMod", "afex_aov", "BFBayesFactor", "gam"))
+  ) {
     res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
