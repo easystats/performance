@@ -319,8 +319,7 @@
       data.frame(
         Predicted = predicted,
         Residuals = raw_res,
-        Res2 = raw_res^2,
-        StdRes = raw_res # will be overwritten with standardized version below
+        Res2 = raw_res^2
       )
     })
     if (!is.null(d)) {
