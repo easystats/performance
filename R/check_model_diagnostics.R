@@ -320,7 +320,7 @@
         Predicted = predicted,
         Residuals = raw_res,
         Res2 = raw_res^2,
-        StdRes = raw_res  # will be overwritten with standardized version below
+        StdRes = raw_res # will be overwritten with standardized version below
       )
     })
     if (!is.null(d)) {
@@ -408,23 +408,26 @@
     stats::predict(model, type = ptype)
   }
 
-  if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
-    # Poisson: V = mu
-    expected_var <- d$Predicted
-  } else if (isTRUE(faminfo$family == "nbinom1") && !faminfo$is_zero_inflated) {
-    # nbinom1: V = mu(1 + phi)  [phi=0 is Poisson limit; larger phi = more OD]
-    expected_var <- d$Predicted * (1 + .get_disp())
-  } else if (isTRUE(faminfo$family == "nbinom2") && !faminfo$is_zero_inflated) {
-    # nbinom2: V = mu(1 + mu/phi)  [phi->inf is Poisson limit]
-    expected_var <- d$Predicted * (1 + d$Predicted / .get_disp())
-  } else if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    # General negbin (e.g., MASS::glm.nb): parameterized as nbinom2
-    expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
-  } else if (faminfo$is_poisson && faminfo$is_zero_inflated) {
+  # handle models without zero-inflation component
+  if (!faminfo$is_zero_inflated) {
+    if (faminfo$is_poisson) {
+      # Poisson: V = mu
+      expected_var <- d$Predicted
+    } else if (isTRUE(faminfo$family == "nbinom1")) {
+      # nbinom1: V = mu(1 + phi)  [phi=0 is Poisson limit; larger phi = more OD]
+      expected_var <- d$Predicted * (1 + .get_disp())
+    } else if (isTRUE(faminfo$family == "nbinom2")) {
+      # nbinom2: V = mu(1 + mu/phi)  [phi->inf is Poisson limit]
+      expected_var <- d$Predicted * (1 + d$Predicted / .get_disp())
+    } else if (faminfo$is_negbin) {
+      # General negbin (e.g., MASS::glm.nb): parameterized as nbinom2
+      expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+    }
+  } else if (faminfo$is_poisson) {
     # Zero-inflated Poisson: V = mu(1-p)(1 + mu*p)
     d$Prob <- .get_zprob()
     expected_var <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
-  } else if (isTRUE(faminfo$family == "nbinom1") && faminfo$is_zero_inflated) {
+  } else if (isTRUE(faminfo$family == "nbinom1")) {
     # Zero-inflated nbinom1
     disp <- .get_disp()
     d$Prob <- .get_zprob()
@@ -432,7 +435,7 @@
       (1 + disp) *
       (1 - d$Prob) *
       (1 + d$Predicted * (1 + disp) * d$Prob)
-  } else if (isTRUE(faminfo$family == "nbinom2") && faminfo$is_zero_inflated) {
+  } else if (isTRUE(faminfo$family == "nbinom2")) {
     # Zero-inflated nbinom2
     disp <- .get_disp()
     d$Prob <- .get_zprob()
@@ -440,7 +443,7 @@
       (1 + d$Predicted / disp) *
       (1 - d$Prob) *
       (1 + d$Predicted * (1 + d$Predicted / disp) * d$Prob)
-  } else if (faminfo$is_negbin && faminfo$is_zero_inflated) {
+  } else if (faminfo$is_negbin) {
     # General zero-inflated negbin
     disp <- insight::get_sigma(model)
     d$Prob <- .get_zprob()
