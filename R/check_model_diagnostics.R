@@ -304,11 +304,13 @@
   # For mixed models and glmmTMB models, use simulated residuals from DHARMa
   # for more accurate overdispersion visualization. Pearson residuals can be
   # misleading for these model types.
-  use_simres <- (isTRUE(faminfo$is_mixed) || inherits(model, "glmmTMB")) &&
+  use_simres <- (isTRUE(faminfo$is_mixed) ||
+    inherits(model, "glmmTMB") ||
+    faminfo$is_negbin) &&
     requireNamespace("DHARMa", quietly = TRUE)
 
   if (use_simres) {
-    out <- .safe({
+    d <- .safe({
       simres <- simulate_residuals(model, ...)
       predicted <- simres$fittedPredictedResponse
       # Normal-transformed quantile residuals; cap at +-7 to avoid Inf values
@@ -320,20 +322,17 @@
         quantile_function = stats::qnorm,
         outlier_values = c(-7, 7)
       )
-      data.frame(
+      out <- data.frame(
         Predicted = predicted,
         Residuals = res,
-        Res2 = res^2,
-        # Theoretical variance for N(0,1) quantile residuals: if the model is
-        # correctly specified, residuals should be ~N(0,1), so Res2 ~ chi-sq(1)
-        # with expected value 1. The blue reference line at V=1 allows checking
-        # whether the observed residual variance (green) matches the expected.
-        V = rep(1, length(predicted)),
         StdRes = res
       )
+      out$Res2 <- out$Residuals^2
+      out
     })
-    if (!is.null(out)) {
-      return(out)
+    if (!is.null(d)) {
+      d$V <- .expected_variance(model, faminfo, d)
+      return(d)
     }
   }
 
@@ -342,7 +341,7 @@
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    d$V <- d$Predicted
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -351,7 +350,7 @@
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -366,7 +365,7 @@
       ptype <- "zero"
     }
     d$Prob <- stats::predict(model, type = ptype)
-    d$V <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -375,17 +374,7 @@
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$Disp <- insight::get_sigma(model)
-    d$V <- d$Predicted *
-      (1 + d$Predicted / d$Disp) *
-      (1 - d$Prob) *
-      (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -394,17 +383,7 @@
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$Disp <- stats::predict(model, type = "disp")
-    d$V <- d$Predicted *
-      (1 + d$Predicted / d$Disp) *
-      (1 - d$Prob) *
-      (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -413,6 +392,51 @@
 
 
 # helpers ----------------------------------
+
+.expected_variance <- function(model, faminfo, d) {
+  expected_var <- NULL
+  if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
+    expected_var <- d$Predicted
+  } else if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
+    expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+  } else if (faminfo$is_poisson && faminfo$is_zero_inflated) {
+    d$Prob <- stats::predict(model, type = "zero")
+    expected_var <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
+  } else {
+    if (faminfo$is_dispersion) {
+      d$Disp <- stats::predict(model, type = "disp")
+    } else {
+      d$Disp <- insight::get_sigma(model)
+    }
+    if (faminfo$family == "nbinom1" && !faminfo$is_zero_inflated) {
+      expected_var <- d$Predicted * (1 + d$Disp)
+    } else if (faminfo$family == "nbinom2" && !faminfo$is_zero_inflated) {
+      expected_var <- d$Predicted * (1 + d$Predicted / d$Disp)
+    } else if (faminfo$family == "nbinom1" && faminfo$is_zero_inflated) {
+      d$Prob <- stats::predict(model, type = "zprob")
+      expected_var <- d$Predicted *
+        (1 + d$Disp) *
+        (1 - d$Prob) *
+        (1 + d$Predicted * (1 + d$Disp) * d$Prob)
+    } else if (faminfo$family == "nbinom2" && faminfo$is_zero_inflated) {
+      d$Prob <- stats::predict(model, type = "zprob")
+      expected_var <- d$Predicted *
+        (1 + d$Predicted / d$Disp) *
+        (1 - d$Prob) *
+        (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob)
+    } else if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
+      expected_var <- d$Predicted * (1 + d$Disp)
+    } else if (faminfo$is_negbin && faminfo$is_zero_inflated) {
+      d$Prob <- stats::predict(model, type = "zero")
+      expected_var <- d$Predicted *
+        (1 + d$Predicted / d$Disp) *
+        (1 - d$Prob) *
+        (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob)
+    }
+  }
+  expected_var
+}
+
 
 .sigma_glmmTMB_nonmixed <- function(model, faminfo) {
   if (!is.na(match(faminfo$family, c("binomial", "poisson", "truncated_poisson")))) {
