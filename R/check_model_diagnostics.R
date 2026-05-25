@@ -313,25 +313,20 @@
     d <- .safe({
       simres <- simulate_residuals(model, ...)
       predicted <- simres$fittedPredictedResponse
-      # Normal-transformed quantile residuals; cap at +-7 to avoid Inf values
-      # at boundaries (when DHARMa residuals are exactly 0 or 1). The value 7
-      # is chosen as a practical upper bound: qnorm(0.9999997) ~= 7, making
-      # it an extreme but interpretable value on the standard normal scale.
-      res <- stats::residuals(
-        simres,
-        quantile_function = stats::qnorm,
-        outlier_values = c(-7, 7)
-      )
-      out <- data.frame(
+      # Use response-scale residuals (observed - predicted) so that Res2 and V
+      # are on the same scale as the family variance formula.
+      raw_res <- simres$observedResponse - predicted
+      data.frame(
         Predicted = predicted,
-        Residuals = res,
-        StdRes = res
+        Residuals = raw_res,
+        Res2 = raw_res^2,
+        StdRes = raw_res  # will be overwritten with standardized version below
       )
-      out$Res2 <- out$Residuals^2
-      out
     })
     if (!is.null(d)) {
       d$V <- .expected_variance(model, faminfo, d)
+      # Pearson-like standardized residuals: divide by sqrt of expected variance
+      d$StdRes <- d$Residuals / sqrt(pmax(d$V, .Machine$double.eps))
       return(d)
     }
   }
@@ -395,45 +390,64 @@
 
 .expected_variance <- function(model, faminfo, d) {
   expected_var <- NULL
-  if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
-    expected_var <- d$Predicted
-  } else if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
-  } else if (faminfo$is_poisson && faminfo$is_zero_inflated) {
-    d$Prob <- stats::predict(model, type = "zero")
-    expected_var <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
-  } else {
-    if (faminfo$is_dispersion) {
-      d$Disp <- stats::predict(model, type = "disp")
+
+  # Helper: get per-observation dispersion (if dispersion model) or scalar sigma
+  .get_disp <- function() {
+    if (isTRUE(faminfo$is_dispersion)) {
+      stats::predict(model, type = "disp")
     } else {
-      d$Disp <- insight::get_sigma(model)
-    }
-    if (faminfo$family == "nbinom1" && !faminfo$is_zero_inflated) {
-      expected_var <- d$Predicted * (1 + d$Disp)
-    } else if (faminfo$family == "nbinom2" && !faminfo$is_zero_inflated) {
-      expected_var <- d$Predicted * (1 + d$Predicted / d$Disp)
-    } else if (faminfo$family == "nbinom1" && faminfo$is_zero_inflated) {
-      d$Prob <- stats::predict(model, type = "zprob")
-      expected_var <- d$Predicted *
-        (1 + d$Disp) *
-        (1 - d$Prob) *
-        (1 + d$Predicted * (1 + d$Disp) * d$Prob)
-    } else if (faminfo$family == "nbinom2" && faminfo$is_zero_inflated) {
-      d$Prob <- stats::predict(model, type = "zprob")
-      expected_var <- d$Predicted *
-        (1 + d$Predicted / d$Disp) *
-        (1 - d$Prob) *
-        (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob)
-    } else if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-      expected_var <- d$Predicted * (1 + d$Disp)
-    } else if (faminfo$is_negbin && faminfo$is_zero_inflated) {
-      d$Prob <- stats::predict(model, type = "zero")
-      expected_var <- d$Predicted *
-        (1 + d$Predicted / d$Disp) *
-        (1 - d$Prob) *
-        (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob)
+      insight::get_sigma(model)
     }
   }
+
+  # Helper: get zero-inflation probability (glmmTMB uses "zprob", others "zero")
+  .get_zprob <- function() {
+    ptype <- if (inherits(model, "glmmTMB")) "zprob" else "zero"
+    stats::predict(model, type = ptype)
+  }
+
+  if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
+    # Poisson: V = mu
+    expected_var <- d$Predicted
+  } else if (isTRUE(faminfo$family == "nbinom1") && !faminfo$is_zero_inflated) {
+    # nbinom1: V = mu(1 + phi)  [phi=0 is Poisson limit; larger phi = more OD]
+    expected_var <- d$Predicted * (1 + .get_disp())
+  } else if (isTRUE(faminfo$family == "nbinom2") && !faminfo$is_zero_inflated) {
+    # nbinom2: V = mu(1 + mu/phi)  [phi->inf is Poisson limit]
+    expected_var <- d$Predicted * (1 + d$Predicted / .get_disp())
+  } else if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
+    # General negbin (e.g., MASS::glm.nb): parameterized as nbinom2
+    expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+  } else if (faminfo$is_poisson && faminfo$is_zero_inflated) {
+    # Zero-inflated Poisson: V = mu(1-p)(1 + mu*p)
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
+  } else if (isTRUE(faminfo$family == "nbinom1") && faminfo$is_zero_inflated) {
+    # Zero-inflated nbinom1
+    disp <- .get_disp()
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted *
+      (1 + disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + disp) * d$Prob)
+  } else if (isTRUE(faminfo$family == "nbinom2") && faminfo$is_zero_inflated) {
+    # Zero-inflated nbinom2
+    disp <- .get_disp()
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted *
+      (1 + d$Predicted / disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + d$Predicted / disp) * d$Prob)
+  } else if (faminfo$is_negbin && faminfo$is_zero_inflated) {
+    # General zero-inflated negbin
+    disp <- insight::get_sigma(model)
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted *
+      (1 + d$Predicted / disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + d$Predicted / disp) * d$Prob)
+  }
+
   expected_var
 }
 
