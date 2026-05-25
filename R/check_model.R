@@ -732,7 +732,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   # misspecified dispersion and zero-inflation --------------
   if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
-    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(model)
+    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(model, ...)
   }
 
   dat <- insight::compact_list(dat)

@@ -1,3 +1,11 @@
+# performance (devel)
+
+## Bug fixes
+
+* The overdispersion plot in `check_model()` now uses simulated residuals (based
+  on the *DHARMa* package) for `glmmTMB` models and mixed models. This fixes
+  wonky-looking overdispersion plots for these model types (#654).
+
 # performance 0.17.0
 
 ## Changes
