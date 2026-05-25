@@ -66,7 +66,9 @@ check_multimodal.data.frame <- function(x, ...) {
       insight::format_value(rez$df, protect_integers = TRUE),
       ") = ",
       insight::format_value(rez$Chisq),
-      ", ", insight::format_p(rez$p), ").\n"
+      ", ",
+      insight::format_p(rez$p),
+      ").\n"
     )
     color <- "green"
   } else {
@@ -76,11 +78,12 @@ check_multimodal.data.frame <- function(x, ...) {
       insight::format_value(rez$df, protect_integers = TRUE),
       ") = ",
       insight::format_value(rez$Chisq),
-      ", ", insight::format_p(rez$p), ").\n"
+      ", ",
+      insight::format_p(rez$p),
+      ").\n"
     )
     color <- "yellow"
   }
-
 
   attr(rez, "text") <- insight::format_message(msg)
   attr(rez, "color") <- color
@@ -105,7 +108,9 @@ check_multimodal.numeric <- function(x, ...) {
       msg,
       "the distribution is significantly multimodal (excess mass = ",
       insight::format_value(rez$excess_mass),
-      ", ", insight::format_p(rez$p), ").\n"
+      ", ",
+      insight::format_p(rez$p),
+      ").\n"
     )
     color <- "green"
   } else {
@@ -113,7 +118,9 @@ check_multimodal.numeric <- function(x, ...) {
       msg,
       "the hypothesis of a multimodal distribution cannot be rejected (excess mass = ",
       insight::format_value(rez$excess_mass),
-      ", ", insight::format_p(rez$p), ").\n"
+      ", ",
+      insight::format_p(rez$p),
+      ").\n"
     )
     color <- "yellow"
   }

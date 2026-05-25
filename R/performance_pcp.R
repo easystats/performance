@@ -50,10 +50,7 @@
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
 #' @export
-performance_pcp <- function(model,
-                            ci = 0.95,
-                            method = "Herron",
-                            verbose = TRUE) {
+performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
   # fix special cases
   if (inherits(model, c("model_fit", "logitor", "logitmfx", "probitmfx"))) {
     model <- model$fit
@@ -66,13 +63,20 @@ performance_pcp <- function(model,
   mi <- insight::model_info(model, verbose = verbose)
 
   if (!mi$is_binomial) {
-    insight::format_error("`performance_pcp()` only works for models with binary outcome.")
+    insight::format_error(
+      "`performance_pcp()` only works for models with binary outcome."
+    )
   }
 
   resp <- insight::get_response(model, verbose = verbose)
 
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
-    if (verbose) insight::print_color("`performance_pcp()` only works for models with binary response values.\n", "red")
+    if (verbose) {
+      insight::print_color(
+        "`performance_pcp()` only works for models with binary response values.\n",
+        "red"
+      )
+    }
     return(NULL)
   }
 
@@ -91,9 +95,22 @@ performance_pcp <- function(model,
 
 #' @export
 print.performance_pcp <- function(x, digits = 2, ...) {
-  insight::print_color("# Percentage of Correct Predictions from Logistic Regression Model\n\n", "blue")
-  cat(sprintf("  Full model: %.2f%% [%.2f%% - %.2f%%]\n", 100 * x$pcp_model, 100 * x$model_ci_low, 100 * x$model_ci_high))
-  cat(sprintf("  Null model: %.2f%% [%.2f%% - %.2f%%]\n", 100 * x$pcp_m0, 100 * x$null_ci_low, 100 * x$null_ci_high))
+  insight::print_color(
+    "# Percentage of Correct Predictions from Logistic Regression Model\n\n",
+    "blue"
+  )
+  cat(sprintf(
+    "  Full model: %.2f%% [%.2f%% - %.2f%%]\n",
+    100 * x$pcp_model,
+    100 * x$model_ci_low,
+    100 * x$model_ci_high
+  ))
+  cat(sprintf(
+    "  Null model: %.2f%% [%.2f%% - %.2f%%]\n",
+    100 * x$pcp_m0,
+    100 * x$null_ci_low,
+    100 * x$null_ci_high
+  ))
 
   insight::print_color("\n# Likelihood-Ratio-Test\n\n", "blue")
 
@@ -148,23 +165,32 @@ as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
     pcp_null <- 1 - mean((pr_null > 0.5 & y_null == 0) | (pr_null <= 0.5 & y_null == 1))
   }
 
-  lrt.p <- 1 - stats::pchisq(
-    q = model$null.deviance - model$deviance,
-    df = model$df.null - model$df.residual,
-    lower.tail = TRUE
-  )
+  lrt.p <- 1 -
+    stats::pchisq(
+      q = model$null.deviance - model$deviance,
+      df = model$df.null - model$df.residual,
+      lower.tail = TRUE
+    )
 
-  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model, verbose = verbose) - insight::get_loglikelihood(m0, verbose = verbose))
+  lrt.chisq <- 2 *
+    abs(
+      insight::get_loglikelihood(model, verbose = verbose) -
+        insight::get_loglikelihood(m0, verbose = verbose)
+    )
 
   structure(
     class = "performance_pcp",
     list(
       pcp_model = pcp_full,
-      model_ci_low = pcp_full - stats::qnorm((1 + ci) / 2) * sqrt(pcp_full * (1 - pcp_full) / n_full),
-      model_ci_high = pcp_full + stats::qnorm((1 + ci) / 2) * sqrt(pcp_full * (1 - pcp_full) / n_full),
+      model_ci_low = pcp_full -
+        stats::qnorm((1 + ci) / 2) * sqrt(pcp_full * (1 - pcp_full) / n_full),
+      model_ci_high = pcp_full +
+        stats::qnorm((1 + ci) / 2) * sqrt(pcp_full * (1 - pcp_full) / n_full),
       pcp_m0 = pcp_null,
-      null_ci_low = pcp_null - stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
-      null_ci_high = pcp_null + stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
+      null_ci_low = pcp_null -
+        stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
+      null_ci_high = pcp_null +
+        stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       lrt_chisq = as.vector(lrt.chisq),
       lrt_df_error = model$df.null - model$df.residual,
       lrt_p = lrt.p

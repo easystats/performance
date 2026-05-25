@@ -70,7 +70,12 @@
 #' item_discrimination(x)
 #' item_totalcor(x)
 #' @export
-item_discrimination <- function(x, standardize = FALSE, corrected = TRUE, verbose = TRUE) {
+item_discrimination <- function(
+  x,
+  standardize = FALSE,
+  corrected = TRUE,
+  verbose = TRUE
+) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
     insight::format_alert("`x` needs to be a data frame or matrix.")
@@ -90,21 +95,27 @@ item_discrimination <- function(x, standardize = FALSE, corrected = TRUE, verbos
     x <- .std(x)
   }
   # calculate corrected total-item correlation
-  id <- vapply(seq_len(ncol(x)), function(i) {
-    if (corrected) {
-      # compute item discrimination (corrected item-total correlation)
-      score <- rowSums(x[, -i])
-    } else {
-      # compute item-total correlation
-      score <- rowSums(x)
-    }
-    stats::cor(x[, i], score, use = "pairwise.complete.obs")
-  }, numeric(1))
+  id <- vapply(
+    seq_len(ncol(x)),
+    function(i) {
+      if (corrected) {
+        # compute item discrimination (corrected item-total correlation)
+        score <- rowSums(x[, -i])
+      } else {
+        # compute item-total correlation
+        score <- rowSums(x)
+      }
+      stats::cor(x[, i], score, use = "pairwise.complete.obs")
+    },
+    numeric(1)
+  )
 
   # check for negative discrimination values. Tell user that item might need
   # to be reverse coded
   if (any(id < 0) && verbose) {
-    insight::format_alert("Some of the values are negative. Maybe affected items need to be reverse-coded, e.g. using `datawizard::reverse()`.")
+    insight::format_alert(
+      "Some of the values are negative. Maybe affected items need to be reverse-coded, e.g. using `datawizard::reverse()`."
+    )
   }
 
   out <- data.frame(
@@ -127,7 +138,12 @@ item_discrimination <- function(x, standardize = FALSE, corrected = TRUE, verbos
 #' @export
 item_totalcor <- function(x, standardize = FALSE, corrected = FALSE, verbose = TRUE) {
   # alias for item_discrimination, but corrected is FALSE by default
-  item_discrimination(x, standardize = standardize, corrected = corrected, verbose = verbose)
+  item_discrimination(
+    x,
+    standardize = standardize,
+    corrected = corrected,
+    verbose = verbose
+  )
 }
 
 

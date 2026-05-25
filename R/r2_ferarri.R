@@ -46,7 +46,6 @@ r2_ferrari.default <- function(model, correct_bounds = FALSE, ...) {
   structure(class = "r2_generic", out)
 }
 
-
 # helper -----------------------------
 
 # .r2_ferrari <- function(model, x) {

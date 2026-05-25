@@ -66,7 +66,7 @@ See the documentation for \code{?metafor::fitstats}.
 }
 }
 \examples{
-\dontshow{if (require("metafor") && require("metadat")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("metafor") && require("metadat")) withAutoprint(\{ # examplesIf}
 data(dat.bcg, package = "metadat")
 dat <- metafor::escalc(
   measure = "RR",

@@ -142,7 +142,7 @@ r-squared values, which may not be meaningful.
 }
 
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2_nakagawa(model)
 r2_nakagawa(model, by_group = TRUE)

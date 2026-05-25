@@ -31,7 +31,6 @@ r2_mcfadden <- function(model, ...) {
 
 # helper -----------------------
 
-
 .r2_mcfadden <- function(model, l_null) {
   l_full <- insight::get_loglikelihood(model)
   k <- length(insight::find_parameters(model))
@@ -50,7 +49,6 @@ r2_mcfadden <- function(model, ...) {
 
 # r2 via loglik and update --------------------------
 
-
 #' @export
 r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
   info <- list(...)$model_info
@@ -59,16 +57,25 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
   }
   matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
 
-  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] %in% c("glm", "glmmTMB")) {
+  if (
+    info$is_binomial &&
+      !info$is_betabinomial &&
+      !info$is_bernoulli &&
+      class(model)[1] %in% c("glm", "glmmTMB")
+  ) {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
   # currently, beta-binomial models without proportion response are not supported
   if (info$is_betabinomial && matrix_response) {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
+      )
     }
     return(NULL)
   }
@@ -128,7 +135,6 @@ r2_mcfadden.mblogit <- function(model, ...) {
 
 # mfx models ---------------------
 
-
 #' @export
 r2_mcfadden.logitmfx <- function(model, ...) {
   r2_mcfadden(model$fit, ...)
@@ -154,7 +160,6 @@ r2_mcfadden.negbinmfx <- r2_mcfadden.logitmfx
 
 
 # special models -------------------------------------------
-
 
 #' @export
 r2_mcfadden.vglm <- function(model, ...) {

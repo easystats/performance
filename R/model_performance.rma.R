@@ -60,7 +60,13 @@
 #' model <- metafor::rma(yi, vi, data = dat, method = "REML")
 #' model_performance(model)
 #' @export
-model_performance.rma <- function(model, metrics = "all", estimator = "ML", verbose = TRUE, ...) {
+model_performance.rma <- function(
+  model,
+  metrics = "all",
+  estimator = "ML",
+  verbose = TRUE,
+  ...
+) {
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "I2", "H2", "TAU2", "COCHRANSQ", "OMNIBUS", "R2")
   } else if (all(metrics == "common")) {

@@ -10,7 +10,11 @@ test_that("fixest: r2", {
   expect_equal(r2_res$R2, fixest::fitstat(res, "r2")[[1]], ignore_attr = TRUE)
   expect_equal(r2_res$R2_adjusted, fixest::fitstat(res, "ar2")[[1]], ignore_attr = TRUE)
   expect_equal(r2_res$R2_within, fixest::fitstat(res, "wr2")[[1]], ignore_attr = TRUE)
-  expect_equal(r2_res$R2_within_adjusted, fixest::fitstat(res, "war2")[[1]], ignore_attr = TRUE)
+  expect_equal(
+    r2_res$R2_within_adjusted,
+    fixest::fitstat(res, "war2")[[1]],
+    ignore_attr = TRUE
+  )
 })
 
 

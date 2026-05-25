@@ -31,7 +31,6 @@ test_that("performance_reliability - Bayesian", {
   expect_equal(out$Reliability, c(0.97116, 0.80915), tolerance = 1e-3)
 })
 
-
 ## FIXME: doesn't work yet for Bayesian models
 
 # test_that("performance_reliability - Bayesian", {

@@ -9,7 +9,7 @@
 #' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
 #' get hints about possible problems.
 #'
-#' @param x A model object.
+#' @param model A model object.
 #' @param size_dot,size_line Size of line and dot-geoms.
 #' @param base_size,size_title,size_axis_title Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
@@ -28,8 +28,8 @@
 #' @param colors Character vector with color codes (hex-format). Must be of
 #' length 3. First color is usually used for reference lines, second color
 #' for dots, and third color for outliers or extreme values.
-#' @param theme String, indicating the name of the plot-theme. Must be in the
-#' format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
+#' @param theme A ggplot2-theme function, e.g. `theme = see::theme_lucid()` or
+#' `theme = ggplot2::theme_dark()`.
 #' @param detrend Logical. Should Q-Q/P-P plots be detrended? Defaults to
 #' `TRUE` for linear models or when `residual_type = "normal"`. Defaults to
 #' `FALSE` for QQ plots based on simulated residuals (i.e. when
@@ -47,9 +47,17 @@
 #' time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
 #' tries to guess whether performance will be poor due to a very large model
 #' and thus automatically shows or hides dots.
+#' @param show_ci Logical, if `TRUE`, confidence intervals in plots are shown.
+#' For models with only categorical predictors, confidence intervals are not shown
+#' by default, because in this case, these are usually on very large scales.
+#' @param maximum_dots Limits the number of data points for models with many
+#' observations, to reduce the time for rendering the plot. Defaults to a
+#' maximum of 2000 data points to render
 #' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Arguments passed down to the individual check functions, especially
 #' to `check_predictions()` and `binned_residuals()`.
+#' @param x Deprecated, please use `model` instead.
+#'
 #' @inheritParams check_predictions
 #'
 #' @return The data frame that is used for plotting.
@@ -173,9 +181,37 @@
 #' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
 #' get hints about possible problems.
 #'
+#' If your plots are not rendering correctly in your IDE or you receive an error
+#' stating that the viewport is too small, try the following steps to resolve
+#' the issue:
+#'
+#' - *Enlarge the plotting window:* The most common cause is that the plotting
+#'   pane is simply too small. If you are using RStudio, click and drag the
+#'   edges of the 'Plots' pane to increase its dimensions, then try plotting
+#'   again.
+#' - *Reset your IDE zoom settings:* If resizing the window doesn't help, your
+#'   IDE's zoom level might be causing scaling issues. In RStudio, navigate to
+#'   the menu bar and select *View > Actual Size* to reset the zoom. If you are
+#'   using a different IDE, look for a similar zoom reset option.
+#' - *Adjust Windows display scaling:* On Windows, system-wide display scaling can
+#'   sometimes interfere with graphical outputs in R. You can adjust this in
+#'   your system settings: Go to *Start > Settings > System > Display* and locate
+#'   the `"Scale and layout"` section. Try reducing the scaling percentage (e.g.,
+#'   to 100%) and restart your IDE.
+#' - *Decrease the base font size:* As a code-level workaround, you can reduce the
+#'   base font size of your plots to help them fit into smaller viewports. If
+#'   you are using `{ggplot2}`, load the library and adjust your theme before
+#'   plotting. For example: `theme_set(theme_classic(base_size = 6))`.
+#' - *Update relevant packages:* Ensure your graphics and layout packages are up
+#'   to date. You can update your packages (paying special attention to
+#'   `{ggplot2}` and `{patchwork}`) by running `update.packages(ask = FALSE)`.
+#' - *Update relevant software:* Finally, ensure your R version, and the IDE
+#'   you use, are up to date. Running the most recent versions of R and, e.g.,
+#'   RStudio or Positron can resolve any remaining issues.
+#'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4") && FALSE
 #' \donttest{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_model(m)
@@ -185,7 +221,7 @@
 #' check_model(m, panel = FALSE)
 #' }
 #' @export
-check_model <- function(x, ...) {
+check_model <- function(model = NULL, ...) {
   UseMethod("check_model")
 }
 
@@ -194,31 +230,44 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x,
-                                panel = TRUE,
-                                check = "all",
-                                detrend = TRUE,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                show_dots = NULL,
-                                size_dot = 2,
-                                size_line = 0.8,
-                                size_title = 12,
-                                size_axis_title = base_size,
-                                base_size = 10,
-                                alpha = 0.2,
-                                alpha_dot = 0.8,
-                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                theme = "see::theme_lucid",
-                                verbose = FALSE,
-                                ...) {
-  # check model formula
-  if (verbose) {
-    insight::formula_ok(x)
+check_model.default <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
   }
 
-  minfo <- insight::model_info(x, verbose = FALSE)
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  minfo <- insight::model_info(model, verbose = FALSE)
 
   # set default for residual_type
   if (is.null(residual_type)) {
@@ -240,11 +289,25 @@ check_model.default <- function(x,
 
   assumptions_data <- tryCatch(
     if (minfo$is_bayesian) {
-      suppressWarnings(.check_assumptions_stan(x, ...))
+      suppressWarnings(.check_assumptions_stan(model, ...))
     } else if (minfo$is_linear) {
-      suppressWarnings(.check_assumptions_linear(x, minfo, check, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_linear(
+        model,
+        minfo,
+        check,
+        residual_type,
+        verbose,
+        ...
+      ))
     } else {
-      suppressWarnings(.check_assumptions_glm(x, minfo, check, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_glm(
+        model,
+        minfo,
+        check,
+        residual_type,
+        verbose,
+        ...
+      ))
     },
     error = function(e) {
       e
@@ -257,7 +320,11 @@ check_model.default <- function(x,
     cleaned_string <- gsub(pattern, replacement, assumptions_data$message)
     insight::format_error(
       paste("`check_model()` returned following error:", cleaned_string),
-      paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
+      paste0(
+        "\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `",
+        class(model)[1],
+        "` are not yet supported."
+      ) # nolint
     )
   }
 
@@ -265,21 +332,42 @@ check_model.default <- function(x,
   if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
     insight::format_alert(paste0(
       "Cannot simulate residuals for models of class `",
-      class(x)[1],
+      class(model)[1],
       "`. Please try `check_model(..., residual_type = \"normal\")` instead."
     ))
   }
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  suggest_dots <- (minfo$is_bernoulli ||
+    minfo$is_count ||
+    minfo$is_ordinal ||
+    minfo$is_categorical ||
+    minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
 
   # set default for show_dots, based on "model size"
+  n <- .safe(insight::n_obs(model))
   if (is.null(show_dots)) {
-    n <- .safe(insight::n_obs(x))
     show_dots <- is.null(n) || n <= 1e5
+  }
+
+  # tell user about limited dots
+  if (!is.null(maximum_dots) && !is.null(n) && n > maximum_dots && verbose) {
+    insight::format_alert(
+      "The model contains a large number of observations. To ensure efficient rendering, the plot is limited to 2,000 data points. You can use the `maximum_dots` argument to adjust this limit."
+    )
+  }
+
+  # if we have only categorical predictors, we don't show CI by default
+  parameter_types <- .safe(parameters::parameters_type(model))
+  if (
+    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
+  ) {
+    show_ci = FALSE
+  } else {
+    show_ci = TRUE
   }
 
   attr(assumptions_data, "panel") <- panel
@@ -292,6 +380,7 @@ check_model.default <- function(x,
   attr(assumptions_data, "alpha") <- alpha
   attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
+  attr(assumptions_data, "show_ci") <- isTRUE(show_ci)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
@@ -299,7 +388,8 @@ check_model.default <- function(x,
   attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
   attr(assumptions_data, "bandwidth") <- bandwidth
   attr(assumptions_data, "type") <- type
-  attr(assumptions_data, "model_class") <- class(x)[1]
+  attr(assumptions_data, "maximum_dots") <- maximum_dots
+  attr(assumptions_data, "model_class") <- class(model)[1]
   assumptions_data
 }
 
@@ -325,26 +415,40 @@ plot.check_model <- function(x, ...) {
 ## need to fix this later
 
 #' @export
-check_model.stanreg <- function(x,
-                                panel = TRUE,
-                                check = "all",
-                                detrend = TRUE,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                show_dots = NULL,
-                                size_dot = 2,
-                                size_line = 0.8,
-                                size_title = 12,
-                                size_axis_title = base_size,
-                                base_size = 10,
-                                alpha = 0.2,
-                                alpha_dot = 0.8,
-                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                theme = "see::theme_lucid",
-                                verbose = FALSE,
-                                ...) {
-  check_model(bayestestR::bayesian_as_frequentist(x),
+check_model.stanreg <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
+  check_model(
+    model = .safe(bayestestR::bayesian_as_frequentist(model)),
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -357,9 +461,11 @@ check_model.stanreg <- function(x,
     size_axis_title = size_axis_title,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
+    maximum_dots = maximum_dots,
     verbose = verbose,
     ...
   )
@@ -371,27 +477,40 @@ check_model.brmsfit <- check_model.stanreg
 
 
 #' @export
-check_model.model_fit <- function(x,
-                                  panel = TRUE,
-                                  check = "all",
-                                  detrend = TRUE,
-                                  bandwidth = "nrd",
-                                  type = "density",
-                                  residual_type = NULL,
-                                  show_dots = NULL,
-                                  size_dot = 2,
-                                  size_line = 0.8,
-                                  size_title = 12,
-                                  size_axis_title = base_size,
-                                  base_size = 10,
-                                  alpha = 0.2,
-                                  alpha_dot = 0.8,
-                                  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                  theme = "see::theme_lucid",
-                                  verbose = FALSE,
-                                  ...) {
+check_model.model_fit <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
-    x$fit,
+    model$fit,
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -404,6 +523,8 @@ check_model.model_fit <- function(x,
     base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
+    maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
@@ -414,27 +535,40 @@ check_model.model_fit <- function(x,
 
 
 #' @export
-check_model.performance_simres <- function(x,
-                                           panel = TRUE,
-                                           check = "all",
-                                           detrend = TRUE,
-                                           bandwidth = "nrd",
-                                           type = "density",
-                                           residual_type = NULL,
-                                           show_dots = NULL,
-                                           size_dot = 2,
-                                           size_line = 0.8,
-                                           size_title = 12,
-                                           size_axis_title = base_size,
-                                           base_size = 10,
-                                           alpha = 0.2,
-                                           alpha_dot = 0.8,
-                                           colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                           theme = "see::theme_lucid",
-                                           verbose = FALSE,
-                                           ...) {
+check_model.performance_simres <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
-    x$fittedModel,
+    model$fittedModel,
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -447,6 +581,8 @@ check_model.performance_simres <- function(x,
     base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
+    maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
     residual_type = "simulated",
@@ -461,7 +597,14 @@ check_model.DHARMa <- check_model.performance_simres
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, check = "all", residual_type = "normal", verbose = TRUE, ...) {
+.check_assumptions_linear <- function(
+  model,
+  model_info,
+  check = "all",
+  residual_type = "normal",
+  verbose = TRUE,
+  ...
+) {
   dat <- list()
 
   # multicollinearity --------------
@@ -471,7 +614,8 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
-    dat$QQ <- switch(residual_type,
+    dat$QQ <- switch(
+      residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
       .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
@@ -479,7 +623,12 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(
+      model,
+      level = 0.95,
+      model_info = model_info,
+      verbose = verbose
+    )
   }
 
   # normal-curve plot (normality of residuals) --------------
@@ -521,7 +670,14 @@ check_model.DHARMa <- check_model.performance_simres
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info, check = "all", residual_type = "simulated", verbose = TRUE, ...) {
+.check_assumptions_glm <- function(
+  model,
+  model_info,
+  check = "all",
+  residual_type = "simulated",
+  verbose = TRUE,
+  ...
+) {
   dat <- list()
 
   # multicollinearity --------------
@@ -531,7 +687,8 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
-    dat$QQ <- switch(residual_type,
+    dat$QQ <- switch(
+      residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
       .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
@@ -544,7 +701,12 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(
+      model,
+      level = 0.95,
+      model_info = model_info,
+      verbose = verbose
+    )
   }
 
   # outliers --------------
@@ -603,14 +765,21 @@ check_model.DHARMa <- check_model.performance_simres
 
     # get samples from posterior and prior
 
-    d1 <- d1[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d1), perl = TRUE)]
-    d2 <- d2[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d2), perl = TRUE)]
+    d1 <- d1[, grepl(
+      pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)",
+      colnames(d1),
+      perl = TRUE
+    )]
+    d2 <- d2[, grepl(
+      pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)",
+      colnames(d2),
+      perl = TRUE
+    )]
   } else if (inherits(model, c("stanreg", "stanfit"))) {
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
       insight::format_error("Package `rstanarm` needs to be loaded first!")
     }
-
 
     # get samples from posterior and prior
 
@@ -626,7 +795,6 @@ check_model.DHARMa <- check_model.performance_simres
 
     d1 <- as.data.frame(model)
     d2 <- as.data.frame(prior)
-
 
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
@@ -647,10 +815,17 @@ check_model.DHARMa <- check_model.performance_simres
       d2 <- datawizard::data_remove(d2, "sigma")
     }
 
-    d1 <- d1[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d1), perl = TRUE)]
-    d2 <- d2[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d2), perl = TRUE)]
+    d1 <- d1[, grepl(
+      pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)",
+      colnames(d1),
+      perl = TRUE
+    )]
+    d2 <- d2[, grepl(
+      pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)",
+      colnames(d2),
+      perl = TRUE
+    )]
   }
-
 
   # grouping variable
 

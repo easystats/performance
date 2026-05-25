@@ -140,7 +140,7 @@ increasing lack of identifiability. The \emph{VIF proportion} column equals the
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
 
-\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # plot results
 x <- check_collinearity(m)
 plot(x)
@@ -164,8 +164,8 @@ Inflation Factors in Regression Models Using Latent Variable Modeling
 Methods. Educational and Psychological Measurement, 79(5), 874–882.
 \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
-\item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-\href{https://janhove.github.io/posts/2019-09-11-collinearity/}{webpage}
+\item Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
+Meta-Psychology, 5. \doi{10.15626/MP.2021.2548}
 \item Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 common statistical problems: Data exploration. Methods in Ecology and
 Evolution (2010) 1:3–14.
@@ -174,16 +174,16 @@ Evolution (2010) 1:3–14.
 \seealso{
 \code{\link[see:plot.see_check_collinearity]{see::plot.see_check_collinearity()}} for options to customize the plot.
 
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

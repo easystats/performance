@@ -54,7 +54,20 @@
 #' @export
 performance_score <- function(model, verbose = TRUE, ...) {
   # check special case
-  if (inherits(model, c("logitor", "logitmfx", "probitmfx", "negbinirr", "negbinmfx", "poissonirr", "poissonmfx"))) {
+  if (
+    inherits(
+      model,
+      c(
+        "logitor",
+        "logitmfx",
+        "probitmfx",
+        "negbinirr",
+        "negbinmfx",
+        "poissonirr",
+        "poissonmfx"
+      )
+    )
+  ) {
     model <- model$fit
   }
 
@@ -65,7 +78,9 @@ performance_score <- function(model, verbose = TRUE, ...) {
 
   if (minfo$is_ordinal || minfo$is_multinomial) {
     if (verbose) {
-      insight::format_alert("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.")
+      insight::format_alert(
+        "Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models."
+      )
     }
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
@@ -74,7 +89,9 @@ performance_score <- function(model, verbose = TRUE, ...) {
 
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) {
-      insight::format_alert("Can't calculate proper scoring rules for models without integer response values.")
+      insight::format_alert(
+        "Can't calculate proper scoring rules for models without integer response values."
+      )
     }
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
@@ -84,7 +101,9 @@ performance_score <- function(model, verbose = TRUE, ...) {
   } else if (minfo$is_poisson && !minfo$is_zero_inflated) {
     function(x, mean, pis, n) stats::dpois(x, lambda = mean)
   } else if (minfo$is_negbin && !minfo$is_zero_inflated) {
-    function(x, mean, pis, n) stats::dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo)))
+    function(x, mean, pis, n) {
+      stats::dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo)))
+    }
   } else if (minfo$is_poisson && minfo$is_zero_inflated && !minfo$is_hurdle) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
@@ -95,14 +114,20 @@ performance_score <- function(model, verbose = TRUE, ...) {
   } else if (minfo$is_zero_inflated && minfo$is_negbin && !minfo$is_hurdle) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
-      out <- (1 - pis) * stats::dnbinom(x, mu = mean / (1 - pis), size = exp(.dispersion_parameter(model, minfo)))
+      out <- (1 - pis) *
+        stats::dnbinom(
+          x,
+          mu = mean / (1 - pis),
+          size = exp(.dispersion_parameter(model, minfo))
+        )
       out[ind0] <- pis[ind0] + out[ind0]
       out
     }
   } else if (minfo$is_hurdle && minfo$is_poisson) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
-      trunc_zero <- stats::dpois(x, lambda = mean) / stats::ppois(0, lambda = mean, lower.tail = FALSE)
+      trunc_zero <- stats::dpois(x, lambda = mean) /
+        stats::ppois(0, lambda = mean, lower.tail = FALSE)
       out <- (1 - pis) * trunc_zero
       out[ind0] <- pis[ind0]
       out
@@ -110,8 +135,17 @@ performance_score <- function(model, verbose = TRUE, ...) {
   } else if (minfo$is_hurdle && minfo$is_negbin) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
-      trunc_zero <- stats::dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo))) /
-        stats::pnbinom(0, mu = mean, size = exp(.dispersion_parameter(model, minfo)), lower.tail = FALSE)
+      trunc_zero <- stats::dnbinom(
+        x,
+        mu = mean,
+        size = exp(.dispersion_parameter(model, minfo))
+      ) /
+        stats::pnbinom(
+          0,
+          mu = mean,
+          size = exp(.dispersion_parameter(model, minfo)),
+          lower.tail = FALSE
+        )
       out <- (1 - pis) * trunc_zero
       out[ind0] <- pis[ind0]
       out
@@ -124,7 +158,12 @@ performance_score <- function(model, verbose = TRUE, ...) {
   } else {
     datawizard::to_numeric(resp, dummy_factors = FALSE, preserve_levels = TRUE)
   }
-  p_y <- .safe(suppressWarnings(prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))))
+  p_y <- .safe(suppressWarnings(prob_fun(
+    resp,
+    mean = pr$pred,
+    pis = pr$pred_zi,
+    sum(resp)
+  )))
 
   if (is.null(p_y) || all(is.na(p_y))) {
     if (verbose) {

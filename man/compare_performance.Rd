@@ -50,7 +50,7 @@ weights are computed as \code{w = exp(-0.5 * delta_ic) / sum(exp(-0.5 * delta_ic
 where \code{delta_ic} is the difference between the model's IC value and the
 smallest IC value in the model set (Burnham and Anderson, 2002).
 For LOOIC, weights are computed as "stacking weights" using
-\code{\link[loo:loo_model_weights]{loo::stacking_weights()}}.
+\code{\link[loo:stacking_weights]{loo::stacking_weights()}}.
 }
 
 \subsection{Ranking Models}{
@@ -92,7 +92,7 @@ same (AIC/...) values as from the defaults in \code{AIC.merMod()}.
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)

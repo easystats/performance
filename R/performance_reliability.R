@@ -206,7 +206,6 @@ performance_reliability.default <- function(x, ...) {
 
 # d-vour ------------------------------------------------------------------
 
-
 #' @rdname performance_reliability
 #' @export
 performance_dvour <- function(x, ...) {
@@ -254,7 +253,9 @@ performance_dvour.estimate_grouplevel <- function(x, ...) {
   }
 
   # Compute reliability
-  if (!"Component" %in% names(x)) x$Component <- "TEMP"
+  if (!"Component" %in% names(x)) {
+    x$Component <- "TEMP"
+  }
 
   reliability <- data.frame()
 
@@ -262,7 +263,9 @@ performance_dvour.estimate_grouplevel <- function(x, ...) {
     for (grp in unique(x$Group)) {
       for (param in unique(x$Parameter)) {
         d <- x[x$Component == comp & x$Group == grp & x$Parameter == param, ]
-        if (nrow(d) == 0) next
+        if (nrow(d) == 0) {
+          next
+        }
 
         # Store group-level results
         rez <- data.frame(
@@ -288,7 +291,10 @@ performance_dvour.estimate_grouplevel <- function(x, ...) {
   }
 
   # Clean-up output
-  if (insight::has_single_value(reliability$Component, remove_na = TRUE) && unique(reliability$Component) == "TEMP") {
+  if (
+    insight::has_single_value(reliability$Component, remove_na = TRUE) &&
+      unique(reliability$Component) == "TEMP"
+  ) {
     reliability$Component <- NULL
   }
 

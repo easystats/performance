@@ -113,18 +113,17 @@
 #'   the Wald test for small sample sizes (under or about 30) or if the
 #'   parameters are large.
 #'
+#'   The test statistic is calculated by comparing the -2 * log-likelihood
+#'   (-2LL) values for each model. In the output table, the `Criterion` column
+#'   represents this -2LL value. The difference in the criterion values
+#'   between the nested models corresponds to the `Chi2` statistic. This
+#'   Chi-square value is then used to compute the p-value based on the
+#'   difference in degrees of freedom (`df_diff`).
+#'
 #'   Note: for regression models, this is similar to
 #'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`, depending
 #'   on the `estimator` argument. For **lavaan** models (SEM, CFA), the function
 #'   calls `lavaan::lavTestLRT()`.
-#'
-#'   For models with transformed response variables (like `log(x)` or `sqrt(x)`),
-#'   `logLik()` returns a wrong log-likelihood. However, `test_likelihoodratio()`
-#'   calls `insight::get_loglikelihood()` with `check_response=TRUE`, which
-#'   returns a corrected log-likelihood value for models with transformed
-#'   response variables. Furthermore, since the LRT only accepts nested
-#'   models (i.e. models that differ in their fixed effects), the computed
-#'   log-likelihood is always based on the ML estimator, not on the REML fits.
 #'
 #' - **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
@@ -233,7 +232,12 @@ test_performance <- function(..., reference = 1, verbose = TRUE) {
 # default --------------------------------
 
 #' @export
-test_performance.default <- function(..., reference = 1, include_formula = FALSE, verbose = TRUE) {
+test_performance.default <- function(
+  ...,
+  reference = 1,
+  include_formula = FALSE,
+  verbose = TRUE
+) {
   # Attribute class to list and get names from the global environment
   my_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
@@ -241,10 +245,18 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # ensure proper object names
-  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  my_objects <- .check_objectnames(
+    my_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+  if (
+    inherits(
+      my_objects,
+      c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan")
+    )
+  ) {
     test_performance(my_objects, reference = reference, include_formula = include_formula)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
@@ -326,10 +338,12 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
 # other classes -----------------------------------
 
 #' @export
-test_performance.ListNestedRegressions <- function(objects,
-                                                   reference = 1,
-                                                   include_formula = FALSE,
-                                                   ...) {
+test_performance.ListNestedRegressions <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
@@ -363,17 +377,23 @@ test_performance.ListNestedRegressions <- function(objects,
   )
 
   attr(out, "is_nested") <- attributes(objects)$is_nested
-  attr(out, "reference") <- if (attributes(objects)$is_nested_increasing) "increasing" else "decreasing"
+  attr(out, "reference") <- if (attributes(objects)$is_nested_increasing) {
+    "increasing"
+  } else {
+    "decreasing"
+  }
   class(out) <- c("test_performance", class(out))
   out
 }
 
 
 #' @export
-test_performance.ListNonNestedRegressions <- function(objects,
-                                                      reference = 1,
-                                                      include_formula = FALSE,
-                                                      ...) {
+test_performance.ListNonNestedRegressions <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
@@ -421,9 +441,7 @@ test_performance.ListNonNestedRegressions <- function(objects,
 # lmtest::encomptest(m2, m3)
 # nonnest2::icci(m2, m3)
 
-
 # Helpers -----------------------------------------------------------------
-
 
 .test_performance_init <- function(objects, include_formula = FALSE) {
   model_names <- insight::model_name(objects, include_formula = include_formula)
@@ -437,7 +455,12 @@ test_performance.ListNonNestedRegressions <- function(objects,
 }
 
 
-.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE, verbose = TRUE) {
+.test_performance_checks <- function(
+  objects,
+  multiple = TRUE,
+  same_response = TRUE,
+  verbose = TRUE
+) {
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
   if (multiple && insight::is_model(objects)) {
     null_model <- .safe(insight::null_model(objects, verbose = FALSE))
@@ -455,7 +478,11 @@ test_performance.ListNonNestedRegressions <- function(objects,
     }
   }
 
-  if (same_response && !inherits(objects, "ListLavaan") && isFALSE(attributes(objects)$same_response)) {
+  if (
+    same_response &&
+      !inherits(objects, "ListLavaan") &&
+      isFALSE(attributes(objects)$same_response)
+  ) {
     insight::format_error(
       "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models." # nolint
     )
@@ -480,13 +507,15 @@ test_performance.ListNonNestedRegressions <- function(objects,
   # Replace with names from the global environment, if these are not yet properly set
   object_names <- insight::compact_character(names(objects))
   # check if we have any names at all
-  if ((is.null(object_names) ||
-    # or if length of names doesn't match number of models
-    length(object_names) != length(objects) ||
-    # or if names are "..1", "..2" pattern
-    all(grepl("\\.\\.\\d", object_names))) &&
-    # and length of dot-names must match length of objects
-    length(objects) == length(dot_names)) {
+  if (
+    (is.null(object_names) ||
+      # or if length of names doesn't match number of models
+      length(object_names) != length(objects) ||
+      # or if names are "..1", "..2" pattern
+      all(grepl("\\.\\.\\d", object_names))) &&
+      # and length of dot-names must match length of objects
+      length(objects) == length(dot_names)
+  ) {
     names(objects) <- dot_names
   }
   objects

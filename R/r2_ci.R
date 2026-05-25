@@ -46,15 +46,18 @@
 .dRsq <- function(K1, R2_pop, R2_obs, p, nobs) {
   NCP <- R2_pop / (1 - R2_pop)
   F1_obs <- ((nobs - p - 1) / p) * (R2_obs / (1 - R2_obs))
-  exp(log(
-    suppressWarnings(stats::pf(
-      q = F1_obs,
-      df1 = p,
-      df2 = (nobs - p - 1),
-      ncp = NCP * K1,
-      lower.tail = FALSE
-    ))
-  ) + stats::dchisq(x = K1, df = (nobs - 1), log = TRUE))
+  exp(
+    log(
+      suppressWarnings(stats::pf(
+        q = F1_obs,
+        df1 = p,
+        df2 = (nobs - p - 1),
+        ncp = NCP * K1,
+        lower.tail = FALSE
+      ))
+    ) +
+      stats::dchisq(x = K1, df = (nobs - 1), log = TRUE)
+  )
 }
 
 
@@ -65,8 +68,10 @@
   integrals <- mapply(
     function(i, j, ...) {
       dots <- list(...)
-      stats::integrate(.dRsq,
-        i, j,
+      stats::integrate(
+        .dRsq,
+        i,
+        j,
         R2_pop = dots$R2_pop,
         R2_obs = dots$R2_obs,
         p = dots$p,

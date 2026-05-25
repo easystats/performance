@@ -67,13 +67,15 @@ item_omega <- function(x, ...) {
 
 #' @rdname item_omega
 #' @export
-item_omega.data.frame <- function(x,
-                                  n = "auto",
-                                  rotation = "oblimin",
-                                  factor_method = "minres",
-                                  poly_cor = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+item_omega.data.frame <- function(
+  x,
+  n = "auto",
+  rotation = "oblimin",
+  factor_method = "minres",
+  poly_cor = FALSE,
+  verbose = TRUE,
+  ...
+) {
   insight::check_if_installed(c("psych", "parameters"))
 
   # remove missings
@@ -104,8 +106,20 @@ item_omega.data.frame <- function(x,
   )
 
   out <- data.frame(
-    Statistic = c("Alpha", "G.6", "Omega (hierarchical)", "Omega (asymptotic H)", "Omega (total)"),
-    Coefficient = c(model$alpha, model$G6, model$omega_h, model$omega.lim, model$omega.tot),
+    Statistic = c(
+      "Alpha",
+      "G.6",
+      "Omega (hierarchical)",
+      "Omega (asymptotic H)",
+      "Omega (total)"
+    ),
+    Coefficient = c(
+      model$alpha,
+      model$G6,
+      model$omega_h,
+      model$omega.lim,
+      model$omega.tot
+    ),
     stringsAsFactors = FALSE
   )
 
@@ -122,14 +136,16 @@ item_omega.data.frame <- function(x,
 
 #' @rdname item_omega
 #' @export
-item_omega.matrix <- function(x,
-                              n = "auto",
-                              rotation = "oblimin",
-                              factor_method = "minres",
-                              n_obs = NULL,
-                              poly_cor = FALSE,
-                              verbose = TRUE,
-                              ...) {
+item_omega.matrix <- function(
+  x,
+  n = "auto",
+  rotation = "oblimin",
+  factor_method = "minres",
+  n_obs = NULL,
+  poly_cor = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # validate n_obs
   if (!is.null(n_obs) && (!is.numeric(n_obs) || n_obs <= 0 || n_obs %% 1 != 0)) {
     insight::format_error(
@@ -165,7 +181,6 @@ item_omega.matrix <- function(x,
 
 
 # methods ------------------------------------------------
-
 
 #' @export
 summary.item_omega <- function(object, ...) {
@@ -204,7 +219,6 @@ as.double.item_omega <- function(x, ...) {
 
 
 # helper ------------------------------------------------
-
 
 .get_n_factors <- function(x, n = NULL, rotation, ...) {
   insight::check_if_installed("parameters")

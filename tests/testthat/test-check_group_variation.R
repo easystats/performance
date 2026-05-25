@@ -14,13 +14,19 @@ test_that("check_group_variation-1", {
     out,
     data.frame(
       Group = rep("group", 6),
-      Variable = c("constant", "variable1", "variable1b", "variable2", "variable3", "variable4"),
+      Variable = c(
+        "constant",
+        "variable1",
+        "variable1b",
+        "variable2",
+        "variable3",
+        "variable4"
+      ),
       Variation = c(NA, "between", "between", "within", "both", "both"),
       Design = c(NA, "nested", NA, "crossed", "nested", NA)
     ),
     ignore_attr = TRUE
   )
-
 
   set.seed(111)
   dat <- data.frame(
@@ -49,7 +55,14 @@ test_that("check_group_variation-1", {
     out,
     data.frame(
       Group = c("id", "id", "id", "id", "id", "id"),
-      Variable = c("between_num", "within_num", "both_num", "between_fac", "within_fac", "both_fac"),
+      Variable = c(
+        "between_num",
+        "within_num",
+        "both_num",
+        "between_fac",
+        "within_fac",
+        "both_fac"
+      ),
       Variation = c("between", "within", "both", "between", "within", "both"),
       Design = c(NA, NA, NA, "nested", "crossed", NA)
     ),
@@ -143,10 +156,30 @@ test_that("check_group_variation, multiple by", {
     female = rep(c(TRUE, FALSE), each = 12),
     year = rep(1:6, times = 4),
     math = c(
-      -3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
-      -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
-      -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
-      -2.288, -2.162, -1.631, -1.555, -0.725, 0.097
+      -3.068,
+      -1.13,
+      -0.921,
+      0.463,
+      0.021,
+      2.035,
+      -2.732,
+      -2.097,
+      -0.988,
+      0.227,
+      0.403,
+      1.623,
+      -2.732,
+      -1.898,
+      -0.921,
+      0.587,
+      1.578,
+      2.3,
+      -2.288,
+      -2.162,
+      -1.631,
+      -1.555,
+      -0.725,
+      0.097
     )
   )
 
@@ -154,9 +187,36 @@ test_that("check_group_variation, multiple by", {
   expect_equal(
     out,
     data.frame(
-      Group = c("schoolid", "schoolid", "schoolid", "schoolid", "childid", "childid", "childid", "childid"),
-      Variable = c("lowinc", "female", "year", "math", "lowinc", "female", "year", "math"),
-      Variation = c("between", "both", "within", "both", "between", "between", "within", "both"),
+      Group = c(
+        "schoolid",
+        "schoolid",
+        "schoolid",
+        "schoolid",
+        "childid",
+        "childid",
+        "childid",
+        "childid"
+      ),
+      Variable = c(
+        "lowinc",
+        "female",
+        "year",
+        "math",
+        "lowinc",
+        "female",
+        "year",
+        "math"
+      ),
+      Variation = c(
+        "between",
+        "both",
+        "within",
+        "both",
+        "between",
+        "between",
+        "within",
+        "both"
+      ),
       Design = c("nested", rep(NA_character_, 7))
     ),
     ignore_attr = TRUE
@@ -167,16 +227,40 @@ test_that("check_group_variation, multiple by", {
     out,
     data.frame(
       Group = c(
-        "schoolid", "schoolid", "schoolid", "schoolid", "schoolid",
-        "childid", "childid", "childid", "childid", "childid"
+        "schoolid",
+        "schoolid",
+        "schoolid",
+        "schoolid",
+        "schoolid",
+        "childid",
+        "childid",
+        "childid",
+        "childid",
+        "childid"
       ),
       Variable = c(
-        "childid", "lowinc", "female", "year", "math",
-        "schoolid", "lowinc", "female", "year", "math"
+        "childid",
+        "lowinc",
+        "female",
+        "year",
+        "math",
+        "schoolid",
+        "lowinc",
+        "female",
+        "year",
+        "math"
       ),
       Variation = c(
-        "both", "between", "both", "within", "both",
-        "between", "between", "between", "within", "both"
+        "both",
+        "between",
+        "both",
+        "within",
+        "both",
+        "between",
+        "between",
+        "between",
+        "within",
+        "both"
       ),
       Design = c("nested", "nested", rep(NA_character_, 8))
     ),
@@ -222,10 +306,30 @@ test_that("check_group_variation, numeric_as_factor", {
     female = rep(c(TRUE, FALSE), each = 12),
     year = rep(1:6, times = 4),
     math = c(
-      -3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
-      -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
-      -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
-      -2.288, -2.162, -1.631, -1.555, -0.725, 0.097
+      -3.068,
+      -1.13,
+      -0.921,
+      0.463,
+      0.021,
+      2.035,
+      -2.732,
+      -2.097,
+      -0.988,
+      0.227,
+      0.403,
+      1.623,
+      -2.732,
+      -1.898,
+      -0.921,
+      0.587,
+      1.578,
+      2.3,
+      -2.288,
+      -2.162,
+      -1.631,
+      -1.555,
+      -0.725,
+      0.097
     )
   )
 

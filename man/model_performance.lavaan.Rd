@@ -77,7 +77,7 @@ and the \strong{SRMR}.
 }
 }
 \examples{
-\dontshow{if (require("lavaan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lavaan")) withAutoprint(\{ # examplesIf}
 # Confirmatory Factor Analysis (CFA) ---------
 data(HolzingerSwineford1939, package = "lavaan")
 structure <- " visual  =~ x1 + x2 + x3

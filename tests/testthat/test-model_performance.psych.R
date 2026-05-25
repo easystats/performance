@@ -8,12 +8,12 @@ test_that("model_performance.psych", {
   raq_items$id <- NULL
 
   raq_fa <- parameters::factor_analysis(
-      raq_items,
-      n = 4,
-      scores = "tenBerge",
-      cor = "poly",
-      rotation = "none",
-      standardize = FALSE
+    raq_items,
+    n = 4,
+    scores = "tenBerge",
+    cor = "poly",
+    rotation = "none",
+    standardize = FALSE
   )
 
   expect_snapshot(print(raq_fa))

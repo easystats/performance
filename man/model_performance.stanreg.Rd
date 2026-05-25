@@ -60,7 +60,7 @@ values mean better fit. See \code{?loo::waic}.
 }
 }
 \examples{
-\dontshow{if (require("rstanarm") && require("rstantools")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("rstantools")) withAutoprint(\{ # examplesIf}
 \donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
   mpg ~ wt + cyl,

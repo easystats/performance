@@ -38,7 +38,7 @@ Code is partially based on
 \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
 }
 \examples{
-\dontshow{if (require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("glmmTMB")) withAutoprint(\{ # examplesIf}
 ## Dobson (1990) Page 93: Randomized Controlled Trial :
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 outcome <- gl(3, 1, 9)

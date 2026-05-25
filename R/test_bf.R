@@ -22,7 +22,12 @@ test_bf.default <- function(..., reference = 1, text_length = NULL) {
   }
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+  if (
+    inherits(
+      my_objects,
+      c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan")
+    )
+  ) {
     test_bf(my_objects, reference = reference, text_length = text_length)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
@@ -33,7 +38,9 @@ test_bf.default <- function(..., reference = 1, text_length = NULL) {
 #' @export
 test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) {
   if (.test_bf_areAllBayesian(objects) == "mixed") {
-    insight::format_error("You cannot mix Bayesian and non-Bayesian models in `test_bf()`.")
+    insight::format_error(
+      "You cannot mix Bayesian and non-Bayesian models in `test_bf()`."
+    )
   }
 
   # Adapt reference but keep original input
@@ -81,7 +88,9 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
 # Helpers -----------------------------------------------------------------
 
 .test_bf_areAllBayesian <- function(objects) {
-  bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
+  bayesian_models <- sapply(objects, function(i) {
+    isTRUE(insight::model_info(i)$is_bayesian)
+  })
 
   if (all(bayesian_models)) {
     "yes"

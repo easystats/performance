@@ -123,8 +123,8 @@
 #' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 #'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
-#' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#'   [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
+#' - Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
+#'   Meta-Psychology, 5. \doi{10.15626/MP.2021.2548}
 #'
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 #'   common statistical problems: Data exploration. Methods in Ecology and
@@ -313,11 +313,13 @@ check_collinearity.betamfx <- check_collinearity.logitor
 
 #' @rdname check_collinearity
 #' @export
-check_collinearity.glmmTMB <- function(x,
-                                       component = "all",
-                                       ci = 0.95,
-                                       verbose = TRUE,
-                                       ...) {
+check_collinearity.glmmTMB <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = TRUE,
+  ...
+) {
   component <- insight::validate_argument(
     component,
     c("all", "conditional", "count", "zi", "zero_inflated")
@@ -327,11 +329,13 @@ check_collinearity.glmmTMB <- function(x,
 
 
 #' @export
-check_collinearity.MixMod <- function(x,
-                                      component = "all",
-                                      ci = 0.95,
-                                      verbose = TRUE,
-                                      ...) {
+check_collinearity.MixMod <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = TRUE,
+  ...
+) {
   component <- insight::validate_argument(
     component,
     c("all", "conditional", "count", "zi", "zero_inflated")
@@ -341,11 +345,13 @@ check_collinearity.MixMod <- function(x,
 
 
 #' @export
-check_collinearity.hurdle <- function(x,
-                                      component = "all",
-                                      ci = 0.95,
-                                      verbose = verbose,
-                                      ...) {
+check_collinearity.hurdle <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = verbose,
+  ...
+) {
   component <- insight::validate_argument(
     component,
     c("all", "conditional", "count", "zi", "zero_inflated")
@@ -355,11 +361,13 @@ check_collinearity.hurdle <- function(x,
 
 
 #' @export
-check_collinearity.zeroinfl <- function(x,
-                                        component = "all",
-                                        ci = 0.95,
-                                        verbose = verbose,
-                                        ...) {
+check_collinearity.zeroinfl <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = verbose,
+  ...
+) {
   component <- insight::validate_argument(
     component,
     c("all", "conditional", "count", "zi", "zero_inflated")
@@ -369,11 +377,13 @@ check_collinearity.zeroinfl <- function(x,
 
 
 #' @export
-check_collinearity.zerocount <- function(x,
-                                         component = "all",
-                                         ci = 0.95,
-                                         verbose = verbose,
-                                         ...) {
+check_collinearity.zerocount <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = verbose,
+  ...
+) {
   component <- insight::validate_argument(
     component,
     c("all", "conditional", "count", "zi", "zero_inflated")
@@ -385,11 +395,17 @@ check_collinearity.zerocount <- function(x,
 # utilities ---------------------------------
 
 .check_collinearity_zi_model <- function(x, component, ci = 0.95, verbose = TRUE) {
-  if (component == "count") component <- "conditional"
-  if (component == "zi") component <- "zero_inflated"
+  if (component == "count") {
+    component <- "conditional"
+  }
+  if (component == "zi") {
+    component <- "zero_inflated"
+  }
 
   mi <- insight::model_info(x, verbose = FALSE)
-  if (!mi$is_zero_inflated) component <- "conditional"
+  if (!mi$is_zero_inflated) {
+    component <- "conditional"
+  }
 
   if (component == "all") {
     cond <- .check_collinearity(x, "conditional", ci = ci, verbose = verbose)
@@ -434,12 +450,20 @@ check_collinearity.zerocount <- function(x,
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
   v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
 
+  # fix class for fixest, which returns a "fixest_vcov" here
+  if (inherits(v, "fixest_vcov")) {
+    v <- array(v, dim = dim(v), dimnames = dimnames(v))
+  }
+
   # sanity check
   if (is.null(v)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         paste(
-          sprintf("Could not extract the variance-covariance matrix for the %s component of the model.", component),
+          sprintf(
+            "Could not extract the variance-covariance matrix for the %s component of the model.",
+            component
+          ),
           "Please try to run `vcov(model)`, which may help identifying the problem."
         )
       )
@@ -453,12 +477,53 @@ check_collinearity.zerocount <- function(x,
   if (is.null(term_assign) || all(is.na(term_assign))) {
     if (verbose) {
       insight::format_alert(
-        sprintf("Could not extract model terms for the %s component of the model.", component)
+        sprintf(
+          "Could not extract model terms for the %s component of the model.",
+          component
+        )
       )
     }
     return(NULL)
   }
 
+  # Filter to true slope parameters (handles multiple intercepts in ordinal models)
+  if (inherits(x, c("clm", "clmm"))) {
+    # names(x$beta) returns only non-singular (surviving) slopes
+    slope_names <- names(x$beta)
+    keep_idx <- which(colnames(v) %in% slope_names)
+
+    # Rebuild term_assign by matching model matrix columns to surviving slopes
+    tryCatch(
+      {
+        mm <- insight::get_modelmatrix(x)
+        assign_attr <- attr(mm, "assign")
+        if (!is.null(assign_attr)) {
+          # Use name-matching to isolate indices for estimated slopes
+          match_idx <- which(colnames(mm) %in% slope_names)
+          if (length(match_idx) > 0) {
+            term_assign <- assign_attr[match_idx]
+          }
+        }
+      },
+      error = function(e) NULL
+    )
+  } else if (insight::has_intercept(x)) {
+    # Standard behavior: drop the first column/row (the singular intercept)
+    keep_idx <- seq_len(ncol(v))[-1]
+  } else {
+    keep_idx <- seq_len(ncol(v))
+    if (isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
+  }
+
+  # Safely subset the matrix
+  if (length(keep_idx) < ncol(v)) {
+    if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
+      term_assign <- term_assign[keep_idx]
+    }
+    v <- v[keep_idx, keep_idx, drop = FALSE]
+  }
 
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
@@ -470,21 +535,15 @@ check_collinearity.zerocount <- function(x,
     }
   }
 
-  # check for missing intercept
-  if (insight::has_intercept(x)) {
-    v <- v[-1, -1]
-    term_assign <- term_assign[-1]
-  } else if (isTRUE(verbose)) {
-    insight::format_alert("Model has no intercept. VIFs may not be sensible.")
-  }
-
   f <- insight::find_formula(x, verbose = FALSE)
 
   # hurdle or zeroinfl model can have no zero-inflation formula, in which case
   # we have the same formula as for conditional formula part
-  if (inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
-    component == "zero_inflated" &&
-    is.null(f[["zero_inflated"]])) {
+  if (
+    inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
+      component == "zero_inflated" &&
+      is.null(f[["zero_inflated"]])
+  ) {
     f$zero_inflated <- f$conditional
   }
 
@@ -503,7 +562,10 @@ check_collinearity.zerocount <- function(x,
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
       insight::format_alert(
-        sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
+        sprintf(
+          "Not enough model terms in the %s part of the model to check for multicollinearity.",
+          component
+        )
       )
     }
     return(NULL)
@@ -515,7 +577,6 @@ check_collinearity.zerocount <- function(x,
   result <- vector("numeric")
   na_terms <- vector("numeric")
 
-  # sanity check - models with offset(?) may contain too many term assignments
   if (length(term_assign) > ncol(v)) {
     term_assign <- term_assign[seq_len(ncol(v))]
   }
@@ -639,17 +700,20 @@ check_collinearity.zerocount <- function(x,
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-        term_assign <- switch(component,
+        term_assign <- switch(
+          component,
           conditional = attr(insight::get_modelmatrix(x, model = "count"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
-        term_assign <- switch(component,
+        term_assign <- switch(
+          component,
           conditional = attr(insight::get_modelmatrix(x), "assign"),
           zero_inflated = .zi_term_assignment(x, component, verbose = verbose)
         )
       } else if (inherits(x, "MixMod")) {
-        term_assign <- switch(component,
+        term_assign <- switch(
+          component,
           conditional = attr(insight::get_modelmatrix(x, type = "fixed"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, type = "zi_fixed"), "assign")
         )
@@ -692,7 +756,10 @@ check_collinearity.zerocount <- function(x,
   }))
 
   if (insight::is_gam_model(x)) {
-    model_params <- as.vector(unlist(insight::find_parameters(x)[c(component, "smooth_terms")]))
+    model_params <- as.vector(unlist(insight::find_parameters(x)[c(
+      component,
+      "smooth_terms"
+    )]))
   } else {
     model_params <- insight::find_parameters(x)[[component]]
   }

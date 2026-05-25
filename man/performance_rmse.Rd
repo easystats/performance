@@ -73,7 +73,7 @@ range of the response variable. Hence, lower values indicate
 less residual variance.
 }
 \examples{
-\dontshow{if (require("nlme")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nlme")) withAutoprint(\{ # examplesIf}
 data(Orthodont, package = "nlme")
 m <- nlme::lme(distance ~ age, data = Orthodont)
 

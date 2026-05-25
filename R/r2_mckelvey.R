@@ -46,14 +46,16 @@ r2_mckelvey.default <- function(model) {
   n <- insight::n_obs(model, disaggregate = TRUE)
 
   if (faminfo$is_binomial || faminfo$is_ordinal || faminfo$is_multinomial) {
-    dist.variance <- switch(faminfo$link_function,
+    dist.variance <- switch(
+      faminfo$link_function,
       probit = 1,
       logit = pi^2 / 3,
       clogloglink = pi^2 / 6,
       NA
     )
   } else if (faminfo$is_count) {
-    dist.variance <- switch(faminfo$link_function,
+    dist.variance <- switch(
+      faminfo$link_function,
       log = .get_poisson_variance(model),
       sqrt = 0.25,
       0
@@ -64,7 +66,9 @@ r2_mckelvey.default <- function(model) {
 
   # fix for VGAM
   yhat_columns <- ncol(y.hat)
-  if (!is.null(yhat_columns) && yhat_columns > 1) y.hat <- as.vector(y.hat[, 1])
+  if (!is.null(yhat_columns) && yhat_columns > 1) {
+    y.hat <- as.vector(y.hat[, 1])
+  }
 
   dist.residual <- sum((y.hat - mean(y.hat))^2)
 

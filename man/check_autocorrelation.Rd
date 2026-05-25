@@ -3,18 +3,25 @@
 \name{check_autocorrelation}
 \alias{check_autocorrelation}
 \alias{check_autocorrelation.default}
+\alias{check_autocorrelation.performance_simres}
 \title{Check model for independence of residuals.}
 \usage{
 check_autocorrelation(x, ...)
 
 \method{check_autocorrelation}{default}(x, nsim = 1000, ...)
+
+\method{check_autocorrelation}{performance_simres}(x, time = NULL, ...)
 }
 \arguments{
-\item{x}{A model object.}
+\item{x}{A model object, or an object returned by \code{simulate_residuals()}.}
 
-\item{...}{Currently not used.}
+\item{...}{Currently not used for models. For simulated residuals, arguments are
+passed to \code{DHARMa::testTemporalAutocorrelation()}.}
 
 \item{nsim}{Number of simulations for the Durbin-Watson-Test.}
+
+\item{time}{A vector with time values to specify the temporal order of the data.
+Only used if \code{x} is an object returned by \code{simulate_residuals()} or by \code{DHARMa}.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value < 0.05
@@ -35,16 +42,16 @@ m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_autocorrelation(m)
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

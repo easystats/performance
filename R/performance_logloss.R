@@ -36,7 +36,9 @@ performance_logloss.default <- function(model, verbose = TRUE, ...) {
   ll <- suppressWarnings(mean(log(1 - abs(resp - stats::fitted(model))) * -1))
 
   if (is.na(ll)) {
-    if (verbose) insight::print_color("Can't calculate log-loss.\n", "red")
+    if (verbose) {
+      insight::print_color("Can't calculate log-loss.\n", "red")
+    }
     return(NA)
   }
 
@@ -51,7 +53,9 @@ performance_logloss.brmsfit <- function(model, verbose = TRUE, ...) {
   ll <- suppressWarnings(mean(log(1 - abs(resp - yhat)) * -1))
 
   if (is.na(ll)) {
-    if (verbose) insight::print_color("Can't calculate log-loss.\n", "red")
+    if (verbose) {
+      insight::print_color("Can't calculate log-loss.\n", "red")
+    }
     return(NA)
   }
 

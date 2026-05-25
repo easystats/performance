@@ -29,7 +29,11 @@ test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE)
   # different default when mixed model or glm is included
   if (missing(estimator)) {
     mixed_models <- sapply(my_objects, insight::is_mixed_model)
-    if (all(mixed_models) && all(sapply(my_objects, .is_lmer_reml)) && isTRUE(attributes(my_objects)$same_fixef)) {
+    if (
+      all(mixed_models) &&
+        all(sapply(my_objects, .is_lmer_reml)) &&
+        isTRUE(attributes(my_objects)$same_fixef)
+    ) {
       estimator <- "REML"
     } else if (any(mixed_models) || !all(attributes(my_objects)$is_linear)) {
       estimator <- "ML"
@@ -37,7 +41,10 @@ test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE)
   }
 
   # ensure proper object names
-  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  my_objects <- .check_objectnames(
+    my_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(my_objects, "ListNestedRegressions")) {
@@ -73,11 +80,20 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 
 
 #' @export
-format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, format = "text", ...) {
+format.test_likelihoodratio <- function(
+  x,
+  digits = 2,
+  p_digits = 3,
+  format = "text",
+  ...
+) {
   # Footer
   if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
-    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+    footer <- c(
+      sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]),
+      "yellow"
+    )
   } else {
     footer <- NULL
   }
@@ -92,9 +108,15 @@ format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, format = "t
   }
 
   if (format == "text") {
-    caption <- c(paste0("# Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string), "blue")
+    caption <- c(
+      paste0("# Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string),
+      "blue"
+    )
   } else {
-    caption <- paste0("Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string)
+    caption <- paste0(
+      "Likelihood-Ratio-Test (LRT) for Model Comparison",
+      estimator_string
+    )
   }
 
   attr(x, "table_footer") <- footer
@@ -105,7 +127,11 @@ format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, format = "t
 
 #' @export
 print_md.test_likelihoodratio <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, format = "markdown", ...), format = "markdown", ...)
+  insight::export_table(
+    format(x, digits = digits, format = "markdown", ...),
+    format = "markdown",
+    ...
+  )
 }
 
 
@@ -138,7 +164,12 @@ display.test_likelihoodratio <- function(object, format = "markdown", digits = 2
 # other classes ---------------------------
 
 #' @export
-test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", verbose = TRUE, ...) {
+test_likelihoodratio.ListNestedRegressions <- function(
+  objects,
+  estimator = "ML",
+  verbose = TRUE,
+  ...
+) {
   dfs <- sapply(objects, insight::get_df, type = "model")
   same_fixef <- attributes(objects)$same_fixef
 
@@ -158,12 +189,14 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   } else {
     # lmtest::lrtest()
     lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
-    chi2 <- abs(c(NA, -2 * diff(lls)))
+    criterion <- -2 * lls
+    chi2 <- abs(c(NA, diff(criterion)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
     out <- data.frame(
       df = dfs,
       df_diff = dfs_diff,
+      Criterion = criterion,
       Chi2 = chi2,
       p = p,
       stringsAsFactors = FALSE
@@ -173,11 +206,14 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   }
 
   # for REML fits, warn user
-  if (isTRUE(REML) &&
-    # only when mixed models are involved, others probably don't have problems with REML fit
-    any(sapply(objects, insight::is_mixed_model)) &&
-    # only if not all models have same fixed effects (else, REML is ok)
-    !isTRUE(same_fixef) && isTRUE(verbose)) {
+  if (
+    isTRUE(REML) &&
+      # only when mixed models are involved, others probably don't have problems with REML fit
+      any(sapply(objects, insight::is_mixed_model)) &&
+      # only if not all models have same fixed effects (else, REML is ok)
+      !isTRUE(same_fixef) &&
+      isTRUE(verbose)
+  ) {
     insight::format_warning(
       "The Likelihood-Ratio-Test is probably inaccurate when comparing REML-fit models with different fixed effects."
     )
@@ -194,10 +230,13 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   insight::check_if_installed("lavaan")
 
-  # Create data frame with info about model name and class
+  # Create data frame with info about model name, class, and criterion
   names_types <- data.frame(
     Model = names(objects),
     Type = sapply(objects, function(x) class(x)[1]),
+    Criterion = sapply(objects, function(x) {
+      -2 * as.numeric(lavaan::fitMeasures(x, "logl"))
+    }),
     stringsAsFactors = FALSE
   )
 
@@ -209,22 +248,25 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"
   colnames(out)[names(out) == "Df diff"] <- "df_diff"
-  colnames(out)[names(out) == "Chisq"] <- "Chi2"
+  colnames(out)[names(out) == "Chisq diff"] <- "Chi2"
   colnames(out)[startsWith(names(out), "Pr(>")] <- "p"
   out$Model <- row.names(out)
 
   # Bind all data
   out <- merge(names_types, out[c("Model", "df", "df_diff", "Chi2", "p")], by = "Model")
 
+  out <- out[c("Model", "Type", "df", "df_diff", "Criterion", "Chi2", "p")]
+  out <- out[order(out$df), ]
+
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
 
-
 # helper ----------------------
 
 .is_lmer_reml <- function(x) {
-  tryCatch(inherits(x, "lmerMod") && as.logical(x@devcomp$dims[["REML"]]),
+  tryCatch(
+    inherits(x, "lmerMod") && as.logical(x@devcomp$dims[["REML"]]),
     error = function(e) FALSE
   )
 }

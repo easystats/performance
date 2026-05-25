@@ -169,11 +169,14 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     lapply(seq_along(x), function(i) {
       out <- x[[i]]
       attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
-      attr(out, "table_footer") <- c(sprintf(
-        "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-        attributes(out)$item_intercorrelation,
-        attributes(out)$cronbachs_alpha
-      ), "yellow")
+      attr(out, "table_footer") <- c(
+        sprintf(
+          "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+          attributes(out)$item_intercorrelation,
+          attributes(out)$cronbachs_alpha
+        ),
+        "yellow"
+      )
 
       out
     }),

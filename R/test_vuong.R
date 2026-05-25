@@ -14,10 +14,18 @@ test_vuong.default <- function(..., reference = 1, verbose = TRUE) {
   my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # ensure proper object names
-  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  my_objects <- .check_objectnames(
+    my_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+  if (
+    inherits(
+      my_objects,
+      c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan")
+    )
+  ) {
     test_vuong(my_objects, reference = reference)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
@@ -50,9 +58,14 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # - sandwich::estfun()
 # - CompQuadForm::imhof()
 
-
 .test_vuong <- function(objects, nested = FALSE, reference = NULL, ...) {
-  out <- data.frame(Omega2 = NA, p_Omega2 = NA, LR = NA, p_LR = NA, stringsAsFactors = FALSE)
+  out <- data.frame(
+    Omega2 = NA,
+    p_Omega2 = NA,
+    LR = NA,
+    p_LR = NA,
+    stringsAsFactors = FALSE
+  )
 
   for (i in 2:length(objects)) {
     if (is.null(reference)) {
@@ -86,7 +99,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # Vuong test for two models -----------------------------------------------
 # -------------------------------------------------------------------------
 
-
 # m1 <- lm(mpg ~ disp, data=mtcars)
 # m2 <- lm(mpg ~ drat, data=mtcars)
 # ref <- nonnest2::vuongtest(m1, m2, nested=FALSE)
@@ -114,7 +126,11 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 
   # If nested==TRUE, find the full model and reverse if necessary
   if (nested) {
-    dfs <- c(insight::get_df(object1, type = "residual"), insight::get_df(object2), type = "residual")
+    dfs <- c(
+      insight::get_df(object1, type = "residual"),
+      insight::get_df(object2),
+      type = "residual"
+    )
     if (order(dfs)[1] == 2) {
       temp <- object2
       object2 <- object1
@@ -125,7 +141,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # Get individual log-likelihoods
   llA <- attributes(insight::get_loglikelihood(object1))$per_obs
   llB <- attributes(insight::get_loglikelihood(object2))$per_obs
-
 
   # DISTINGUISABILITY TEST --------
   # Eq (4.2)
@@ -157,7 +172,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
       lr <- lr - (nparA - nparB) * log(n) / 2
     }
   }
-
 
   # Null distribution and test stat depends on nested
   if (nested) {
@@ -253,7 +267,9 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
     scaling <- 1
   } else {
     scaling <- insight::get_sigma(model, ci = NULL, verbose = FALSE)^2
-    if (is.null(scaling) || is.na(scaling)) scaling <- 1
+    if (is.null(scaling) || is.na(scaling)) {
+      scaling <- 1
+    }
     covmat <- n * insight::get_varcov(model, component = "conditional")
   }
 

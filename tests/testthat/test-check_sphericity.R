@@ -5,17 +5,14 @@ test_that("check_sphericity | afex", {
 
   obk.long$treatment <- as.character(obk.long$treatment)
   suppressWarnings(suppressMessages({
-    aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+    aM <- afex::aov_car(
+      value ~ treatment * gender + Error(id / (phase * hour)),
       data = obk.long
     )
 
-    aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
-      data = obk.long
-    )
+    aW <- afex::aov_car(value ~ Error(id / (phase * hour)), data = obk.long)
 
-    aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-      data = obk.long
-    )
+    aB <- afex::aov_car(value ~ treatment * gender + Error(id), data = obk.long)
   }))
 
   expect_error(check_sphericity(aB))

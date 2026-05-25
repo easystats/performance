@@ -82,7 +82,12 @@ test_that("check_itemscale for FA", {
   skip_if_not_installed("psych")
   skip_if_not_installed("GPArotation")
 
-  f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
+  f <- parameters::factor_analysis(
+    mtcars,
+    n = 2,
+    rotation = "oblimin",
+    standardize = FALSE
+  )
   out <- check_itemscale(f)
   expect_equal(
     out[[1]]$Mean,
@@ -98,7 +103,12 @@ test_that("print_md check_itemscale for FA", {
   skip_if_not_installed("GPArotation")
   skip_if_not_installed("knitr")
 
-  f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
+  f <- parameters::factor_analysis(
+    mtcars,
+    n = 2,
+    rotation = "oblimin",
+    standardize = FALSE
+  )
   out <- check_itemscale(f)
   expect_snapshot(print_md(out))
 })

@@ -76,8 +76,11 @@ check_distribution.default <- function(model) {
   }
   dat <- .extract_features(x, "residuals")
 
-  dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
-
+  dist_residuals <- as.data.frame(t(stats::predict(
+    classify_distribution,
+    dat,
+    type = "prob"
+  )))
 
   # Extract features
   x <- datawizard::to_numeric(
@@ -87,7 +90,11 @@ check_distribution.default <- function(model) {
   )
   dat <- .extract_features(x, "response")
 
-  dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
+  dist_response <- as.data.frame(t(stats::predict(
+    classify_distribution,
+    dat,
+    type = "prob"
+  )))
 
   out <- data.frame(
     Distribution = rownames(dist_response),
@@ -174,7 +181,11 @@ check_distribution.numeric <- function(model) {
     row.names = NULL
   )
 
-  class(out) <- unique(c("check_distribution_numeric", "see_check_distribution_numeric", class(out)))
+  class(out) <- unique(c(
+    "check_distribution_numeric",
+    "see_check_distribution_numeric",
+    class(out)
+  ))
   attr(out, "data") <- model
 
   out

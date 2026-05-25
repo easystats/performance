@@ -53,15 +53,24 @@
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
 check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE) {
-  insight::format_alert("`check_heterogeneity_bias()` is deprecated. Please use `check_group_variation()` instead.")
+  insight::format_alert(
+    "`check_heterogeneity_bias()` is deprecated. Please use `check_group_variation()` instead."
+  )
 
   if (insight::is_model(x)) {
     by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
     if (is.null(by)) {
-      insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `by`.") # nolint
+      insight::format_error(
+        "Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `by`."
+      ) # nolint
     }
     my_data <- insight::get_data(x, source = "mf", verbose = FALSE)
-    select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
+    select <- insight::find_predictors(
+      x,
+      effects = "fixed",
+      component = "conditional",
+      flatten = TRUE
+    )
   } else {
     if (inherits(select, "formula")) {
       select <- all.vars(select)
@@ -77,7 +86,9 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE
     insight::format_error("Please provide the group variable using `by`.")
   }
   if (!all(by %in% colnames(my_data))) {
-    insight::format_error("The variable(s) speciefied in `by` were not found in the data.")
+    insight::format_error(
+      "The variable(s) speciefied in `by` were not found in the data."
+    )
   }
 
   # select all, if not given
@@ -94,22 +105,26 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE
   # create all combinations that should be checked
   combinations <- expand.grid(select, by[1])
 
-  result <- Map(function(predictor, id) {
-    # demean predictor
+  result <- Map(
+    function(predictor, id) {
+      # demean predictor
 
-    d <- datawizard::demean(my_data, select = predictor, by = id, verbose = FALSE)
+      d <- datawizard::demean(my_data, select = predictor, by = id, verbose = FALSE)
 
-    # get new names
-    within_name <- paste0(predictor, "_within")
+      # get new names
+      within_name <- paste0(predictor, "_within")
 
-    # check if any within-variable differs from zero. if yes, we have
-    # a within-subject effect
-    if (any(abs(d[[within_name]]) > 1e-5)) {
-      predictor
-    } else {
-      NULL
-    }
-  }, as.character(combinations[[1]]), by)
+      # check if any within-variable differs from zero. if yes, we have
+      # a within-subject effect
+      if (any(abs(d[[within_name]]) > 1e-5)) {
+        predictor
+      } else {
+        NULL
+      }
+    },
+    as.character(combinations[[1]]),
+    by
+  )
 
   out <- unlist(insight::compact_list(result), use.names = FALSE)
 

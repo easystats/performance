@@ -9,12 +9,14 @@
 #'
 #'   **performance** provides posterior predictive check methods for a variety
 #'   of frequentist models (e.g., `lm`, `merMod`, `glmmTMB`, ...). For Bayesian
-#'   models, the model is passed to [`bayesplot::pp_check()`].
+#'   models, posterior predictions are computed with
+#'   `modelbased::estimate_prediction()` and plotted with the same machinery as
+#'   for other supported models.
 #'
 #'   If `check_predictions()` doesn't work as expected, try setting
 #'   `verbose = TRUE` to get hints about possible problems.
 #'
-#' @param object A statistical model.
+#' @param model A statistical model.
 #' @param iterations The number of draws to simulate/bootstrap.
 #' @param check_range Logical, if `TRUE`, includes a plot with the minimum
 #'   value of the original response against the minimum values of the replicated
@@ -36,7 +38,11 @@
 #' options are appropriate for models with discrete - binary, integer or ordinal
 #' etc. - outcomes).
 #' @param verbose Toggle warnings.
-#' @param ... Passed down to `simulate()`.
+#' @param ... Additional arguments passed on to downstream functions. For
+#' frequentist models, these are forwarded to `simulate()`; for Bayesian models
+#' (e.g., `stanreg`, `brmsfit`), they are forwarded to
+#' `modelbased::estimate_prediction()`.
+#' @param object Deprecated, please use `model` instead.
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
@@ -46,7 +52,7 @@
 #' @details An example how posterior predictive checks can also be used for model
 #'   comparison is Figure 6 from _Gabry et al. 2019, Figure 6_.
 #'
-#'   \if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
+#'   \if{html}{\cr \figure{pp_check.png}{options: style="width: 25\%;" alt="Posterior Predictive Check"} \cr}
 #'   The model shown in the right panel (b) can simulate new data that are more
 #'   similar to the observed outcome than the model in the left panel (a). Thus,
 #'   model (b) is likely to be preferred over model (a).
@@ -92,35 +98,51 @@
 #' check_predictions(model, type = "discrete_both")
 #'
 #' @export
-check_predictions <- function(object, ...) {
+check_predictions <- function(model = NULL, ...) {
   UseMethod("check_predictions")
 }
 
 #' @rdname check_predictions
 #' @export
-check_predictions.default <- function(object,
-                                      iterations = 50,
-                                      check_range = FALSE,
-                                      re_formula = NULL,
-                                      bandwidth = "nrd",
-                                      type = "density",
-                                      verbose = TRUE,
-                                      ...) {
-  .is_model_valid(object)
+check_predictions.default <- function(
+  model = NULL,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  object = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(object) && is.null(model)) {
+    insight::format_warning(
+      "Argument `object` is deprecated; please use `model` instead."
+    )
+    model <- object
+  }
+
+  .is_model_valid(model)
+
   # check_predictions() can't handle exotic formula notation
   if (verbose) {
     insight::formula_ok(
-      object,
+      model,
       action = "error",
       prefix_msg = "Posterior predictive checks failed due to an incompatible model formula." # nolint
     )
   }
 
   # retrieve model information
-  minfo <- insight::model_info(object, verbose = FALSE)
+  minfo <- insight::model_info(model, verbose = FALSE)
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  suggest_dots <- (minfo$is_bernoulli ||
+    minfo$is_count ||
+    minfo$is_ordinal ||
+    minfo$is_categorical ||
+    minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -132,7 +154,7 @@ check_predictions.default <- function(object,
   )
 
   pp_check.lm(
-    object,
+    model,
     iterations = iterations,
     check_range = check_range,
     re_formula = re_formula,
@@ -146,19 +168,34 @@ check_predictions.default <- function(object,
 
 
 #' @export
-check_predictions.stanreg <- function(object,
-                                      iterations = 50,
-                                      check_range = FALSE,
-                                      re_formula = NULL,
-                                      bandwidth = "nrd",
-                                      type = "density",
-                                      verbose = TRUE,
-                                      ...) {
+check_predictions.stanreg <- function(
+  model = NULL,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  object = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(object) && is.null(model)) {
+    insight::format_warning(
+      "Argument `object` is deprecated; please use `model` instead."
+    )
+    model <- object
+  }
+
   # retrieve model information
-  minfo <- insight::model_info(object, verbose = FALSE)
+  minfo <- insight::model_info(model, verbose = FALSE)
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  suggest_dots <- (minfo$is_bernoulli ||
+    minfo$is_count ||
+    minfo$is_ordinal ||
+    minfo$is_categorical ||
+    minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -169,51 +206,50 @@ check_predictions.stanreg <- function(object,
     c("density", "discrete_dots", "discrete_interval", "discrete_both")
   )
 
-  # convert to type-argument for pp_check
-  pp_type <- switch(type,
-    density = "dens",
-    "bars"
-  )
-
   insight::check_if_installed(
-    "bayesplot",
-    "to create posterior prediction plots for Stan models"
+    "modelbased",
+    "to create posterior predictive checks for Bayesian models"
   )
 
-  # for plotting
-  resp_string <- insight::find_terms(object)$response
+  out <- modelbased::estimate_prediction(
+    model,
+    iterations = iterations,
+    keep_iterations = TRUE,
+    re_formula = re_formula,
+    verbose = verbose,
+    ...
+  )
 
-  if (inherits(object, "brmsfit")) {
-    out <- as.data.frame(bayesplot::pp_check(object, type = pp_type, ndraws = iterations, ...)$data)
-  } else {
-    out <- as.data.frame(bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data)
-  }
-
-  # bring data into shape, like we have for other models with `check_predictions()`
-  if (pp_type == "dens") {
-    d_filter <- out[!out$is_y, ]
-    d_filter <- datawizard::data_to_wide(
-      d_filter,
-      id_cols = "y_id",
-      values_from = "value",
-      names_from = "rep_id"
-    )
-    d_filter$y_id <- NULL
-    colnames(d_filter) <- paste0("sim_", colnames(d_filter))
-    d_filter$y <- out$value[out$is_y]
-    out <- d_filter
-  } else {
-    colnames(out) <- c("x", "y", "CI_low", "Mean", "CI_high")
-    # to long, for plotting
-    out <- datawizard::data_to_long(
-      out,
-      select = c("y", "Mean"),
-      names_to = "Group",
-      values_to = "Count"
+  iter_columns <- startsWith(colnames(out), "iter_")
+  if (!any(iter_columns)) {
+    insight::format_error(
+      "Could not retrieve posterior predictive draws for the Bayesian model."
     )
   }
 
-  attr(out, "is_stan") <- TRUE
+  out <- as.data.frame(out[iter_columns])
+  colnames(out) <- sub("^iter_", "sim_", colnames(out))
+
+  resp_string <- insight::find_terms(model)$response
+  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
+
+  if (
+    !is.null(resp_string) &&
+      length(resp_string) == 1 &&
+      grepl(paste0(pattern, "\\("), resp_string)
+  ) {
+    out <- .backtransform_sims(out, resp_string)
+  }
+
+  response <- insight::get_response(model)
+  if (is.data.frame(response)) {
+    response <- eval(
+      str2lang(insight::find_response(model)),
+      envir = insight::get_response(model)
+    )
+  }
+  out$y <- response
+
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
   attr(out, "bandwidth") <- bandwidth
@@ -228,14 +264,25 @@ check_predictions.brmsfit <- check_predictions.stanreg
 
 
 #' @export
-check_predictions.BFBayesFactor <- function(object,
-                                            iterations = 50,
-                                            check_range = FALSE,
-                                            re_formula = NULL,
-                                            bandwidth = "nrd",
-                                            verbose = TRUE,
-                                            ...) {
-  everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
+check_predictions.BFBayesFactor <- function(
+  model = NULL,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  verbose = TRUE,
+  object = NULL,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(object) && is.null(model)) {
+    insight::format_warning(
+      "Argument `object` is deprecated; please use `model` instead."
+    )
+    model <- object
+  }
+
+  everything_we_need <- .get_bfbf_predictions(model, iterations = iterations)
 
   y <- everything_we_need[["y"]]
   sig <- everything_we_need[["sigma"]]
@@ -264,22 +311,26 @@ pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
 
 #' @export
-check_predictions.lme <- function(object, ...) {
-  insight::format_error("`check_predictions()` does currently not work for models of class `lme`.")
+check_predictions.lme <- function(model = NULL, ...) {
+  insight::format_error(
+    "`check_predictions()` does currently not work for models of class `lme`."
+  )
 }
 
 
 # pp-check functions -------------------------------------
 
-pp_check.lm <- function(object,
-                        iterations = 50,
-                        check_range = FALSE,
-                        re_formula = NULL,
-                        bandwidth = "nrd",
-                        type = "density",
-                        verbose = TRUE,
-                        model_info = NULL,
-                        ...) {
+pp_check.lm <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  model_info = NULL,
+  ...
+) {
   # we need the formula and the response values to check for matrix responses
   # or proportions in binomial models
   model_response <- insight::find_response(object, combine = TRUE)
@@ -287,7 +338,17 @@ pp_check.lm <- function(object,
 
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", model_response) || is.matrix(response_values)) {
-    return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
+    return(pp_check.glm(
+      object,
+      iterations,
+      check_range,
+      re_formula,
+      bandwidth,
+      type,
+      verbose,
+      model_info,
+      ...
+    ))
   }
 
   # else, proceed as usual
@@ -341,14 +402,19 @@ pp_check.lm <- function(object,
   pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
   # check for transformed response, and backtransform simulations
-  if (!is.null(resp_string) && length(resp_string) == 1 && grepl(paste0(pattern, "\\("), resp_string)) {
+  if (
+    !is.null(resp_string) &&
+      length(resp_string) == 1 &&
+      grepl(paste0(pattern, "\\("), resp_string)
+  ) {
     out <- .backtransform_sims(out, resp_string)
   }
 
   # sanity check - do we have a ratio or similar?
   if (is.data.frame(response)) {
     # get response data, evaluate formula
-    response <- eval(str2lang(insight::find_response(object)),
+    response <- eval(
+      str2lang(insight::find_response(object)),
       envir = insight::get_response(object)
     )
   }
@@ -420,7 +486,15 @@ pp_check.glm <- function(
   )
 
   # validation check, for mixed models, where re.form = NULL (default) might fail
-  out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
+  out <- .check_re_formula(
+    out,
+    object,
+    iterations,
+    re_formula,
+    verbose,
+    as_proportion = TRUE,
+    ...
+  )
 
   if (is.null(out)) {
     insight::format_error(sprintf(
@@ -463,20 +537,19 @@ pp_check.glm <- function(
 
 
 # styler: off
-pp_check.glmmTMB   <-
-  pp_check.glm.nb  <-
-  pp_check.lme     <-
-  pp_check.merMod  <-
-  pp_check.MixMod  <-
-  pp_check.mle2    <-
-  pp_check.negbin  <-
-  pp_check.polr    <-
-  pp_check.rma     <-
-  pp_check.vlm     <-
-  pp_check.wbm     <-
-  pp_check.lm
+pp_check.glmmTMB <-
+  pp_check.glm.nb <-
+    pp_check.lme <-
+      pp_check.merMod <-
+        pp_check.MixMod <-
+          pp_check.mle2 <-
+            pp_check.negbin <-
+              pp_check.polr <-
+                pp_check.rma <-
+                  pp_check.vlm <-
+                    pp_check.wbm <-
+                      pp_check.lm
 # styler: on
-
 
 #' @rawNamespace
 #' S3method(bayesplot::pp_check, lm)
@@ -493,9 +566,7 @@ pp_check.glmmTMB   <-
 #' S3method(bayesplot::pp_check, wbm)
 #' S3method(bayesplot::pp_check, BFBayesFactor)
 
-
 # methods -----------------------
-
 
 #' @export
 print.performance_pp_check <- function(x, verbose = TRUE, ...) {
@@ -533,7 +604,8 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
               ifelse(length(missing_levs) == 1, " ", "s "),
               paste0("'", missing_levs, "'", collapse = ", "),
               " from original data is not included in the replicated data."
-            ), "Model may not capture the variation of the data."
+            ),
+            "Model may not capture the variation of the data."
           ),
           "red"
         )
@@ -564,10 +636,14 @@ plot.performance_pp_check <- function(x, ...) {
   } else if (grepl("log(", resp_string, fixed = TRUE)) {
     # exceptions: log(x+1) or log(1+x)
     # 1. try: log(x + number)
-    plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))))
+    plus_minus <- .safe(eval(parse(
+      text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string)
+    )))
     # 2. try: log(number + x)
     if (is.null(plus_minus)) {
-      plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))))
+      plus_minus <- .safe(eval(parse(
+        text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string)
+      )))
     }
     if (is.null(plus_minus) || !is.numeric(plus_minus)) {
       sims[] <- lapply(sims, exp)
@@ -592,7 +668,15 @@ plot.performance_pp_check <- function(x, ...) {
 }
 
 
-.check_re_formula <- function(out, object, iterations, re_formula, verbose, ...) {
+.check_re_formula <- function(
+  out,
+  object,
+  iterations,
+  re_formula,
+  verbose,
+  as_proportion = FALSE,
+  ...
+) {
   # validation check, for mixed models, where re.form = NULL (default) might fail
   if (is.null(out) && insight::is_mixed_model(object) && !isTRUE(is.na(re_formula))) {
     if (verbose) {
@@ -606,6 +690,14 @@ plot.performance_pp_check <- function(x, ...) {
       )
     }
     out <- .safe(stats::simulate(object, nsim = iterations, re.form = NA, ...))
+    # if we have a matrix response, convert to proportions
+    if (as_proportion) {
+      out <- as.data.frame(sapply(
+        out,
+        function(i) i[, 1] / rowSums(i, na.rm = TRUE),
+        simplify = TRUE
+      ))
+    }
   }
   out
 }

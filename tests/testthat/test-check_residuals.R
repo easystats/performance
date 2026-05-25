@@ -1,6 +1,6 @@
 test_that("check_residuals and simulate_residuals", {
   skip_on_cran()
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   set.seed(123)
   dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
   m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
@@ -52,8 +52,18 @@ test_that("check_residuals and simulate_residuals", {
   )
   # outlier_values works
   expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm))), 3L)
-  expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm, outlier_values = c(-100, 100)))), 0L) # nolint
-  expect_error(residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3), regex = "`outlier_values` must be") # nolint
+  expect_identical(
+    sum(is.infinite(residuals(
+      res,
+      quantile_function = stats::qnorm,
+      outlier_values = c(-100, 100)
+    ))),
+    0L
+  ) # nolint
+  expect_error(
+    residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3),
+    regex = "`outlier_values` must be"
+  ) # nolint
 
   # check_residuals
   out <- check_residuals(res)

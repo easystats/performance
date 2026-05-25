@@ -19,7 +19,11 @@ test_that("test_performance - nested", {
 
   models <- list(Interaction = m1, NoInteraction = m2, SingleTerm = m3)
   rez <- test_performance(models)
-  expect_equal(rez$Name, c("Interaction", "NoInteraction", "SingleTerm"), ignore_attr = TRUE)
+  expect_equal(
+    rez$Name,
+    c("Interaction", "NoInteraction", "SingleTerm"),
+    ignore_attr = TRUE
+  )
 
   # Increasing
   # TODO: Increasing order must be fixed and double checked, because the empty line should be the bottom one (?)

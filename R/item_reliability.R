@@ -120,11 +120,14 @@ print.item_reliability <- function(x, ...) {
 
   # add attributes for table caption and footer
   attr(out, "table_caption") <- c("# Item Reliability", "blue")
-  attr(out, "table_footer") <- c(sprintf(
-    "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-    attributes(out)$item_intercorrelation,
-    attributes(out)$cronbachs_alpha
-  ), "yellow")
+  attr(out, "table_footer") <- c(
+    sprintf(
+      "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+      attributes(out)$item_intercorrelation,
+      attributes(out)$cronbachs_alpha
+    ),
+    "yellow"
+  )
 
   cat(insight::export_table(out, ...))
   invisible(x)

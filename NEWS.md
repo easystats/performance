@@ -1,3 +1,67 @@
+# performance 0.17.0
+
+## Changes
+
+* `test_likelihoodratio()` now has a new 'Criterion' column containing the
+  -2 * log-likelihood (-2LL) value for each model.
+
+* Added more details to the troubleshooting section to the documentation of
+  `check_model()`.
+
+* `check_predictions()` for Bayesian models now uses
+  `modelbased::estimate_prediction()` and returns posterior predictive data in
+  the same format as for other supported models.
+
+* Updated tests to work with the next release of the *DHARMa* package
+  (version 0.5.0).
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for models from the *fixest* package.
+
+* Fixed issue in `check_collinearity()` that was causing inflated VIF values
+  when applied to clm and clmm models from the ordinal package.
+
+* Fixed issue in `test_likelihoodratio.ListLavaan()` that was extracting the
+  absolute model fit (Chisq) from the lavTestLRT output instead of the actual
+  LRT test statistic (Chisq diff).
+
+# performance 0.16.0
+
+## Breaking Changes
+
+* `model_performance()` for psych FA objects now correctly names the metric as
+  `RMSR` (Root Mean Square Residual) instead of `RMSA`. The `RMSR_corrected`
+  column (previously `RMSA_corrected`) is also renamed accordingly.
+
+* The first argument in `check_model()`, `check_predictions()` and
+  `check_convergence()` was renamed to `model`.
+
+## Changes
+
+* `check_model()` now limits the number of data points for models with many
+  observations, to reduce the time for rendering the plot via the `maximum_dots`
+  argument.
+
+* `check_model()` can now show or hide confidence intervals using the `show_ci`
+  argument. For models with only categorical predictors, confidence intervals
+  are not shown by default.
+
+## Bug fixes
+
+* Fixed issue in `check_dag()` with multiple colliders.
+
+* Fixed CRAN check issues.
+
+# performance 0.15.3
+
+## Changes
+
+* `check_autocorrelation()` gets methods for `DHARMa` objects and objects from
+  `simulate_residuals()`.
+
+* Improved documentation for printing-methods.
+
 # performance 0.15.2
 
 ## Bug fixes

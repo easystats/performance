@@ -20,7 +20,7 @@ Calculates two multivariate R2 values for multivariate linear regression.
 \details{
 The two indexes returned summarize model fit for the set of predictors
 given the system of responses. As compared to the default
-\link[=r2]{r2} index for multivariate linear models, the indexes
+\link{r2} index for multivariate linear models, the indexes
 returned by this function provide a single fit value collapsed across
 all responses.
 

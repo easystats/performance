@@ -2,7 +2,11 @@ skip_if_not_installed("mclogit")
 
 data(Transport, package = "mclogit")
 mod_mb <- mclogit::mblogit(factor(gear) ~ mpg + hp, data = mtcars, trace = FALSE)
-mod_mc <- mclogit::mclogit(resp | suburb ~ distance + cost, data = Transport, trace = FALSE)
+mod_mc <- mclogit::mclogit(
+  resp | suburb ~ distance + cost,
+  data = Transport,
+  trace = FALSE
+)
 
 test_that("r2 Nagelkerke", {
   expect_equal(

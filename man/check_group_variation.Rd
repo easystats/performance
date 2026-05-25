@@ -157,7 +157,7 @@ result
 
 summary(result)
 
-\dontshow{if (insight::check_if_installed("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 
 data(sleepstudy, package = "lme4")
 check_group_variation(sleepstudy, select = "Days", by = "Subject")

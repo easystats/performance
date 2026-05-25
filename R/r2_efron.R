@@ -41,6 +41,11 @@ r2_efron.default <- function(model) {
 
 .r2_efron <- function(model) {
   y_hat <- stats::predict(model, type = "response")
-  y <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE, lowest = 0)
+  y <- datawizard::to_numeric(
+    insight::get_response(model, verbose = FALSE),
+    dummy_factors = FALSE,
+    preserve_levels = TRUE,
+    lowest = 0
+  )
   (1 - (sum((y - y_hat)^2)) / (sum((y - mean(y))^2)))
 }

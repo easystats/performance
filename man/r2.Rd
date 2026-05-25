@@ -61,7 +61,7 @@ to return a "generic" r-quared value, calculated as following:
 \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2)}
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 # Pseudo r-quared for GLM
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)

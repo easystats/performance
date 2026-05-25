@@ -47,10 +47,20 @@ test_that("model_performance.brmsfit", {
   expect_equal(perf$R2, 0.8262673, tolerance = 1e-2)
   expect_equal(perf$R2_adjusted, 0.792831, tolerance = 1e-2)
   expect_equal(perf$ELPD, -78.59823, tolerance = 1e-2)
-  expect_identical(colnames(perf), c(
-    "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_adjusted",
-    "RMSE", "Sigma"
-  ))
+  expect_identical(
+    colnames(perf),
+    c(
+      "ELPD",
+      "ELPD_SE",
+      "LOOIC",
+      "LOOIC_SE",
+      "WAIC",
+      "R2",
+      "R2_adjusted",
+      "RMSE",
+      "Sigma"
+    )
+  )
 
   model <- insight::download_model("brms_mixed_4")
   skip_if(is.null(model))
@@ -60,10 +70,23 @@ test_that("model_performance.brmsfit", {
   expect_equal(perf$R2, 0.954538, tolerance = 1e-2)
   expect_equal(perf$R2_adjusted, 0.9526158, tolerance = 1e-2)
   expect_equal(perf$ELPD, -70.40493, tolerance = 1e-2)
-  expect_named(perf, c(
-    "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_marginal",
-    "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
-  ))
+  expect_named(
+    perf,
+    c(
+      "ELPD",
+      "ELPD_SE",
+      "LOOIC",
+      "LOOIC_SE",
+      "WAIC",
+      "R2",
+      "R2_marginal",
+      "R2_adjusted",
+      "R2_adjusted_marginal",
+      "ICC",
+      "RMSE",
+      "Sigma"
+    )
+  )
 
   model <- insight::download_model("brms_ordinal_1")
   skip_if(is.null(model))
@@ -87,7 +110,11 @@ test_that("model_performance.BFBayesFactor", {
   })
   expect_null(p)
 
-  mods <- BayesFactor::contingencyTableBF(matrix(1:4, 2), sampleType = "indepMulti", fixedMargin = "cols")
+  mods <- BayesFactor::contingencyTableBF(
+    matrix(1:4, 2),
+    sampleType = "indepMulti",
+    fixedMargin = "cols"
+  )
   expect_warning({
     p <- model_performance(mod)
   })

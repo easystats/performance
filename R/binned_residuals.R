@@ -75,16 +75,18 @@
 #' }
 #'
 #' @export
-binned_residuals <- function(model,
-                             term = NULL,
-                             n_bins = NULL,
-                             show_dots = NULL,
-                             ci = 0.95,
-                             ci_type = "exact",
-                             residuals = "deviance",
-                             iterations = 1000,
-                             verbose = TRUE,
-                             ...) {
+binned_residuals <- function(
+  model,
+  term = NULL,
+  n_bins = NULL,
+  show_dots = NULL,
+  ci = 0.95,
+  ci_type = "exact",
+  residuals = "deviance",
+  iterations = 1000,
+  verbose = TRUE,
+  ...
+) {
   ci_type <- insight::validate_argument(
     ci_type,
     c("exact", "gaussian", "boot")
@@ -98,7 +100,9 @@ binned_residuals <- function(model,
   if (isFALSE(insight::model_info(model)$is_bernoulli)) {
     ci_type <- "gaussian"
     if (verbose) {
-      insight::format_alert("Using `ci_type = \"gaussian\"` because model is not bernoulli.")
+      insight::format_alert(
+        "Using `ci_type = \"gaussian\"` because model is not bernoulli."
+      )
     }
   }
 
@@ -121,7 +125,8 @@ binned_residuals <- function(model,
   y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
 
   # calculate residuals
-  y <- switch(residuals,
+  y <- switch(
+    residuals,
     response = y0 - fitted_values,
     pearson = .safe((y0 - fitted_values) / sqrt(fitted_values * (1 - fitted_values))),
     deviance = .safe(stats::residuals(model, type = "deviance"))
@@ -129,10 +134,14 @@ binned_residuals <- function(model,
 
   # make sure we really have residuals
   if (is.null(y)) {
-    insight::format_error("Could not calculate residuals. Try using `residuals = \"response\"`.")
+    insight::format_error(
+      "Could not calculate residuals. Try using `residuals = \"response\"`."
+    )
   }
 
-  if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
+  if (is.null(n_bins)) {
+    n_bins <- round(sqrt(length(pred)))
+  }
 
   breaks.index <- floor(length(pred) * (1:(n_bins - 1)) / n_bins)
   breaks <- unique(c(-Inf, sort(pred)[breaks.index], Inf))
@@ -151,8 +160,13 @@ binned_residuals <- function(model,
     if (n == 0) {
       conf_int <- stats::setNames(c(NA, NA), c("CI_low", "CI_high"))
     } else {
-      conf_int <- switch(ci_type,
-        gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
+      conf_int <- switch(
+        ci_type,
+        gaussian = stats::qnorm(
+          c((1 - ci) / 2, (1 + ci) / 2),
+          mean = ybar,
+          sd = sdev / sqrt(n)
+        ),
         exact = {
           out <- stats::binom.test(sum(y0[items]), n)$conf.int
           # center CIs around point estimate
