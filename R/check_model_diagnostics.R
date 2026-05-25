@@ -315,7 +315,11 @@
       # at boundaries (when DHARMa residuals are exactly 0 or 1). The value 7
       # is chosen as a practical upper bound: qnorm(0.9999997) ~= 7, making
       # it an extreme but interpretable value on the standard normal scale.
-      res <- stats::residuals(simres, quantile_function = stats::qnorm, outlier_values = c(-7, 7))
+      res <- stats::residuals(
+        simres,
+        quantile_function = stats::qnorm,
+        outlier_values = c(-7, 7)
+      )
       data.frame(
         Predicted = predicted,
         Residuals = res,
