@@ -325,8 +325,10 @@
     })
     if (!is.null(d)) {
       d$V <- .expected_variance(model, faminfo, d)
-      # Pearson-like standardized residuals: divide by sqrt of expected variance
-      d$StdRes <- d$Residuals / sqrt(pmax(d$V, .Machine$double.eps))
+      # Pearson-like standardized residuals: divide by sqrt of expected variance.
+      # Use 1e-6 floor to avoid division by near-zero values when predicted
+      # means are very small, while keeping the value practically interpretable.
+      d$StdRes <- d$Residuals / sqrt(pmax(d$V, 1e-6))
       return(d)
     }
   }
