@@ -135,8 +135,9 @@ These variables can have one of the following three labels:
   perfectly balanced).
 
 Additionally, the design of non-numeric variables is also checked to see
-if they are *nested* within the groups or is they are *crossed*. This is
-indicated by the `Design` column.
+if they are *nested* within the groups (see
+[`reformulas::isNested()`](https://rdrr.io/pkg/reformulas/man/isNested.html))
+or if they are *crossed*. This is indicated by the `Design` column.
 
 ### Heterogeneity bias
 

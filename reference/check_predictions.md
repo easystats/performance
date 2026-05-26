@@ -179,7 +179,9 @@ model <- glm(
   data = d
 )
 check_predictions(model, type = "discrete_both")
+#> The model has an integer or a discrete response variable.
+#>   It is recommended to switch to a dot-plot style, e.g.
+#>   `plot(check_model(model), type = "discrete_dots"`.
 #> Ignoring unknown labels:
 #> • size : ""
-#> • alpha : ""
 ```
