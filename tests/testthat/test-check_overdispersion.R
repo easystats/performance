@@ -1,3 +1,5 @@
+skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+
 test_that("check_overdispersion, glmmTMB-poisson", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
@@ -92,7 +94,6 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
 
 test_that("check_overdispersion, zero-inflated and negbin", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -207,7 +208,6 @@ test_that("check_overdispersion, zero-inflated and negbin", {
 
 test_that("check_overdispersion, MASS::negbin", {
   skip_if_not_installed("MASS")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   set.seed(3)
   mu <- rpois(500, lambda = 3)
   x <- rnorm(500, mu, mu * 3)
@@ -247,7 +247,6 @@ test_that("check_overdispersion, MASS::negbin", {
 
 test_that("check_overdispersion, genpois", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -279,6 +278,58 @@ test_that("check_overdispersion, genpois", {
       ),
       class = c("check_overdisp", "see_check_overdisp"),
       object_name = "model"
+    ),
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("check_overdispersion, glm can use normal residuals", {
+  #fmt: skip
+  dat <- data.frame(
+    n = c(
+      55, 59, 74, 7, 54, 54, 57, 48, 55, 57, 41,
+      20, 13, 21, 13, 32, 38, 42, 37, 14, 19
+    ),
+    success = c(
+      26, 35, 28, 6, 16, 35, 28, 21, 31, 10, 2, 9, 7,
+      18, 1, 26, 28, 3, 17, 11, 17
+    ),
+    x = c(
+      3.464, 1.599, 3.39, 3.047, 2.442, 1.777, 3.363,
+      4.626, 2.701, 4.636, 3.622, 2.031, 1.666, 2.218, 3.338, 4.255,
+      2.476, 4.727, 3.317, 3.925, 2.854
+    )
+  )
+
+  mod1 <- glm(cbind(success, n - success) ~ x, data = dat, family = binomial)
+
+  set.seed(123)
+  out <- check_overdispersion(mod1, residual_type = "normal")
+  expect_equal(
+    out,
+    structure(
+      list(
+        chisq_statistic = 105583.222033006,
+        dispersion_ratio = 5557.01168594766,
+        residual_df = 19L,
+        p_value = 0
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "mod1"
+    ),
+    tolerance = 1e-4
+  )
+
+  set.seed(123)
+  out <- check_overdispersion(mod1)
+  expect_equal(
+    out,
+    structure(
+      list(dispersion_ratio = 1.07771876659311, p_value = 0.528),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "mod1",
+      simulated = TRUE
     ),
     tolerance = 1e-4
   )
