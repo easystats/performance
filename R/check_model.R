@@ -34,14 +34,14 @@
 #' `TRUE` for linear models or when `residual_type = "normal"`. Defaults to
 #' `FALSE` for QQ plots based on simulated residuals (i.e. when
 #' `residual_type = "simulated"`).
-#' @param residual_type Character, indicating the type of residuals to be used.
-#' For non-Gaussian models, the default is `"simulated"`, which uses simulated
-#' residuals. These are based on [`simulate_residuals()`] and thus uses the
-#' **DHARMa** package to return randomized quantile residuals. For Gaussian
-#' models, the default is `"normal"`, which uses the default residuals from
-#' the model. Setting `residual_type = "normal"` for non-Gaussian models will
-#' use a half-normal Q-Q plot of the absolute value of the standardized deviance
-#' residuals.
+#' @param residual_type Character, indicating the type of residuals to be used
+#' for QQ-plots and overdispersion tests. For non-Gaussian models, the default
+#' is `"simulated"`, which uses simulated residuals. These are based on
+#' [`simulate_residuals()`] and thus uses the **DHARMa** package to return
+#' randomized quantile residuals. For Gaussian models, the default is
+#' `"normal"`, which uses the default residuals from the model. Setting
+#' `residual_type = "normal"` for non-Gaussian models will use a half-normal Q-Q
+#' plot of the absolute value of the standardized deviance residuals.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #' to `FALSE` for models with many observations, if generating the plot is too
 #' time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
@@ -269,6 +269,11 @@ check_model.default <- function(
 
   minfo <- insight::model_info(model, verbose = FALSE)
 
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
+
   # set default for residual_type
   if (is.null(residual_type)) {
     residual_type <- ifelse(minfo$is_linear && !minfo$is_gam, "normal", "simulated")
@@ -278,7 +283,11 @@ check_model.default <- function(
   # exceptions here as they appear, but for now, `check_model()` also
   # automatically falls back to normal Q-Q plot for all models not supported
   # by DHARMa
-  if (minfo$family %in% c("quasipoisson", "quasibinomial")) {
+  if (
+    minfo$family %in%
+      c("quasipoisson", "quasibinomial") ||
+      !requireNamespace("DHARMa", quietly = TRUE)
+  ) {
     residual_type <- "normal"
   }
 
@@ -732,7 +741,11 @@ check_model.DHARMa <- check_model.performance_simres
 
   # misspecified dispersion and zero-inflation --------------
   if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
-    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(model, ...)
+    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(
+      model,
+      residual_type = residual_type,
+      ...
+    )
   }
 
   dat <- insight::compact_list(dat)

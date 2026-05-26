@@ -2,10 +2,13 @@
 % Please edit documentation in R/check_overdispersion.R
 \name{check_overdispersion}
 \alias{check_overdispersion}
+\alias{check_overdispersion.glm}
 \alias{check_overdispersion.performance_simres}
 \title{Check overdispersion (and underdispersion) of GL(M)M's}
 \usage{
 check_overdispersion(x, ...)
+
+\method{check_overdispersion}{glm}(x, residual_type = NULL, verbose = TRUE, ...)
 
 \method{check_overdispersion}{performance_simres}(x, alternative = "two.sided", ...)
 }
@@ -16,6 +19,13 @@ check_overdispersion(x, ...)
 \item{...}{Arguments passed down to \code{\link[=simulate_residuals]{simulate_residuals()}}. This only applies
 for models with zero-inflation component, or for models of class \code{glmmTMB}
 from \code{nbinom1} or \code{nbinom2} family.}
+
+\item{residual_type}{Character, indicating the type of residuals to be used
+for overdispersion tests. For mixed models, the default is \code{"simulated"},
+which uses simulated residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}},
+using the \strong{DHARMa} package. For \code{glm}, the default is \code{"simulated"} for
+bernoulli, binomial and negative-binomial models. Set \code{residual_type = "normal"}
+to use}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}

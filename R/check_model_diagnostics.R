@@ -298,16 +298,33 @@
 }
 
 
-.model_diagnostic_overdispersion <- function(model, ...) {
+.model_diagnostic_overdispersion <- function(model, residual_type = NULL, ...) {
   faminfo <- insight::model_info(model)
+
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
 
   # For mixed models and glmmTMB models, use simulated residuals from DHARMa
   # for more accurate overdispersion visualization. Pearson residuals can be
   # misleading for these model types.
-  use_simres <- (isTRUE(faminfo$is_mixed) ||
-    inherits(model, "glmmTMB") ||
-    faminfo$is_negbin) &&
-    requireNamespace("DHARMa", quietly = TRUE)
+  if (is.null(residual_type) || identical(residual_type, "simulated")) {
+    use_simres <- (isTRUE(faminfo$is_mixed) ||
+      inherits(model, "glmmTMB") ||
+      faminfo$is_negbin) &&
+      requireNamespace("DHARMa", quietly = TRUE)
+  } else {
+    use_simres <- FALSE
+  }
+
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  if (faminfo$family %in% c("quasipoisson", "quasibinomial")) {
+    use_simres <- FALSE
+  }
 
   if (use_simres) {
     d <- .safe({

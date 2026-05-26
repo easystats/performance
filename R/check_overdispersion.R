@@ -6,6 +6,12 @@
 #'
 #' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
 #'   (package **MASS**), or an object returned by `simulate_residuals()`.
+#' @param residual_type Character, indicating the type of residuals to be used
+#' for overdispersion tests. For mixed models, the default is `"simulated"`,
+#' which uses simulated residuals. These are based on [`simulate_residuals()`],
+#' using the **DHARMa** package. For `glm`, the default is `"simulated"` for
+#' bernoulli, binomial and negative-binomial models. Set `residual_type = "normal"`
+#' to use
 #'
 #' @inheritParams check_zeroinflation
 #'
@@ -102,8 +108,12 @@ plot.check_overdisp <- function(x, ...) {
       model <- .safe(get(obj_name, envir = globalenv()))
     }
   }
+
+  # detect residual type
+  residual_type <- ifelse(isTRUE(attr(x, "simulated")), "simulated", NULL)
+
   if (!is.null(model)) {
-    x <- .model_diagnostic_overdispersion(model, ...)
+    x <- .model_diagnostic_overdispersion(model, residual_type = residual_type, ...)
     class(x) <- c("see_check_overdisp", "data.frame")
     attr(x, "colors") <- list(...)$colors
     attr(x, "line_size") <- list(...)$size_line
@@ -171,17 +181,34 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
 # Overdispersion for classical models -----------------------------
 
+#' @rdname check_overdispersion
 #' @export
-check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
+check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ...) {
   # model info
   info <- insight::model_info(x)
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
-  # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$is_bernoulli ||
-    info$is_binomial ||
-    (!info$is_count && !info$is_binomial) ||
-    info$is_negbin
+  if (is.null(residual_type) || identical(residual_type, "simulated")) {
+    # for certain distributions, simulated residuals are more accurate
+    use_simulated <- info$is_bernoulli ||
+      info$is_binomial ||
+      (!info$is_count && !info$is_binomial) ||
+      info$is_negbin
+  } else {
+    use_simulated <- FALSE
+  }
+
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  if (
+    info$family %in%
+      c("quasipoisson", "quasibinomial") ||
+      !requireNamespace("DHARMa", quietly = TRUE)
+  ) {
+    use_simulated <- FALSE
+  }
 
   # model classes not supported in DHARMa
   not_supported <- c("fixest", "glmx")
@@ -260,20 +287,18 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 # Overdispersion for mixed models ---------------------------
 
 #' @export
-check_overdispersion.merMod <- function(x, ...) {
+check_overdispersion.merMod <- function(x, residual_type = NULL, ...) {
   # for certain distributions, simulated residuals are more accurate
   info <- insight::model_info(x)
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
-  # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$family == "genpois" ||
-    info$is_zero_inflated ||
-    info$is_bernoulli ||
-    info$is_binomial ||
-    (!info$is_count && !info$is_binomial) ||
-    info$is_negbin # nolint
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
 
-  if (use_simulated) {
+  # always use simulated residuals by default
+  if (is.null(residual_type) || identical(residual_type, "simulated")) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
@@ -341,6 +366,7 @@ check_overdispersion.performance_simres <- function(x, alternative = "two.sided"
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
   attr(out, "object_name") <- obj_name
+  attr(out, "simulated") <- TRUE
 
   out
 }
