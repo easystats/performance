@@ -439,7 +439,9 @@
 
   # Helper: get per-observation dispersion (if dispersion model) or scalar sigma
   .get_disp <- function() {
-    if (isTRUE(faminfo$is_dispersion)) {
+    if (inherits(model, "cpglmm")) {
+      model@phi
+    } else if (isTRUE(faminfo$is_dispersion)) {
       stats::predict(model, type = "disp")
     } else {
       insight::get_sigma(model)
@@ -466,6 +468,15 @@
     } else if (faminfo$is_negbin) {
       # General negbin (e.g., MASS::glm.nb): parameterized as nbinom2
       expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+    } else if (faminfo$is_tweedie) {
+      # Tweedie distribution: phi*mu^power
+      if (inherits(model, "cpglmm")) {
+        p <- model@p - 2
+      } else {
+        insight::check_if_installed("glmmTMB")
+        p <- unname(unlist(glmmTMB::family_params(model)))
+      }
+      expected_var <- .get_disp() * d$Predicted^p
     }
   } else if (faminfo$is_poisson) {
     # Zero-inflated Poisson: V = mu(1-p)(1 + mu*p)
