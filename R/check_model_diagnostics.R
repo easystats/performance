@@ -300,6 +300,7 @@
 
 .model_diagnostic_overdispersion <- function(model, residual_type = NULL, ...) {
   faminfo <- insight::model_info(model)
+  d <- NULL
 
   # validate argument
   if (!is.null(residual_type)) {
@@ -400,6 +401,15 @@
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
+  # fallback for remaining models
+  if (is.null(d)) {
+    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d$Residuals <- insight::get_residuals(model)
+    d$Res2 <- d$Residuals^2
+    d$V <- .expected_variance(model, faminfo, d)
+    d$StdRes <- d$Residuals / sqrt(pmax(d$V, 1e-6))
+  }
+
   d
 }
 
@@ -467,6 +477,37 @@
       (1 + d$Predicted / disp) *
       (1 - d$Prob) *
       (1 + d$Predicted * (1 + d$Predicted / disp) * d$Prob)
+  }
+
+  # fallback for all other families
+  if (is.null(expected_var)) {
+    # find required arguments
+    formal_args <- .safe(formals(stats::family(model)$variance))
+    # error when not supported
+    if (!is.null(formal_args)) {
+      fun_args <- list()
+      if ("mu" %in% names(formal_args)) {
+        fun_args$mu <- d$Predicted
+      }
+      if ("theta" %in% names(formal_args)) {
+        fun_args$theta <- .get_disp()
+      }
+      if ("phi" %in% names(formal_args)) {
+        fun_args$phi <- .get_disp()
+      }
+      expected_var <- .safe(do.call(stats::family(model)$variance, fun_args))
+    }
+  }
+
+  if (is.null(expected_var)) {
+    insight::format_error(paste0(
+      "Models of class `",
+      class(model)[1],
+      "` or model family `",
+      faminfo$family,
+      "` are not yet supported by `check_overdispersion()`. ",
+      "Please file an issue at {.url https://github.com/easystats/performance/issues/}."
+    ))
   }
 
   expected_var
