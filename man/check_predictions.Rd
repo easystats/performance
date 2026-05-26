@@ -14,6 +14,7 @@ check_predictions(model = NULL, ...)
   re_formula = NULL,
   bandwidth = "nrd",
   type = "density",
+  x_limits = NULL,
   verbose = TRUE,
   object = NULL,
   ...
@@ -51,6 +52,10 @@ to a different value.}
 \code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the \verb{discrete_*}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
+
+\item{x_limits}{An integer vector of length two specifying the x-axis limits
+for the plot. Use this to zoom in on a specific region of interest,
+especially if the response variable has a large range.}
 
 \item{verbose}{Toggle warnings.}
 

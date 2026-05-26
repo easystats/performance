@@ -25,6 +25,7 @@ check_model(model = NULL, ...)
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
@@ -96,6 +97,10 @@ maximum of 2000 data points to render}
 
 \item{alpha, alpha_dot}{The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.}
+
+\item{ppc_range}{An integer vector of length two specifying the x-axis limits
+for the posterior predictive checks plot. Use this to zoom in on a specific
+region of interest, especially if the response variable has a large range.}
 
 \item{colors}{Character vector with color codes (hex-format). Must be of
 length 3. First color is usually used for reference lines, second color

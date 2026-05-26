@@ -1,5 +1,18 @@
 # performance (devel)
 
+## Changes
+
+* `check_overdispersion()` gets a `residual_type` argument, to decide whether
+  overdispersion tests are based on simulated or "standard" residuals.
+
+* `check_model()` gains a `ppc_range` argument for posterior predictive checks
+  plot. Use this to zoom in on a specific region of interest, especially if the
+  response variable has a large range.
+
+* `check_predictions()` gains a `x_limits` argument for plots. Use this to zoom
+  in on a specific region of interest, especially if the response variable has
+  a large range.
+
 ## Bug fixes
 
 * The overdispersion plot in `check_model()` now uses simulated residuals (based

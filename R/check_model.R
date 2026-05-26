@@ -53,6 +53,9 @@
 #' @param maximum_dots Limits the number of data points for models with many
 #' observations, to reduce the time for rendering the plot. Defaults to a
 #' maximum of 2000 data points to render
+#' @param ppc_range An integer vector of length two specifying the x-axis limits
+#' for the posterior predictive checks plot. Use this to zoom in on a specific
+#' region of interest, especially if the response variable has a large range.
 #' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Arguments passed down to the individual check functions, especially
 #' to `check_predictions()` and `binned_residuals()`.
@@ -248,6 +251,7 @@ check_model.default <- function(
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
@@ -397,6 +401,7 @@ check_model.default <- function(
   attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
   attr(assumptions_data, "bandwidth") <- bandwidth
   attr(assumptions_data, "type") <- type
+  attr(assumptions_data, "ppc_range") <- ppc_range
   attr(assumptions_data, "maximum_dots") <- maximum_dots
   attr(assumptions_data, "model_class") <- class(model)[1]
   assumptions_data
@@ -442,6 +447,7 @@ check_model.stanreg <- function(
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
@@ -475,6 +481,7 @@ check_model.stanreg <- function(
     type = type,
     residual_type = residual_type,
     maximum_dots = maximum_dots,
+    ppc_range = ppc_range,
     verbose = verbose,
     ...
   )
@@ -504,6 +511,7 @@ check_model.model_fit <- function(
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
@@ -537,6 +545,7 @@ check_model.model_fit <- function(
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
+    ppc_range = ppc_range,
     verbose = verbose,
     ...
   )
@@ -562,6 +571,7 @@ check_model.performance_simres <- function(
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
@@ -595,6 +605,7 @@ check_model.performance_simres <- function(
     bandwidth = bandwidth,
     type = type,
     residual_type = "simulated",
+    ppc_range = ppc_range,
     verbose = verbose,
     ...
   )
