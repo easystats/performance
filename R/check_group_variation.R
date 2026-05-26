@@ -62,8 +62,8 @@
 #'   perfectly balanced).
 #'
 #' Additionally, the design of non-numeric variables is also checked to see if
-#' they are _nested_ within the groups or is they are _crossed_. This is
-#' indicated by the `Design` column.
+#' they are _nested_ within the groups (see [reformulas::isNested()]) or if they
+#' are _crossed_. This is indicated by the `Design` column.
 #'
 #' ## Heterogeneity bias
 #' Variables that vary both within and between groups can cause a heterogeneity
