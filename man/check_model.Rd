@@ -67,14 +67,14 @@ to a different value.}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
-\item{residual_type}{Character, indicating the type of residuals to be used.
-For non-Gaussian models, the default is \code{"simulated"}, which uses simulated
-residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the
-\strong{DHARMa} package to return randomized quantile residuals. For Gaussian
-models, the default is \code{"normal"}, which uses the default residuals from
-the model. Setting \code{residual_type = "normal"} for non-Gaussian models will
-use a half-normal Q-Q plot of the absolute value of the standardized deviance
-residuals.}
+\item{residual_type}{Character, indicating the type of residuals to be used
+for QQ-plots and overdispersion tests. For non-Gaussian models, the default
+is \code{"simulated"}, which uses simulated residuals. These are based on
+\code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the \strong{DHARMa} package to return
+randomized quantile residuals. For Gaussian models, the default is
+\code{"normal"}, which uses the default residuals from the model. Setting
+\code{residual_type = "normal"} for non-Gaussian models will use a half-normal Q-Q
+plot of the absolute value of the standardized deviance residuals.}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
 to \code{FALSE} for models with many observations, if generating the plot is too
