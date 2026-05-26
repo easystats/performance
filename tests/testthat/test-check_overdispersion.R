@@ -41,7 +41,8 @@ test_that("check_overdispersion, glmmTMB-poisson", {
         dispersion_ratio = 3.91516791651235,
         p_value = 0
       ),
-      class = c("check_overdisp", "see_check_overdisp")
+      class = c("check_overdisp", "see_check_overdisp"),
+      simulated = TRUE
     ),
     tolerance = 1e-3
   )
@@ -68,7 +69,8 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
         p_value = 8.41489530177729e-69
       ),
       class = c("check_overdisp", "see_check_overdisp"),
-      object_name = "m2"
+      object_name = "m2",
+      simulated = TRUE
     ),
     tolerance = 1e-3
   )
@@ -104,7 +106,8 @@ test_that("check_overdispersion, zero-inflated and negbin", {
         dispersion_ratio = 1.98057695890769,
         p_value = 0
       ),
-      class = c("check_overdisp", "see_check_overdisp")
+      class = c("check_overdisp", "see_check_overdisp"),
+      simulated = TRUE
     ),
     tolerance = 1e-4,
     ignore_attr = TRUE
@@ -119,7 +122,8 @@ test_that("check_overdispersion, zero-inflated and negbin", {
         p_value = 3.26556213101505e-122
       ),
       class = c("check_overdisp", "see_check_overdisp"),
-      object_name = "m1"
+      object_name = "m1",
+      simulated = TRUE
     ),
     tolerance = 1e-4,
     ignore_attr = TRUE
