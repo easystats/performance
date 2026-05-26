@@ -52,6 +52,8 @@ test_that("check_overdispersion, glmmTMB-poisson", {
 test_that("check_overdispersion, glmmTMB-poisson mixed", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+
   data(Salamanders, package = "glmmTMB")
 
   m2 <- glmmTMB::glmmTMB(
@@ -59,8 +61,9 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
     family = poisson,
     data = Salamanders
   )
+  set.seed(123)
   expect_equal(
-    check_overdispersion(m2),
+    check_overdispersion(m2, residual_type = "normal"),
     structure(
       list(
         chisq_statistic = 1475.87512547128,
@@ -68,6 +71,16 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
         residual_df = 635L,
         p_value = 8.41489530177729e-69
       ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m2"
+    ),
+    tolerance = 1e-3
+  )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m2),
+    structure(
+      list(dispersion_ratio = 3.04011005020607, p_value = 0),
       class = c("check_overdisp", "see_check_overdisp"),
       object_name = "m2",
       simulated = TRUE
@@ -99,6 +112,8 @@ test_that("check_overdispersion, zero-inflated and negbin", {
     family = glmmTMB::nbinom1(),
     data = Salamanders
   )
+
+  set.seed(123)
   expect_equal(
     check_overdispersion(m1),
     structure(
@@ -112,8 +127,27 @@ test_that("check_overdispersion, zero-inflated and negbin", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  set.seed(123)
   expect_equal(
-    check_overdispersion(m2),
+    check_overdispersion(m1, residual_type = "normal"),
+    structure(
+      list(
+        chisq_statistic = 1027.18155565511,
+        dispersion_ratio = 1.63563941983298,
+        residual_df = 628L,
+        p_value = 9.12825627359497e-22
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m1"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m2, residual_type = "normal"),
     structure(
       list(
         chisq_statistic = 1873.7105986433,
@@ -122,20 +156,48 @@ test_that("check_overdispersion, zero-inflated and negbin", {
         p_value = 3.26556213101505e-122
       ),
       class = c("check_overdisp", "see_check_overdisp"),
-      object_name = "m1",
+      object_name = "m1"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m2),
+    structure(
+      list(dispersion_ratio = 3.91516799008681, p_value = 0),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m2",
       simulated = TRUE
     ),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  set.seed(123)
   expect_equal(
-    check_overdispersion(m1),
+    check_overdispersion(m3, residual_type = "normal"),
     structure(
       list(
-        dispersion_ratio = 1.98057695890769,
-        p_value = 0
+        chisq_statistic = 544.29641690291,
+        dispersion_ratio = 0.857159711658125,
+        residual_df = 635L,
+        p_value = 0.996077528983478
       ),
-      class = c("check_overdisp", "see_check_overdisp")
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m3"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m3),
+    structure(
+      list(dispersion_ratio = 1.18027855021855, p_value = 0.232),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m3",
+      simulated = TRUE
     ),
     tolerance = 1e-4,
     ignore_attr = TRUE
@@ -168,7 +230,7 @@ test_that("check_overdispersion, MASS::negbin", {
   expect_identical(
     capture.output(print(out)),
     c(
-      "# Overdispersion test",
+      "# Overdispersion test (using simulated residuals)",
       "",
       " dispersion ratio =   0.410",
       "          p-value = < 0.001",
@@ -194,12 +256,30 @@ test_that("check_overdispersion, genpois", {
     family = glmmTMB::genpois(),
     data = Salamanders
   )
+  set.seed(123)
   expect_equal(
     check_overdispersion(model),
     structure(
       list(dispersion_ratio = 1.13005481966618, p_value = 0.408),
       class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "model",
+      simulated = TRUE
+    ),
+    tolerance = 1e-4
+  )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(model, residual_type = "normal"),
+    structure(
+      list(
+        chisq_statistic = 473.48007461303,
+        dispersion_ratio = 0.74681399781235,
+        residual_df = 634L,
+        p_value = 0.999999604566096
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
       object_name = "model"
-    )
+    ),
+    tolerance = 1e-4
   )
 })
