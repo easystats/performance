@@ -195,32 +195,10 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
   info <- insight::model_info(x)
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
-  # validate argument
-  if (!is.null(residual_type)) {
-    insight::validate_argument(residual_type, c("normal", "simulated"))
-  }
+  # check whether simulated residuals should be used or not
+  use_simulated <- .use_simulated_residuals(x, residual_type, info)
 
-  if (is.null(residual_type)) {
-    # for certain distributions, simulated residuals are more accurate
-    # fmt: skip
-    use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
-  } else {
-    use_simulated <- switch(residual_type, normal = FALSE, simulated = TRUE)
-  }
-
-  # catch models/families not supported by DHARMa - we need to add more
-  # exceptions here as they appear, but for now, `check_model()` also
-  # automatically falls back to normal Q-Q plot for all models not supported
-  # by DHARMa
-  # fmt: skip
-  if (info$family %in% c("quasipoisson", "quasibinomial") || !requireNamespace("DHARMa", quietly = TRUE)) {
-    use_simulated <- FALSE
-  }
-
-  # model classes not supported in DHARMa
-  not_supported <- c("fixest", "glmx")
-
-  if (use_simulated && !inherits(x, not_supported)) {
+  if (use_simulated) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 

@@ -302,32 +302,7 @@
   faminfo <- insight::model_info(model)
   d <- NULL
 
-  # validate argument
-  if (!is.null(residual_type)) {
-    insight::validate_argument(residual_type, c("normal", "simulated"))
-  }
-
-  # For mixed models and glmmTMB models, use simulated residuals from DHARMa
-  # for more accurate overdispersion visualization. Pearson residuals can be
-  # misleading for these model types.
-
-  if (is.null(residual_type)) {
-    # fmt: skip
-    use_simres <- isTRUE(faminfo$is_mixed) || inherits(model, "glmmTMB") || faminfo$is_negbin
-  } else {
-    use_simres <- switch(residual_type, normal = FALSE, simulated = TRUE)
-  }
-
-  # catch models/families not supported by DHARMa - we need to add more
-  # exceptions here as they appear, but for now, `check_model()` also
-  # automatically falls back to normal Q-Q plot for all models not supported
-  # by DHARMa
-  # fmt: skip
-  if (faminfo$family %in% c("quasipoisson", "quasibinomial") || !requireNamespace("DHARMa", quietly = TRUE)) {
-    use_simres <- FALSE
-  }
-
-  if (use_simres) {
+  if (.use_simulated_residuals(model, residual_type, faminfo)) {
     d <- .safe({
       simres <- simulate_residuals(model, ...)
       predicted <- simres$fittedPredictedResponse
@@ -415,6 +390,49 @@
 
 
 # helpers ----------------------------------
+
+.use_simulated_residuals <- function(model, residual_type, faminfo) {
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
+
+  # For mixed models and glmmTMB models, use simulated residuals from DHARMa
+  # for more accurate overdispersion visualization. Pearson residuals can be
+  # misleading for these model types.
+
+  # fmt: skip
+  if (is.null(residual_type)) {
+    if (inherits(model, "glm")) {
+      simres <- faminfo$is_bernoulli ||
+        faminfo$is_binomial ||
+        (!faminfo$is_count && !faminfo$is_binomial) ||
+        faminfo$is_negbin
+    } else {
+      simres <- isTRUE(faminfo$is_mixed) ||
+        inherits(model, "glmmTMB") ||
+        faminfo$is_negbin
+    }
+  } else {
+    simres <- switch(residual_type, normal = FALSE, simulated = TRUE)
+  }
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  not_supported <- c("fixest", "glmx")
+
+  if (
+    inherits(model, not_supported) ||
+      faminfo$family %in% c("quasipoisson", "quasibinomial") ||
+      !requireNamespace("DHARMa", quietly = TRUE)
+  ) {
+    simres <- FALSE
+  }
+
+  simres
+}
+
 
 .expected_variance <- function(model, faminfo, d) {
   expected_var <- NULL
