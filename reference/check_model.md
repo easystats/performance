@@ -31,6 +31,7 @@ check_model(
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = see::theme_lucid(),
   verbose = FALSE,
@@ -94,9 +95,9 @@ check_model(
 
 - residual_type:
 
-  Character, indicating the type of residuals to be used. For
-  non-Gaussian models, the default is `"simulated"`, which uses
-  simulated residuals. These are based on
+  Character, indicating the type of residuals to be used for QQ-plots
+  and overdispersion tests. For non-Gaussian models, the default is
+  `"simulated"`, which uses simulated residuals. These are based on
   [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md)
   and thus uses the **DHARMa** package to return randomized quantile
   residuals. For Gaussian models, the default is `"normal"`, which uses
@@ -138,6 +139,13 @@ check_model(
 
   The alpha level of the confidence bands and dot-geoms. Scalar from 0
   to 1.
+
+- ppc_range:
+
+  An integer vector of length two specifying the x-axis limits for the
+  posterior predictive checks plot. Use this to zoom in on a specific
+  region of interest, especially if the response variable has a large
+  range.
 
 - colors:
 
@@ -340,13 +348,13 @@ resolve the issue:
 
 - *Decrease the base font size:* As a code-level workaround, you can
   reduce the base font size of your plots to help them fit into smaller
-  viewports. If you are using `{ggplot2}`, load the library and adjust
+  viewports. If you are using **ggplot2**, load the library and adjust
   your theme before plotting. For example:
   `theme_set(theme_classic(base_size = 6))`.
 
 - *Update relevant packages:* Ensure your graphics and layout packages
   are up to date. You can update your packages (paying special attention
-  to `{ggplot2}` and `{patchwork}`) by running
+  to **ggplot2**, **patchwork** and **qqplotr**) by running
   `update.packages(ask = FALSE)`.
 
 - *Update relevant software:* Finally, ensure your R version, and the

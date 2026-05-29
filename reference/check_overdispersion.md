@@ -8,6 +8,9 @@ overdispersion (and underdispersion).
 ``` r
 check_overdispersion(x, ...)
 
+# S3 method for class 'glm'
+check_overdispersion(x, residual_type = NULL, verbose = TRUE, ...)
+
 # S3 method for class 'performance_simres'
 check_overdispersion(x, alternative = "two.sided", ...)
 ```
@@ -26,6 +29,17 @@ check_overdispersion(x, alternative = "two.sided", ...)
   [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md).
   This only applies for models with zero-inflation component, or for
   models of class `glmmTMB` from `nbinom1` or `nbinom2` family.
+
+- residual_type:
+
+  Character, indicating the type of residuals to be used for
+  overdispersion tests. For mixed models, the default is `"simulated"`,
+  which uses simulated residuals. These are based on
+  [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md),
+  using the **DHARMa** package. For `glm`, the default is `"simulated"`
+  for bernoulli, binomial and negative-binomial models. Set
+  `residual_type = "normal"` to always use regular (i.e. non-simulated)
+  residuals to assess overdispersion.
 
 - alternative:
 

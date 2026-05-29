@@ -29,7 +29,7 @@ verbose = TRUE to get hints about possible problems."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,6 +103,7 @@ for other supported models.</p>
 <span>  re_formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bandwidth <span class="op">=</span> <span class="st">"nrd"</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"density"</span>,</span>
+<span>  x_limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  object <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -157,6 +158,12 @@ to a different value.</p></dd>
 <code>"discrete_dots"</code>, <code>"discrete_interval"</code> or <code>"discrete_both"</code> (the <code>discrete_*</code>
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).</p></dd>
+
+
+<dt id="arg-x-limits">x_limits<a class="anchor" aria-label="anchor" href="#arg-x-limits"></a></dt>
+<dd><p>An integer vector of length two specifying the x-axis limits
+for the plot. Use this to zoom in on a specific region of interest,
+especially if the response variable has a large range.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

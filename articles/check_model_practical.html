@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -194,12 +194,11 @@ and/or zero-inflation. We can check for these problems using
 beyond the visual inspection.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # Overdispersion test</span></span>
+<span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        dispersion ratio =    2.324</span></span>
-<span><span class="co">#&gt;   Pearson's Chi-Squared = 1475.875</span></span>
-<span><span class="co">#&gt;                 p-value =  &lt; 0.001</span></span>
-<span><span class="co">#&gt; Overdispersion detected.</span></span>
+<span><span class="co">#&gt;  dispersion ratio = 1.742</span></span>
+<span><span class="co">#&gt;           p-value =   0.1</span></span>
+<span><span class="co">#&gt; No overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
@@ -234,7 +233,7 @@ using <code><a href="../reference/check_overdispersion.html">check_overdispersio
 <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> again.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # Overdispersion test</span></span>
+<span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 1.679</span></span>
 <span><span class="co">#&gt;           p-value = 0.008</span></span>
@@ -270,7 +269,7 @@ zero-inflation</em> suggests that the overdispersion is better addressed
 than before. Let us check again:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # Overdispersion test</span></span>
+<span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 1.081</span></span>
 <span><span class="co">#&gt;           p-value =  0.54</span></span>
@@ -418,7 +417,7 @@ might find a better distributional family for our model, and try
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # Overdispersion test</span></span>
+<span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 0.958</span></span>
 <span><span class="co">#&gt;           p-value =  0.93</span></span>

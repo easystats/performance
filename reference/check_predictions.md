@@ -28,6 +28,7 @@ check_predictions(
   re_formula = NULL,
   bandwidth = "nrd",
   type = "density",
+  x_limits = NULL,
   verbose = TRUE,
   object = NULL,
   ...
@@ -83,6 +84,12 @@ check_predictions(
   `"density"`, `"discrete_dots"`, `"discrete_interval"` or
   `"discrete_both"` (the `discrete_*` options are appropriate for models
   with discrete - binary, integer or ordinal etc. - outcomes).
+
+- x_limits:
+
+  An integer vector of length two specifying the x-axis limits for the
+  plot. Use this to zoom in on a specific region of interest, especially
+  if the response variable has a large range.
 
 - verbose:
 

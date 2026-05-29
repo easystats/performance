@@ -15,7 +15,7 @@ get hints about possible problems."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,7 @@ get hints about possible problems.</p>
 <span>  base_size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  alpha_dot <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  ppc_range <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#3aaf85"</span>, <span class="st">"#1b6ca8"</span>, <span class="st">"#cd201f"</span><span class="op">)</span>,</span>
 <span>  theme <span class="op">=</span> <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_lucid.html" class="external-link">theme_lucid</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -154,14 +155,14 @@ etc. - outcomes).</p></dd>
 
 
 <dt id="arg-residual-type">residual_type<a class="anchor" aria-label="anchor" href="#arg-residual-type"></a></dt>
-<dd><p>Character, indicating the type of residuals to be used.
-For non-Gaussian models, the default is <code>"simulated"</code>, which uses simulated
-residuals. These are based on <code><a href="simulate_residuals.html">simulate_residuals()</a></code> and thus uses the
-<strong>DHARMa</strong> package to return randomized quantile residuals. For Gaussian
-models, the default is <code>"normal"</code>, which uses the default residuals from
-the model. Setting <code>residual_type = "normal"</code> for non-Gaussian models will
-use a half-normal Q-Q plot of the absolute value of the standardized deviance
-residuals.</p></dd>
+<dd><p>Character, indicating the type of residuals to be used
+for QQ-plots and overdispersion tests. For non-Gaussian models, the default
+is <code>"simulated"</code>, which uses simulated residuals. These are based on
+<code><a href="simulate_residuals.html">simulate_residuals()</a></code> and thus uses the <strong>DHARMa</strong> package to return
+randomized quantile residuals. For Gaussian models, the default is
+<code>"normal"</code>, which uses the default residuals from the model. Setting
+<code>residual_type = "normal"</code> for non-Gaussian models will use a half-normal Q-Q
+plot of the absolute value of the standardized deviance residuals.</p></dd>
 
 
 <dt id="arg-show-dots">show_dots<a class="anchor" aria-label="anchor" href="#arg-show-dots"></a></dt>
@@ -195,6 +196,12 @@ maximum of 2000 data points to render</p></dd>
 <dt id="arg-alpha-alpha-dot">alpha, alpha_dot<a class="anchor" aria-label="anchor" href="#arg-alpha-alpha-dot"></a></dt>
 <dd><p>The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.</p></dd>
+
+
+<dt id="arg-ppc-range">ppc_range<a class="anchor" aria-label="anchor" href="#arg-ppc-range"></a></dt>
+<dd><p>An integer vector of length two specifying the x-axis limits
+for the posterior predictive checks plot. Use this to zoom in on a specific
+region of interest, especially if the response variable has a large range.</p></dd>
 
 
 <dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
@@ -389,11 +396,12 @@ the <code>"Scale and layout"</code> section. Try reducing the scaling percentage
 to 100%) and restart your IDE.</p></li>
 <li><p><em>Decrease the base font size:</em> As a code-level workaround, you can reduce the
 base font size of your plots to help them fit into smaller viewports. If
-you are using <code>{ggplot2}</code>, load the library and adjust your theme before
+you are using <strong>ggplot2</strong>, load the library and adjust your theme before
 plotting. For example: <code>theme_set(theme_classic(base_size = 6))</code>.</p></li>
 <li><p><em>Update relevant packages:</em> Ensure your graphics and layout packages are up
 to date. You can update your packages (paying special attention to
-<code>{ggplot2}</code> and <code>{patchwork}</code>) by running <code>update.packages(ask = FALSE)</code>.</p></li>
+<strong>ggplot2</strong>, <strong>patchwork</strong> and <strong>qqplotr</strong>) by running
+<code>update.packages(ask = FALSE)</code>.</p></li>
 <li><p><em>Update relevant software:</em> Finally, ensure your R version, and the IDE
 you use, are up to date. Running the most recent versions of R and, e.g.,
 RStudio or Positron can resolve any remaining issues.</p></li>

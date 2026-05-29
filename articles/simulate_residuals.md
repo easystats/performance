@@ -68,7 +68,7 @@ zero-inflation.
 ``` r
 
 check_overdispersion(simulated_residuals)
-#> # Overdispersion test
+#> # Overdispersion test (using simulated residuals)
 #> 
 #>  dispersion ratio = 1.742
 #>           p-value =   0.1
@@ -142,7 +142,7 @@ str(simulated_residuals, max.level = 1)
 #>  $ simulatedResponse      : num [1:644, 1:250] 0 0 0 3 0 4 3 0 5 1 ...
 #>   ..- attr(*, "dimnames")=List of 2
 #>  $ scaledResiduals        : num [1:644] 0.155 0.731 0.448 0.498 0.437 ...
-#>  $ time                   : 'proc_time' Named num [1:5] 0.075 0.007 0.082 0 0
+#>  $ time                   : 'proc_time' Named num [1:5] 0.092 0.013 0.104 0 0
 #>   ..- attr(*, "names")= chr [1:5] "user.self" "sys.self" "elapsed" "user.child" ...
 #>  $ randomState            :List of 4
 #>  - attr(*, "class")= chr [1:3] "performance_simres" "see_performance_simres" "DHARMa"
