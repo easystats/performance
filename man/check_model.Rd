@@ -285,11 +285,12 @@ the \code{"Scale and layout"} section. Try reducing the scaling percentage (e.g.
 to 100\%) and restart your IDE.
 \item \emph{Decrease the base font size:} As a code-level workaround, you can reduce the
 base font size of your plots to help them fit into smaller viewports. If
-you are using \code{{ggplot2}}, load the library and adjust your theme before
+you are using \strong{ggplot2}, load the library and adjust your theme before
 plotting. For example: \code{theme_set(theme_classic(base_size = 6))}.
 \item \emph{Update relevant packages:} Ensure your graphics and layout packages are up
 to date. You can update your packages (paying special attention to
-\code{{ggplot2}} and \code{{patchwork}}) by running \code{update.packages(ask = FALSE)}.
+\strong{ggplot2}, \strong{patchwork} and \strong{qqplotr}) by running
+\code{update.packages(ask = FALSE)}.
 \item \emph{Update relevant software:} Finally, ensure your R version, and the IDE
 you use, are up to date. Running the most recent versions of R and, e.g.,
 RStudio or Positron can resolve any remaining issues.
