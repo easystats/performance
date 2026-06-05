@@ -236,12 +236,11 @@ check_predictions.stanreg <- function(
   colnames(out) <- sub("^iter_", "sim_", colnames(out))
 
   resp_string <- insight::find_terms(model)$response
-  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
   if (
     !is.null(resp_string) &&
       length(resp_string) == 1 &&
-      grepl(paste0(pattern, "\\("), resp_string)
+      !is.null(insight::find_transformation(resp_string))
   ) {
     out <- .backtransform_sims(out, resp_string)
   }
@@ -421,13 +420,12 @@ pp_check.lm <- function(
   # get response data, and response term, to check for transformations
   response <- insight::get_response(object)
   resp_string <- insight::find_terms(object)$response
-  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
   # check for transformed response, and backtransform simulations
   if (
     !is.null(resp_string) &&
       length(resp_string) == 1 &&
-      grepl(paste0(pattern, "\\("), resp_string)
+      !is.null(insight::find_transformation(resp_string))
   ) {
     out <- .backtransform_sims(out, resp_string)
   }
@@ -659,39 +657,10 @@ plot.performance_pp_check <- function(x, ...) {
 # helper --------------------
 
 .backtransform_sims <- function(sims, resp_string) {
-  if (grepl("log(log(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) exp(exp(i)))
-  } else if (grepl("log(", resp_string, fixed = TRUE)) {
-    # exceptions: log(x+1) or log(1+x)
-    # 1. try: log(x + number)
-    plus_minus <- .safe(eval(parse(
-      text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string)
-    )))
-    # 2. try: log(number + x)
-    if (is.null(plus_minus)) {
-      plus_minus <- .safe(eval(parse(
-        text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string)
-      )))
-    }
-    if (is.null(plus_minus) || !is.numeric(plus_minus)) {
-      sims[] <- lapply(sims, exp)
-    } else {
-      sims[] <- lapply(sims, function(i) exp(i) - plus_minus)
-    }
-  } else if (grepl("log1p(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, expm1)
-  } else if (grepl("log10(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) 10^i)
-  } else if (grepl("log2(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) 2^i)
-  } else if (grepl("sqrt(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) i^2)
-  } else if (grepl("exp(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, log)
-  } else if (grepl("expm1(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, log1p)
+  trans <- insight::get_transformation(resp_string)
+  if (!is.null(trans)) {
+    sims[] <- lapply(sims, trans$inverse)
   }
-
   sims
 }
 
