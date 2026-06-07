@@ -2,12 +2,12 @@
 % Please edit documentation in R/check_priors.R
 \name{check_priors}
 \alias{check_priors}
-\alias{check_priors.default}
+\alias{check_priors.stanreg}
 \title{Prior predictive checks}
 \usage{
 check_priors(model = NULL, ...)
 
-\method{check_priors}{default}(model = NULL, ...)
+\method{check_priors}{stanreg}(model = NULL, predictors = NULL, ...)
 }
 \arguments{
 \item{model}{A Bayesian model of class \code{stanreg} or \code{brmsfit}. Note that
