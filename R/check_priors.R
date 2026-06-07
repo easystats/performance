@@ -45,9 +45,10 @@
 #' Visualization in Bayesian Workflow. Journal of the Royal Statistical Society
 #' Series A: Statistics in Society, 182(2), 389–402. \doi{10.1111/rssa.12378}
 #'
-#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
+#' @examples
 #' \dontrun{
-#' # check_priors(model)
+#' model <- insight::download_model("stan_prior_checks_1")
+#' plot(check_priors(model, "mmse"))
 #' }
 #' @export
 check_priors <- function(model = NULL, ...) {

@@ -55,11 +55,10 @@ data sets can be used to investigate the variability and multivariate
 structure of the distribution.
 }
 \examples{
-\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \dontrun{
-# check_priors(model)
+model <- insight::download_model("stan_prior_checks_1")
+plot(check_priors(model, "mmse"))
 }
-\dontshow{\}) # examplesIf}
 }
 \references{
 Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019).
