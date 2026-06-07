@@ -79,6 +79,8 @@ Statistical Society Series A: Statistics in Society, 182(2), 389–402.
 # \dontrun{
 model <- insight::download_model("stan_prior_checks_1")
 plot(check_priors(model, "mmse"))
-#> Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'
+#> Warning: Logistic regression model has a categorical response variable. You may
+#>   need to set `include_response=TRUE` to make it work for predictions.
+
 # }
 ```
