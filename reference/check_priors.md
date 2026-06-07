@@ -82,7 +82,7 @@ Statistical Society Series A: Statistics in Society, 182(2), 389–402.
 # on the prior distributions - the resulting pattern aligns with
 # our real-world assumptions
 model <- insight::download_model("stan_prior_checks_1")
-plot(check_priors(model, "mmse"))
+check_priors(model, "mmse")
 
 
 # model with default (weakly informative) priors, which is poorly
@@ -90,7 +90,7 @@ plot(check_priors(model, "mmse"))
 # extremes of 0 and 1, leaving the plausible middle range largely
 # unsupported
 model <- insight::download_model("stan_prior_checks_2")
-plot(check_priors(model, "mmse"))
+check_priors(model, "mmse")
 
 # }
 ```
