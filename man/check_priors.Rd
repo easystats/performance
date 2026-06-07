@@ -56,7 +56,18 @@ structure of the distribution.
 }
 \examples{
 \dontrun{
+# model with correctly defined priors. outcome is binary, prior
+# predictive checks indicate the predicted probability mass based
+# on the prior distributions - the resulting pattern aligns with
+# our real-world assumptions
 model <- insight::download_model("stan_prior_checks_1")
+plot(check_priors(model, "mmse"))
+
+# model with default (weakly informative) priors, which is poorly
+# calibrated. It pushes probability mass almost exclusively to the
+# extremes of 0 and 1, leaving the plausible middle range largely
+# unsupported
+model <- insight::download_model("stan_prior_checks_2")
 plot(check_priors(model, "mmse"))
 }
 }
