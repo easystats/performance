@@ -168,3 +168,4 @@ Config/Needs/website:
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
 Config/roxygen2/version: 8.0.0
+Remotes: easystats/see
