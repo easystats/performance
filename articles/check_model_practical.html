@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,9 +196,9 @@ beyond the visual inspection.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  dispersion ratio = 1.742</span></span>
-<span><span class="co">#&gt;           p-value =   0.1</span></span>
-<span><span class="co">#&gt; No overdispersion detected.</span></span>
+<span><span class="co">#&gt;  dispersion ratio =   3.040</span></span>
+<span><span class="co">#&gt;           p-value = &lt; 0.001</span></span>
+<span><span class="co">#&gt; Overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
@@ -235,18 +235,18 @@ using <code><a href="../reference/check_overdispersion.html">check_overdispersio
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  dispersion ratio = 1.679</span></span>
-<span><span class="co">#&gt;           p-value = 0.008</span></span>
+<span><span class="co">#&gt;  dispersion ratio =   1.864</span></span>
+<span><span class="co">#&gt;           p-value = &lt; 0.001</span></span>
 <span><span class="co">#&gt; Overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
-<span><span class="co">#&gt;   Predicted zeros: 387</span></span>
+<span><span class="co">#&gt;   Predicted zeros: 386</span></span>
 <span><span class="co">#&gt;             Ratio: 1.00</span></span>
 <span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
-<span><span class="co">#&gt;   tolerance range (p &gt; .999).</span></span></code></pre></div>
+<span><span class="co">#&gt;   tolerance range (p = 0.984).</span></span></code></pre></div>
 <p>Indeed, the overdispersion is still present.</p>
 </div>
 <div class="section level3">
@@ -271,15 +271,15 @@ than before. Let us check again:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  dispersion ratio = 1.081</span></span>
-<span><span class="co">#&gt;           p-value =  0.54</span></span>
+<span><span class="co">#&gt;  dispersion ratio = 1.206</span></span>
+<span><span class="co">#&gt;           p-value =  0.19</span></span>
 <span><span class="co">#&gt; No overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
-<span><span class="co">#&gt;   Predicted zeros: 389</span></span>
+<span><span class="co">#&gt;   Predicted zeros: 386</span></span>
 <span><span class="co">#&gt;             Ratio: 1.00</span></span>
 <span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
 <span><span class="co">#&gt;   tolerance range (p &gt; .999).</span></span></code></pre></div>
@@ -419,18 +419,18 @@ might find a better distributional family for our model, and try
 <span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test (using simulated residuals)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  dispersion ratio = 0.958</span></span>
-<span><span class="co">#&gt;           p-value =  0.93</span></span>
+<span><span class="co">#&gt;  dispersion ratio = 1.215</span></span>
+<span><span class="co">#&gt;           p-value =  0.19</span></span>
 <span><span class="co">#&gt; No overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
-<span><span class="co">#&gt;   Predicted zeros: 386</span></span>
-<span><span class="co">#&gt;             Ratio: 1.00</span></span>
+<span><span class="co">#&gt;   Predicted zeros: 385</span></span>
+<span><span class="co">#&gt;             Ratio: 0.99</span></span>
 <span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
-<span><span class="co">#&gt;   tolerance range (p = 0.952).</span></span>
+<span><span class="co">#&gt;   tolerance range (p = 0.856).</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/test_performance.html">test_likelihoodratio</a></span><span class="op">(</span><span class="va">model3</span>, <span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some of the nested models seem to be identical and probably only vary in</span></span>

@@ -92,6 +92,9 @@
 - [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
   : Posterior predictive checks
 
+- [`check_priors()`](https://easystats.github.io/performance/reference/check_priors.md)
+  : Prior predictive checks
+
 - [`check_residuals()`](https://easystats.github.io/performance/reference/check_residuals.md)
   : Check distribution of simulated quantile residuals
 

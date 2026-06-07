@@ -42,7 +42,6 @@ if (require("mlogit")) {
   r2_mcfadden(model)
 }
 #> Loading required package: mlogit
-#> Loading required package: dfidx
 #> McFadden's R2 
 #>       0.17823 
 ```

@@ -129,9 +129,9 @@ These tests can additionally be used beyond the visual inspection.
 check_overdispersion(model1)
 #> # Overdispersion test (using simulated residuals)
 #> 
-#>  dispersion ratio = 1.742
-#>           p-value =   0.1
-#> No overdispersion detected.
+#>  dispersion ratio =   3.040
+#>           p-value = < 0.001
+#> Overdispersion detected.
 
 check_zeroinflation(model1)
 #> # Check for zero-inflation
@@ -178,18 +178,18 @@ again.
 check_overdispersion(model2)
 #> # Overdispersion test (using simulated residuals)
 #> 
-#>  dispersion ratio = 1.679
-#>           p-value = 0.008
+#>  dispersion ratio =   1.864
+#>           p-value = < 0.001
 #> Overdispersion detected.
 
 check_zeroinflation(model2)
 #> # Check for zero-inflation
 #> 
 #>    Observed zeros: 387
-#>   Predicted zeros: 387
+#>   Predicted zeros: 386
 #>             Ratio: 1.00
 #> Model seems ok, ratio of observed and predicted zeros is within the
-#>   tolerance range (p > .999).
+#>   tolerance range (p = 0.984).
 ```
 
 Indeed, the overdispersion is still present.
@@ -222,15 +222,15 @@ than before. Let us check again:
 check_overdispersion(model3)
 #> # Overdispersion test (using simulated residuals)
 #> 
-#>  dispersion ratio = 1.081
-#>           p-value =  0.54
+#>  dispersion ratio = 1.206
+#>           p-value =  0.19
 #> No overdispersion detected.
 
 check_zeroinflation(model3)
 #> # Check for zero-inflation
 #> 
 #>    Observed zeros: 387
-#>   Predicted zeros: 389
+#>   Predicted zeros: 386
 #>             Ratio: 1.00
 #> Model seems ok, ratio of observed and predicted zeros is within the
 #>   tolerance range (p > .999).
@@ -401,18 +401,18 @@ check_model(model4, size_dot = 1.2)
 check_overdispersion(model4)
 #> # Overdispersion test (using simulated residuals)
 #> 
-#>  dispersion ratio = 0.958
-#>           p-value =  0.93
+#>  dispersion ratio = 1.215
+#>           p-value =  0.19
 #> No overdispersion detected.
 
 check_zeroinflation(model4)
 #> # Check for zero-inflation
 #> 
 #>    Observed zeros: 387
-#>   Predicted zeros: 386
-#>             Ratio: 1.00
+#>   Predicted zeros: 385
+#>             Ratio: 0.99
 #> Model seems ok, ratio of observed and predicted zeros is within the
-#>   tolerance range (p = 0.952).
+#>   tolerance range (p = 0.856).
 
 test_likelihoodratio(model3, model4)
 #> Some of the nested models seem to be identical and probably only vary in
