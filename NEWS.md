@@ -13,6 +13,9 @@
   in on a specific region of interest, especially if the response variable has
   a large range.
 
+* New function `check_priors()` to conduct prior predictive checks for Bayesian
+  models.
+
 ## Bug fixes
 
 * The overdispersion plot in `check_model()` now uses simulated residuals (based
