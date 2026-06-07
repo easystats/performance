@@ -64,11 +64,11 @@ check_priors.default <- function(model = NULL, ...) {
 check_priors.stanreg <- function(model = NULL, predictors = NULL, ...) {
   # sanity check
   if (is.null(predictors)) {
-    insight::format_error("")
+    insight::format_error("Argument `predictors` is required and cannot be `NULL`.")
   }
 
   x <- list(model = model)
-  attr(x, "predictors") <- NULL
+  attr(x, "predictors") <- predictors
   class(x) <- c("performance_check_priors", "see_check_priors")
 
   graphics::plot(x)
