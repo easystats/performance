@@ -54,12 +54,12 @@ check_priors <- function(model = NULL, ...) {
   UseMethod("check_priors")
 }
 
-#' @rdname check_priors
 #' @export
 check_priors.default <- function(model = NULL, ...) {
   insight::format_error("Prior predictive checks are not implemented for this model.")
 }
 
+#' @rdname check_priors
 #' @export
 check_priors.stanreg <- function(model = NULL, predictors = NULL, ...) {
   # sanity check
