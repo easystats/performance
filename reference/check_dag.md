@@ -178,6 +178,12 @@ a regression model to detect missing adjustments or over-adjustment.
   Journal of Epidemiology, 177(4), 292–298.
   [doi:10.1093/aje/kws412](https://doi.org/10.1093/aje/kws412)
 
+## See also
+
+See documentation of
+[`see::plot.see_check_dag()`](https://easystats.github.io/see/reference/plot.see_check_dag.html)
+for available arguments to change the plot appearance.
+
 ## Examples
 
 ``` r

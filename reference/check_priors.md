@@ -57,6 +57,12 @@ Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A.
 Statistical Society Series A: Statistics in Society, 182(2), 389–402.
 [doi:10.1111/rssa.12378](https://doi.org/10.1111/rssa.12378)
 
+## See also
+
+See documentation of
+[`see::plot.see_check_priors()`](https://easystats.github.io/see/reference/plot.see_check_priors.html)
+for available arguments to change the plot appearance.
+
 ## Examples
 
 ``` r

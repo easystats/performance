@@ -363,6 +363,10 @@ resolve the issue:
 
 ## See also
 
+See documentation of
+[`see::plot.see_check_model()`](https://easystats.github.io/see/reference/plot.see_check_model.html)
+for available arguments to change the plot appearance.
+
 Other functions to check model assumptions and and assess model quality:
 [`check_autocorrelation()`](https://easystats.github.io/performance/reference/check_autocorrelation.md),
 [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md),
