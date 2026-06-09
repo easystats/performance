@@ -51,6 +51,9 @@
 #' See 'Examples'.
 #' @param x An object of class `check_dag`, as returned by `check_dag()`.
 #'
+#' @seealso See documentation of [`see::plot.see_check_dag()`] for available
+#' arguments to change the plot appearance.
+#'
 #' @section Specifying the DAG formulas:
 #'
 #' The formulas have following syntax:

@@ -310,6 +310,9 @@ check_model(m, panel = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+See documentation of \code{\link[see:plot.see_check_model]{see::plot.see_check_model()}} for available
+arguments to change the plot appearance.
+
 Other functions to check model assumptions and and assess model quality:
 \code{\link[=check_autocorrelation]{check_autocorrelation()}},
 \code{\link[=check_collinearity]{check_collinearity()}},

@@ -28,6 +28,9 @@
 #' overlaid with boxplots indicating where the probability mass of the prior
 #' distribution is located.
 #'
+#' @seealso See documentation of [`see::plot.see_check_priors()`] for available
+#' arguments to change the plot appearance.
+#'
 #' @references
 #' Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019).
 #' Visualization in Bayesian Workflow. Journal of the Royal Statistical Society

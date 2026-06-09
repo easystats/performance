@@ -63,6 +63,9 @@
 #'
 #' @inheritParams check_predictions
 #'
+#' @seealso See documentation of [`see::plot.see_check_model()`] for available
+#' arguments to change the plot appearance.
+#'
 #' @return The data frame that is used for plotting.
 #'
 #' @note This function just prepares the data for plotting. To create the plots,

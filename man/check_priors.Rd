@@ -62,3 +62,7 @@ Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019).
 Visualization in Bayesian Workflow. Journal of the Royal Statistical Society
 Series A: Statistics in Society, 182(2), 389–402. \doi{10.1111/rssa.12378}
 }
+\seealso{
+See documentation of \code{\link[see:plot.see_check_priors]{see::plot.see_check_priors()}} for available
+arguments to change the plot appearance.
+}
