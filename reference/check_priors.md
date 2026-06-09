@@ -35,36 +35,20 @@ check_priors(model = NULL, predictors = NULL, ...)
 
 ## Value
 
-A data frame of simulated responses and the original response vector.
+A `ggplot2` object visualizing the prior predictive distribution,
+overlaid with boxplots indicating where the probability mass of the
+prior distribution is located.
 
 ## Details
 
-Assessing priors based on the prior marginal distribution for the data
-provides several methodological advantages:
-
-- It reflects the interplay between the prior distribution on the
-  parameters and the likelihood.
-
-- It is a vital component of understanding how prior distributions
-  actually work for a given problem.
-
-- It explicitly reflects the idea that we cannot fully understand the
-  prior by fixing all except one parameter and assessing the effect of
-  the unidimensional marginal prior.
-
-- Instead, we need to assess the effect of the prior as a multivariate
-  distribution.
-
-- The prior distribution over the data enables us to extend the concept
-  of a weakly informative prior to be more aware of the role of the
-  likelihood.
-
-A prior leads to a weakly informative joint prior data-generating
-process if draws from the prior data-generating distribution could
-represent any data set that could plausibly be observed. Furthermore,
-there should be no mass on completely implausible data sets. Generating
-simulated data sets can be used to investigate the variability and
-multivariate structure of the distribution.
+Prior predictive checks allow researchers to verify whether the
+mathematical definitions of their priors accurately reflect the assumed
+underlying reality. Data are sampled from the model using only the prior
+distributions (the prior predictive distribution), before any observed
+data are considered. By visualizing the prior predictive distribution,
+researchers can assess whether their chosen priors generate plausible
+data. This provides a crucial sanity check on the model's assumptions
+and their consistency with domain knowledge.
 
 ## References
 
