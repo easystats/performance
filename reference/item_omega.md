@@ -145,9 +145,9 @@ result
 
 as.numeric(result)
 #>                Alpha                  G.6 Omega (hierarchical) 
-#>            0.9315665            0.9662008            0.4610075 
+#>            0.9315665            0.9662008            0.4610010 
 #> Omega (asymptotic H)        Omega (total) 
-#>            0.4745543            0.9714535 
+#>            0.4745477            0.9714535 
 
 summary(result)
 #> # Omega Statistics
