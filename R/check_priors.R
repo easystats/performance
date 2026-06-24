@@ -3,8 +3,9 @@
 #'
 #' @description
 #' Simulates from the prior marginal distribution of the data to assess the
-#' consistency of the chosen priors with domain knowledge (*Gabry et al. 2019*)
-#' and creates a visualization from the prior predictive checks.
+#' consistency of the chosen priors with domain knowledge (*Gabry et al. 2019*,
+#' *Lüdecke et al. 2026*) and creates a visualization from the prior predictive
+#' checks.
 #'
 #' @details
 #' Prior predictive checks allow researchers to verify whether the mathematical
@@ -35,6 +36,11 @@
 #' Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019).
 #' Visualization in Bayesian Workflow. Journal of the Royal Statistical Society
 #' Series A: Statistics in Society, 182(2), 389–402. \doi{10.1111/rssa.12378}
+#'
+#' Lüdecke D, Makowski AC, Klein J, Ben-Shachar MS and Makowski D (2026)
+#' Choosing informative priors in Bayesian regression models: a simulation study
+#' and tutorial using Stan and R. Front. Psychol. 17:1856582.
+#' \doi{10.3389/fpsyg.2026.1856582}
 #'
 #' @examples
 #' \dontrun{
