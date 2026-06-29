@@ -27,6 +27,8 @@ using the \strong{DHARMa} package. For \code{glm}, the default is \code{"simulat
 bernoulli, binomial and negative-binomial models. Set \code{residual_type = "normal"}
 to always use regular (i.e. non-simulated) residuals to assess overdispersion.}
 
+\item{verbose}{Toggle warnings and messages.}
+
 \item{alternative}{A character string specifying the alternative hypothesis.
 Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }

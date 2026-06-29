@@ -12,6 +12,7 @@
 #' using the **DHARMa** package. For `glm`, the default is `"simulated"` for
 #' bernoulli, binomial and negative-binomial models. Set `residual_type = "normal"`
 #' to always use regular (i.e. non-simulated) residuals to assess overdispersion.
+#' @param verbose Toggle warnings and messages.
 #'
 #' @inheritParams check_zeroinflation
 #'
