@@ -51,6 +51,9 @@
 #' See 'Examples'.
 #' @param x An object of class `check_dag`, as returned by `check_dag()`.
 #'
+#' @seealso See documentation of [`see::plot.see_check_dag()`] for available
+#' arguments to change the plot appearance.
+#'
 #' @section Specifying the DAG formulas:
 #'
 #' The formulas have following syntax:
@@ -347,7 +350,7 @@ check_dag <- function(
       # - required is NULL and current adjustment not NULL
       # - OR we have a collider in current adjustments
       incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) ||
-        (!is.null(collider) && collider %in% adjustment_nodes), # nolint
+        (!is.null(collider) && any(collider %in% adjustment_nodes)), # nolint
       current_adjustments = adjustment_nodes,
       minimal_adjustments = minimal_adjustments,
       collider = collider

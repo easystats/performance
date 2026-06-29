@@ -42,7 +42,7 @@ or logistic regression models.
 For linear models, the accuracy is the correlation coefficient
 between the actual and the predicted value of the outcome. For logistic
 regression models, the accuracy corresponds to the AUC-value, calculated with
-the \code{\link[bayestestR:area_under_curve]{bayestestR::auc()}}-function.
+the \code{\link[bayestestR:auc]{bayestestR::auc()}}-function.
 
 The accuracy is the mean value of multiple correlation resp. AUC-values,
 which are either computed with cross-validation or non-parametric

@@ -1,17 +1,3 @@
-# check_collinearity, ci = NULL
-
-    Code
-      out
-    Output
-      # Check for Multicollinearity
-      
-      Low Correlation
-      
-       Term VIF adj. VIF Tolerance
-          N   1        1         1
-          P   1        1         1
-          K   1        1         1
-
 # check_collinearity, hurdle/zi models w/o zi-formula
 
     Code

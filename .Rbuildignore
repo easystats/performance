@@ -10,6 +10,7 @@
 ^\_pkgdown.yml
 ^\_pkgdown.yaml
 ^paper.bib$
+^GEMINI\.md$
 
 ^data/.
 ^docs/.
@@ -28,3 +29,5 @@
 ^CRAN-SUBMISSION$
 ^[.]?air[.]toml$
 ^\.vscode$
+^\.positai$
+^\.claude$

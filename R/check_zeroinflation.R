@@ -96,7 +96,6 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
         model_info$is_negbin ||
         model_info$family == "genpois")
   ) {
-    # nolint
     if (missing(tolerance)) {
       tolerance <- 0.1
     }

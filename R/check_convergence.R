@@ -4,9 +4,10 @@
 #' @description `check_convergence()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @param x A `merMod` or `glmmTMB`-object.
+#' @param model A `merMod` or `glmmTMB`-object.
 #' @param tolerance Indicates up to which value the convergence result is
 #'   accepted. The smaller `tolerance` is, the stricter the test will be.
+#' @param x Deprecated, please use `model` instead.
 #' @param ... Currently not used.
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence
@@ -50,8 +51,16 @@
 #' check_convergence(model)
 #' }
 #' @export
-check_convergence <- function(x, tolerance = 0.001, ...) {
-  out <- .safe(insight::is_converged(x, tolerance = tolerance, ...))
+check_convergence <- function(model = NULL, tolerance = 0.001, x = NULL, ...) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+  .is_model_valid(model)
+  out <- .safe(insight::is_converged(model, tolerance = tolerance, ...))
   if (is.null(out)) {
     insight::format_alert("Could not compute convergence information.")
     out <- NA

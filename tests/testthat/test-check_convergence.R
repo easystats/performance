@@ -19,6 +19,11 @@ test_that("check_convergence", {
     structure(TRUE, gradient = NA_real_),
     tolerance = 1e-3
   )
+  expect_warning(
+    check_convergence(x = model),
+    regex = "Argument `x` is deprecated",
+    fixed = TRUE
+  )
 })
 
 test_that("check_convergence", {

@@ -4,13 +4,15 @@
 \alias{check_convergence}
 \title{Convergence test for mixed effects models}
 \usage{
-check_convergence(x, tolerance = 0.001, ...)
+check_convergence(model = NULL, tolerance = 0.001, x = NULL, ...)
 }
 \arguments{
-\item{x}{A \code{merMod} or \code{glmmTMB}-object.}
+\item{model}{A \code{merMod} or \code{glmmTMB}-object.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}
+
+\item{x}{Deprecated, please use \code{model} instead.}
 
 \item{...}{Currently not used.}
 }
@@ -114,16 +116,16 @@ Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1),
 1-48. \doi{10.18637/jss.v067.i01}
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

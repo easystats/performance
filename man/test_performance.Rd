@@ -150,18 +150,17 @@ efficient. Agresti (1990) suggests that you should use the LRT instead of
 the Wald test for small sample sizes (under or about 30) or if the
 parameters are large.
 
+The test statistic is calculated by comparing the -2 * log-likelihood
+(-2LL) values for each model. In the output table, the \code{Criterion} column
+represents this -2LL value. The difference in the criterion values
+between the nested models corresponds to the \code{Chi2} statistic. This
+Chi-square value is then used to compute the p-value based on the
+difference in degrees of freedom (\code{df_diff}).
+
 Note: for regression models, this is similar to
 \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)}, depending
 on the \code{estimator} argument. For \strong{lavaan} models (SEM, CFA), the function
 calls \code{lavaan::lavTestLRT()}.
-
-For models with transformed response variables (like \code{log(x)} or \code{sqrt(x)}),
-\code{logLik()} returns a wrong log-likelihood. However, \code{test_likelihoodratio()}
-calls \code{insight::get_loglikelihood()} with \code{check_response=TRUE}, which
-returns a corrected log-likelihood value for models with transformed
-response variables. Furthermore, since the LRT only accepts nested
-models (i.e. models that differ in their fixed effects), the computed
-log-likelihood is always based on the ML estimator, not on the REML fits.
 \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.

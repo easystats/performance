@@ -201,3 +201,21 @@ test_that("check_dag, formula-interface", {
   )
   expect_identical(dag, dag2)
 })
+
+
+test_that("check_dag handles multiple colliders correctly - issue #878", {
+  # This test reproduces the error from issue #878
+  # The DAG has multiple colliders (both 'a' and 'b' are colliders)
+  # because they both have multiple incoming paths from 'c' and 'd'
+  # This test FAILS while bug exists, PASSES after fix
+  expect_no_error(
+    check_dag(
+      y ~ x + a + b,
+      a ~ c + d,
+      b ~ c + d,
+      outcome = "y",
+      exposure = "x",
+      adjusted = ~ a + b
+    )
+  )
+})

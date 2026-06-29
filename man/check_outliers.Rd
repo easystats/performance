@@ -205,7 +205,7 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}}
+1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:dist_ogk]{bigutilsr::dist_ogk()}}
 function.
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
@@ -240,7 +240,7 @@ extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
 \strong{dbscan} package to be installed, and that it takes some time to compute
 the results. Additionally, the \code{optics_xi} (default to 0.05) is passed to
-the \code{\link[dbscan:optics]{dbscan::extractXi()}} function to further refine the cluster selection.
+the \code{\link[dbscan:extractXi]{dbscan::extractXi()}} function to further refine the cluster selection.
 \item \strong{Local Outlier Factor}:
 Based on a K nearest neighbors algorithm, LOF compares the local density of
 a point to the local densities of its neighbors instead of computing a
@@ -335,13 +335,9 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 # We can run the function stratified by groups using `{datawizard}` package:
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
-# nolint start
-\dontshow{if (all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
-# nolint end
-\donttest{
-# You can also run all the methods
-check_outliers(data, method = "all", verbose = FALSE)
 
+\dontshow{if (all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\donttest{
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
 mt1 <- mtcars[, c(1, 3, 4)]
@@ -400,16 +396,16 @@ association}, \emph{85}(411), 633-639.
 \seealso{
 \code{\link[see:plot.see_check_outliers]{see::plot.see_check_outliers()}} for options to customize the plot.
 
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

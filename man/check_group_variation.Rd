@@ -106,8 +106,8 @@ perfectly balanced).
 }
 
 Additionally, the design of non-numeric variables is also checked to see if
-they are \emph{nested} within the groups or is they are \emph{crossed}. This is
-indicated by the \code{Design} column.
+they are \emph{nested} within the groups (see \code{\link[reformulas:isNested]{reformulas::isNested()}}) or if they
+are \emph{crossed}. This is indicated by the \code{Design} column.
 }
 
 \subsection{Heterogeneity bias}{

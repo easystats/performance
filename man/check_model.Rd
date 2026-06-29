@@ -5,10 +5,10 @@
 \alias{check_model.default}
 \title{Visual check of model assumptions}
 \usage{
-check_model(x, ...)
+check_model(model = NULL, ...)
 
 \method{check_model}{default}(
-  x,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -16,6 +16,8 @@ check_model(x, ...)
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
   size_title = 12,
@@ -23,14 +25,16 @@ check_model(x, ...)
   base_size = 10,
   alpha = 0.2,
   alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{A model object.}
+\item{model}{A model object.}
 
 \item{...}{Arguments passed down to the individual check functions, especially
 to \code{check_predictions()} and \code{binned_residuals()}.}
@@ -64,20 +68,28 @@ to a different value.}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
-\item{residual_type}{Character, indicating the type of residuals to be used.
-For non-Gaussian models, the default is \code{"simulated"}, which uses simulated
-residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the
-\strong{DHARMa} package to return randomized quantile residuals. For Gaussian
-models, the default is \code{"normal"}, which uses the default residuals from
-the model. Setting \code{residual_type = "normal"} for non-Gaussian models will
-use a half-normal Q-Q plot of the absolute value of the standardized deviance
-residuals.}
+\item{residual_type}{Character, indicating the type of residuals to be used
+for QQ-plots and overdispersion tests. For non-Gaussian models, the default
+is \code{"simulated"}, which uses simulated residuals. These are based on
+\code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the \strong{DHARMa} package to return
+randomized quantile residuals. For Gaussian models, the default is
+\code{"normal"}, which uses the default residuals from the model. Setting
+\code{residual_type = "normal"} for non-Gaussian models will use a half-normal Q-Q
+plot of the absolute value of the standardized deviance residuals.}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
 to \code{FALSE} for models with many observations, if generating the plot is too
 time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
+
+\item{show_ci}{Logical, if \code{TRUE}, confidence intervals in plots are shown.
+For models with only categorical predictors, confidence intervals are not shown
+by default, because in this case, these are usually on very large scales.}
+
+\item{maximum_dots}{Limits the number of data points for models with many
+observations, to reduce the time for rendering the plot. Defaults to a
+maximum of 2000 data points to render}
 
 \item{size_dot, size_line}{Size of line and dot-geoms.}
 
@@ -86,14 +98,20 @@ and thus automatically shows or hides dots.}
 \item{alpha, alpha_dot}{The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.}
 
+\item{ppc_range}{An integer vector of length two specifying the x-axis limits
+for the posterior predictive checks plot. Use this to zoom in on a specific
+region of interest, especially if the response variable has a large range.}
+
 \item{colors}{Character vector with color codes (hex-format). Must be of
 length 3. First color is usually used for reference lines, second color
 for dots, and third color for outliers or extreme values.}
 
-\item{theme}{String, indicating the name of the plot-theme. Must be in the
-format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
+\item{theme}{A ggplot2-theme function, e.g. \code{theme = see::theme_lucid()} or
+\code{theme = ggplot2::theme_dark()}.}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
+
+\item{x}{Deprecated, please use \code{model} instead.}
 }
 \value{
 The data frame that is used for plotting.
@@ -247,10 +265,40 @@ skipped, which also increases performance.
 
 If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
 get hints about possible problems.
+
+If your plots are not rendering correctly in your IDE or you receive an error
+stating that the viewport is too small, try the following steps to resolve
+the issue:
+\itemize{
+\item \emph{Enlarge the plotting window:} The most common cause is that the plotting
+pane is simply too small. If you are using RStudio, click and drag the
+edges of the 'Plots' pane to increase its dimensions, then try plotting
+again.
+\item \emph{Reset your IDE zoom settings:} If resizing the window doesn't help, your
+IDE's zoom level might be causing scaling issues. In RStudio, navigate to
+the menu bar and select \emph{View > Actual Size} to reset the zoom. If you are
+using a different IDE, look for a similar zoom reset option.
+\item \emph{Adjust Windows display scaling:} On Windows, system-wide display scaling can
+sometimes interfere with graphical outputs in R. You can adjust this in
+your system settings: Go to \emph{Start > Settings > System > Display} and locate
+the \code{"Scale and layout"} section. Try reducing the scaling percentage (e.g.,
+to 100\%) and restart your IDE.
+\item \emph{Decrease the base font size:} As a code-level workaround, you can reduce the
+base font size of your plots to help them fit into smaller viewports. If
+you are using \strong{ggplot2}, load the library and adjust your theme before
+plotting. For example: \code{theme_set(theme_classic(base_size = 6))}.
+\item \emph{Update relevant packages:} Ensure your graphics and layout packages are up
+to date. You can update your packages (paying special attention to
+\strong{ggplot2}, \strong{patchwork} and \strong{qqplotr}) by running
+\code{update.packages(ask = FALSE)}.
+\item \emph{Update relevant software:} Finally, ensure your R version, and the IDE
+you use, are up to date. Running the most recent versions of R and, e.g.,
+RStudio or Positron can resolve any remaining issues.
+}
 }
 
 \examples{
-\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
+\dontshow{if (require("lme4") && FALSE) withAutoprint(\{ # examplesIf}
 \donttest{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_model(m)
@@ -262,16 +310,19 @@ check_model(m, panel = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+See documentation of \code{\link[see:plot.see_check_model]{see::plot.see_check_model()}} for available
+arguments to change the plot appearance.
+
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

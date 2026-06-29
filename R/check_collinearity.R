@@ -450,6 +450,11 @@ check_collinearity.zerocount <- function(
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
   v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
 
+  # fix class for fixest, which returns a "fixest_vcov" here
+  if (inherits(v, "fixest_vcov")) {
+    v <- array(v, dim = dim(v), dimnames = dimnames(v))
+  }
+
   # sanity check
   if (is.null(v)) {
     if (isTRUE(verbose)) {
@@ -481,6 +486,45 @@ check_collinearity.zerocount <- function(
     return(NULL)
   }
 
+  # Filter to true slope parameters (handles multiple intercepts in ordinal models)
+  if (inherits(x, c("clm", "clmm"))) {
+    # names(x$beta) returns only non-singular (surviving) slopes
+    slope_names <- names(x$beta)
+    keep_idx <- which(colnames(v) %in% slope_names)
+
+    # Rebuild term_assign by matching model matrix columns to surviving slopes
+    tryCatch(
+      {
+        mm <- insight::get_modelmatrix(x)
+        assign_attr <- attr(mm, "assign")
+        if (!is.null(assign_attr)) {
+          # Use name-matching to isolate indices for estimated slopes
+          match_idx <- which(colnames(mm) %in% slope_names)
+          if (length(match_idx) > 0) {
+            term_assign <- assign_attr[match_idx]
+          }
+        }
+      },
+      error = function(e) NULL
+    )
+  } else if (insight::has_intercept(x)) {
+    # Standard behavior: drop the first column/row (the singular intercept)
+    keep_idx <- seq_len(ncol(v))[-1]
+  } else {
+    keep_idx <- seq_len(ncol(v))
+    if (isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
+  }
+
+  # Safely subset the matrix
+  if (length(keep_idx) < ncol(v)) {
+    if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
+      term_assign <- term_assign[keep_idx]
+    }
+    v <- v[keep_idx, keep_idx, drop = FALSE]
+  }
+
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     term_assign <- term_assign[-attributes(v)$na_columns_index]
@@ -489,14 +533,6 @@ check_collinearity.zerocount <- function(
         "Model matrix is rank deficient. VIFs may not be sensible."
       )
     }
-  }
-
-  # check for missing intercept
-  if (insight::has_intercept(x)) {
-    v <- v[-1, -1]
-    term_assign <- term_assign[-1]
-  } else if (isTRUE(verbose)) {
-    insight::format_alert("Model has no intercept. VIFs may not be sensible.")
   }
 
   f <- insight::find_formula(x, verbose = FALSE)
@@ -541,7 +577,6 @@ check_collinearity.zerocount <- function(
   result <- vector("numeric")
   na_terms <- vector("numeric")
 
-  # sanity check - models with offset(?) may contain too many term assignments
   if (length(term_assign) > ncol(v)) {
     term_assign <- term_assign[seq_len(ncol(v))]
   }

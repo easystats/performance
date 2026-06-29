@@ -2,10 +2,13 @@
 % Please edit documentation in R/check_overdispersion.R
 \name{check_overdispersion}
 \alias{check_overdispersion}
+\alias{check_overdispersion.glm}
 \alias{check_overdispersion.performance_simres}
 \title{Check overdispersion (and underdispersion) of GL(M)M's}
 \usage{
 check_overdispersion(x, ...)
+
+\method{check_overdispersion}{glm}(x, residual_type = NULL, verbose = TRUE, ...)
 
 \method{check_overdispersion}{performance_simres}(x, alternative = "two.sided", ...)
 }
@@ -16,6 +19,13 @@ check_overdispersion(x, ...)
 \item{...}{Arguments passed down to \code{\link[=simulate_residuals]{simulate_residuals()}}. This only applies
 for models with zero-inflation component, or for models of class \code{glmmTMB}
 from \code{nbinom1} or \code{nbinom2} family.}
+
+\item{residual_type}{Character, indicating the type of residuals to be used
+for overdispersion tests. For mixed models, the default is \code{"simulated"},
+which uses simulated residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}},
+using the \strong{DHARMa} package. For \code{glm}, the default is \code{"simulated"} for
+bernoulli, binomial and negative-binomial models. Set \code{residual_type = "normal"}
+to always use regular (i.e. non-simulated) residuals to assess overdispersion.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
@@ -112,16 +122,16 @@ Press.
 }
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

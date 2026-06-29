@@ -1,6 +1,85 @@
 # performance (devel)
 
+## Changes
+
+* `check_overdispersion()` gets a `residual_type` argument, to decide whether
+  overdispersion tests are based on simulated or "standard" residuals.
+
+* `check_model()` gains a `ppc_range` argument for posterior predictive checks
+  plot. Use this to zoom in on a specific region of interest, especially if the
+  response variable has a large range.
+
+* `check_predictions()` gains a `x_limits` argument for plots. Use this to zoom
+  in on a specific region of interest, especially if the response variable has
+  a large range.
+
+* New function `check_priors()` to conduct prior predictive checks for Bayesian
+  models.
+
 ## Bug fixes
+
+* The overdispersion plot in `check_model()` now uses simulated residuals (based
+  on the *DHARMa* package) for `glmmTMB` models and mixed models. This fixes
+  wonky-looking overdispersion plots for these model types (#654).
+
+* Fixed the expected variance calculation in `.expected_variance()` so that
+  `glmmTMB` `nbinom1` and `nbinom2` families use the correct formulas from the
+  glmmTMB documentation: `nbinom1`: V = μ(1 + φ); `nbinom2`: V = μ(1 + μ/φ).
+  Previously, glmmTMB `nbinom1` models incorrectly used the `nbinom2` formula
+  because it matched a more general `is_negbin` branch first (#654).
+
+# performance 0.17.0
+
+## Changes
+
+* `test_likelihoodratio()` now has a new 'Criterion' column containing the
+  -2 * log-likelihood (-2LL) value for each model.
+
+* Added more details to the troubleshooting section to the documentation of
+  `check_model()`.
+
+* `check_predictions()` for Bayesian models now uses
+  `modelbased::estimate_prediction()` and returns posterior predictive data in
+  the same format as for other supported models.
+
+* Updated tests to work with the next release of the *DHARMa* package
+  (version 0.5.0).
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for models from the *fixest* package.
+
+* Fixed issue in `check_collinearity()` that was causing inflated VIF values
+  when applied to clm and clmm models from the ordinal package.
+
+* Fixed issue in `test_likelihoodratio.ListLavaan()` that was extracting the
+  absolute model fit (Chisq) from the lavTestLRT output instead of the actual
+  LRT test statistic (Chisq diff).
+
+# performance 0.16.0
+
+## Breaking Changes
+
+* `model_performance()` for psych FA objects now correctly names the metric as
+  `RMSR` (Root Mean Square Residual) instead of `RMSA`. The `RMSR_corrected`
+  column (previously `RMSA_corrected`) is also renamed accordingly.
+
+* The first argument in `check_model()`, `check_predictions()` and
+  `check_convergence()` was renamed to `model`.
+
+## Changes
+
+* `check_model()` now limits the number of data points for models with many
+  observations, to reduce the time for rendering the plot via the `maximum_dots`
+  argument.
+
+* `check_model()` can now show or hide confidence intervals using the `show_ci`
+  argument. For models with only categorical predictors, confidence intervals
+  are not shown by default.
+
+## Bug fixes
+
+* Fixed issue in `check_dag()` with multiple colliders.
 
 * Fixed CRAN check issues.
 

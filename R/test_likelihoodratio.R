@@ -189,12 +189,14 @@ test_likelihoodratio.ListNestedRegressions <- function(
   } else {
     # lmtest::lrtest()
     lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
-    chi2 <- abs(c(NA, -2 * diff(lls)))
+    criterion <- -2 * lls
+    chi2 <- abs(c(NA, diff(criterion)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
     out <- data.frame(
       df = dfs,
       df_diff = dfs_diff,
+      Criterion = criterion,
       Chi2 = chi2,
       p = p,
       stringsAsFactors = FALSE
@@ -228,10 +230,13 @@ test_likelihoodratio.ListNestedRegressions <- function(
 test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   insight::check_if_installed("lavaan")
 
-  # Create data frame with info about model name and class
+  # Create data frame with info about model name, class, and criterion
   names_types <- data.frame(
     Model = names(objects),
     Type = sapply(objects, function(x) class(x)[1]),
+    Criterion = sapply(objects, function(x) {
+      -2 * as.numeric(lavaan::fitMeasures(x, "logl"))
+    }),
     stringsAsFactors = FALSE
   )
 
@@ -243,17 +248,19 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"
   colnames(out)[names(out) == "Df diff"] <- "df_diff"
-  colnames(out)[names(out) == "Chisq"] <- "Chi2"
+  colnames(out)[names(out) == "Chisq diff"] <- "Chi2"
   colnames(out)[startsWith(names(out), "Pr(>")] <- "p"
   out$Model <- row.names(out)
 
   # Bind all data
   out <- merge(names_types, out[c("Model", "df", "df_diff", "Chi2", "p")], by = "Model")
 
+  out <- out[c("Model", "Type", "df", "df_diff", "Criterion", "Chi2", "p")]
+  out <- out[order(out$df), ]
+
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
-
 
 # helper ----------------------
 

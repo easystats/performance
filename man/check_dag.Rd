@@ -248,3 +248,7 @@ Interpreting Confounder and Modifier Coefficients. American Journal of
 Epidemiology, 177(4), 292–298. \doi{10.1093/aje/kws412}
 }
 }
+\seealso{
+See documentation of \code{\link[see:plot.see_check_dag]{see::plot.see_check_dag()}} for available
+arguments to change the plot appearance.
+}

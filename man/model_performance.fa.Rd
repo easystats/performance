@@ -12,8 +12,8 @@
 \code{parameters::factor_analysis()} or \code{item_omega()}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed
-(some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"df"}, \code{"p_Chi2"}, \code{"RMSA"},
-\code{"RMSA_corrected"}, \code{"TLI"}, \code{"RMSEA"}, and \code{"BIC"}. For omega-models, can
+(some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"df"}, \code{"p_Chi2"}, \code{"RMSR"},
+\code{"RMSR_corrected"}, \code{"TLI"}, \code{"RMSEA"}, and \code{"BIC"}. For omega-models, can
 also include \code{"R2"} and \code{"Correlation"}.}
 
 \item{verbose}{Toggle off warnings.}
@@ -29,6 +29,10 @@ Compute indices of model performance for models from the \strong{psych} package,
 and for \code{parameters::factor_analysis()} and \code{item_omega()}.
 }
 \details{
+The \code{RMSR_corrected} metric is the Root Mean Square Residual corrected for
+degrees of freedom (i.e., dividing by degrees of freedom rather than the
+number of observations).
+
 For omega-models, the columns \code{R2} and \code{Correlation} are measures of factor
 score adequacy. \code{R2} refers to the multiple R square of scores with factors,
 while \code{Correlation} indicates the correlation of scores with factors.
