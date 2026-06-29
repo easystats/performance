@@ -1,4 +1,6 @@
-skip_if_not_installed("see", minimum_version = "0.12.0.1")
+skip_on_cran()
+skip_if_not_installed("see", minimum_version = "0.13.0")
+skip_if_not_installed("ggplot2")
 
 # ==============================================================================
 # ISSUE #851: theme argument of check_model() has no effect
@@ -25,10 +27,6 @@ skip_if_not_installed("see", minimum_version = "0.12.0.1")
 # hardcoded arguments (plot.title.space, axis.title.space, etc.) that don't
 # exist in standard ggplot2 themes.
 test_that("check_model accepts standard ggplot2 themes as functions", {
-  skip_if_not_installed("performance")
-  skip_if_not_installed("see")
-  skip_if_not_installed("ggplot2")
-
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 
   # Test with theme_dark passed as function (not string)
@@ -36,25 +34,19 @@ test_that("check_model accepts standard ggplot2 themes as functions", {
   expect_no_error({
     p1 <- check_model(m, theme = ggplot2::theme_dark)
     # The plot method should handle the theme attribute correctly
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p1)
-    }
+    plot(p1)
   })
 
   # Test with theme_minimal
   expect_no_error({
     p2 <- check_model(m, theme = ggplot2::theme_minimal)
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p2)
-    }
+    plot(p2)
   })
 
   # Test with theme_bw
   expect_no_error({
     p3 <- check_model(m, theme = ggplot2::theme_bw)
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p3)
-    }
+    plot(p3)
   })
 })
 
@@ -64,26 +56,18 @@ test_that("check_model accepts standard ggplot2 themes as functions", {
 # PROBLEM: String parsing doesn't work reliably, and when it does parse,
 # it still hits the "unused arguments" error from hardcoded parameters.
 test_that("check_model accepts theme as string (backward compatibility)", {
-  skip_if_not_installed("performance")
-  skip_if_not_installed("see")
-  skip_if_not_installed("ggplot2")
-
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 
   # String reference should work
   expect_no_error({
     p1 <- check_model(m, theme = "ggplot2::theme_dark")
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p1)
-    }
+    plot(p1)
   })
 
   # Test with theme_bw as string
   expect_no_error({
     p2 <- check_model(m, theme = "ggplot2::theme_bw")
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p2)
-    }
+    plot(p2)
   })
 })
 
@@ -93,10 +77,6 @@ test_that("check_model accepts theme as string (backward compatibility)", {
 # PROBLEM: Custom themes defined in user environment can't be accessed because
 # the see package's string parsing approach only searches package namespaces.
 test_that("check_model accepts custom theme functions from user environment", {
-  skip_if_not_installed("performance")
-  skip_if_not_installed("see")
-  skip_if_not_installed("ggplot2")
-
   # Define custom theme in test environment
   my_custom_theme <- function(
     base_size = 11,
@@ -121,17 +101,13 @@ test_that("check_model accepts custom theme functions from user environment", {
   # Custom theme function should work when passed directly
   expect_no_error({
     p1 <- check_model(m, theme = my_custom_theme)
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p1)
-    }
+    plot(p1)
   })
 
   # Also test passing custom theme to plot method's style argument
   expect_no_error({
     p2 <- check_model(m)
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p2, style = my_custom_theme)
-    }
+    plot(p2, style = my_custom_theme)
   })
 })
 
@@ -141,10 +117,6 @@ test_that("check_model accepts custom theme functions from user environment", {
 # PROBLEM: The theme attribute is stored by check_model() but may not be
 # properly read by see package's plot method.
 test_that("theme attribute is stored and used correctly", {
-  skip_if_not_installed("performance")
-  skip_if_not_installed("see")
-  skip_if_not_installed("ggplot2")
-
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 
   # Test with function
@@ -183,17 +155,12 @@ test_that("theme attribute is stored and used correctly", {
 # Tests that check_model works correctly when no theme argument is provided,
 # ensuring it falls back to the default theme.
 test_that("check_model works without theme argument (default behavior)", {
-  skip_if_not_installed("performance")
-  skip_if_not_installed("see")
-
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 
   # Should work with default theme
   expect_no_error({
     p <- check_model(m)
-    if (requireNamespace("see", quietly = TRUE)) {
-      plot(p)
-    }
+    plot(p)
   })
 
   # Default theme should be stored
@@ -207,23 +174,17 @@ test_that("check_model works without theme argument (default behavior)", {
 # This tests that the plot method's style parameter can override the theme
 # set during check_model() call.
 test_that("plot style argument overrides check_model theme", {
-  skip_if_not_installed("performance")
-  skip_if_not_installed("see")
-  skip_if_not_installed("ggplot2")
-
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 
   # Create with one theme
   p <- check_model(m, theme = ggplot2::theme_dark)
 
   # Plot with different theme - should work
-  if (requireNamespace("see", quietly = TRUE)) {
-    expect_no_error({
-      plot(p, style = ggplot2::theme_minimal)
-    })
+  expect_no_error({
+    plot(p, style = ggplot2::theme_minimal)
+  })
 
-    expect_no_error({
-      plot(p, style = ggplot2::theme_bw)
-    })
-  }
+  expect_no_error({
+    plot(p, style = ggplot2::theme_bw)
+  })
 })
