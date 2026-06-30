@@ -69,6 +69,7 @@ and tutorial using Stan and R. Front. Psychol. 17:1856582.
 \doi{10.3389/fpsyg.2026.1856582}
 }
 \seealso{
-See documentation of \code{\link[see:plot.see_check_priors]{see::plot.see_check_priors()}} for available
-arguments to change the plot appearance.
+See documentation of
+\href{https://easystats.github.io/see/reference/plot.see_check_priors.html}{\code{?see::plot.see_check_priors}}
+for available arguments to change the plot appearance.
 }

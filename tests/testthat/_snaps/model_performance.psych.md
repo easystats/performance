@@ -114,7 +114,7 @@
       Model             |    Chi2 | df | p (Chi2) |  RMSR | RMSR_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
       -----------------------------------------------------------------------------------------------------------------------------------
       3-factor solution |  31.796 | 25 |   0.164  | 0.011 |          0.016 |       | 0.087 | [0.000, 0.181] | -54.8 |       |            
-      g-model           | 264.781 | 44 |   < .001 | 0.278 |          0.311 | 0.195 | 0.395 | [0.356, 0.450] | 112.3 | 0.886 |       0.941
+      g-model           | 264.785 | 44 |   < .001 | 0.278 |          0.311 | 0.195 | 0.395 | [0.356, 0.450] | 112.3 | 0.886 |       0.941
       
       Compare the model fit of the 3-factor solution with the g-only model.
         If the g-model has smaller RMSR and RMSEA then your items are more
@@ -132,7 +132,7 @@
       Model             |    Chi2 | df | p (Chi2) |  RMSR | RMSR_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
       -----------------------------------------------------------------------------------------------------------------------------------
       3-factor solution |  31.796 | 25 |   0.164  | 0.011 |          0.016 |       | 0.087 | [0.000, 0.181] | -54.8 |       |            
-      g-model           | 264.781 | 44 |   < .001 | 0.278 |          0.311 | 0.195 | 0.395 | [0.356, 0.450] | 112.3 | 0.886 |       0.941
+      g-model           | 264.785 | 44 |   < .001 | 0.278 |          0.311 | 0.195 | 0.395 | [0.356, 0.450] | 112.3 | 0.886 |       0.941
       
       Compare the model fit of the 3-factor solution with the g-only model.
         If the g-model has smaller RMSR and RMSEA then your items are more
