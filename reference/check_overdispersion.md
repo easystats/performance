@@ -41,6 +41,10 @@ check_overdispersion(x, alternative = "two.sided", ...)
   `residual_type = "normal"` to always use regular (i.e. non-simulated)
   residuals to assess overdispersion.
 
+- verbose:
+
+  Toggle warnings and messages.
+
 - alternative:
 
   A character string specifying the alternative hypothesis. Can be one

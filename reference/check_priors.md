@@ -66,7 +66,7 @@ study and tutorial using Stan and R. Front. Psychol. 17:1856582.
 ## See also
 
 See documentation of
-[`see::plot.see_check_priors()`](https://easystats.github.io/see/reference/plot.see_check_priors.html)
+[`?see::plot.see_check_priors`](https://easystats.github.io/see/reference/plot.see_check_priors.html)
 for available arguments to change the plot appearance.
 
 ## Examples

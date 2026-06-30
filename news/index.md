@@ -1,5 +1,44 @@
 # Changelog
 
+## performance 0.17.1
+
+### Changes
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  gets a `residual_type` argument, to decide whether overdispersion
+  tests are based on simulated or “standard” residuals.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  gains a `ppc_range` argument for posterior predictive checks plot. Use
+  this to zoom in on a specific region of interest, especially if the
+  response variable has a large range.
+
+- [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  gains a `x_limits` argument for plots. Use this to zoom in on a
+  specific region of interest, especially if the response variable has a
+  large range.
+
+- New function
+  [`check_priors()`](https://easystats.github.io/performance/reference/check_priors.md)
+  to conduct prior predictive checks for Bayesian models.
+
+### Bug fixes
+
+- The overdispersion plot in
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now uses simulated residuals (based on the *DHARMa* package) for
+  `glmmTMB` models and mixed models. This fixes wonky-looking
+  overdispersion plots for these model types
+  ([\#654](https://github.com/easystats/performance/issues/654)).
+
+- Fixed the expected variance calculation in `.expected_variance()` so
+  that `glmmTMB` `nbinom1` and `nbinom2` families use the correct
+  formulas from the glmmTMB documentation: `nbinom1`: V = μ(1 + φ);
+  `nbinom2`: V = μ(1 + μ/φ). Previously, glmmTMB `nbinom1` models
+  incorrectly used the `nbinom2` formula because it matched a more
+  general `is_negbin` branch first
+  ([\#654](https://github.com/easystats/performance/issues/654)).
+
 ## performance 0.17.0
 
 CRAN release: 2026-05-21

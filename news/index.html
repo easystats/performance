@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,21 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.17.1" id="performance-0171">performance 0.17.1<a class="anchor" aria-label="anchor" href="#performance-0171"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-17-1">Changes<a class="anchor" aria-label="anchor" href="#changes-0-17-1"></a></h3>
+<ul><li><p><code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> gets a <code>residual_type</code> argument, to decide whether overdispersion tests are based on simulated or “standard” residuals.</p></li>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> gains a <code>ppc_range</code> argument for posterior predictive checks plot. Use this to zoom in on a specific region of interest, especially if the response variable has a large range.</p></li>
+<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> gains a <code>x_limits</code> argument for plots. Use this to zoom in on a specific region of interest, especially if the response variable has a large range.</p></li>
+<li><p>New function <code><a href="../reference/check_priors.html">check_priors()</a></code> to conduct prior predictive checks for Bayesian models.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-17-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-17-1"></a></h3>
+<ul><li><p>The overdispersion plot in <code><a href="../reference/check_model.html">check_model()</a></code> now uses simulated residuals (based on the <em>DHARMa</em> package) for <code>glmmTMB</code> models and mixed models. This fixes wonky-looking overdispersion plots for these model types (<a href="https://github.com/easystats/performance/issues/654" class="external-link">#654</a>).</p></li>
+<li><p>Fixed the expected variance calculation in <code>.expected_variance()</code> so that <code>glmmTMB</code> <code>nbinom1</code> and <code>nbinom2</code> families use the correct formulas from the glmmTMB documentation: <code>nbinom1</code>: V = μ(1 + φ); <code>nbinom2</code>: V = μ(1 + μ/φ). Previously, glmmTMB <code>nbinom1</code> models incorrectly used the <code>nbinom2</code> formula because it matched a more general <code>is_negbin</code> branch first (<a href="https://github.com/easystats/performance/issues/654" class="external-link">#654</a>).</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.17.0" id="performance-0170">performance 0.17.0<a class="anchor" aria-label="anchor" href="#performance-0170"></a></h2><p class="text-muted">CRAN release: 2026-05-21</p>
 <div class="section level3">
