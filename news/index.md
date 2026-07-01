@@ -2,6 +2,8 @@
 
 ## performance 0.17.1
 
+CRAN release: 2026-06-30
+
 ### Changes
 
 - [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
