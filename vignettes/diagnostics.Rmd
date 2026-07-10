@@ -1,0 +1,283 @@
+---
+title: "Graphical model diagnostics"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, regression, modeling, diagnositics, pp_check, check, assumptions]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Graphical model diagnostics}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+This vignette can be referred to by citing the package:
+
+- citation
+- citation
+
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+if (
+  !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("performance", quietly = TRUE) ||
+  !requireNamespace("ggplot2", quietly = TRUE) || 
+  !requireNamespace("qqplotr", quietly = TRUE)
+) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+library(knitr)
+knitr::opts_chunk$set(comment = ">")
+options(knitr.kable.NA = "", digits = 2)
+
+set.seed(333)
+```
+
+# Model diagnostics
+
+A critical step in statistical modeling is *model diagnostics*—
+checks made to evaluate model assumptions and ensure that predictions and inferences made based on a model are reliable. 
+Model diagnostics can include global evaluations of the fit of a model to observed data,
+as well as checks of specific model assumptions, such as linearity, variance homogeneity, or normality of residuals.
+
+A variety of methods for model diagnostics are available. 
+A useful family of model diagnostics methods are **graphical methods**.
+Graphical methods visualize information about the model and allow modelers to quickly check a variety of model assumptions using visual inspection (the "eyeball test"). 
+
+Another approach to model diagnostics are **statistical hypothesis tests**, 
+such as the Levene test for homogeneity of variance or the Shapiro test for normality.
+These tests are often problematic—they are frequently highly sensitive to sample size (being either overpowered or underpowered),
+and they provide little information about the nature, size, or importance of assumption violations.
+For example, the Shapiro test for normality of residuals frequently has *p* < .05 even when deviations from normality are minor and have no impact on the validity of model inferences or predictions.
+Compared to statistical hypothesis checks of model assumptions, 
+graphical methods are often more robust to sample size and 
+more informative about the size, nature, and impact of assumption violations.
+With graphical methods, modelers can better assess whether assumption violations are major and must be addressed,
+or minor and can safely be ignored.
+
+In this vignette, we present a variety of diagnostic tools provided in the *performance* package,
+with an emphasis on graphical methods and diagnostic plots. 
+We discuss assumptions made by different types of models, 
+how aspects and assumptions of models can be visualized,
+and how to use diagnostic plots to determine if a model is performing well or poorly.
+The vignette is organized by type of statistical model, 
+as different types of models make different assumptions 
+and may use different types of diagnostic plots.
+
+# Linear models
+
+Linear models include linear regression and many common statistical tests,
+such as *t*-tests, correlations, ANOVA, ANCOVA, and *χ*^2^ tests.
+
+Linear models assume a *normal likelihood*, which means that they assume that residuals on the response variable (*y*) are normally distributed around their predicted values after accounting for any predictor variables (*x*).
+
+Linear models make the following assumptions:
+
+1. Validity
+
+2. Linearity 
+
+3. Homogeneity of residual variance
+
+4. Normality of residuals
+
+In addition to these assumptions, depending on the purpose of the model, 
+we might also be concerned with additional potential sources of problems with our model.
+
+5. Endogeneity
+
+6. Influential observations and outliers
+
+7. Collinearity
+
+Many of these assumptions can be checked using the `check_moodel()` function.
+We will demonstrate this function using the `mtcars` dataset.
+This dataset includes features about 32 different car models,
+as well as their fuel economy (miles per gallon).
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, fig.cap="Correlation between the frequentist p-value and the probability of direction (pd)", fig.align='center'}
+library(performance)
+
+dat <- mtcars
+
+
+```
+
+ 
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE, fig.cap="Correlation between the frequentist p-value and the probability of direction (pd)", fig.align='center'}
+library(ggplot2)
+library(see)
+
+raw <- read.csv("https://raw.github.com/easystats/easystats/master/publications/makowski_2019_bayesian/data/data.csv") 
+dat <- transform(
+  raw,
+  effect_existence = ifelse(true_effect == 1, "Presence of true effect", "Absence of true effect"),
+  p_direction = p_direction * 100
+) 
+ggplot(dat, aes(x = p_direction, y = p_value, color = effect_existence)) +
+  geom_point2(alpha = 0.1) +
+  geom_segment(aes(x = 95, y = Inf, xend = 95, yend = 0.1), color = "black", linetype = "longdash") +
+  geom_segment(aes(x = -Inf, y = 0.1, xend = 95, yend = 0.1), color = "black", linetype = "longdash") +
+  geom_segment(aes(x = 97.5, y = Inf, xend = 97.5, yend = 0.05), color = "black", linetype = "dashed") +
+  geom_segment(aes(x = -Inf, y = 0.05, xend = 97.5, yend = 0.05), color = "black", linetype = "dashed") +
+  theme_modern() +
+  scale_y_reverse(breaks = c(0.05, round(seq(0, 1, length.out = 11), digits = 2))) +
+  scale_x_continuous(breaks = c(95, 97.5, round(seq(50, 100, length.out = 6)))) +
+  scale_color_manual(values = c("Presence of true effect" = "green", "Absence of true effect" = "red")) +
+  theme(legend.title = element_blank()) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+  xlab("Probability of Direction (pd)") +
+  ylab("Frequentist p-value")
+```
+
+
+
+> **But if it's like the *p*-value, it must be bad because the *p*-value is bad [*insert reference to the reproducibility crisis*].**
+
+In fact, this aspect of the reproducibility crisis might have been
+misunderstood. Indeed, it is not that the *p*-value is an intrinsically bad or
+wrong. Instead, it is its **misuse**, **misunderstanding** and
+**misinterpretation** that fuels the decay of the situation. For instance, the
+fact that the **pd** is highly correlated with the *p*-value suggests that the
+latter is more an index of effect *existence* than *significance* (*i.e.*,
+"worth of interest"). The Bayesian version, the **pd**, has an intuitive meaning
+and makes obvious the fact that **all thresholds are arbitrary**. Additionally,
+the **mathematical and interpretative transparency** of the **pd**, and its
+reconceptualisation as an index of effect existence, offers a valuable insight
+into the characterization of Bayesian results. Moreover, its concomitant
+proximity with the frequentist *p*-value makes it a perfect metric to ease the
+transition of psychological research into the adoption of the Bayesian
+framework.
+
+# Methods of computation
+
+The most **simple and direct** way to compute the **pd** is to 1) look at the
+median's sign, 2) select the portion of the posterior of the same sign and 3)
+compute the percentage that this portion represents. This "simple" method is the
+most straightforward, but its precision is directly tied to the number of
+posterior draws.
+
+The second approach relies on [**density estimation**](https://easystats.github.io/bayestestR/reference/estimate_density.html).
+It starts by estimating the density function (for which many methods are
+available), and then computing the [**area under the curve**](https://easystats.github.io/bayestestR/reference/area_under_curve.html)
+(AUC) of the density curve on the other side of 0. The density-based method
+could hypothetically be considered as more precise, but strongly depends on the
+method used to estimate the density function.
+
+# Methods comparison
+
+Let's compare the 4 available methods, the **direct** method and 3
+**density-based** methods differing by their density estimation algorithm (see
+[`estimate_density`](https://easystats.github.io/bayestestR/reference/estimate_density.html)).
+
+## Correlation
+
+Let's start by testing the proximity and similarity of the results obtained by different methods.
+
+```{r message=FALSE, warning=FALSE, fig.align='center'}
+library(bayestestR)
+library(logspline)
+library(KernSmooth)
+
+# Compute the correlations
+data <- data.frame()
+for (the_mean in runif(25, 0, 4)) {
+  for (the_sd in runif(25, 0.5, 4)) {
+    x <- rnorm(100, the_mean, abs(the_sd))
+    data <- rbind(
+      data,
+      data.frame(
+        "direct" = pd(x),
+        "kernel" = pd(x, method = "kernel"),
+        "logspline" = pd(x, method = "logspline"),
+        "KernSmooth" = pd(x, method = "KernSmooth")
+      )
+    )
+  }
+}
+data <- as.data.frame(sapply(data, as.numeric))
+
+# Visualize the correlations
+bayesplot::mcmc_pairs(data) +
+  theme_classic()
+```
+
+All methods give are highly correlated and give very similar results. That means
+that the method choice is not a drastic game changer and cannot be used to tweak
+the results too much.
+
+## Accuracy
+
+To test the accuracy of each methods, we will start by computing the **direct
+*pd*** from a very dense distribution (with a large amount of observations).
+This will be our baseline, or "true" *pd*. Then, we will iteratively draw
+smaller samples from this parent distribution, and we will compute the *pd* with
+different methods. The closer this estimate is from the reference one, the
+better.
+
+```{r message=FALSE, warning=FALSE}
+data <- data.frame()
+for (i in 1:25) {
+  the_mean <- runif(1, 0, 4)
+  the_sd <- abs(runif(1, 0.5, 4))
+  parent_distribution <- rnorm(100000, the_mean, the_sd)
+  true_pd <- pd(parent_distribution)
+
+  for (j in 1:25) {
+    sample_size <- round(runif(1, 25, 5000))
+    subsample <- sample(parent_distribution, sample_size)
+    data <- rbind(
+      data,
+      data.frame(
+        "sample_size" = sample_size,
+        "true" = true_pd,
+        "direct" = pd(subsample) - true_pd,
+        "kernel" = pd(subsample, method = "kernel") - true_pd,
+        "logspline" = pd(subsample, method = "logspline") - true_pd,
+        "KernSmooth" = pd(subsample, method = "KernSmooth") - true_pd
+      )
+    )
+  }
+}
+data <- as.data.frame(sapply(data, as.numeric))
+```
+
+```{r message=FALSE, warning=FALSE, fig.align='center'}
+library(datawizard) # for reshape_longer
+data |>
+  reshape_longer(cols = 3:6, names_to = "Method", values_to = "Distance") |>
+  ggplot(aes(x = sample_size, y = Distance, color = Method, fill = Method)) +
+  geom_point(alpha = 0.3, stroke = 0, shape = 16) +
+  geom_smooth(alpha = 0.2) +
+  geom_hline(yintercept = 0) +
+  theme_classic() +
+  xlab("\nDistribution Size")
+```
+
+The "Kernel" based density methods seems to consistently underestimate the *pd*. Interestingly, the "direct" method appears as being the more reliable, even in the case of small number of posterior draws.
+
+
+## Can the pd be 100\%?
+
+`p = 0.000` is coined as one of the term to avoid when reporting results
+[@lilienfeld2015fifty], even if often displayed by statistical software. The
+rationale is that for every probability distribution, there is no value with a
+probability of exactly 0. There is always some infinitesimal probability
+associated with each data point, and the `p = 0.000` returned by software is due
+to approximations related, among other, to finite memory hardware.
+
+One could apply this rationale for the *pd*: since all data points have a
+non-null probability density, then the *pd* (a particular portion of the
+probability density) can *never* be 100\%. While this is an entirely valid
+point, people using the *direct* method might argue that their *pd* is based on
+the posterior draws, rather than on the theoretical, hidden, true posterior
+distribution (which is only approximated by the posterior draws). These
+posterior draws represent a finite sample for which `pd = 100%` is a valid
+statement.
