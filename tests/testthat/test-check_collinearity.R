@@ -429,5 +429,3 @@ test_that("check_collinearity, rank deficient.", {
   )
   expect_identical(out1$VIF, out2$VIF)
 })
-
-debugonce(performance:::.check_collinearity)

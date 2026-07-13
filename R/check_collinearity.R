@@ -526,7 +526,7 @@ check_collinearity.zerocount <- function(
     } else if (anyNA(v)) {
       # If no attribute exists, then we need to identify NA columns manually
       # fixme: this should be ficef in insight::get_varcov() to avoid this step
-      idx_na <- apply(is.na(m), 2, all)
+      idx_na <- apply(is.na(v), 2, all)
       na_cols <- colnames(v)[idx_na]
       keep_idx[idx_na] <- FALSE
     }
@@ -549,7 +549,7 @@ check_collinearity.zerocount <- function(
   }
 
   # Safely subset the matrix
-  if (any(!keep_idx) < ncol(v)) {
+  if (sum(keep_idx) < ncol(v)) {
     if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
       term_assign <- term_assign[keep_idx]
     }
