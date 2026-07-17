@@ -1,3 +1,9 @@
+# performance (devel)
+
+## Changes
+
+* Updated test-files to fix deprecated names.
+
 # performance 0.17.1
 
 ## Changes
