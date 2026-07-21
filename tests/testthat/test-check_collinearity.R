@@ -1,5 +1,6 @@
 # https://github.com/easystats/performance/pull/547
 test_that("check_collinearity, correct order in print", {
+  data(mtcars)
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
   out <- capture.output(print(check_collinearity(m, verbose = FALSE)))
   expect_identical(
@@ -409,4 +410,23 @@ test_that("check_collinearity, standard lm models with offset", {
   # The offset should not be evaluated for collinearity
   expect_identical(out$Term, c("wt", "cyl"))
   expect_false("disp" %in% out$Term)
+})
+
+
+test_that("check_collinearity, rank deficient.", {
+  data(mtcars)
+  mtcars$Z <- mtcars$wt + mtcars$cyl
+
+  m1 <- lm(mpg ~ wt + cyl + Z, data = mtcars)
+  m2 <- lm(mpg ~ wt + cyl, data = mtcars)
+  expect_warning(
+    {
+      out1 <- check_collinearity(m1)
+    },
+    "Model matrix is rank deficient"
+  )
+  expect_silent({
+    out2 <- check_collinearity(m2)
+  })
+  expect_identical(out1$VIF, out2$VIF)
 })

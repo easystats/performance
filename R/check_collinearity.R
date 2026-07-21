@@ -490,7 +490,7 @@ check_collinearity.zerocount <- function(
   if (inherits(x, c("clm", "clmm"))) {
     # names(x$beta) returns only non-singular (surviving) slopes
     slope_names <- names(x$beta)
-    keep_idx <- which(colnames(v) %in% slope_names)
+    keep_idx <- colnames(v) %in% slope_names
 
     # Rebuild term_assign by matching model matrix columns to surviving slopes
     tryCatch(
@@ -507,32 +507,53 @@ check_collinearity.zerocount <- function(
       },
       error = function(e) NULL
     )
-  } else if (insight::has_intercept(x)) {
-    # Standard behavior: drop the first column/row (the singular intercept)
-    keep_idx <- seq_len(ncol(v))[-1]
   } else {
-    keep_idx <- seq_len(ncol(v))
-    if (isTRUE(verbose)) {
+    keep_idx <- rep(TRUE, ncol(v))
+    if (insight::has_intercept(x)) {
+      # Standard behavior: drop the first column/row (the singular intercept)
+      keep_idx[1] <- FALSE
+    } else if (isTRUE(verbose)) {
       insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
   }
 
+  # we have rank-deficiency here. remove NA columns from assignment
+  if (isTRUE(attr(v, "rank_deficient")) || anyNA(v)) {
+    if (!is.null(attr(v, "na_columns_index"))) {
+      # If this attribute exists, then NA values were already removed from v
+      term_assign <- term_assign[-attr(v, "na_columns_index")]
+      na_cols <- names(attr(v, "na_columns_name"))
+    } else if (anyNA(v)) {
+      # If no attribute exists, then we need to identify NA columns manually
+      ## FIXME: this should be fixed in insight::get_varcov() to avoid this step
+      idx_na <- apply(is.na(v), 2, all)
+      na_cols <- colnames(v)[idx_na]
+      keep_idx[idx_na] <- FALSE
+    }
+
+    if (isTRUE(verbose)) {
+      if (length(na_cols) > 0) {
+        insight::format_warning(
+          "Model matrix is rank deficient. VIFs may not be sensible.",
+          paste0(
+            "The following coefficients have VIF = Inf / tolerance = 0: ",
+            paste0(na_cols, collapse = ", ")
+          )
+        )
+      } else {
+        insight::format_warning(
+          "Model matrix is rank deficient. VIFs may not be sensible."
+        )
+      }
+    }
+  }
+
   # Safely subset the matrix
-  if (length(keep_idx) < ncol(v)) {
+  if (sum(keep_idx) < ncol(v)) {
     if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
       term_assign <- term_assign[keep_idx]
     }
     v <- v[keep_idx, keep_idx, drop = FALSE]
-  }
-
-  # we have rank-deficiency here. remove NA columns from assignment
-  if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
-    term_assign <- term_assign[-attributes(v)$na_columns_index]
-    if (isTRUE(verbose)) {
-      insight::format_alert(
-        "Model matrix is rank deficient. VIFs may not be sensible."
-      )
-    }
   }
 
   f <- insight::find_formula(x, verbose = FALSE)

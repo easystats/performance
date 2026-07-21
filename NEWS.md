@@ -4,6 +4,11 @@
 
 * Updated test-files to fix deprecated names.
 
+## Bug fixes
+
+* `check_collinearity()` now properly warns when the `vcov` matrix is rank
+  deficient (#922).
+
 # performance 0.17.1
 
 ## Changes
