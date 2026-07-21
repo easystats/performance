@@ -420,12 +420,13 @@ test_that("check_collinearity, rank deficient.", {
   m1 <- lm(mpg ~ wt + cyl + Z, data = mtcars)
   m2 <- lm(mpg ~ wt + cyl, data = mtcars)
   expect_warning(
-    out1 <- check_collinearity(m1),
+    {
+      out1 <- check_collinearity(m1)
+    },
     "Model matrix is rank deficient"
   )
-  expect_warning(
-    out2 <- check_collinearity(m2),
-    NA
-  )
+  expect_silent({
+    out2 <- check_collinearity(m2)
+  })
   expect_identical(out1$VIF, out2$VIF)
 })
