@@ -525,7 +525,7 @@ check_collinearity.zerocount <- function(
       na_cols <- names(attr(v, "na_columns_name"))
     } else if (anyNA(v)) {
       # If no attribute exists, then we need to identify NA columns manually
-      # fixme: this should be ficef in insight::get_varcov() to avoid this step
+      ## FIXME: this should be fixed in insight::get_varcov() to avoid this step
       idx_na <- apply(is.na(v), 2, all)
       na_cols <- colnames(v)[idx_na]
       keep_idx[idx_na] <- FALSE
