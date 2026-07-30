@@ -544,6 +544,11 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
       attr(out, "model_type") <- "Generalized Linear"
       class(out) <- c("r2_pseudo", class(out))
+    } else if (info$is_negbin && !info$is_zero_inflated) {
+      # negative-binomial regression uses McFadden's R2. Nagelkerke's is unstable
+      # here (the null-model refit finds a different dispersion, which can yield
+      # nonsensical negative values), so mirror the beta-binomial branch above.
+      out <- r2_mcfadden(model)
     } else if (info$is_zero_inflated) {
       # zero-inflated models use the default method
       out <- r2_zeroinflated(model)
