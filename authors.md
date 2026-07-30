@@ -45,13 +45,9 @@ Lüdecke et al., (2021). performance: An R Package for Assessment,
 Comparison and Testing of Statistical Models. Journal of Open Source
 Software, 6(60), 3139. https://doi.org/10.21105/joss.03139
 
-    @Article{,
-      title = {{performance}: An {R} Package for Assessment, Comparison and Testing of Statistical Models},
-      author = {Daniel Lüdecke and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner and Dominique Makowski},
-      year = {2021},
-      journal = {Journal of Open Source Software},
-      volume = {6},
-      number = {60},
-      pages = {3139},
-      doi = {10.21105/joss.03139},
-    }
+@Article{, title = {{performance}: An {R} Package for Assessment,
+Comparison and Testing of Statistical Models}, author = {Daniel Lüdecke
+and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner and
+Dominique Makowski}, year = {2021}, journal = {Journal of Open Source
+Software}, volume = {6}, number = {60}, pages = {3139}, doi =
+{10.21105/joss.03139}, }

@@ -48,27 +48,12 @@ e.g.:
 
 We start with a simple example for a linear model.
 
-``` r
-
-data(iris)
-m1 <- lm(Sepal.Width ~ Species + Petal.Length + Petal.Width, data = iris)
-```
+[`data`](https://rdrr.io/r/utils/data.html)`(``iris``)`` ``m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Width`` ``~`` ``Species`` ``+`` ``Petal.Length`` ``+`` ``Petal.Width``, data ``=`` ``iris``)`
 
 Before we go into details of the diagnostic plots, let’s first look at
 the summary table.
 
-``` r
-
-library(parameters)
-model_parameters(m1)
-#> Parameter            | Coefficient |   SE |         95% CI | t(145) |      p
-#> ----------------------------------------------------------------------------
-#> (Intercept)          |        3.05 | 0.09 | [ 2.86,  3.23] |  32.52 | < .001
-#> Species [versicolor] |       -1.76 | 0.18 | [-2.12, -1.41] |  -9.83 | < .001
-#> Species [virginica]  |       -2.20 | 0.27 | [-2.72, -1.67] |  -8.28 | < .001
-#> Petal Length         |        0.15 | 0.06 | [ 0.03,  0.28] |   2.38 | 0.018 
-#> Petal Width          |        0.62 | 0.14 | [ 0.35,  0.89] |   4.57 | < .001
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`parameters`](https://easystats.github.io/parameters/)`)`` `[`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)`(``m1``)`` ``#> Parameter | Coefficient | SE | 95% CI | t(145) | p`` ``#> ----------------------------------------------------------------------------`` ``#> (Intercept) | 3.05 | 0.09 | [ 2.86, 3.23] | 32.52 | < .001`` ``#> Species [versicolor] | -1.76 | 0.18 | [-2.12, -1.41] | -9.83 | < .001`` ``#> Species [virginica] | -2.20 | 0.27 | [-2.72, -1.67] | -8.28 | < .001`` ``#> Petal Length | 0.15 | 0.06 | [ 0.03, 0.28] | 2.38 | 0.018 `` ``#> Petal Width | 0.62 | 0.14 | [ 0.35, 0.89] | 4.57 | < .001`
 
 There is nothing suspicious so far. Now let’s start with model
 diagnostics. We use the
@@ -76,11 +61,7 @@ diagnostics. We use the
 function, which provides an overview with the most important and
 appropriate diagnostic plots for the model under investigation.
 
-``` r
-
-library(performance)
-check_model(m1)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`` `[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``m1``)`
 
 ![](check_model_files/figure-html/unnamed-chunk-4-1.png)
 
@@ -90,11 +71,7 @@ to return a single plot for each check, instead of arranging them in a
 grid. We can do so using the `panel` argument. This returns a list of
 *ggplot* plots.
 
-``` r
-
-# return a list of single plots
-diagnostic_plots <- plot(check_model(m1, panel = FALSE))
-```
+`# return a list of single plots`` ``diagnostic_plots`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``m1``, panel ``=`` ``FALSE``)``)`
 
 ### Posterior predictive checks
 
@@ -105,11 +82,7 @@ discrepancies between real and simulated data” (*Gelman et al. 2014,
 p. 169*). It helps to see whether the type of model (distributional
 family) fits well to the data (*Gelman and Hill, 2007, p. 158*).
 
-``` r
-
-# posterior predicive checks
-diagnostic_plots[[1]]
-```
+`# posterior predicive checks`` ``diagnostic_plots``[[``1``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -124,15 +97,7 @@ Next, a different example. We use a Poisson-distributed outcome for our
 linear model, so we should expect some deviation from the distributional
 assumption of a linear model.
 
-``` r
-
-set.seed(99)
-d <- iris
-d$skewed <- rpois(150, 1)
-m2 <- lm(skewed ~ Species + Petal.Length + Petal.Width, data = d)
-out <- check_predictions(m2)
-plot(out)
-```
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``99``)`` ``d`` ``<-`` ``iris`` ``d``$``skewed`` ``<-`` `[`rpois`](https://rdrr.io/r/stats/Poisson.html)`(``150``, ``1``)`` ``m2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``skewed`` ``~`` ``Species`` ``+`` ``Petal.Length`` ``+`` ``Petal.Width``, data ``=`` ``d``)`` ``out`` ``<-`` `[`check_predictions`](https://easystats.github.io/performance/reference/check_predictions.md)`(``m2``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``out``)`
 
 ![](check_model_files/figure-html/unnamed-chunk-7-1.png)
 
@@ -161,19 +126,7 @@ change the plot-style. Available options are `type = "discrete_dots"`
 replicated outcomes) or `type = "discrete_both"` (both dots and error
 bars).
 
-``` r
-
-set.seed(99)
-d <- iris
-d$skewed <- rpois(150, 1)
-m3 <- glm(
-  skewed ~ Species + Petal.Length + Petal.Width,
-  family = poisson(),
-  data = d
-)
-out <- check_predictions(m3)
-plot(out, type = "discrete_both")
-```
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``99``)`` ``d`` ``<-`` ``iris`` ``d``$``skewed`` ``<-`` `[`rpois`](https://rdrr.io/r/stats/Poisson.html)`(``150``, ``1``)`` ``m3`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(`` `` ``skewed`` ``~`` ``Species`` ``+`` ``Petal.Length`` ``+`` ``Petal.Width``,`` `` family ``=`` `[`poisson`](https://rdrr.io/r/stats/family.html)`(``)``,`` `` data ``=`` ``d`` ``)`` ``out`` ``<-`` `[`check_predictions`](https://easystats.github.io/performance/reference/check_predictions.md)`(``m3``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``out``, type ``=`` ``"discrete_both"``)`
 
 ![](check_model_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -185,32 +138,14 @@ in which case the reference line may roughly indicate that relationship.
 A straight and horizontal line indicates that the model specification
 seems to be ok.
 
-``` r
-
-# linearity
-diagnostic_plots[[2]]
-```
+`# linearity`` ``diagnostic_plots``[[``2``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-9-1.png)
 
 Now to a different example, where we simulate data with a quadratic
 relationship of one of the predictors and the outcome.
 
-``` r
-
-set.seed(1234)
-x <- rnorm(200)
-z <- rnorm(200)
-# quadratic relationship
-y <- 2 * x + x^2 + 4 * z + rnorm(200)
-d <- data.frame(x, y, z)
-
-m <- lm(y ~ x + z, data = d)
-out <- plot(check_model(m, panel = FALSE))
-
-# linearity plot
-out[[2]]
-```
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``1234``)`` ``x`` ``<-`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``200``)`` ``z`` ``<-`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``200``)`` ``# quadratic relationship`` ``y`` ``<-`` ``2`` ``*`` ``x`` ``+`` ``x``^``2`` ``+`` ``4`` ``*`` ``z`` ``+`` `[`rnorm`](https://rdrr.io/r/stats/Normal.html)`(``200``)`` ``d`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``x``, ``y``, ``z``)`` `` ``m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``y`` ``~`` ``x`` ``+`` ``z``, data ``=`` ``d``)`` ``out`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``m``, panel ``=`` ``FALSE``)``)`` `` ``# linearity plot`` ``out``[[``2``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-10-1.png)
 
@@ -222,15 +157,7 @@ the predictors probably should better be modeled as quadratic term.
 Transforming the response variable might be another solution when
 linearity assumptions are not met.
 
-``` r
-
-# model quadratic term
-m <- lm(y ~ x + I(x^2) + z, data = d)
-out <- plot(check_model(m, panel = FALSE))
-
-# linearity plot
-out[[2]]
-```
+`# model quadratic term`` ``m`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``y`` ``~`` ``x`` ``+`` `[`I`](https://rdrr.io/r/base/AsIs.html)`(``x``^``2``)`` ``+`` ``z``, data ``=`` ``d``)`` ``out`` ``<-`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``m``, panel ``=`` ``FALSE``)``)`` `` ``# linearity plot`` ``out``[[``2``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-11-1.png)
 
@@ -256,18 +183,7 @@ are horizontal and parallel, everything is ok. If the spread of the dot
 increases (decreases) across the x-axis, the model may suffer from
 heteroscedasticity.
 
-``` r
-
-library(ggplot2)
-d <- data.frame(
-  x = fitted(m1),
-  y = residuals(m1),
-  grp = as.factor(residuals(m1) >= 0)
-)
-ggplot(d, aes(x, y, colour = grp)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ggplot2`](https://ggplot2.tidyverse.org)`)`` ``d`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(`` `` x ``=`` `[`fitted`](https://rdrr.io/r/stats/fitted.values.html)`(``m1``)``,`` `` y ``=`` `[`residuals`](https://rdrr.io/r/stats/residuals.html)`(``m1``)``,`` `` grp ``=`` `[`as.factor`](https://rdrr.io/r/base/factor.html)`(`[`residuals`](https://rdrr.io/r/stats/residuals.html)`(``m1``)`` ``>=`` ``0``)`` ``)`` `[`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)`(``d``, `[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x``, ``y``, colour ``=`` ``grp``)``)`` ``+`` `` `[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``)`` ``+`` `` `[`geom_smooth`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)`(``method ``=`` ``"lm"``, se ``=`` ``FALSE``)`
 
 ![](check_model_files/figure-html/unnamed-chunk-12-1.png)
 
@@ -284,11 +200,7 @@ needs to be judged. A roughly flat and horizontal green reference line
 indicates homoscedasticity. A steeper slope of that line indicates that
 the model suffers from heteroscedasticity.
 
-``` r
-
-# homoscedasticiy - homogeneity of variance
-diagnostic_plots[[3]]
-```
+`# homoscedasticiy - homogeneity of variance`` ``diagnostic_plots``[[``3``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-13-1.png)
 
@@ -324,11 +236,7 @@ this plot helps detecting those outliers. Cook’s distance (*Cook 1977*,
 this plot that falls outside of Cook’s distance (the dashed lines) is
 considered an influential observation.
 
-``` r
-
-# influential observations - outliers
-diagnostic_plots[[4]]
-```
+`# influential observations - outliers`` ``diagnostic_plots``[[``4``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-14-1.png)
 
@@ -368,11 +276,7 @@ low estimates and high standard errors), even when these predictors are
 actually strongly related to the outcome (*McElreath 2020, chapter
 6.1*).
 
-``` r
-
-# multicollinearity
-diagnostic_plots[[5]]
-```
+`# multicollinearity`` ``diagnostic_plots``[[``5``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-15-1.png)
 
@@ -447,11 +351,7 @@ deviations from the reference line. In such cases, inferential
 statistics like the p-value or coverage of confidence intervals can be
 inaccurate.
 
-``` r
-
-# normally distributed residuals
-diagnostic_plots[[6]]
-```
+`# normally distributed residuals`` ``diagnostic_plots``[[``6``]``]`
 
 ![](check_model_files/figure-html/unnamed-chunk-16-1.png)
 
