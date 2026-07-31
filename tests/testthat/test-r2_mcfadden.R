@@ -69,3 +69,21 @@ withr::with_environment(
     })
   }
 )
+
+test_that("r2, glmmTMB negative-binomial without random effects", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(101)
+  dd <- data.frame(x = rnorm(200))
+  dd$y <- rnbinom(200, mu = exp(0.5 + 1 * dd$x), size = 2)
+
+  # nbinom2 previously errored ("does not support models of class `glmmTMB`
+  # without random effects and from nbinom2-family ..."); now returns McFadden's.
+  m2 <- glmmTMB::glmmTMB(y ~ 1 + x, data = dd, family = glmmTMB::nbinom2())
+  out <- r2(m2)
+  expect_equal(out$R2, r2_mcfadden(m2)$R2, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$R2, 0.1521543, tolerance = 1e-4, ignore_attr = TRUE)
+
+  # nbinom1 is handled by the same branch.
+  m1 <- glmmTMB::glmmTMB(y ~ 1 + x, data = dd, family = glmmTMB::nbinom1())
+  expect_equal(r2(m1)$R2, 0.1406573, tolerance = 1e-4, ignore_attr = TRUE)
+})

@@ -9,6 +9,10 @@
 * `check_collinearity()` now properly warns when the `vcov` matrix is rank
   deficient (#922).
 
+* `r2()` (and hence `model_performance()`) no longer errors for `glmmTMB`
+  negative-binomial models (`nbinom1`/`nbinom2`) without random effects, and now
+  returns McFadden's R2 for them.
+
 # performance 0.17.1
 
 ## Changes
