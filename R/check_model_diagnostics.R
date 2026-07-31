@@ -264,11 +264,11 @@
     } else if (inherits(model, "gam")) {
       stats::residuals(model, type = "scaled.pearson")
     } else if (inherits(model, c("glmmTMB", "MixMod"))) {
-      ## Pearson residuals are scaled by the family's variance function
-      ## V(mu_i), which varies across observations. The fallback below
-      ## divides by a single scalar, which is only correct when V() does
-      ## not depend on mu (e.g. gaussian); for binomial and poisson that
-      ## scalar is 1, i.e. no standardization at all.
+      ## Pearson residuals are scaled by the family's variance function V(mu_i),
+      ## which varies across observations. The fallback below divides by a single
+      ## scalar, which is only correct when V() does not depend on mu (e.g.
+      ## gaussian). For non-mixed binomial/poisson models `.sigma_glmmTMB_nonmixed()`
+      ## returns 1, i.e. no standardization at all.
       r_pearson <- .safe(stats::residuals(model, type = "pearson"))
       if (is.null(r_pearson) || all(is.na(r_pearson))) {
         residual_sigma <- if (faminfo$is_mixed) {
@@ -276,7 +276,7 @@
         } else {
           .sigma_glmmTMB_nonmixed(model, faminfo)
         }
-        stats::residuals(model) / residual_sigma
+        stats::residuals(model, type = "response") / residual_sigma
       } else {
         r_pearson
       }
