@@ -43,7 +43,7 @@ for the given model (or \code{NULL} if no R2 could be extracted). See the
 list below:
 \itemize{
 \item Logistic models: \link[=r2_tjur]{Tjur's R2}
-\item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
+\item Generalized linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
 \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
 \item Models with zero-inflation: \link[=r2_zeroinflated]{R2 for zero-inflated models}
 \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}

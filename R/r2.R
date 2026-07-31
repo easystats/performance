@@ -20,7 +20,7 @@
 #'   for the given model (or `NULL` if no R2 could be extracted). See the
 #'   list below:
 #'   - Logistic models: [Tjur's R2][r2_tjur]
-#'   - General linear models: [Nagelkerke's R2][r2_nagelkerke]
+#'   - Generalized linear models: [Nagelkerke's R2][r2_nagelkerke]
 #'   - Multinomial Logit: [McFadden's R2][r2_mcfadden]
 #'   - Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
 #'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
