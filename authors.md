@@ -36,6 +36,9 @@
 - **Joseph Luchman**. Contributor.
   [](https://orcid.org/0000-0002-8886-9717)
 
+- **Julius Bogomolovas**. Contributor.
+  [](https://orcid.org/0000-0001-8344-1909)
+
 ## Citation
 
 Source:
