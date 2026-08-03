@@ -207,3 +207,29 @@ test_that("compare_performance, REML fit", {
   expect_silent(compare_performance(m1, m2))
   expect_message(compare_performance(m1, m2, estimator = "REML"))
 })
+
+
+test_that("compare_performance, lavaan", {
+  skip_on_cran()
+  skip_if_not_installed("lavaan")
+
+  data(HolzingerSwineford1939, package = "lavaan")
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9 "
+  model1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  model2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+
+  out <- performance::compare_performance(model1, model2)
+  expect_identical(
+    capture.output(print(out, ci_digits = 2, table_width = Inf)),
+    c(
+      "# Comparison of Model Performance Indices",
+      "",
+      "Name   |  Model | Chi2(24) | p (Chi2) | Baseline(36) | p (Baseline) |   GFI |  AGFI |   NFI |  NNFI |   CFI | RMSEA |    RMSEA  CI | p (RMSEA) |   RMR |  SRMR |   RFI |  PNFI |   IFI |   RNI | Loglikelihood |  AIC (weights) |  BIC (weights) | BIC_adjusted",
+      "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+      "model1 | lavaan |   85.306 |   < .001 |      918.852 |       < .001 | 0.959 | 0.894 | 0.907 | 0.896 | 0.931 | 0.092 | [0.07, 0.11] |    < .001 | 0.082 | 0.065 | 0.861 | 0.605 | 0.931 | 0.931 |     -3737.745 | 7517.5 (0.500) | 7595.3 (0.500) |     7528.739",
+      "model2 | lavaan |   85.306 |   < .001 |      918.852 |       < .001 | 0.959 | 0.894 | 0.907 | 0.896 | 0.931 | 0.092 | [0.07, 0.11] |    < .001 | 0.082 | 0.065 | 0.861 | 0.605 | 0.931 | 0.931 |     -3737.745 | 7517.5 (0.500) | 7595.3 (0.500) |     7528.739"
+    )
+  )
+})

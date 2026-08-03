@@ -13,6 +13,15 @@
   negative-binomial models (`nbinom1`/`nbinom2`) without random effects, and now
   returns McFadden's R2 for them.
 
+* `check_model()` now uses Pearson residuals for the homogeneity-of-variance
+  plot of `glmmTMB` and `MixMod` models. Previously these residuals were divided
+  by a single scalar, which is only correct when the variance function does not
+  depend on the mean; for non-mixed binomial and Poisson models that scalar was
+  1, so the plot could suggest heteroscedasticity for correctly specified models
+  (#926).
+
+* Fixed issue in `compare_performance()` for objects from package *lavaan*.
+
 # performance 0.17.1
 
 ## Changes

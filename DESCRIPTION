@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.17.1.3
+Version: 0.17.1.5
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -56,7 +56,11 @@ Authors@R:
       person(given = "Joseph",
              family = "Luchman",
              role = "ctb",
-             comment = c(ORCID = "0000-0002-8886-9717")))
+             comment = c(ORCID = "0000-0002-8886-9717")),
+      person(given = "Julius",
+             family = "Bogomolovas",
+             role = "ctb",
+             comment = c(ORCID = "0000-0001-8344-1909")))
 Maintainer: Daniel Lüdecke <officialeasystats@gmail.com>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's 'base' or 'stats' packages.
