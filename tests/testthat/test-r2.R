@@ -48,6 +48,7 @@ withr::with_environment(
   test_that("r2 glmmTMB, no ranef", {
     skip_if_not_installed("glmmTMB", minimum_version = "1.1.10")
     data(Owls, package = "glmmTMB")
+
     # linear ---------------------------------------------------------------
     m <- glmmTMB::glmmTMB(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
     out <- r2(m)
@@ -56,6 +57,7 @@ withr::with_environment(
     m2 <- lm(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
     out2 <- r2(m2)
     expect_equal(out$R2, out2$R2, tolerance = 1e-3, ignore_attr = TRUE)
+
     # binomial -------------------------------------------------------------
     data(mtcars)
     m <- glmmTMB::glmmTMB(am ~ mpg, data = mtcars, family = binomial())
@@ -65,6 +67,7 @@ withr::with_environment(
     m2 <- glm(am ~ mpg, data = mtcars, family = binomial())
     out2 <- r2(m2)
     expect_equal(out[[1]], out2[[1]], tolerance = 1e-3, ignore_attr = TRUE)
+
     # poisson --------------------------------------------------------------
     d <<- data.frame(
       counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12),
@@ -78,6 +81,25 @@ withr::with_environment(
     m2 <- glm(counts ~ outcome + treatment, family = poisson(), data = d)
     out2 <- r2(m2)
     expect_equal(out[[1]], out2[[1]], tolerance = 1e-3, ignore_attr = TRUE)
+
+    # compois --------------------------------------------------------------
+    m <- glmmTMB::glmmTMB(
+      counts ~ outcome + treatment,
+      family = glmmTMB::compois(),
+      data = d
+    )
+    out <- r2(m)
+    expect_equal(out[[1]], 0.1261956, tolerance = 1e-3, ignore_attr = TRUE)
+
+    # genpois --------------------------------------------------------------
+    m <- glmmTMB::glmmTMB(
+      counts ~ outcome + treatment,
+      family = glmmTMB::genpois(),
+      data = d
+    )
+    out <- r2(m)
+    expect_equal(out[[1]], 0.1244158, tolerance = 1e-3, ignore_attr = TRUE)
+
     # zero-inflated --------------------------------------------------------------
     skip_if_not(packageVersion("glmmTMB") > "1.1.10")
     skip_if_not_installed("pscl")
@@ -97,6 +119,7 @@ withr::with_environment(
     )
     out2 <- r2(m2)
     expect_equal(out[[1]], out2[[1]], tolerance = 1e-3, ignore_attr = TRUE)
+
     # Gamma --------------------------------------------------------------
     clotting <<- data.frame(
       u = c(5, 10, 15, 20, 30, 40, 60, 80, 100),

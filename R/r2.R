@@ -500,24 +500,39 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
   # most models are mixed models
   if (insight::is_mixed_model(model)) {
     return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
-  } else {
-    if (!is.null(ci) && !is.na(ci)) {
-      return(.r2_ci(model, ci = ci, ...))
-    }
-    # calculate r2 for non-mixed glmmTMB models here -------------------------
-    info <- insight::model_info(model, verbose = FALSE)
-    matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+  }
 
-    if (info$is_linear) {
-      # for linear models, use the manual calculation
-      out <- .safe(.r2_lm_manual(model))
-    } else if (info$is_logit && info$is_bernoulli) {
-      # logistic regression with binary outcome
-      out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
-      attr(out, "model_type") <- "Logistic"
-      names(out$R2_Tjur) <- "Tjur's R2"
-      class(out) <- c("r2_pseudo", class(out))
-    } else if (info$is_betabinomial) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
+
+  # calculate r2 for non-mixed glmmTMB models here -------------------------
+  info <- insight::model_info(model, verbose = FALSE)
+  model_family <- info$family
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+
+  switch(
+    model_family,
+    gaussian = .safe(.r2_lm_manual(model)),
+    binomial = {
+      if (!info$is_bernoulli) {
+        # currently, non-bernoulli binomial models are not supported
+        if (verbose) {
+          insight::format_warning(
+            "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+          )
+        }
+        NULL
+      } else {
+        # logistic regression with binary outcome
+        out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
+        attr(out, "model_type") <- "Logistic"
+        names(out$R2_Tjur) <- "Tjur's R2"
+        class(out) <- c("r2_pseudo", class(out))
+        out
+      }
+    },
+    betabinomial = {
       # currently, beta-binomial models without proportion response are not supported
       if (matrix_response) {
         if (verbose) {
@@ -525,50 +540,38 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
             "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
           )
         }
-        out <- NULL
+        NULL
       } else {
-        # betabinomial default to mcfadden, see pscl:::pR2Work
-        out <- r2_mcfadden(model)
+        r2_mcfadden(model)
       }
-    } else if (info$is_binomial && !info$is_bernoulli) {
-      # currently, non-bernoulli binomial models are not supported
-      if (verbose) {
-        insight::format_warning(
-          "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
-        )
+    },
+    ordbeta = ,
+    beta = r2_ferrari(model),
+    Gamma = ,
+    poisson = {
+      if (info$is_zero_inflated) {
+        # zero-inflated models use the default method
+        r2_zeroinflated(model)
+      } else {
+        # Poisson-regression or Gamma uses Nagelkerke's R2
+        out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
+        names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
+        attr(out, "model_type") <- "Generalized Linear"
+        class(out) <- c("r2_pseudo", class(out))
+        out
       }
-      out <- NULL
-    } else if ((info$is_poisson && !info$is_zero_inflated) || info$is_exponential) {
-      # Poisson-regression or Gamma uses Nagelkerke's R2
-      out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
-      names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
-      attr(out, "model_type") <- "Generalized Linear"
-      class(out) <- c("r2_pseudo", class(out))
-    } else if (info$is_negbin && !info$is_zero_inflated) {
-      # negative-binomial regression uses McFadden's R2. Nagelkerke's is unstable
-      # here (the null-model refit finds a different dispersion, which can yield
-      # nonsensical negative values), so mirror the beta-binomial branch above.
-      out <- r2_mcfadden(model)
-    } else if (info$is_zero_inflated) {
-      # zero-inflated models use the default method
-      out <- r2_zeroinflated(model)
-    } else if (info$is_orderedbeta) {
-      # ordered-beta-regression
-      out <- r2_ferrari(model, correct_bounds = TRUE)
-    } else if (info$is_beta) {
-      # beta-regression
-      out <- r2_ferrari(model)
-    } else {
-      insight::format_error(paste0(
-        "`r2()` does not support models of class `glmmTMB` without random effects and from ",
-        info$family,
-        "-family with ",
-        info$link_function,
-        "-link-function."
-      ))
-    }
-  }
-  out
+    },
+    nbinom1 = ,
+    nbinom2 = ,
+    nbinom12 = {
+      if (info$is_zero_inflated) {
+        r2_zeroinflated(model)
+      } else {
+        r2_mcfadden(model)
+      }
+    },
+    r2_mcfadden(model)
+  )
 }
 
 #' @export
