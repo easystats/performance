@@ -20,6 +20,8 @@
   1, so the plot could suggest heteroscedasticity for correctly specified models
   (#926).
 
+* Fixed issue in `compare_performance()` for objects from package *lavaan*.
+
 # performance 0.17.1
 
 ## Changes

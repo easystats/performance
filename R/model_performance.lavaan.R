@@ -138,14 +138,22 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
     out_names <- all_metric_names
   }
 
+  # process dots - we need to remove some arguments not supported in 'lavaan',
+  # e.g. argument 'estimator' from "compare_performance()"
+  dots <- list(...)
+  dots$estimator <- NULL
+
+  # create arguments for function call, with valid ellipses-dots
+  fun_args <- insight::compact_list(list(model, dots))
+
   # Check if converged
   if (insight::is_converged(model)) {
     if (isTRUE(verbose)) {
-      measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
+      measures <- as.data.frame(t(as.data.frame(do.call(lavaan::fitmeasures, fun_args))))
     } else {
-      measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(
-        model,
-        ...
+      measures <- as.data.frame(t(as.data.frame(suppressWarnings(do.call(
+        lavaan::fitmeasures,
+        fun_args
       )))))
     }
 
