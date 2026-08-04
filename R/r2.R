@@ -546,7 +546,8 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       }
     },
     betabinomial = {
-      # currently, beta-binomial models without proportion response are not supported
+      # currently, beta-binomial models without proportion response are not
+      # supported
       if (matrix_response) {
         if (verbose) {
           insight::format_warning(
@@ -558,20 +559,22 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
         r2_mcfadden(model)
       }
     },
-    ordbeta = r2_ferrari(model, correct_bounds = TRUE),
-    beta = r2_ferrari(model),
+    # Poisson-regression or Gamma uses Nagelkerke's R2
     Gamma = ,
     poisson = {
-      # Poisson-regression or Gamma uses Nagelkerke's R2
       out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
       names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
       attr(out, "model_type") <- "Generalized Linear"
       class(out) <- c("r2_pseudo", class(out))
       out
     },
+    ordbeta = r2_ferrari(model, correct_bounds = TRUE),
+    beta = r2_ferrari(model),
+    # all remaining families default to McFadden (#928)
     r2_mcfadden(model)
   )
 }
+
 
 #' @export
 r2.wbm <- function(model, tolerance = 1e-5, ...) {
