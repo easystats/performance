@@ -29,6 +29,8 @@
 #'   - Additional model families from package *glmmTMB* that are not mentioned
 #'     above (like `nbinom1`, `compois`, `betabinomial` etc.) default to
 #'     [McFadden's R2][r2_mcfadden].
+#'   - R2 for models from package *gamlss* is extracted directly from the
+#'     `summary()`, if available. Else, [McFadden's R2][r2_mcfadden] is returned.
 #'
 #' @note
 #' If there is no `r2()`-method defined for the given model class, `r2()` tries
@@ -639,15 +641,26 @@ r2.BFBayesFactor <- r2.brmsfit
 # Other methods ------------------------------
 
 #' @export
-r2.gam <- function(model, ...) {
-  # gamlss inherits from gam, and summary.gamlss prints results automatically
-  printout <- utils::capture.output(s <- summary(model)) # nolint
+r2.gamlss <- function(model, ...) {
+  # summary.gamlss prints results automatically for some families
+  printout <- utils::capture.output({
+    s <- summary(model)
+  })
 
-  if (is.null(s$r.sq)) {
-    NextMethod()
+  # ... but not for all families, so try safe extraction
+  gamlss_r2 <- .safe(s$r.sq)
+
+  # default to McFadden if R2 is not provided in the summary
+  if (is.null(gamlss_r2)) {
+    r2_mcfadden(model)
   } else {
-    list(R2 = c(`Adjusted R2` = s$r.sq))
+    list(R2 = c(`Adjusted R2` = gamlss_r2))
   }
+}
+
+#' @export
+r2.gam <- function(model, ...) {
+  NextMethod()
 }
 
 #' @export

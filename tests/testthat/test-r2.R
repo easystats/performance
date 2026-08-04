@@ -40,6 +40,18 @@ test_that("r2 glm, ci", {
   )
 })
 
+
+# mgsv / gam --------------------------------------------------------
+
+test_that("r2 - mgcv::gam", {
+  skip_if_not_installed("mgcv")
+  data(mtcars)
+  model <- mgcv::gam(mpg ~ s(hp), data = mtcars)
+
+  expect_equal(as.numeric(performance::r2(model)$R2), 0.7571925, tolerance = 0.01)
+})
+
+
 # glmmTMB, non-mixed --------------------------------------------------------
 
 skip_if_not_installed("withr")

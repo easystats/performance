@@ -52,6 +52,8 @@ list below:
 \item Additional model families from package \emph{glmmTMB} that are not mentioned
 above (like \code{nbinom1}, \code{compois}, \code{betabinomial} etc.) default to
 \link[=r2_mcfadden]{McFadden's R2}.
+\item R2 for models from package \emph{gamlss} is extracted directly from the
+\code{summary()}, if available. Else, \link[=r2_mcfadden]{McFadden's R2} is returned.
 }
 }
 \description{
