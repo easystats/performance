@@ -85,6 +85,38 @@ check_heteroscedasticity.default <- function(x, ...) {
 }
 
 
+#' @export
+check_heteroscedasticity.glmmTMB <- function(x, ...) {
+  # for linear models, compute p-value
+  info <- insight::model_info(x)
+  if (info$is_linear) {
+    return(check_heteroscedasticity.default(x))
+  }
+
+  # no formal test for p-values for other families, only plots
+  p.val <- NA
+  obj_name <- insight::safe_deparse_symbol(substitute(x))
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- obj_name
+  class(p.val) <- unique(c(
+    "check_heteroscedasticity",
+    "see_check_heteroscedasticity",
+    class(p.val)
+  ))
+
+  insight::format_alert(
+    paste0(
+      "There is only a `plot()` method for this model family. Please run `plot(check_heteroscedasticity(",
+      obj_name,
+      "))`."
+    )
+  )
+
+  invisible(p.val)
+}
+
+
 # methods -----------------------
 
 #' @export
