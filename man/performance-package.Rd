@@ -54,6 +54,7 @@ Other contributors:
   \item gjo11 [reviewer]
   \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID}) [contributor]
   \item Joseph Luchman (\href{https://orcid.org/0000-0002-8886-9717}{ORCID}) [contributor]
+  \item Julius Bogomolovas (\href{https://orcid.org/0000-0001-8344-1909}{ORCID}) [contributor]
 }
 
 }

@@ -20,11 +20,17 @@
 #'   for the given model (or `NULL` if no R2 could be extracted). See the
 #'   list below:
 #'   - Logistic models: [Tjur's R2][r2_tjur]
-#'   - General linear models: [Nagelkerke's R2][r2_nagelkerke]
+#'   - Generalized linear models: [Nagelkerke's R2][r2_nagelkerke]
 #'   - Multinomial Logit: [McFadden's R2][r2_mcfadden]
+#'   - Beta or ordered Beta: [Ferrari's R2][r2_ferrari]
 #'   - Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
 #'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
 #'   - Bayesian models: [R2 bayes][r2_bayes]
+#'   - Additional model families from package *glmmTMB* that are not mentioned
+#'     above (like `nbinom1`, `compois`, `betabinomial` etc.) default to
+#'     [McFadden's R2][r2_mcfadden].
+#'   - R2 for models from package *gamlss* is extracted directly from the
+#'     `summary()`, if available. Else, [McFadden's R2][r2_mcfadden] is returned.
 #'
 #' @note
 #' If there is no `r2()`-method defined for the given model class, `r2()` tries
@@ -500,76 +506,78 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
   # most models are mixed models
   if (insight::is_mixed_model(model)) {
     return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
-  } else {
-    if (!is.null(ci) && !is.na(ci)) {
-      return(.r2_ci(model, ci = ci, ...))
-    }
-    # calculate r2 for non-mixed glmmTMB models here -------------------------
-    info <- insight::model_info(model, verbose = FALSE)
-    matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+  }
 
-    if (info$is_linear) {
-      # for linear models, use the manual calculation
-      out <- .safe(.r2_lm_manual(model))
-    } else if (info$is_logit && info$is_bernoulli) {
-      # logistic regression with binary outcome
-      out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
-      attr(out, "model_type") <- "Logistic"
-      names(out$R2_Tjur) <- "Tjur's R2"
-      class(out) <- c("r2_pseudo", class(out))
-    } else if (info$is_betabinomial) {
-      # currently, beta-binomial models without proportion response are not supported
+  # retrieve information about model
+  info <- insight::model_info(model, verbose = FALSE)
+
+  # all zero-inflated models use the default method
+  if (info$is_zero_inflated) {
+    return(r2_zeroinflated(model))
+  }
+
+  # call default method again, and calculate confidence intervals. ".r2_ci()"
+  # will just call the default "r2()" with "ci = NULL" again.
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
+
+  # calculate r2 for non-mixed glmmTMB models here -------------------------
+  model_family <- info$family
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+
+  switch(
+    model_family,
+    gaussian = .safe(.r2_lm_manual(model)),
+    binomial = {
+      if (!info$is_bernoulli) {
+        # currently, non-bernoulli binomial models are not supported
+        if (verbose) {
+          insight::format_warning(
+            "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+          )
+        }
+        NULL
+      } else {
+        # logistic regression with binary outcome
+        out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
+        attr(out, "model_type") <- "Logistic"
+        names(out$R2_Tjur) <- "Tjur's R2"
+        class(out) <- c("r2_pseudo", class(out))
+        out
+      }
+    },
+    betabinomial = {
+      # currently, beta-binomial models without proportion response are not
+      # supported
       if (matrix_response) {
         if (verbose) {
           insight::format_warning(
             "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
           )
         }
-        out <- NULL
+        NULL
       } else {
-        # betabinomial default to mcfadden, see pscl:::pR2Work
-        out <- r2_mcfadden(model)
+        r2_mcfadden(model)
       }
-    } else if (info$is_binomial && !info$is_bernoulli) {
-      # currently, non-bernoulli binomial models are not supported
-      if (verbose) {
-        insight::format_warning(
-          "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
-        )
-      }
-      out <- NULL
-    } else if ((info$is_poisson && !info$is_zero_inflated) || info$is_exponential) {
-      # Poisson-regression or Gamma uses Nagelkerke's R2
+    },
+    # Poisson-regression or Gamma uses Nagelkerke's R2
+    Gamma = ,
+    poisson = {
       out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
       names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
       attr(out, "model_type") <- "Generalized Linear"
       class(out) <- c("r2_pseudo", class(out))
-    } else if (info$is_negbin && !info$is_zero_inflated) {
-      # negative-binomial regression uses McFadden's R2. Nagelkerke's is unstable
-      # here (the null-model refit finds a different dispersion, which can yield
-      # nonsensical negative values), so mirror the beta-binomial branch above.
-      out <- r2_mcfadden(model)
-    } else if (info$is_zero_inflated) {
-      # zero-inflated models use the default method
-      out <- r2_zeroinflated(model)
-    } else if (info$is_orderedbeta) {
-      # ordered-beta-regression
-      out <- r2_ferrari(model, correct_bounds = TRUE)
-    } else if (info$is_beta) {
-      # beta-regression
-      out <- r2_ferrari(model)
-    } else {
-      insight::format_error(paste0(
-        "`r2()` does not support models of class `glmmTMB` without random effects and from ",
-        info$family,
-        "-family with ",
-        info$link_function,
-        "-link-function."
-      ))
-    }
-  }
-  out
+      out
+    },
+    ordbeta = r2_ferrari(model, correct_bounds = TRUE),
+    beta = r2_ferrari(model),
+    # all remaining families default to McFadden (#928)
+    # Nagelkerke is unreliable for GLMs with non-fixed dispersion parameters
+    r2_mcfadden(model)
+  )
 }
+
 
 #' @export
 r2.wbm <- function(model, tolerance = 1e-5, ...) {
@@ -633,15 +641,26 @@ r2.BFBayesFactor <- r2.brmsfit
 # Other methods ------------------------------
 
 #' @export
-r2.gam <- function(model, ...) {
-  # gamlss inherits from gam, and summary.gamlss prints results automatically
-  printout <- utils::capture.output(s <- summary(model)) # nolint
+r2.gamlss <- function(model, ...) {
+  # summary.gamlss prints results automatically for some families
+  printout <- utils::capture.output({
+    s <- summary(model)
+  })
 
-  if (is.null(s$r.sq)) {
-    NextMethod()
+  # ... but not for all families, so try safe extraction
+  gamlss_r2 <- .safe(s$r.sq)
+
+  # default to McFadden if R2 is not provided in the summary
+  if (is.null(gamlss_r2)) {
+    r2_mcfadden(model)
   } else {
-    list(R2 = c(`Adjusted R2` = s$r.sq))
+    list(R2 = c(`Adjusted R2` = gamlss_r2))
   }
+}
+
+#' @export
+r2.gam <- function(model, ...) {
+  NextMethod()
 }
 
 #' @export

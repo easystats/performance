@@ -4,6 +4,9 @@
 
 * Updated test-files to fix deprecated names.
 
+* `r2()` now also covers remaining families from package *glmmTMB* and defaults
+  to returning McFadden's R2. Documentation of `r2()` was updated accordingly.
+
 ## Bug fixes
 
 * `check_collinearity()` now properly warns when the `vcov` matrix is rank

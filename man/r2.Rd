@@ -43,11 +43,17 @@ for the given model (or \code{NULL} if no R2 could be extracted). See the
 list below:
 \itemize{
 \item Logistic models: \link[=r2_tjur]{Tjur's R2}
-\item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
+\item Generalized linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
 \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
+\item Beta or ordered Beta: \link[=r2_ferrari]{Ferrari's R2}
 \item Models with zero-inflation: \link[=r2_zeroinflated]{R2 for zero-inflated models}
 \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
 \item Bayesian models: \link[=r2_bayes]{R2 bayes}
+\item Additional model families from package \emph{glmmTMB} that are not mentioned
+above (like \code{nbinom1}, \code{compois}, \code{betabinomial} etc.) default to
+\link[=r2_mcfadden]{McFadden's R2}.
+\item R2 for models from package \emph{gamlss} is extracted directly from the
+\code{summary()}, if available. Else, \link[=r2_mcfadden]{McFadden's R2} is returned.
 }
 }
 \description{
