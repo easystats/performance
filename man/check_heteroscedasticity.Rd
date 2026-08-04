@@ -21,7 +21,10 @@ non-constant variance (heteroskedasticity).
 \description{
 Significance testing for linear regression models assumes that
 the model errors (or residuals) have constant variance. If this assumption
-is violated the p-values from the model are no longer reliable.
+is violated the p-values from the model are no longer reliable. For models
+from package \emph{glmmTMB} with other families tha Gaussian, no formal test is
+carried out, but a \code{ plot()} method is available, i.e. you can run
+\code{plot(check_heteroscedasticity(model))}.
 }
 \details{
 This test of the hypothesis of (non-)constant error is also called
