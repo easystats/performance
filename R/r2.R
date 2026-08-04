@@ -571,6 +571,7 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     ordbeta = r2_ferrari(model, correct_bounds = TRUE),
     beta = r2_ferrari(model),
     # all remaining families default to McFadden (#928)
+    # Nagelkerke is unreliable for GLMs with non-fixed dispersion parameters
     r2_mcfadden(model)
   )
 }
