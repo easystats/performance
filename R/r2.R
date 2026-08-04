@@ -22,9 +22,13 @@
 #'   - Logistic models: [Tjur's R2][r2_tjur]
 #'   - Generalized linear models: [Nagelkerke's R2][r2_nagelkerke]
 #'   - Multinomial Logit: [McFadden's R2][r2_mcfadden]
+#'   - Beta or ordered Beta: [Ferrari's R2][r2_ferrari]
 #'   - Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
 #'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
 #'   - Bayesian models: [R2 bayes][r2_bayes]
+#'   - Additional model families from package *glmmTMB* that are not mentioned
+#'     above (like `nbinom1`, `compois`, `betabinomial` etc.) default to
+#'     [McFadden's R2][r2_mcfadden].
 #'
 #' @note
 #' If there is no `r2()`-method defined for the given model class, `r2()` tries
@@ -502,12 +506,19 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
   }
 
+  # retrieve information about model
+  info <- insight::model_info(model, verbose = FALSE)
+
+  # all zero-inflated models use the default method
+  if (info$is_zero_inflated) {
+    return(r2_zeroinflated(model))
+  }
+
   if (!is.null(ci) && !is.na(ci)) {
     return(.r2_ci(model, ci = ci, ...))
   }
 
   # calculate r2 for non-mixed glmmTMB models here -------------------------
-  info <- insight::model_info(model, verbose = FALSE)
   model_family <- info$family
   matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
 
@@ -545,30 +556,16 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
         r2_mcfadden(model)
       }
     },
-    ordbeta = ,
+    ordbeta = r2_ferrari(model, correct_bounds = TRUE),
     beta = r2_ferrari(model),
     Gamma = ,
     poisson = {
-      if (info$is_zero_inflated) {
-        # zero-inflated models use the default method
-        r2_zeroinflated(model)
-      } else {
-        # Poisson-regression or Gamma uses Nagelkerke's R2
-        out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
-        names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
-        attr(out, "model_type") <- "Generalized Linear"
-        class(out) <- c("r2_pseudo", class(out))
-        out
-      }
-    },
-    nbinom1 = ,
-    nbinom2 = ,
-    nbinom12 = {
-      if (info$is_zero_inflated) {
-        r2_zeroinflated(model)
-      } else {
-        r2_mcfadden(model)
-      }
+      # Poisson-regression or Gamma uses Nagelkerke's R2
+      out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
+      names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
+      attr(out, "model_type") <- "Generalized Linear"
+      class(out) <- c("r2_pseudo", class(out))
+      out
     },
     r2_mcfadden(model)
   )
