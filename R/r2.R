@@ -514,6 +514,8 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     return(r2_zeroinflated(model))
   }
 
+  # call default method again, and calculate confidence intervals. ".r2_ci()"
+  # will just call the default "r2()" with "ci = NULL" again.
   if (!is.null(ci) && !is.na(ci)) {
     return(.r2_ci(model, ci = ci, ...))
   }
