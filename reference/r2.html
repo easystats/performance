@@ -11,7 +11,7 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,11 +120,17 @@ decrease the tolerance-level. See also <code><a href="check_singularity.html">ch
     <p>Returns a list containing values related to the most appropriate R2
 for the given model (or <code>NULL</code> if no R2 could be extracted). See the
 list below:</p><ul><li><p>Logistic models: <a href="r2_tjur.html">Tjur's R2</a></p></li>
-<li><p>General linear models: <a href="r2_nagelkerke.html">Nagelkerke's R2</a></p></li>
+<li><p>Generalized linear models: <a href="r2_nagelkerke.html">Nagelkerke's R2</a></p></li>
 <li><p>Multinomial Logit: <a href="r2_mcfadden.html">McFadden's R2</a></p></li>
+<li><p>Beta or ordered Beta: <a href="r2_ferrari.html">Ferrari's R2</a></p></li>
 <li><p>Models with zero-inflation: <a href="r2_zeroinflated.html">R2 for zero-inflated models</a></p></li>
 <li><p>Mixed models: <a href="r2_nakagawa.html">Nakagawa's R2</a></p></li>
 <li><p>Bayesian models: <a href="r2_bayes.html">R2 bayes</a></p></li>
+<li><p>Additional model families from package <em>glmmTMB</em> that are not mentioned
+above (like <code>nbinom1</code>, <code>compois</code>, <code>betabinomial</code> etc.) default to
+<a href="r2_mcfadden.html">McFadden's R2</a>.</p></li>
+<li><p>R2 for models from package <em>gamlss</em> is extracted directly from the
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, if available. Else, <a href="r2_mcfadden.html">McFadden's R2</a> is returned.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

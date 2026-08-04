@@ -71,3 +71,6 @@ Other contributors:
 
 - Joseph Luchman ([ORCID](https://orcid.org/0000-0002-8886-9717))
   \[contributor\]
+
+- Julius Bogomolovas ([ORCID](https://orcid.org/0000-0001-8344-1909))
+  \[contributor\]
