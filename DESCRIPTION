@@ -103,6 +103,7 @@ Suggests:
     dbscan,
     DHARMa (>= 0.4.7),
     discovr,
+    effectsize,
     estimatr,
     fixest,
     flextable,
