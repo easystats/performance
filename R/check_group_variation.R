@@ -74,7 +74,9 @@
 #' bias.
 #'
 #' @return A data frame with Group, Variable, Variation, Design, and Eta columns.
-#'   Eta is an effect size of the grouping variable's predictive association strength.
+#'   Eta is an effect size of the grouping variable's predictive association strength:
+#'   when it is 0 the grouping variable carries no predictive information (`"within"`),
+#'   and when it is 1 the variable is perfectly predicted by the grouping variable (`"between"`).
 #'     - For numeric variables it is the square-root of the inter class correlation (ICC)
 #'     - For non-numeric variables it is a non-symmetric Cramer's _V_ (when `{effectsize}` is available)
 #'
