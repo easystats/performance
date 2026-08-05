@@ -58,7 +58,10 @@ frequency}.
 \item{flatten}{Logical, if \code{TRUE}, the values are returned as character vector, not as list. Duplicated values are removed.}
 }
 \value{
-A data frame with Group, Variable, Variation and Design columns.
+A data frame with Group, Variable, Variation, Design, and Eta columns.
+Eta is the correlation coefficient:
+- For numeric variables it is the square-root of the inter class correlation (ICC)
+- For non-numeric variables it is a non-symmetric Cramer's \emph{V} (when \code{{effectsize}} is available)
 }
 \description{
 Checks if variables vary within and/or between levels of grouping variables.
