@@ -73,12 +73,14 @@
 #' indicates if and which predictors are possibly affected by heterogeneity
 #' bias.
 #'
-#' @return A data frame with Group, Variable, Variation, Design, and Eta columns.
-#'   Eta is an effect size of the grouping variable's predictive association strength:
+#' @return A data frame with Group, Variable, Variation, Design, and r columns.
+#'   `r` is a correlation coefficient representing the grouping variable's predictive association strength:
 #'   when it is 0 the grouping variable carries no predictive information (`"within"`),
 #'   and when it is 1 the variable is perfectly predicted by the grouping variable (`"between"`).
-#'     - For numeric variables it is the square-root of the inter class correlation (ICC)
+#'     - For numeric variables it is the square-root of the inter class correlation (ICC), aka the correlation ratio \eqn{\eta} (Ayres, 1920).
 #'     - For non-numeric variables it is a non-symmetric Cramer's _V_ (when `{effectsize}` is available)
+#'
+#' @references Ayres, L. P. (1920). The correlation ratio. The Journal of Educational Research, 2(1), 452-456.
 #'
 #' @seealso
 #' For further details, read the vignette
@@ -221,11 +223,11 @@ check_group_variation.data.frame <- function(
   combinations <- combinations[combinations$Variable != combinations$Group, ]
   combinations$Variation <- NA_character_
   combinations$Design <- NA_character_
-  combinations$Eta <- NA_real_
+  combinations$r <- NA_real_
 
   # initialize lists
   for (i in seq_len(nrow(combinations))) {
-    combinations[i, c("Variation", "Design", "Eta")] <- .check_nested(
+    combinations[i, c("Variation", "Design", "r")] <- .check_nested(
       x,
       combinations[i, "Group"],
       combinations[i, "Variable"],
@@ -249,8 +251,8 @@ check_group_variation.data.frame <- function(
 #' @export
 print.check_group_variation <- function(x, digits = 3, zap_small = TRUE, ...) {
   x_orig <- x
-  x$Eta <- insight::format_value(
-    x$Eta,
+  x$r <- insight::format_value(
+    x$r,
     digits = digits,
     zap_small = zap_small,
     lead_zero = FALSE
@@ -286,8 +288,8 @@ print_html.check_group_variation <- function(x, digits = 3, zap_small = TRUE, ..
     group_by <- "group"
   }
 
-  x$Eta <- insight::format_value(
-    x$Eta,
+  x$r <- insight::format_value(
+    x$r,
     digits = digits,
     zap_small = zap_small,
     lead_zero = FALSE

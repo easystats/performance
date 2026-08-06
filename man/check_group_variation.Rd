@@ -58,11 +58,11 @@ frequency}.
 \item{flatten}{Logical, if \code{TRUE}, the values are returned as character vector, not as list. Duplicated values are removed.}
 }
 \value{
-A data frame with Group, Variable, Variation, Design, and Eta columns.
-Eta is an effect size of the grouping variable's predictive association strength:
+A data frame with Group, Variable, Variation, Design, and r columns.
+\code{r} is a correlation coefficient representing the grouping variable's predictive association strength:
 when it is 0 the grouping variable carries no predictive information (\code{"within"}),
 and when it is 1 the variable is perfectly predicted by the grouping variable (\code{"between"}).
-- For numeric variables it is the square-root of the inter class correlation (ICC)
+- For numeric variables it is the square-root of the inter class correlation (ICC), aka the correlation ratio \eqn{\eta} (Ayres, 1920).
 - For non-numeric variables it is a non-symmetric Cramer's \emph{V} (when \code{{effectsize}} is available)
 }
 \description{
@@ -176,6 +176,8 @@ summary(result)
 \dontshow{\}) # examplesIf}
 }
 \references{
+Ayres, L. P. (1920). The correlation ratio. The Journal of Educational Research, 2(1), 452-456.
+
 \itemize{
 \item Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
 Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
