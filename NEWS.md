@@ -2,6 +2,9 @@
 
 ## Changes
 
+* `check_group_variation()` now returns a numeric effect size of the grouping
+  variable's predictive association strength.
+
 * Updated test-files to fix deprecated names.
 
 * `r2()` now also covers remaining families from package *glmmTMB* and defaults
