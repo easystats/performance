@@ -9,6 +9,12 @@
 
 ## Bug fixes
 
+* `r2_mcfadden()` now uses the number of estimated parameters in the penalty
+  of the adjusted R2. Previously the component list returned by
+  `insight::find_parameters()` was counted instead of the parameters inside
+  it, so the penalty was almost always 1 and the adjusted value barely
+  differed from the unadjusted one (#933).
+
 * `check_collinearity()` now properly warns when the `vcov` matrix is rank
   deficient (#922).
 
