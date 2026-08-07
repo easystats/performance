@@ -33,7 +33,10 @@ r2_mcfadden <- function(model, ...) {
 
 .r2_mcfadden <- function(model, l_null) {
   l_full <- insight::get_loglikelihood(model)
-  k <- length(insight::find_parameters(model))
+  # number of estimated parameters, for the adjustment penalty. Not
+  # `length(find_parameters(model))`: that counts the model components
+  # (usually 1), not the parameters inside them (#933).
+  k <- insight::n_parameters(model)
   mcfadden <- 1 - (as.vector(l_full) / as.vector(l_null))
   mcfadden_adjusted <- 1 - ((as.vector(l_full) - k) / as.vector(l_null))
 

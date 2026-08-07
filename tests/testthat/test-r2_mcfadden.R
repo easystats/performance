@@ -12,7 +12,7 @@ test_that("r2_mcfadden", {
         structure(
           list(
             R2 = c(`McFadden's R2` = 0.0465152150591893),
-            R2_adjusted = c(`adjusted McFadden's R2` = 0.0459671013089695)
+            R2_adjusted = c(`adjusted McFadden's R2` = 0.0421303069)
           ),
           model_type = "Generalized Linear",
           class = "r2_generic"
@@ -86,4 +86,25 @@ test_that("r2, glmmTMB negative-binomial without random effects", {
   # nbinom1 is handled by the same branch.
   m1 <- glmmTMB::glmmTMB(y ~ 1 + x, data = dd, family = glmmTMB::nbinom1())
   expect_equal(r2(m1)$R2, 0.1406573, tolerance = 1e-4, ignore_attr = TRUE)
+})
+
+test_that("adjusted McFadden's R2 penalizes by the number of parameters", {
+  m <- glm(am ~ mpg + hp + wt, data = mtcars, family = binomial)
+  out <- r2_mcfadden(m)
+
+  ll_full <- as.vector(insight::get_loglikelihood(m))
+  ll_null <- as.vector(insight::get_loglikelihood(insight::null_model(m)))
+  k <- insight::n_parameters(m)
+
+  expect_identical(k, 4L)
+  expect_equal(
+    out$R2_adjusted,
+    1 - ((ll_full - k) / ll_null),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
+
+  # reference values from DescTools::PseudoR2(m, c("McFadden", "McFaddenAdj"))
+  expect_equal(out$R2, 0.7972202, tolerance = 1e-5, ignore_attr = TRUE)
+  expect_equal(out$R2_adjusted, 0.6121632, tolerance = 1e-5, ignore_attr = TRUE)
 })
