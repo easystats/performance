@@ -333,8 +333,12 @@ plot.compare_performance <- function(x, ...) {
     i
   })
 
-  # recode some indices, so higher values = better fit
-  for (i in c("RMSE", "Sigma")) {
+  # recode some indices, so higher values = better fit. Log_loss belongs here
+  # for the same reason RMSE does: it is an error measure, so the model with
+  # the smallest value is the best one. The scoring rules do not: Score_log
+  # runs over [-Inf, 0] and Score_spherical over [0, 1], and both are already
+  # oriented so that larger is better.
+  for (i in c("RMSE", "Sigma", "Log_loss")) {
     if (i %in% colnames(out)) {
       out[[i]] <- 1 - out[[i]]
     }

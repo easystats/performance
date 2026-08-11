@@ -12,6 +12,11 @@
 
 ## Bug fixes
 
+* `compare_performance(rank = TRUE)` now ranks `Log_loss` in the right
+  direction. It was normalized along with the other indices but never flipped,
+  so the model with the largest log-loss got the highest performance score and
+  the best-fitting model was listed last (#917).
+
 * `r2_mcfadden()` now uses the number of estimated parameters in the penalty
   of the adjusted R2. Previously the component list returned by
   `insight::find_parameters()` was counted instead of the parameters inside
