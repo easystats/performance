@@ -73,7 +73,14 @@
 #' indicates if and which predictors are possibly affected by heterogeneity
 #' bias.
 #'
-#' @return A data frame with Group, Variable, Variation and Design columns.
+#' @return A data frame with Group, Variable, Variation, Design, and r columns.
+#'   `r` is a correlation coefficient representing the grouping variable's predictive association strength:
+#'   when it is 0 the grouping variable carries no predictive information (`"within"`),
+#'   and when it is 1 the variable is perfectly predicted by the grouping variable (`"between"`).
+#'     - For numeric variables it is the square-root of the inter class correlation (ICC), aka the correlation ratio \eqn{\eta} (Ayres, 1920).
+#'     - For non-numeric variables it is a non-symmetric Cramer's _V_ (when `{effectsize}` is available)
+#'
+#' @references Ayres, L. P. (1920). The correlation ratio. The Journal of Educational Research, 2(1), 452-456.
 #'
 #' @seealso
 #' For further details, read the vignette
@@ -216,10 +223,11 @@ check_group_variation.data.frame <- function(
   combinations <- combinations[combinations$Variable != combinations$Group, ]
   combinations$Variation <- NA_character_
   combinations$Design <- NA_character_
+  combinations$r <- NA_real_
 
   # initialize lists
   for (i in seq_len(nrow(combinations))) {
-    combinations[i, c("Variation", "Design")] <- .check_nested(
+    combinations[i, c("Variation", "Design", "r")] <- .check_nested(
       x,
       combinations[i, "Group"],
       combinations[i, "Variable"],
@@ -241,8 +249,14 @@ check_group_variation.data.frame <- function(
 # methods -------------------------------------------------------------
 
 #' @export
-print.check_group_variation <- function(x, ...) {
+print.check_group_variation <- function(x, digits = 3, zap_small = TRUE, ...) {
   x_orig <- x
+  x$r <- insight::format_value(
+    x$r,
+    digits = digits,
+    zap_small = zap_small,
+    lead_zero = FALSE
+  )
 
   if (insight::n_unique(x$Group) == 1L) {
     x$Group <- NULL
@@ -264,7 +278,7 @@ print.check_group_variation <- function(x, ...) {
 
 
 #' @export
-print_html.check_group_variation <- function(x, ...) {
+print_html.check_group_variation <- function(x, digits = 3, zap_small = TRUE, ...) {
   x_orig <- x
   caption <- "Check group variation"
 
@@ -273,6 +287,13 @@ print_html.check_group_variation <- function(x, ...) {
   } else {
     group_by <- "group"
   }
+
+  x$r <- insight::format_value(
+    x$r,
+    digits = digits,
+    zap_small = zap_small,
+    lead_zero = FALSE
+  )
 
   insight::export_table(
     x,
@@ -332,7 +353,7 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
 #' @keywords internals
 .check_nested <- function(data, by, predictor, ...) {
   if (insight::n_unique(data[[predictor]]) == 1L) {
-    return(NA_character_)
+    return(list(NA_character_, NA_character_, NA_real_))
   }
 
   UseMethod(".check_nested", data[[predictor]])
@@ -356,22 +377,24 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
   var_between <- stats::var(d[[between_name]], na.rm = TRUE)
   var_within <- stats::var(d[[within_name]], na.rm = TRUE)
   icc <- var_between / (var_between + var_within)
+  eta <- sqrt(icc)
 
   is_between <- icc > tolerance_numeric
   is_within <- (1 - icc) > tolerance_numeric
   is_both <- is_between && is_within
 
   if (is_both) {
-    return(c("both", NA_character_))
+    return(list("both", NA_character_, eta))
   }
   if (is_between) {
-    return(c("between", NA_character_))
+    return(list("between", NA_character_, eta))
   }
   if (is_within) {
-    return(c("within", NA_character_))
+    return(list("within", NA_character_, eta))
   }
 
-  NA_character_
+  # fallback, if none of the above is true, return NA
+  list(NA_character_, NA_character_, eta)
 }
 
 #' @keywords internals
@@ -393,6 +416,24 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
   complete <- stats::complete.cases(group, variable)
   group <- droplevels(as.factor(group[complete]))
   variable <- variable[complete]
+
+  # Effect size
+  tab <- table(variable, group)
+  if (
+    insight::check_if_installed(
+      "effectsize",
+      reason = "for calculating effect sizes",
+      stop = FALSE
+    )
+  ) {
+    if (nrow(tab) < ncol(tab)) {
+      es <- effectsize::cramers_v(tab, ci = NULL, adjust = FALSE)[[1]]
+    } else {
+      es <- effectsize::tschuprows_t(tab, ci = NULL, adjust = FALSE)[[1]]
+    }
+  } else {
+    es <- NA_real_
+  }
 
   struct <- NA_character_
 
@@ -419,32 +460,31 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
   n_uniques <- tapply(variable, group, insight::n_unique)
   is_between <- all(n_uniques == 1L)
   if (is_between) {
-    return(c("between", struct))
+    return(list("between", struct, es))
   }
 
   # If each group has a different number of unique values,
   # then it is partially nested/crossed.
   if (!insight::has_single_value(n_uniques)) {
-    return(c("both", struct))
+    return(list("both", struct, es))
   }
 
   # Is the variable crossed?
   variable_levels <- unique(variable)
   has_all <- tapply(variable, group, function(v) all(variable_levels %in% v))
   if (!all(has_all)) {
-    return(c("both", struct))
+    return(list("both", struct, es))
   }
 
   if (tolerance_factor == "crossed") {
-    return(c("within", "crossed"))
+    return(list("within", "crossed", es))
   }
 
   # Is the variable crossed and balanced?
-  tab <- table(variable, group)
   is_balanced <- all(apply(tab, 2, insight::has_single_value))
   if (is_balanced) {
-    return(c("within", "crossed"))
+    return(list("within", "crossed", es))
   }
 
-  c("both", "crossed")
+  list("both", "crossed", es)
 }
