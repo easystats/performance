@@ -260,5 +260,6 @@ test_that("compare_performance, RMSE and Sigma still rank in the right direction
 
   expect_identical(out$Name, c("l_best", "l_worst"))
   expect_true(all(diff(out$RMSE) > 0))
+  expect_true(all(diff(out$Sigma) > 0))
   expect_true(all(diff(out$Performance_Score) < 0))
 })
