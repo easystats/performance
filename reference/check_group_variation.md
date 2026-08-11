@@ -91,7 +91,15 @@ summary(object, flatten = FALSE, ...)
 
 ## Value
 
-A data frame with Group, Variable, Variation and Design columns.
+A data frame with Group, Variable, Variation, Design, and r columns. `r`
+is a correlation coefficient representing the grouping variable's
+predictive association strength: when it is 0 the grouping variable
+carries no predictive information (`"within"`), and when it is 1 the
+variable is perfectly predicted by the grouping variable
+(`"between"`). - For numeric variables it is the square-root of the
+inter class correlation (ICC), aka the correlation ratio \\\eta\\
+(Ayres, 1920). - For non-numeric variables it is a non-symmetric
+Cramer's *V* (when `{effectsize}` is available)
 
 ## Details
 
@@ -152,6 +160,9 @@ heterogeneity bias.
 
 ## References
 
+Ayres, L. P. (1920). The correlation ratio. The Journal of Educational
+Research, 2(1), 452-456.
+
 - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
   Modeling of Time-Series Cross-Sectional and Panel Data. Political
   Science Research and Methods, 3(1), 133–153.
@@ -170,33 +181,33 @@ data(npk)
 check_group_variation(npk, by = "block")
 #> Check block variation
 #> 
-#> Variable | Variation |  Design
-#> ------------------------------
-#> N        |    within | crossed
-#> P        |    within | crossed
-#> K        |    within | crossed
-#> yield    |      both |        
+#> Variable | Variation |  Design |    r
+#> -------------------------------------
+#> N        |    within | crossed | .000
+#> P        |    within | crossed | .000
+#> K        |    within | crossed | .000
+#> yield    |      both |         | .626
 
 data(iris)
 check_group_variation(iris, by = "Species")
 #> Check Species variation
 #> 
-#> Variable     | Variation | Design
-#> ---------------------------------
-#> Sepal.Length |      both |       
-#> Sepal.Width  |      both |       
-#> Petal.Length |      both |       
-#> Petal.Width  |      both |       
+#> Variable     | Variation | Design |    r
+#> ----------------------------------------
+#> Sepal.Length |      both |        | .787
+#> Sepal.Width  |      both |        | .633
+#> Petal.Length |      both |        | .970
+#> Petal.Width  |      both |        | .964
 
 data(ChickWeight)
 check_group_variation(ChickWeight, by = "Chick")
 #> Check Chick variation
 #> 
-#> Variable | Variation | Design
-#> -----------------------------
-#> weight   |      both |       
-#> Time     |      both |       
-#> Diet     |   between |       
+#> Variable | Variation | Design |     r
+#> -------------------------------------
+#> weight   |      both |        |  .426
+#> Time     |      both |        |  .139
+#> Diet     |   between |        | 1.000
 
 # A subset of mlmRev::egsingle
 egsingle <- data.frame(
@@ -224,23 +235,23 @@ result <- check_group_variation(
 result
 #> Check schoolid variation
 #> 
-#> Variable | Variation | Design
-#> -----------------------------
-#> childid  |      both | nested
-#> lowinc   |   between | nested
-#> female   |      both |       
-#> year     |    within |       
-#> math     |      both |       
+#> Variable | Variation | Design |     r
+#> -------------------------------------
+#> childid  |      both | nested |  .760
+#> lowinc   |   between | nested | 1.000
+#> female   |      both |        |  .577
+#> year     |    within |        |  .000
+#> math     |      both |        |  .274
 #> 
 #> Check childid variation
 #> 
-#> Variable | Variation | Design
-#> -----------------------------
-#> schoolid |   between |       
-#> lowinc   |   between |       
-#> female   |   between |       
-#> year     |    within |       
-#> math     |      both |       
+#> Variable | Variation | Design |     r
+#> -------------------------------------
+#> schoolid |   between |        | 1.000
+#> lowinc   |   between |        | 1.000
+#> female   |   between |        | 1.000
+#> year     |    within |        |  .000
+#> math     |      both |        |  .290
 
 summary(result)
 #> Possible heterogeneity bias due to following predictors:
@@ -253,9 +264,9 @@ data(sleepstudy, package = "lme4")
 check_group_variation(sleepstudy, select = "Days", by = "Subject")
 #> Check Subject variation
 #> 
-#> Variable | Variation | Design
-#> -----------------------------
-#> Days     |    within |       
+#> Variable | Variation | Design |    r
+#> ------------------------------------
+#> Days     |    within |        | .000
 
 # Or
 mod <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
@@ -263,9 +274,9 @@ result <- check_group_variation(mod)
 result
 #> Check Subject variation
 #> 
-#> Variable | Variation | Design
-#> -----------------------------
-#> Days     |    within |       
+#> Variable | Variation | Design |    r
+#> ------------------------------------
+#> Days     |    within |        | .000
 
 summary(result)
 #> No predictor found that could cause heterogeneity bias.
