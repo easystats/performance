@@ -233,3 +233,33 @@ test_that("compare_performance, lavaan", {
     )
   )
 })
+
+
+test_that("compare_performance, Log_loss ranks in the right direction", {
+  data(mtcars)
+  m_best <- glm(am ~ mpg + hp + wt, data = mtcars, family = binomial())
+  m_mid <- glm(am ~ mpg, data = mtcars, family = binomial())
+  m_worst <- glm(am ~ 1, data = mtcars, family = binomial())
+
+  out <- compare_performance(m_best, m_mid, m_worst, metrics = "LOGLOSS", rank = TRUE)
+
+  # log-loss is an error measure, so the smallest value is the best model and
+  # must come first once the table is ranked (#917)
+  expect_identical(out$Name, c("m_best", "m_mid", "m_worst"))
+  expect_true(all(diff(out$Log_loss) > 0))
+  expect_true(all(diff(out$Performance_Score) < 0))
+})
+
+
+test_that("compare_performance, RMSE and Sigma still rank in the right direction", {
+  data(mtcars)
+  l_best <- lm(mpg ~ wt + cyl + hp, data = mtcars)
+  l_worst <- lm(mpg ~ 1, data = mtcars)
+
+  out <- compare_performance(l_best, l_worst, metrics = c("RMSE", "SIGMA"), rank = TRUE)
+
+  expect_identical(out$Name, c("l_best", "l_worst"))
+  expect_true(all(diff(out$RMSE) > 0))
+  expect_true(all(diff(out$Sigma) > 0))
+  expect_true(all(diff(out$Performance_Score) < 0))
+})
