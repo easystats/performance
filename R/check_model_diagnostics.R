@@ -107,6 +107,9 @@
 
   insight::check_if_installed("lme4")
 
+  ## TODO: check if we can simplify code by using following:
+  ## as.data.frame(lme4::ranef(model, condVar = TRUE), stringsAsFactors = FALSE)
+
   tryCatch(
     if (inherits(model, "glmmTMB")) {
       var_attr <- "condVar"
