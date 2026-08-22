@@ -138,7 +138,9 @@ test_clusters <- function(
 
   column_sd <- apply(x, 2L, stats::sd)
   if (!all(is.finite(column_sd)) || any(column_sd == 0)) {
-    insight::format_error("`x` cannot contain constant columns when `standardize = TRUE`.")
+    insight::format_error(
+      "`x` cannot contain constant columns when `standardize = TRUE`."
+    )
   }
   scale(x)
 }
