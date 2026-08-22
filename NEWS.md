@@ -2,6 +2,10 @@
 
 ## Changes
 
+* New function `test_clusters()` uses the `matchednull` package to test whether
+  a selected cluster count exceeds what matched-null data with the same margins
+  and correlations would produce.
+
 * `check_group_variation()` now returns a numeric effect size of the grouping
   variable's predictive association strength.
 
