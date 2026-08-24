@@ -23,7 +23,7 @@
 #' A data frame with two columns, one with the group (cluster) names and one
 #' with the median odds ratios.
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "datawizdard"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "datawizard"), quietly = TRUE))
 #' data(sleepstudy, package = "lme4")
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 #' sleepstudy$high_reaction <- as.factor(datawizard::categorize(sleepstudy$Reaction))

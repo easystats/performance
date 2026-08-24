@@ -32,7 +32,7 @@ individual in the lower-risk cluster.
 }
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "datawizdard"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "datawizard"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$high_reaction <- as.factor(datawizard::categorize(sleepstudy$Reaction))
