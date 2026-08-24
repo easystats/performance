@@ -50,10 +50,8 @@ performance_poor <- function(x) {
   model_info <- insight::model_info(x)
 
   valid_ior <- .valid_roc_models(x) &&
-    any(unlist(
-      model_info[c("is_binomial", "is_ordinal", "is_multinomial", "is_cumulative")],
-      use.names = FALSE
-    )) &&
+    isTRUE(model_info$is_logit) &&
+    isTRUE(model_info$is_binomial) &&
     insight::is_mixed_model(x)
 
   if (!valid_ior) {
