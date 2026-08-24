@@ -48,14 +48,14 @@
 performance_ior <- function(x) {
   model_info <- insight::model_info(x)
 
-  valid_mor <- .valid_roc_models(x) &&
+  valid_ior <- .valid_roc_models(x) &&
     any(unlist(
       model_info[c("is_binomial", "is_ordinal", "is_multinomial", "is_cumulative")],
       use.names = FALSE
     )) &&
     insight::is_mixed_model(x)
 
-  if (!valid_mor) {
+  if (!valid_ior) {
     insight::format_error("The supplied model needs to be a logistic multilevel model.")
   }
 

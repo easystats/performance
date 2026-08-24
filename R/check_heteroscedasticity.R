@@ -5,7 +5,7 @@
 #'   the model errors (or residuals) have constant variance. If this assumption
 #'   is violated the p-values from the model are no longer reliable. For
 #'   generalized linear models, or models from package *glmmTMB* with other
-#'   families tha Gaussian, no formal test is carried out, but a `plot()`
+#'   families than Gaussian, no formal test is carried out, but a `plot()`
 #'   method is available, i.e. you can run
 #'   `plot(check_heteroscedasticity(model))`.
 #'
