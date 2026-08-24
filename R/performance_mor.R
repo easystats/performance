@@ -9,6 +9,16 @@
 #'
 #' @param x A (logistic) multilevel model.
 #'
+#' @details
+#' The MOR is always greater than or equal to 1 and can be interpreted as follows:
+#' - *MOR close to 1*: No Cluster Effect. There is (almost) no between-cluster
+#'   heterogeneity, meaning cluster membership plays no role in the outcome.
+#' - *MOR > 1*: Presence of Heterogeneity. Indicates meaningful variation across
+#'   clusters. If two persons are randomly picked from two different clusters,
+#'   the MOR represents the median factor by which the odds of the outcome
+#'   increase for the individual from the higher-risk cluster compared to the
+#'   individual in the lower-risk cluster.
+#'
 #' @return
 #' A data frame with two columns, one with the group (cluster) names and one
 #' with the median odds ratios.
