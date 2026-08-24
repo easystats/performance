@@ -22,9 +22,9 @@ risk to the person at lower risk.
 \details{
 The MOR is always greater than or equal to 1 and can be interpreted as follows:
 \itemize{
-\item \emph{MOR close to 1}: No Cluster Effect. There is (almost) no between-cluster
+\item \emph{MOR close to 1:} No Cluster Effect. There is (almost) no between-cluster
 heterogeneity, meaning cluster membership plays no role in the outcome.
-\item \emph{MOR > 1}: Presence of Heterogeneity. Indicates meaningful variation across
+\item \emph{MOR > 1:} Presence of Heterogeneity. Indicates meaningful variation across
 clusters. If two persons are randomly picked from two different clusters,
 the MOR represents the median factor by which the odds of the outcome
 increase for the individual from the higher-risk cluster compared to the
