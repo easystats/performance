@@ -46,11 +46,11 @@ m <- lme4::glmer(
 )
 performance_ior(m)
 
-m <- lme4::glmer(
+m <- suppressWarnings(lme4::glmer(
   high_reaction ~ Days + (1 | mygrp) + (1 | Subject),
   data = sleepstudy,
   family = "binomial"
-)
+))
 performance_ior(m)
 \dontshow{\}) # examplesIf}
 }
