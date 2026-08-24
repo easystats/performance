@@ -37,6 +37,16 @@ odds ratios across clusters due to residual cluster heterogeneity.
   cluster could actually experience lower odds of the outcome if the new
   cluster happens to have a very low unobserved random effect.
 
+## See also
+
+[`performance_poor()`](https://easystats.github.io/performance/reference/performance_poor.md)
+and
+[`performance_mor()`](https://easystats.github.io/performance/reference/performance_mor.md)
+as additional metrics specifically for logistic multilevel regression
+models, and
+[`icc()`](https://easystats.github.io/performance/reference/icc.md) for
+multilevel models in general.
+
 ## Examples
 
 ``` r

@@ -40,6 +40,16 @@ strong warning to researchers against making overgeneralized statements
 about the utility of a stratum characteristic, as the average OR masks
 massive internal heterogeneity.
 
+## See also
+
+[`performance_ior()`](https://easystats.github.io/performance/reference/performance_ior.md)
+and
+[`performance_mor()`](https://easystats.github.io/performance/reference/performance_mor.md)
+as additional metrics specifically for logistic multilevel regression
+models, and
+[`icc()`](https://easystats.github.io/performance/reference/icc.md) for
+multilevel models in general.
+
 ## Examples
 
 ``` r

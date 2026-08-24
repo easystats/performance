@@ -44,6 +44,16 @@ effects on individual health: integrating random and fixed effects in
 multilevel logistic regression. American Journal of Epidemiology,
 161(1), 81-88.
 
+## See also
+
+[`performance_ior()`](https://easystats.github.io/performance/reference/performance_ior.md)
+and
+[`performance_poor()`](https://easystats.github.io/performance/reference/performance_poor.md)
+as additional metrics specifically for logistic multilevel regression
+models, and
+[`icc()`](https://easystats.github.io/performance/reference/icc.md) for
+multilevel models in general.
+
 ## Examples
 
 ``` r

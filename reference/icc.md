@@ -317,6 +317,15 @@ be meaningful.
   applications and data analysis methods (2nd ed). Thousand Oaks: Sage
   Publications.
 
+## See also
+
+[`performance_ior()`](https://easystats.github.io/performance/reference/performance_ior.md),
+[`performance_mor()`](https://easystats.github.io/performance/reference/performance_mor.md)
+and
+[`performance_poor()`](https://easystats.github.io/performance/reference/performance_poor.md)
+as additional metrics specifically for logistic multilevel regression
+models.
+
 ## Examples
 
 ``` r
