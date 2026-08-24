@@ -54,3 +54,8 @@ m <- suppressWarnings(lme4::glmer(
 performance_ior(m)
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+\code{\link[=performance_poor]{performance_poor()}} and \code{\link[=performance_mor]{performance_mor()}} as additional
+metrics specifically for logistic multilevel regression models, and \code{\link[=icc]{icc()}}
+for multilevel models in general.
+}

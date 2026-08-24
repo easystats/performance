@@ -8,6 +8,10 @@
 #'
 #' @param x A (logistic) multilevel model.
 #'
+#' @seealso [`performance_poor()`] and [`performance_mor()`] as additional
+#' metrics specifically for logistic multilevel regression models, and [`icc()`]
+#' for multilevel models in general.
+#'
 #' @details
 #' Unlike a standard confidence interval (which reflects sample estimation
 #' uncertainty around the coefficients), the IOR reflects the variation in odds

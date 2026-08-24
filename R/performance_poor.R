@@ -24,6 +24,10 @@
 #' utility of a stratum characteristic, as the average OR masks massive
 #' internal heterogeneity.
 #'
+#' @seealso [`performance_ior()`] and [`performance_mor()`] as additional
+#' metrics specifically for logistic multilevel regression models, and [`icc()`]
+#' for multilevel models in general.
+#'
 #' @return
 #' A data frame with the parameter names and their POOR estimates.
 #'

@@ -57,3 +57,8 @@ Larsen, K., & Merlo, J. (2005). Appropriate assessment of neighborhood effects
 on individual health: integrating random and fixed effects in multilevel
 logistic regression. American Journal of Epidemiology, 161(1), 81-88.
 }
+\seealso{
+\code{\link[=performance_ior]{performance_ior()}} and \code{\link[=performance_poor]{performance_poor()}} as additional
+metrics specifically for logistic multilevel regression models, and \code{\link[=icc]{icc()}}
+for multilevel models in general.
+}

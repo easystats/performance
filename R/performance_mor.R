@@ -9,6 +9,10 @@
 #'
 #' @param x A (logistic) multilevel model.
 #'
+#' @seealso [`performance_ior()`] and [`performance_poor()`] as additional
+#' metrics specifically for logistic multilevel regression models, and [`icc()`]
+#' for multilevel models in general.
+#'
 #' @details
 #' The MOR is always greater than or equal to 1 and can be interpreted as follows:
 #' - *MOR close to 1:* No Cluster Effect. There is (almost) no between-cluster
