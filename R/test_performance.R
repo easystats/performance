@@ -100,7 +100,7 @@
 #'   models are nested.
 #'
 #'   Note: this test is also available in base R
-#'   through the [`anova()`][anova] function. It returns an `F-value` column
+#'   through the [`anova()`][stats::anova] function. It returns an `F-value` column
 #'   as a statistic and its associated p-value.
 #'
 #' - **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
