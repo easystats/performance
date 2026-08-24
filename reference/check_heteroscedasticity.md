@@ -2,10 +2,10 @@
 
 Significance testing for linear regression models assumes that the model
 errors (or residuals) have constant variance. If this assumption is
-violated the p-values from the model are no longer reliable. For models
-from package *glmmTMB* with other families tha Gaussian, no formal test
-is carried out, but a
-` `[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method is
+violated the p-values from the model are no longer reliable. For
+generalized linear models, or models from package *glmmTMB* with other
+families than Gaussian, no formal test is carried out, but a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method is
 available, i.e. you can run `plot(check_heteroscedasticity(model))`.
 
 ## Usage

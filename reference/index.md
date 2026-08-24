@@ -125,11 +125,15 @@
   : Cross-validated model performance
 - [`performance_hosmer()`](https://easystats.github.io/performance/reference/performance_hosmer.md)
   : Hosmer-Lemeshow goodness-of-fit test
+- [`performance_ior()`](https://easystats.github.io/performance/reference/performance_ior.md)
+  : Interval Odds Ratio
 - [`performance_logloss()`](https://easystats.github.io/performance/reference/performance_logloss.md)
   : Log Loss
 - [`performance_mae()`](https://easystats.github.io/performance/reference/performance_mae.md)
   [`mae()`](https://easystats.github.io/performance/reference/performance_mae.md)
   : Mean Absolute Error of Models
+- [`performance_mor()`](https://easystats.github.io/performance/reference/performance_mor.md)
+  : Median Odds Ratio
 - [`performance_mse()`](https://easystats.github.io/performance/reference/performance_mse.md)
   [`mse()`](https://easystats.github.io/performance/reference/performance_mse.md)
   : Mean Square Error of Linear Models
