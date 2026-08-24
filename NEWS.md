@@ -2,8 +2,9 @@
 
 ## Changes
 
-* New functions `performance_mor()` and `performance_ior()` to calculate median
-  odds ratios and interval odds ratios for logistic multilevel regression.
+* New functions `performance_mor()`, `performance_poor()` and `performance_ior()`
+  to calculate median odds ratios, proportions of opposed odds ratios, and
+  interval odds ratios for logistic multilevel regression.
 
 * `check_group_variation()` now returns a numeric effect size of the grouping
   variable's predictive association strength.
