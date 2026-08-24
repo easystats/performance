@@ -139,6 +139,8 @@
   : Mean Square Error of Linear Models
 - [`performance_pcp()`](https://easystats.github.io/performance/reference/performance_pcp.md)
   : Percentage of Correct Predictions
+- [`performance_poor()`](https://easystats.github.io/performance/reference/performance_poor.md)
+  : Proportion of Opposed Odds Ratios
 - [`performance_reliability()`](https://easystats.github.io/performance/reference/performance_reliability.md)
   [`performance_dvour()`](https://easystats.github.io/performance/reference/performance_reliability.md)
   : Random Effects Reliability

@@ -57,11 +57,11 @@ performance_ior(m)
 #> (Intercept) | Subject | [0.00,   5.21]
 #> Days        | Subject | [0.01, 348.24]
 
-m <- lme4::glmer(
+m <- suppressWarnings(lme4::glmer(
   high_reaction ~ Days + (1 | mygrp) + (1 | Subject),
   data = sleepstudy,
   family = "binomial"
-)
+))
 #> boundary (singular) fit: see help('isSingular')
 performance_ior(m)
 #> boundary (singular) fit: see help('isSingular')
