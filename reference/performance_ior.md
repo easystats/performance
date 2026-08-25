@@ -2,12 +2,15 @@
 
 The Interval Odds Ratio (IOR) evaluates the fixed effect of a
 cluster-level (level 2) covariate by explicitly incorporating the
-residual between-cluster heterogeneity.
+residual between-cluster heterogeneity. `interval_odds_ratio()` is an
+alias for `performance_ior()`.
 
 ## Usage
 
 ``` r
 performance_ior(x)
+
+interval_odds_ratio(x)
 ```
 
 ## Arguments

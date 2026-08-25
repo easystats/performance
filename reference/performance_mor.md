@@ -3,12 +3,15 @@
 A measure of cluster-level variation in multilevel logistic regression,
 defined as the median odds ratio between two randomly chosen individuals
 from different clusters with identical covariates, comparing the person
-at higher risk to the person at lower risk.
+at higher risk to the person at lower risk. `median_odds_ratio()` is an
+alias for `performance_mor()`.
 
 ## Usage
 
 ``` r
 performance_mor(x)
+
+median_odds_ratio(x)
 ```
 
 ## Arguments
