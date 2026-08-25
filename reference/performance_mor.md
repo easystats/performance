@@ -49,11 +49,6 @@ Logistic Regression Analysis of Discriminatory Accuracy: The Case of
 Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
 [doi:10.1371/journal.pone.0153778](https://doi.org/10.1371/journal.pone.0153778)
 
-Larsen, K., & Merlo, J. (2005). Appropriate assessment of neighborhood
-effects on individual health: integrating random and fixed effects in
-multilevel logistic regression. American Journal of Epidemiology,
-161(1), 81-88.
-
 ## See also
 
 [`performance_ior()`](https://easystats.github.io/performance/reference/performance_ior.md)
