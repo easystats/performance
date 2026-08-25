@@ -60,6 +60,7 @@
 #'   family = "binomial"
 #' ))
 #' performance_poor(m)
+#'
 #' @export
 performance_poor <- function(x) {
   model_info <- insight::model_info(x)

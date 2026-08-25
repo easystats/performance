@@ -59,6 +59,7 @@
 #'   family = "binomial"
 #' ))
 #' performance_ior(m)
+#'
 #' @export
 performance_ior <- function(x) {
   model_info <- insight::model_info(x)

@@ -57,10 +57,6 @@
 #' ))
 #' performance_mor(m)
 #'
-#' @references
-#' Larsen, K., & Merlo, J. (2005). Appropriate assessment of neighborhood effects
-#' on individual health: integrating random and fixed effects in multilevel
-#' logistic regression. American Journal of Epidemiology, 161(1), 81-88.
 #' @export
 performance_mor <- function(x) {
   model_info <- insight::model_info(x)

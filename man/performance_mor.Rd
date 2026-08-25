@@ -62,10 +62,6 @@ Merlo J, Wagner P, Ghith N, Leckie G. An Original Stepwise Multilevel
 Logistic Regression Analysis of Discriminatory Accuracy: The Case of
 Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
 \doi{10.1371/journal.pone.0153778}
-
-Larsen, K., & Merlo, J. (2005). Appropriate assessment of neighborhood effects
-on individual health: integrating random and fixed effects in multilevel
-logistic regression. American Journal of Epidemiology, 161(1), 81-88.
 }
 \seealso{
 \code{\link[=performance_ior]{performance_ior()}} and \code{\link[=performance_poor]{performance_poor()}} as additional
