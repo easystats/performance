@@ -138,7 +138,7 @@ test can be run. Importantly, this test only makes statistical sense if the
 models are nested.
 
 Note: this test is also available in base R
-through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
+through the \code{\link[stats:anova]{anova()}} function. It returns an \code{F-value} column
 as a statistic and its associated p-value.
 \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}:
 The LRT tests which model is a better (more likely) explanation of the

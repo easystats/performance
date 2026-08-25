@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.17.1.8
+Version: 0.17.1.10
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -173,4 +173,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

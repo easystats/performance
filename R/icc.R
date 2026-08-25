@@ -152,6 +152,9 @@
 #' very large, the variance ratio in the output makes no sense, e.g. because
 #' it is negative. In such cases, it might help to use `robust = TRUE`.
 #'
+#' @seealso [`performance_ior()`], [`performance_mor()`] and [`performance_poor()`]
+#' as additional metrics specifically for logistic multilevel regression models.
+#'
 #' @examplesIf require("lme4")
 #' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' icc(model)

@@ -280,3 +280,7 @@ applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 Publications.
 }
 }
+\seealso{
+\code{\link[=performance_ior]{performance_ior()}}, \code{\link[=performance_mor]{performance_mor()}} and \code{\link[=performance_poor]{performance_poor()}}
+as additional metrics specifically for logistic multilevel regression models.
+}
