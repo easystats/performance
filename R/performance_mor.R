@@ -27,6 +27,17 @@
 #' A data frame with two columns, one with the group (cluster) names and one
 #' with the median odds ratios.
 #'
+#' @references
+#' Larsen K, Merlo J. Appropriate Assessment of Neighborhood Effects on Individual
+#' Health: Integrating Random and Fixed Effects in Multilevel Logistic
+#' Regression. American Journal of Epidemiology (2005) 161:81–88.
+#' \doi{10.1093/aje/kwi017}
+#'
+#' Merlo J, Wagner P, Ghith N, Leckie G. An Original Stepwise Multilevel
+#' Logistic Regression Analysis of Discriminatory Accuracy: The Case of
+#' Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
+#' \doi{10.1371/journal.pone.0153778}
+#'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "datawizard"), quietly = TRUE))
 #' data(sleepstudy, package = "lme4")
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

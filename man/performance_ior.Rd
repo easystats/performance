@@ -54,6 +54,17 @@ m <- suppressWarnings(lme4::glmer(
 performance_ior(m)
 \dontshow{\}) # examplesIf}
 }
+\references{
+Larsen K, Merlo J. Appropriate Assessment of Neighborhood Effects on Individual
+Health: Integrating Random and Fixed Effects in Multilevel Logistic
+Regression. American Journal of Epidemiology (2005) 161:81–88.
+\doi{10.1093/aje/kwi017}
+
+Merlo J, Wagner P, Ghith N, Leckie G. An Original Stepwise Multilevel
+Logistic Regression Analysis of Discriminatory Accuracy: The Case of
+Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
+\doi{10.1371/journal.pone.0153778}
+}
 \seealso{
 \code{\link[=performance_poor]{performance_poor()}} and \code{\link[=performance_mor]{performance_mor()}} as additional
 metrics specifically for logistic multilevel regression models, and \code{\link[=icc]{icc()}}
