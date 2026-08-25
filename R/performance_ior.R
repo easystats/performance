@@ -4,7 +4,7 @@
 #' @description
 #' The Interval Odds Ratio (IOR) evaluates the fixed effect of a cluster-level
 #' (level 2) covariate by explicitly incorporating the residual between-cluster
-#' heterogeneity.
+#' heterogeneity. `interval_odds_ratio()` is an alias for `performance_ior()`.
 #'
 #' @param x A (logistic) multilevel model.
 #'
@@ -101,3 +101,9 @@ print.performance_ior <- function(x, ...) {
   cat(insight::export_table(insight::format_table(x), caption = "Interval Odds Ratio"))
   invisible(x)
 }
+
+# alias
+
+#' @rdname performance_ior
+#' @export
+interval_odds_ratio <- performance_ior

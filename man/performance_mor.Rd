@@ -2,9 +2,12 @@
 % Please edit documentation in R/performance_mor.R
 \name{performance_mor}
 \alias{performance_mor}
+\alias{median_odds_ratio}
 \title{Median Odds Ratio}
 \usage{
 performance_mor(x)
+
+median_odds_ratio(x)
 }
 \arguments{
 \item{x}{A (logistic) multilevel model.}
@@ -17,7 +20,8 @@ with the median odds ratios.
 A measure of cluster-level variation in multilevel logistic regression,
 defined as the median odds ratio between two randomly chosen individuals from
 different clusters with identical covariates, comparing the person at higher
-risk to the person at lower risk.
+risk to the person at lower risk. \code{median_odds_ratio()} is an alias for
+\code{performance_mor()}.
 }
 \details{
 The MOR is always greater than or equal to 1 and can be interpreted as follows:

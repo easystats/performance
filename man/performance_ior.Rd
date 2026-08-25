@@ -2,9 +2,12 @@
 % Please edit documentation in R/performance_ior.R
 \name{performance_ior}
 \alias{performance_ior}
+\alias{interval_odds_ratio}
 \title{Interval Odds Ratio}
 \usage{
 performance_ior(x)
+
+interval_odds_ratio(x)
 }
 \arguments{
 \item{x}{A (logistic) multilevel model.}
@@ -15,7 +18,7 @@ A data frame with the parameter names and their interval odds ratios.
 \description{
 The Interval Odds Ratio (IOR) evaluates the fixed effect of a cluster-level
 (level 2) covariate by explicitly incorporating the residual between-cluster
-heterogeneity.
+heterogeneity. \code{interval_odds_ratio()} is an alias for \code{performance_ior()}.
 }
 \details{
 Unlike a standard confidence interval (which reflects sample estimation

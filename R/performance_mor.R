@@ -5,7 +5,8 @@
 #' A measure of cluster-level variation in multilevel logistic regression,
 #' defined as the median odds ratio between two randomly chosen individuals from
 #' different clusters with identical covariates, comparing the person at higher
-#' risk to the person at lower risk.
+#' risk to the person at lower risk. `median_odds_ratio()` is an alias for
+#' `performance_mor()`.
 #'
 #' @param x A (logistic) multilevel model.
 #'
@@ -88,3 +89,9 @@ print.performance_mor <- function(x, ...) {
   cat(insight::export_table(x, caption = "Median Odds Ratio"))
   invisible(x)
 }
+
+# alias
+
+#' @rdname performance_mor
+#' @export
+median_odds_ratio <- performance_mor
