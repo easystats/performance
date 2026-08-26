@@ -12,7 +12,7 @@ binned_residuals(
   show_dots = NULL,
   ci = 0.95,
   ci_type = "exact",
-  residuals = "deviance",
+  residuals = "response",
   iterations = 1000,
   verbose = TRUE,
   ...
@@ -60,10 +60,10 @@ binned_residuals(
 
 - residuals:
 
-  Character, the type of residuals to calculate. Can be `"deviance"`
-  (default), `"pearson"` or `"response"`. It is recommended to use
-  `"response"` only for those models where other residuals are not
-  available.
+  Character, the type of residuals to calculate. Can be `"response"`
+  (default), `"pearson"` or `"deviance"`. Gelman and Hill (2007) propose
+  to use response residuals as default, defined "as observed minus
+  expected values" (cf pp. 97-98).
 
 - iterations:
 
@@ -126,24 +126,42 @@ result
 
 # look at the data frame
 as.data.frame(result)
-#>                 xbar        ybar n       x.lo       x.hi         se     CI_low
-#> conf_int  0.03786483 -0.26905395 5 0.01744776 0.06917366 0.07079661 -0.5299658
-#> conf_int1 0.09514191 -0.44334345 5 0.07087498 0.15160143 0.06530245 -0.7042553
-#> conf_int2 0.25910531  0.03762945 6 0.17159955 0.35374001 1.02017708 -0.3293456
-#> conf_int3 0.47954643 -0.19916717 5 0.38363314 0.54063600 1.16107852 -0.5994783
-#> conf_int4 0.71108931  0.81563262 5 0.57299903 0.89141359 0.19814385  0.5547207
-#> conf_int5 0.97119262 -0.23399465 6 0.91147360 0.99815623 0.77513642 -0.5525066
-#>                CI_high group
-#> conf_int  -0.008142076    no
-#> conf_int1 -0.182431572    no
-#> conf_int2  0.404604465   yes
-#> conf_int3  0.201143953   yes
-#> conf_int4  1.076544495    no
-#> conf_int5  0.084517267   yes
+#>                 xbar        ybar n       x.lo       x.hi         se      CI_low
+#> conf_int  0.03786483 -0.03786483 5 0.01744776 0.06917366 0.01899089 -0.29877671
+#> conf_int1 0.09514191 -0.09514191 5 0.07087498 0.15160143 0.02816391 -0.35605378
+#> conf_int2 0.25910531  0.07422802 6 0.17159955 0.35374001 0.42499664 -0.29274700
+#> conf_int3 0.47954643 -0.07954643 5 0.38363314 0.54063600 0.49728294 -0.47985756
+#> conf_int4 0.71108931  0.28891069 5 0.57299903 0.89141359 0.10975381  0.02799882
+#> conf_int5 0.97119262 -0.13785929 6 0.91147360 0.99815623 0.30361062 -0.45637121
+#>             CI_high group
+#> conf_int  0.2230470    no
+#> conf_int1 0.1657700    no
+#> conf_int2 0.4412030   yes
+#> conf_int3 0.3207647   yes
+#> conf_int4 0.5498226    no
+#> conf_int5 0.1806526   yes
 
 # \donttest{
 # plot
 plot(result, show_dots = TRUE)
+
+# }
+
+# run simulation where we know linearity assumptions are met
+set.seed(1)
+n <- 5000
+x <- runif(n, 0, 10)
+logit_true <- -2 + 0.4 * x
+d <- data.frame(x = x, y = rbinom(n, 1, plogis(logit_true)))
+model <- glm(y ~ x, data = d, family = binomial)
+
+result <- binned_residuals(model, term = "x")
+result
+#> Ok: About 97% of the residuals are inside the error bounds.
+#> 
+
+# \donttest{
+plot(result)
 
 # }
 ```

@@ -70,5 +70,5 @@ Other functions to check model assumptions and and assess model quality:
 ``` r
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_autocorrelation(m)
-#> OK: Residuals appear to be independent and not autocorrelated (p = 0.306).
+#> OK: Residuals appear to be independent and not autocorrelated (p = 0.270).
 ```
