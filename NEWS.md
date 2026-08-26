@@ -1,5 +1,10 @@
 # performance (devel)
 
+## Breaking Changes
+
+* `binned_residuals()` now defaults to using response residuals, in line with
+  the suggestion from Gelman and Hill (2007).
+
 ## Changes
 
 * New functions `performance_mor()`, `performance_poor()` and `performance_ior()`

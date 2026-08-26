@@ -19,9 +19,9 @@
 #'   bootstrap method, where confidence intervals are calculated based on the
 #'   quantiles of the bootstrap distribution.
 #' @param residuals Character, the type of residuals to calculate. Can be
-#'   `"deviance"` (default), `"pearson"` or `"response"`. It is recommended to
-#'   use `"response"` only for those models where other residuals are not
-#'   available.
+#'   `"response"` (default), `"pearson"` or `"deviance"`. Gelman and Hill (2007)
+#'   propose to use response residuals as default, defined "as observed minus
+#'   expected values" (cf pp. 97-98).
 #' @param iterations Integer, the number of iterations to use for the
 #'   bootstrap method. Only used if `ci_type = "boot"`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
@@ -74,6 +74,20 @@
 #' plot(result, show_dots = TRUE)
 #' }
 #'
+#' # run simulation where we know linearity assumptions are met
+#' set.seed(1)
+#' n <- 5000
+#' x <- runif(n, 0, 10)
+#' logit_true <- -2 + 0.4 * x
+#' d <- data.frame(x = x, y = rbinom(n, 1, plogis(logit_true)))
+#' model <- glm(y ~ x, data = d, family = binomial)
+#'
+#' result <- binned_residuals(model, term = "x")
+#' result
+#'
+#' \donttest{
+#' plot(result)
+#' }
 #' @export
 binned_residuals <- function(
   model,
@@ -82,7 +96,7 @@ binned_residuals <- function(
   show_dots = NULL,
   ci = 0.95,
   ci_type = "exact",
-  residuals = "deviance",
+  residuals = "response",
   iterations = 1000,
   verbose = TRUE,
   ...
