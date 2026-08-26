@@ -3,7 +3,7 @@
 ## Breaking Changes
 
 * `binned_residuals()` now defaults to using response residuals, in line with
-  the suggestion from Gelman and Hill 2007.
+  the suggestion from Gelman and Hill (2007).
 
 ## Changes
 

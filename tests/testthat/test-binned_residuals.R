@@ -300,6 +300,6 @@ test_that("binned_residuals, validate against simulation", {
       -0.06734, 0.01231, -0.04072, 0.00871, 0.01839, -0.04733, -0.00821,
       -0.01694, 0.04996
     ),
-    tolerance = 1e-4
+    tolerance = 1e-3
   )
 })

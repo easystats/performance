@@ -45,7 +45,7 @@ bootstrap method, where confidence intervals are calculated based on the
 quantiles of the bootstrap distribution.}
 
 \item{residuals}{Character, the type of residuals to calculate. Can be
-\code{"response"} (default), \code{"pearson"} or \code{"deviance"}. Gelman and Hill (2017)
+\code{"response"} (default), \code{"pearson"} or \code{"deviance"}. Gelman and Hill (2007)
 propose to use response residuals as default, defined "as observed minus
 expected values" (cf pp. 97-98).}
 
@@ -105,7 +105,7 @@ n <- 5000
 x <- runif(n, 0, 10)
 logit_true <- -2 + 0.4 * x
 d <- data.frame(x = x, y = rbinom(n, 1, plogis(logit_true)))
-model <- glm(y ~ x, data = df, family = binomial)
+model <- glm(y ~ x, data = d, family = binomial)
 
 result <- binned_residuals(model, term = "x")
 result
