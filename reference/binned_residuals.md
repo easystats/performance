@@ -12,7 +12,7 @@ binned_residuals(
   show_dots = NULL,
   ci = 0.95,
   ci_type = "exact",
-  residuals = "response",
+  residuals = NULL,
   iterations = 1000,
   verbose = TRUE,
   ...
@@ -60,10 +60,11 @@ binned_residuals(
 
 - residuals:
 
-  Character, the type of residuals to calculate. Can be `"response"`
-  (default), `"pearson"` or `"deviance"`. Gelman and Hill (2007) propose
-  to use response residuals as default, defined "as observed minus
-  expected values" (cf pp. 97-98).
+  Character, the type of residuals to calculate. Can be `"response"`,
+  `"pearson"` or `"deviance"`. For Bernoulli models, response residuals
+  are used as default (defined "as observed minus expected values", (cf
+  Gelman and Hill 2007, pp. 97-98). For other binomial models, deviance
+  residuals are used.
 
 - iterations:
 
