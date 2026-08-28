@@ -1,5 +1,76 @@
 # Changelog
 
+## performance 0.18.0
+
+### Breaking Changes
+
+- [`binned_residuals()`](https://easystats.github.io/performance/reference/binned_residuals.md)
+  now defaults to using response residuals, in line with the suggestion
+  from Gelman and Hill (2007).
+
+### Changes
+
+- New functions
+  [`performance_mor()`](https://easystats.github.io/performance/reference/performance_mor.md),
+  [`performance_poor()`](https://easystats.github.io/performance/reference/performance_poor.md)
+  and
+  [`performance_ior()`](https://easystats.github.io/performance/reference/performance_ior.md)
+  to calculate median odds ratios, proportions of opposed odds ratios,
+  and interval odds ratios for logistic multilevel regression.
+
+- [`check_group_variation()`](https://easystats.github.io/performance/reference/check_group_variation.md)
+  now returns a numeric effect size of the grouping variable’s
+  predictive association strength.
+
+- Updated test-files to fix deprecated names.
+
+- [`r2()`](https://easystats.github.io/performance/reference/r2.md) now
+  also covers remaining families from package *glmmTMB* and defaults to
+  returning McFadden’s R2. Documentation of
+  [`r2()`](https://easystats.github.io/performance/reference/r2.md) was
+  updated accordingly.
+
+### Bug fixes
+
+- `compare_performance(rank = TRUE)` now ranks `Log_loss` in the right
+  direction. It was normalized along with the other indices but never
+  flipped, so the model with the largest log-loss got the highest
+  performance score and the best-fitting model was listed last
+  ([\#917](https://github.com/easystats/performance/issues/917)).
+
+- [`r2_mcfadden()`](https://easystats.github.io/performance/reference/r2_mcfadden.md)
+  now uses the number of estimated parameters in the penalty of the
+  adjusted R2. Previously the component list returned by
+  [`insight::find_parameters()`](https://easystats.github.io/insight/reference/find_parameters.html)
+  was counted instead of the parameters inside it, so the penalty was
+  almost always 1 and the adjusted value barely differed from the
+  unadjusted one
+  ([\#933](https://github.com/easystats/performance/issues/933)).
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now properly warns when the `vcov` matrix is rank deficient
+  ([\#922](https://github.com/easystats/performance/issues/922)).
+
+- [`r2()`](https://easystats.github.io/performance/reference/r2.md) (and
+  hence
+  [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md))
+  no longer errors for `glmmTMB` negative-binomial models
+  (`nbinom1`/`nbinom2`) without random effects, and now returns
+  McFadden’s R2 for them.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now uses Pearson residuals for the homogeneity-of-variance plot of
+  `glmmTMB` and `MixMod` models. Previously these residuals were divided
+  by a single scalar, which is only correct when the variance function
+  does not depend on the mean; for non-mixed binomial and Poisson models
+  that scalar was 1, so the plot could suggest heteroscedasticity for
+  correctly specified models
+  ([\#926](https://github.com/easystats/performance/issues/926)).
+
+- Fixed issue in
+  [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
+  for objects from package *lavaan*.
+
 ## performance 0.17.1
 
 CRAN release: 2026-06-30

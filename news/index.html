@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.17.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,30 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.18.0" id="performance-0180">performance 0.18.0<a class="anchor" aria-label="anchor" href="#performance-0180"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-18-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-18-0"></a></h3>
+<ul><li>
+<code><a href="../reference/binned_residuals.html">binned_residuals()</a></code> now defaults to using response residuals, in line with the suggestion from Gelman and Hill (2007).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-18-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-18-0"></a></h3>
+<ul><li><p>New functions <code><a href="../reference/performance_mor.html">performance_mor()</a></code>, <code><a href="../reference/performance_poor.html">performance_poor()</a></code> and <code><a href="../reference/performance_ior.html">performance_ior()</a></code> to calculate median odds ratios, proportions of opposed odds ratios, and interval odds ratios for logistic multilevel regression.</p></li>
+<li><p><code><a href="../reference/check_group_variation.html">check_group_variation()</a></code> now returns a numeric effect size of the grouping variable’s predictive association strength.</p></li>
+<li><p>Updated test-files to fix deprecated names.</p></li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> now also covers remaining families from package <em>glmmTMB</em> and defaults to returning McFadden’s R2. Documentation of <code><a href="../reference/r2.html">r2()</a></code> was updated accordingly.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-18-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-0"></a></h3>
+<ul><li><p><code>compare_performance(rank = TRUE)</code> now ranks <code>Log_loss</code> in the right direction. It was normalized along with the other indices but never flipped, so the model with the largest log-loss got the highest performance score and the best-fitting model was listed last (<a href="https://github.com/easystats/performance/issues/917" class="external-link">#917</a>).</p></li>
+<li><p><code><a href="../reference/r2_mcfadden.html">r2_mcfadden()</a></code> now uses the number of estimated parameters in the penalty of the adjusted R2. Previously the component list returned by <code><a href="https://easystats.github.io/insight/reference/find_parameters.html" class="external-link">insight::find_parameters()</a></code> was counted instead of the parameters inside it, so the penalty was almost always 1 and the adjusted value barely differed from the unadjusted one (<a href="https://github.com/easystats/performance/issues/933" class="external-link">#933</a>).</p></li>
+<li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now properly warns when the <code>vcov</code> matrix is rank deficient (<a href="https://github.com/easystats/performance/issues/922" class="external-link">#922</a>).</p></li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> (and hence <code><a href="../reference/model_performance.html">model_performance()</a></code>) no longer errors for <code>glmmTMB</code> negative-binomial models (<code>nbinom1</code>/<code>nbinom2</code>) without random effects, and now returns McFadden’s R2 for them.</p></li>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> now uses Pearson residuals for the homogeneity-of-variance plot of <code>glmmTMB</code> and <code>MixMod</code> models. Previously these residuals were divided by a single scalar, which is only correct when the variance function does not depend on the mean; for non-mixed binomial and Poisson models that scalar was 1, so the plot could suggest heteroscedasticity for correctly specified models (<a href="https://github.com/easystats/performance/issues/926" class="external-link">#926</a>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> for objects from package <em>lavaan</em>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.17.1" id="performance-0171">performance 0.17.1<a class="anchor" aria-label="anchor" href="#performance-0171"></a></h2><p class="text-muted">CRAN release: 2026-06-30</p>
 <div class="section level3">
