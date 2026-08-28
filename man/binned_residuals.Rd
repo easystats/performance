@@ -11,7 +11,7 @@ binned_residuals(
   show_dots = NULL,
   ci = 0.95,
   ci_type = "exact",
-  residuals = "response",
+  residuals = NULL,
   iterations = 1000,
   verbose = TRUE,
   ...
@@ -45,9 +45,10 @@ bootstrap method, where confidence intervals are calculated based on the
 quantiles of the bootstrap distribution.}
 
 \item{residuals}{Character, the type of residuals to calculate. Can be
-\code{"response"} (default), \code{"pearson"} or \code{"deviance"}. Gelman and Hill (2007)
-propose to use response residuals as default, defined "as observed minus
-expected values" (cf pp. 97-98).}
+\code{"response"}, \code{"pearson"} or \code{"deviance"}. For Bernoulli models, response
+residuals are used as default (defined "as observed minus expected values",
+(cf Gelman and Hill 2007, pp. 97-98). For other binomial models, deviance
+residuals are used.}
 
 \item{iterations}{Integer, the number of iterations to use for the
 bootstrap method. Only used if \code{ci_type = "boot"}.}

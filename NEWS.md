@@ -1,3 +1,11 @@
+# performance (devel)
+
+## Bug fixes
+
+* `binned_residuals()` still defaults to using response residuals, however, only
+  for Bernoulli models. For other binomial models, the default is deviance
+  residuals.
+
 # performance 0.18.0
 
 ## Breaking Changes

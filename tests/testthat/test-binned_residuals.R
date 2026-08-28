@@ -303,3 +303,18 @@ test_that("binned_residuals, validate against simulation", {
     tolerance = 1e-3
   )
 })
+
+
+test_that("binned_residuals, binomial (non-Bernoulli) uses deviance as default", {
+  set.seed(1)
+  n <- 600
+  size <- 20
+  x <- runif(n, -3, 3)
+  d <- data.frame(x = x, y = rbinom(n, size, plogis(-0.5 + 1.2 * x)))
+  d$f <- size - d$y
+  m <- glm(cbind(y, f) ~ x, family = binomial, data = d)
+  out1 <- binned_residuals(m)
+  out2 <- binned_residuals(m, residuals = "deviance")
+  expect_equal(out1$xbar, out2$xbar, tolerance = 1e-5)
+  expect_equal(out1$ybar, out2$ybar, tolerance = 1e-5)
+})
