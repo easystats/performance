@@ -1,5 +1,18 @@
 # performance (devel)
 
+## Bug fixes
+
+* `binned_residuals()` still defaults to using response residuals, however, only
+  for Bernoulli models. For other binomial models, the default is deviance
+  residuals.
+
+# performance 0.18.0
+
+## Breaking Changes
+
+* `binned_residuals()` now defaults to using response residuals, in line with
+  the suggestion from Gelman and Hill (2007).
+
 ## Changes
 
 * New function `test_clusters()` uses the `matchednull` package to test whether

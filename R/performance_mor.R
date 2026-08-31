@@ -5,7 +5,8 @@
 #' A measure of cluster-level variation in multilevel logistic regression,
 #' defined as the median odds ratio between two randomly chosen individuals from
 #' different clusters with identical covariates, comparing the person at higher
-#' risk to the person at lower risk.
+#' risk to the person at lower risk. `median_odds_ratio()` is an alias for
+#' `performance_mor()`.
 #'
 #' @param x A (logistic) multilevel model.
 #'
@@ -27,6 +28,17 @@
 #' A data frame with two columns, one with the group (cluster) names and one
 #' with the median odds ratios.
 #'
+#' @references
+#' Larsen K, Merlo J. Appropriate Assessment of Neighborhood Effects on Individual
+#' Health: Integrating Random and Fixed Effects in Multilevel Logistic
+#' Regression. American Journal of Epidemiology (2005) 161:81–88.
+#' \doi{10.1093/aje/kwi017}
+#'
+#' Merlo J, Wagner P, Ghith N, Leckie G. An Original Stepwise Multilevel
+#' Logistic Regression Analysis of Discriminatory Accuracy: The Case of
+#' Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
+#' \doi{10.1371/journal.pone.0153778}
+#'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "datawizard"), quietly = TRUE))
 #' data(sleepstudy, package = "lme4")
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -46,10 +58,6 @@
 #' ))
 #' performance_mor(m)
 #'
-#' @references
-#' Larsen, K., & Merlo, J. (2005). Appropriate assessment of neighborhood effects
-#' on individual health: integrating random and fixed effects in multilevel
-#' logistic regression. American Journal of Epidemiology, 161(1), 81-88.
 #' @export
 performance_mor <- function(x) {
   model_info <- insight::model_info(x)
@@ -81,3 +89,9 @@ print.performance_mor <- function(x, ...) {
   cat(insight::export_table(x, caption = "Median Odds Ratio"))
   invisible(x)
 }
+
+# alias
+
+#' @rdname performance_mor
+#' @export
+median_odds_ratio <- performance_mor

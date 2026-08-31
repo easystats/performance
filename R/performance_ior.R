@@ -4,7 +4,7 @@
 #' @description
 #' The Interval Odds Ratio (IOR) evaluates the fixed effect of a cluster-level
 #' (level 2) covariate by explicitly incorporating the residual between-cluster
-#' heterogeneity.
+#' heterogeneity. `interval_odds_ratio()` is an alias for `performance_ior()`.
 #'
 #' @param x A (logistic) multilevel model.
 #'
@@ -30,6 +30,17 @@
 #' @return
 #' A data frame with the parameter names and their interval odds ratios.
 #'
+#' @references
+#' Larsen K, Merlo J. Appropriate Assessment of Neighborhood Effects on Individual
+#' Health: Integrating Random and Fixed Effects in Multilevel Logistic
+#' Regression. American Journal of Epidemiology (2005) 161:81–88.
+#' \doi{10.1093/aje/kwi017}
+#'
+#' Merlo J, Wagner P, Ghith N, Leckie G. An Original Stepwise Multilevel
+#' Logistic Regression Analysis of Discriminatory Accuracy: The Case of
+#' Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
+#' \doi{10.1371/journal.pone.0153778}
+#'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "datawizard"), quietly = TRUE))
 #' data(sleepstudy, package = "lme4")
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -48,6 +59,7 @@
 #'   family = "binomial"
 #' ))
 #' performance_ior(m)
+#'
 #' @export
 performance_ior <- function(x) {
   model_info <- insight::model_info(x)
@@ -89,3 +101,9 @@ print.performance_ior <- function(x, ...) {
   cat(insight::export_table(insight::format_table(x), caption = "Interval Odds Ratio"))
   invisible(x)
 }
+
+# alias
+
+#' @rdname performance_ior
+#' @export
+interval_odds_ratio <- performance_ior

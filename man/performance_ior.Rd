@@ -2,9 +2,12 @@
 % Please edit documentation in R/performance_ior.R
 \name{performance_ior}
 \alias{performance_ior}
+\alias{interval_odds_ratio}
 \title{Interval Odds Ratio}
 \usage{
 performance_ior(x)
+
+interval_odds_ratio(x)
 }
 \arguments{
 \item{x}{A (logistic) multilevel model.}
@@ -15,7 +18,7 @@ A data frame with the parameter names and their interval odds ratios.
 \description{
 The Interval Odds Ratio (IOR) evaluates the fixed effect of a cluster-level
 (level 2) covariate by explicitly incorporating the residual between-cluster
-heterogeneity.
+heterogeneity. \code{interval_odds_ratio()} is an alias for \code{performance_ior()}.
 }
 \details{
 Unlike a standard confidence interval (which reflects sample estimation
@@ -53,6 +56,17 @@ m <- suppressWarnings(lme4::glmer(
 ))
 performance_ior(m)
 \dontshow{\}) # examplesIf}
+}
+\references{
+Larsen K, Merlo J. Appropriate Assessment of Neighborhood Effects on Individual
+Health: Integrating Random and Fixed Effects in Multilevel Logistic
+Regression. American Journal of Epidemiology (2005) 161:81–88.
+\doi{10.1093/aje/kwi017}
+
+Merlo J, Wagner P, Ghith N, Leckie G. An Original Stepwise Multilevel
+Logistic Regression Analysis of Discriminatory Accuracy: The Case of
+Neighbourhoods and Health. PLoS ONE (2016) 11:e0153778.
+\doi{10.1371/journal.pone.0153778}
 }
 \seealso{
 \code{\link[=performance_poor]{performance_poor()}} and \code{\link[=performance_mor]{performance_mor()}} as additional
