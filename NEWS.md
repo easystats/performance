@@ -1,6 +1,8 @@
-# performance (devel)
+# performance 0.18.1
 
 ## Bug fixes
+
+* Fixed to strict test tolerance that caused tests to fail on CRAN.
 
 * `binned_residuals()` still defaults to using response residuals, however, only
   for Bernoulli models. For other binomial models, the default is deviance
