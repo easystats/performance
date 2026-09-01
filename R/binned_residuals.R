@@ -107,8 +107,11 @@ binned_residuals <- function(
     c("exact", "gaussian", "boot")
   )
 
+  # extract model information - need this for Bernoulli checks
+  m_info <- insight::model_info(model)
+
   # for non-bernoulli models, `"exact"` doesn't work
-  if (isFALSE(insight::model_info(model)$is_bernoulli)) {
+  if (isFALSE(m_info$is_bernoulli)) {
     ci_type <- "gaussian"
     if (verbose) {
       insight::format_alert(
@@ -119,7 +122,7 @@ binned_residuals <- function(
 
   # set default, depending on response-type
   if (is.null(residuals)) {
-    if (isTRUE(insight::model_info(model)$is_bernoulli)) {
+    if (isTRUE(m_info$is_bernoulli)) {
       residuals <- "response"
     } else {
       residuals <- "deviance"
