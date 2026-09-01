@@ -1,5 +1,16 @@
 # Changelog
 
+## performance 0.18.1
+
+### Bug fixes
+
+- Fixed overly strict test tolerance that caused tests to fail on CRAN.
+
+- [`binned_residuals()`](https://easystats.github.io/performance/reference/binned_residuals.md)
+  still defaults to using response residuals, however, only for
+  Bernoulli models. For other binomial models, the default is deviance
+  residuals.
+
 ## performance 0.18.0
 
 CRAN release: 2026-08-28
