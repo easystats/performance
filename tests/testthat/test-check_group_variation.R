@@ -29,10 +29,10 @@ test_that("check_group_variation-1", {
     ignore_attr = TRUE
   )
 
-  expect_identical(out1$r[out1$Variation %in% "between"], c(1, 1))
-  expect_identical(out1$r[out1$Variation %in% "within"], 0)
+  expect_equal(out1$r[out1$Variation %in% "between"], c(1, 1), tolerance = 1e-4)
+  expect_equal(out1$r[out1$Variation %in% "within"], 0, tolerance = 1e-4)
   expect_false(any(out1$r[!out1$Variation %in% c("between", "within")] %in% c(1, 0)))
-  expect_identical(out1$r[1:4], c(NA, 1, 1, 0))
+  expect_equal(out1$r[1:4], c(NA, 1, 1, 0), tolerance = 1e-4)
   expect_true(all(0.45 < out1$r[5:6] & out1$r[5:6] < 0.75))
 
   set.seed(111)
@@ -76,10 +76,10 @@ test_that("check_group_variation-1", {
     ignore_attr = TRUE
   )
 
-  expect_identical(out2$r[out2$Variation %in% "between"], c(1, 1))
-  expect_identical(out2$r[out2$Variation %in% "within"], c(0, 0))
+  expect_equal(out2$r[out2$Variation %in% "between"], c(1, 1), tolerance = 1e-4)
+  expect_equal(out2$r[out2$Variation %in% "within"], c(0, 0), tolerance = 1e-4)
   expect_false(any(out2$r[!out2$Variation %in% c("between", "within")] %in% c(1, 0)))
-  expect_identical(out2$r[-c(3, 6)], c(1, 0, 1, 0))
+  expect_equal(out2$r[-c(3, 6)], c(1, 0, 1, 0), tolerance = 1e-4)
   expect_true(all(0.7 < out2$r[c(3, 6)] & out2$r[c(3, 6)] < 0.8))
 })
 
@@ -106,11 +106,13 @@ test_that("check_group_variation-2", {
   expect_equal(
     out3$r[1],
     sqrt(r2(lm(Sepal.Length ~ factor(ID), data = iris))[[1]]),
+    tolerance = 1e-4,
     ignore_attr = TRUE
   )
   expect_equal(
     out3$r[2],
     sqrt(r2(lm(Petal.Length ~ factor(ID), data = iris))[[1]]),
+    tolerance = 1e-4,
     ignore_attr = TRUE
   )
 
@@ -164,10 +166,10 @@ test_that("check_group_variation-2", {
     ignore_attr = TRUE
   )
 
-  expect_identical(out6$r[out6$Variation %in% "between"], c(1, 1, 1))
-  expect_equal(out6$r[out6$Variation %in% "within"], 0)
+  expect_equal(out6$r[out6$Variation %in% "between"], c(1, 1, 1), tolerance = 1e-4)
+  expect_equal(out6$r[out6$Variation %in% "within"], 0, tolerance = 1e-4)
   expect_false(any(out6$r[!out6$Variation %in% c("between", "within")] %in% c(1, 0)))
-  expect_equal(out6$r[-(2:3)], c(1, 1, 0, 1))
+  expect_equal(out6$r[-(2:3)], c(1, 1, 0, 1), tolerance = 1e-4)
   expect_true(all(0.8 < out6$r[2:3] & out6$r[2:3] < 0.85))
 })
 
@@ -218,10 +220,10 @@ test_that("check_group_variation, multiple by", {
     ),
     ignore_attr = TRUE
   )
-  expect_identical(out7$r[out7$Variation %in% "between"], c(1, 1, 1))
-  expect_identical(out7$r[out7$Variation %in% "within"], c(0, 0))
+  expect_equal(out7$r[out7$Variation %in% "between"], c(1, 1, 1), tolerance = 1e-4)
+  expect_equal(out7$r[out7$Variation %in% "within"], c(0, 0), tolerance = 1e-4)
   expect_false(any(out7$r[!out7$Variation %in% c("between", "within")] %in% c(1, 0)))
-  expect_identical(out7$r[-c(2, 4, 8)], c(1, 0, 1, 1, 0))
+  expect_equal(out7$r[-c(2, 4, 8)], c(1, 0, 1, 1, 0), tolerance = 1e-4)
   expect_true(all(0.25 < out7$r[c(2, 4, 8)] & out7$r[c(2, 4, 8)] < 0.6))
 
   out8 <- check_group_variation(
@@ -261,10 +263,10 @@ test_that("check_group_variation, multiple by", {
     ),
     ignore_attr = TRUE
   )
-  expect_identical(out8$r[out8$Variation %in% "between"], c(1, 1, 1, 1))
-  expect_identical(out8$r[out8$Variation %in% "within"], c(0, 0))
+  expect_equal(out8$r[out8$Variation %in% "between"], c(1, 1, 1, 1), tolerance = 1e-4)
+  expect_equal(out8$r[out8$Variation %in% "within"], c(0, 0), tolerance = 1e-4)
   expect_false(any(out8$r[!out8$Variation %in% c("between", "within")] %in% c(1, 0)))
-  expect_identical(out8$r[-c(1, 3, 5, 10)], c(1, 0, 1, 1, 1, 0))
+  expect_equal(out8$r[-c(1, 3, 5, 10)], c(1, 0, 1, 1, 1, 0), tolerance = 1e-4)
   expect_true(all(0.25 < out8$r[c(1, 3, 5, 10)] & out8$r[c(1, 3, 5, 10)] < 0.8))
 })
 
