@@ -128,7 +128,7 @@ predictive checks).
 `#>  $ simulatedResponse      : num [1:644, 1:250] 0 1 0 4 5 0 3 4 3 1 ...`\
 `#>   ..- attr(*, "dimnames")=List of 2`\
 `#>  $ scaledResiduals        : num [1:644] 0.416 0.171 0.867 0.447 0.431 ...`\
-`#>  $ time                   : 'proc_time' Named num [1:5] 0.238 0.003 0.241 0 0`\
+`#>  $ time                   : 'proc_time' Named num [1:5] 0.29 0.005 0.294 0 0`\
 `#>   ..- attr(*, "names")= chr [1:5] "user.self" "sys.self" "elapsed" "user.child" ...`\
 `#>  $ randomState            :List of 4`\
 `#>  - attr(*, "class")= chr [1:3] "performance_simres" "see_performance_simres" "DHARMa"`
