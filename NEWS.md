@@ -17,6 +17,10 @@
 
 ## Changes
 
+* New function `test_clusters()` uses the `matchednull` package to test whether
+  a selected cluster count exceeds what matched-null data with the same margins
+  and correlations would produce.
+
 * New functions `performance_mor()`, `performance_poor()` and `performance_ior()`
   to calculate median odds ratios, proportions of opposed odds ratios, and
   interval odds ratios for logistic multilevel regression.
