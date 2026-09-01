@@ -6,7 +6,10 @@ Let’s imagine that we are interested in explaining the variability in
 the `Sepal.Length` using 3 different predictors. For that, we can build
 3 linear models.
 
-`model1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length``, data ``=`` ``iris``)`` ``model2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``)`` ``model3`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Sepal.Width``, data ``=`` ``iris``)`
+\
+`model1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Length``, data ``=`` ``iris``)`\
+`model2`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``)`\
+`model3`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``Sepal.Length`` ``~`` ``Sepal.Width``, data ``=`` ``iris``)`
 
 ### Comparing Indices of Model Performance
 
@@ -15,7 +18,13 @@ The eponymous function from the package,
 can be used to compute different indices of performance (an umbrella
 term for indices of fit).
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`` `` ``` # we will use `print_md` function to display a well-formatted table ``` ``result`` ``<-`` `[`performance`](https://easystats.github.io/performance/reference/model_performance.md)`(``model1``)`` `[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`insight`](https://easystats.github.io/insight/)`)`\
+\
+`` # we will use `print_md` function to display a well-formatted table ``\
+`result`` ``<-`` `[`performance`](https://easystats.github.io/performance/reference/model_performance.md)`(``model1``)`\
+[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
 
 | AIC   | AICc  |  BIC  |  R2  | R2 (adj.) | RMSE | Sigma |
 |:------|:-----:|:-----:|:----:|:---------:|:----:|:-----:|
@@ -28,7 +37,9 @@ indices at a glance using the
 [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html)
 function.
 
-`result`` ``<-`` `[`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``model1``, ``model2``, ``model3``)`` `[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
+\
+`result`` ``<-`` `[`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``model1``, ``model2``, ``model3``)`\
+[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
 
 | Name | Model | AIC (weights) | AICc (weights) | BIC (weights) | R2 | R2 (adj.) | RMSE | Sigma |
 |:---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
@@ -47,7 +58,10 @@ criteria, we can immediately see that `model1` has the best fit.
 If you don’t like looking at tables, you can also plot them using a
 plotting method supported in `see` package:
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`see`](https://easystats.github.io/see/)`)`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``model1``, ``model2``, ``model3``)``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`see`](https://easystats.github.io/see/)`)`\
+\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(`[`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``model1``, ``model2``, ``model3``)``)`
 
 ![](compare_files/figure-html/unnamed-chunk-5-1.png)
 
@@ -67,7 +81,9 @@ frequentist framework) or [Bayes
 Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html)
 (in Bayesian framework).
 
-`result`` ``<-`` `[`test_performance`](https://easystats.github.io/performance/reference/test_performance.md)`(``model1``, ``model2``, ``model3``)`` `[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
+\
+`result`` ``<-`` `[`test_performance`](https://easystats.github.io/performance/reference/test_performance.md)`(``model1``, ``model2``, ``model3``)`\
+[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
 
 | Name   | Model |       BF | Omega2 | p (Omega2) |    LR |  p (LR) |
 |:-------|------:|---------:|-------:|-----------:|------:|--------:|
@@ -93,7 +109,15 @@ regression models, Bayesian regression models, etc.
 To demonstrate this, we will run Bayesian versions of linear regression
 models we just compared:
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`rstanarm`](https://mc-stan.org/rstanarm/)`)`` `` ``model1`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Sepal.Length`` ``~`` ``Petal.Length``, data ``=`` ``iris``, refresh ``=`` ``0``)`` ``model2`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``, refresh ``=`` ``0``)`` ``model3`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Sepal.Length`` ``~`` ``Sepal.Width``, data ``=`` ``iris``, refresh ``=`` ``0``)`` `` ``result`` ``<-`` `[`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``model1``, ``model2``, ``model3``)`` `[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`rstanarm`](https://mc-stan.org/rstanarm/)`)`\
+\
+`model1`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Sepal.Length`` ``~`` ``Petal.Length``, data ``=`` ``iris``, refresh ``=`` ``0``)`\
+`model2`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Sepal.Length`` ``~`` ``Petal.Width``, data ``=`` ``iris``, refresh ``=`` ``0``)`\
+`model3`` ``<-`` `[`stan_glm`](https://mc-stan.org/rstanarm/reference/stan_glm.html)`(``Sepal.Length`` ``~`` ``Sepal.Width``, data ``=`` ``iris``, refresh ``=`` ``0``)`\
+\
+`result`` ``<-`` `[`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``model1``, ``model2``, ``model3``)`\
+[`print_md`](https://easystats.github.io/insight/reference/display.html)`(``result``)`
 
 | Name | Model | ELPD | ELPD_SE | LOOIC (weights) | LOOIC_SE | WAIC (weights) | R2 | R2 (adj.) | RMSE | Sigma |
 |:---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|

@@ -2,6 +2,8 @@
 
 ## performance 0.18.0
 
+CRAN release: 2026-08-28
+
 ### Breaking Changes
 
 - [`binned_residuals()`](https://easystats.github.io/performance/reference/binned_residuals.md)

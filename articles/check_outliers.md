@@ -165,7 +165,15 @@ demonstration, so we choose the first four (`mpg` = Miles/(US) gallon;
 horsepower). Finally, because there are no outliers in this dataset, we
 add two artificial outliers before running our function.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`` `` ``# Create some artificial outliers and an ID column`` ``data`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(``mtcars``[``1``:``4``]``, ``42``, ``55``)`` ``data`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``car ``=`` `[`row.names`](https://rdrr.io/r/base/row.names.html)`(``data``)``, ``data``)`` `` ``outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``data``, method ``=`` ``"zscore_robust"``, ID ``=`` ``"car"``)`` ``outliers`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`performance`](https://easystats.github.io/performance/)`)`\
+\
+`# Create some artificial outliers and an ID column`\
+`data`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(``mtcars``[``1``:``4``]``, ``42``, ``55``)`\
+`data`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``car ``=`` `[`row.names`](https://rdrr.io/r/base/row.names.html)`(``data``)``, ``data``)`\
+\
+`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``data``, method ``=`` ``"zscore_robust"``, ID ``=`` ``"car"``)`\
+`outliers`
 
     > 2 outliers detected: cases 33, 34.
     > - Based on the following method and threshold: zscore_robust (3.291).
@@ -207,11 +215,13 @@ main dataset, we can extract row numbers using
 [`which()`](https://rdrr.io/r/base/which.html) on the output object,
 which can then be used for indexing:
 
+\
 [`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
 
     > [1] 33 34
 
-`data_clean`` ``<-`` ``data``[``-`[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)``, ``]`
+\
+`data_clean`` ``<-`` ``data``[``-`[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)``, ``]`
 
 All
 [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
@@ -221,7 +231,9 @@ it is also possible to visualize the outliers using the generic
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) function on the
 resulting outlier object after loading the {see} package.
 
-[`library`](https://rdrr.io/r/base/library.html)`(`[`see`](https://easystats.github.io/see/)`)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``outliers``)`
+\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`see`](https://easystats.github.io/see/)`)`\
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``outliers``)`
 
     > $threshold_outliers
     > [1] 33 34
@@ -275,7 +287,9 @@ In *{performance}*’s
 [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md),
 one can use this approach with `method = "mcd"`.[^4]
 
-`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``data``, method ``=`` ``"mcd"``, verbose ``=`` ``FALSE``)`` ``outliers`
+\
+`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``data``, method ``=`` ``"mcd"``, verbose ``=`` ``FALSE``)`\
+`outliers`
 
     > 2 outliers detected: cases 33, 34.
     > - Based on the following method and threshold: mcd (20).
@@ -284,6 +298,7 @@ one can use this approach with `method = "mcd"`.[^4]
 Here, we detected 9 multivariate outliers (i.e,. when looking at all
 variables of our dataset together).
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``outliers``)`
 
     > $threshold_outliers
@@ -348,12 +363,16 @@ Also note that although
 supports the pipe operators (`|>` or `%>%`), it does not support
 `tidymodels` at this time. We show a demo below.
 
-`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``disp`` ``~`` ``mpg`` ``*`` ``hp``, data ``=`` ``data``)`` ``outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` ``"cook"``)`` ``outliers`
+\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``disp`` ``~`` ``mpg`` ``*`` ``hp``, data ``=`` ``data``)`\
+`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` ``"cook"``)`\
+`outliers`
 
     > 2 outliers detected: cases 31, 34.
     > - Based on the following method and threshold: cook (0.806).
     > - For variable: (Whole model).
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``outliers``)`
 
 ![Visual depiction of outliers based on Cook's distance (leverage and
@@ -407,7 +426,11 @@ therefore “in line” with our hypothesis. The second one clearly diverges
 from the regression line, and therefore we can conclude that this
 outlier may have a disproportionate influence on our model.
 
-`data`` ``<-`` ``women``[`[`rep`](https://rdrr.io/r/base/rep.html)`(`[`seq_len`](https://rdrr.io/r/base/seq.html)`(`[`nrow`](https://rdrr.io/r/base/nrow.html)`(``women``)``)``, each ``=`` ``100``)``, ``]`` ``data`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(``data``, `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``258``)``, `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``200``)``)`` ``model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``weight`` ``~`` ``height``, ``data``)`` ``rempsyc``::`[`nice_scatter`](https://rempsyc.remi-theriault.com/reference/nice_scatter.html)`(``data``, ``"height"``, ``"weight"``)`
+\
+`data`` ``<-`` ``women``[`[`rep`](https://rdrr.io/r/base/rep.html)`(`[`seq_len`](https://rdrr.io/r/base/seq.html)`(`[`nrow`](https://rdrr.io/r/base/nrow.html)`(``women``)``)``, each ``=`` ``100``)``, ``]`\
+`data`` ``<-`` `[`rbind`](https://rdrr.io/r/base/cbind.html)`(``data``, `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``258``)``, `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``200``)``)`\
+`model`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``weight`` ``~`` ``height``, ``data``)`\
+`rempsyc``::`[`nice_scatter`](https://rempsyc.remi-theriault.com/reference/nice_scatter.html)`(``data``, ``"height"``, ``"weight"``)`
 
 ![Scatter plot of height and weight, with two extreme observations: one
 model-consistent (top-right) and the other, model-inconsistent (i.e., an
@@ -421,7 +444,9 @@ Using either the *z*-score or MCD methods, our model-consistent
 observation will be incorrectly flagged as an outlier or influential
 observation.
 
-`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"zscore_robust"``, ``"mcd"``)``, verbose ``=`` ``FALSE``)`` `[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
+\
+`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"zscore_robust"``, ``"mcd"``)``, verbose ``=`` ``FALSE``)`\
+[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
 
     > [1] 1501 1502
 
@@ -429,10 +454,13 @@ In contrast, the model-based detection method displays the desired
 behaviour: it correctly flags the person who is very tall but very
 light, without flagging the person who is both tall and heavy.
 
-`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` ``"cook"``)`` `[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
+\
+`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` ``"cook"``)`\
+[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
 
     > [1] 1502
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``outliers``)`
 
 ![The leverage method (Cook's distance) correctly distinguishes the true
@@ -475,13 +503,16 @@ at least half of the methods). In *{performance}*’s
 one can use this approach by including all desired methods in the
 corresponding argument.
 
-`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"zscore_robust"``, ``"mcd"``, ``"cook"``)``, verbose ``=`` ``FALSE``)`` `[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
+\
+`outliers`` ``<-`` `[`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``model``, method ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``"zscore_robust"``, ``"mcd"``, ``"cook"``)``, verbose ``=`` ``FALSE``)`\
+[`which`](https://rdrr.io/r/base/which.html)`(``outliers``)`
 
     > [1] 1501 1502
 
 Outliers (counts or per variables) for individual methods can then be
 obtained through attributes. For example:
 
+\
 [`attributes`](https://rdrr.io/r/base/attributes.html)`(``outliers``)``$``outlier_var``$``zscore_robust`
 
     > $weight
@@ -581,13 +612,19 @@ procedure will bring back univariate outliers within the limits of
 ‘acceptable’ values, based either on the percentile, the *z* score, or
 its robust alternative based on the MAD.
 
-`data``[``1501``:``1502``, ``]`` ``# See outliers rows`
+\
+`data``[``1501``:``1502``, ``]`` ``# See outliers rows`
 
     >      height weight
     > 1501    100    258
     > 1502    100    200
 
-`# Winsorizing using the MAD`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`` ``winsorized_data`` ``<-`` `[`winsorize`](https://easystats.github.io/datawizard/reference/winsorize.html)`(``data``, method ``=`` ``"zscore"``, robust ``=`` ``TRUE``, threshold ``=`` ``3``)`` ``# Values > +/- MAD have been winsorized`` ``winsorized_data``[``1501``:``1502``, ``]`
+\
+`# Winsorizing using the MAD`\
+[`library`](https://rdrr.io/r/base/library.html)`(`[`datawizard`](https://easystats.github.io/datawizard/)`)`\
+`winsorized_data`` ``<-`` `[`winsorize`](https://easystats.github.io/datawizard/reference/winsorize.html)`(``data``, method ``=`` ``"zscore"``, robust ``=`` ``TRUE``, threshold ``=`` ``3``)`\
+`# Values > +/- MAD have been winsorized`\
+`winsorized_data``[``1501``:``1502``, ``]`
 
     >      height weight
     > 1501     83    188
