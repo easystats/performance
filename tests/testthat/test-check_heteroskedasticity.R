@@ -43,3 +43,24 @@ test_that("check_heteroskedasticity, hlm", {
     fixed = TRUE
   )
 })
+
+test_that("check_heteroskedasticity, count model", {
+  set.seed(1)
+  n <- 100
+  x <- runif(n, -3, 3)
+  d <- data.frame(
+    x = x,
+    g = factor(rep(LETTERS[1:10], each = n / 10)),
+    y = rpois(n, exp(0.5 + 0.3 * x))
+  )
+
+  skip_if_not_installed("lme4")
+  m <- lme4::glmer(y ~ x + (1 | g), family = poisson, data = d)
+  expect_message(
+    {
+      out <- check_heteroscedasticity(m)
+    },
+    regex = "check your model for overdispersion",
+    fixed = TRUE
+  )
+})

@@ -56,7 +56,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   if (!info$is_linear) {
     msg <- "This Breusch-Pagan Test currently only works Gaussian models."
     if (info$is_count) {
-      paste0(
+      msg <- paste0(
         msg,
         " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()')."
       )
