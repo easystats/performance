@@ -63,9 +63,10 @@ test_that("hdi which", {
 })
 
 test_that("bci which", {
+  skip_if_not_installed("bayestestR", minimum_version = "0.19.0")
   expect_identical(
     which(check_outliers(mtcars$mpg, method = "bci", threshold = 0.95)),
-    as.integer(c(15, 16, 20))
+    as.integer(c(15, 16, 20, 24))
   )
 })
 
