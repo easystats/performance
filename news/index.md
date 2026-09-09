@@ -2,6 +2,8 @@
 
 ## performance 0.18.1
 
+CRAN release: 2026-09-01
+
 ### Bug fixes
 
 - Fixed overly strict test tolerance that caused tests to fail on CRAN.
