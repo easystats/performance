@@ -6,6 +6,14 @@ CRAN release: 2026-09-01
 
 ### Bug fixes
 
+- [`check_singularity()`](https://easystats.github.io/performance/reference/check_singularity.md)
+  for models from package *nlme* now applies the tolerance to the
+  absolute values of the variance-covariance diagonal.
+
+- [`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
+  now includes the hint about overdispersion and zero-inflation in the
+  message for count models.
+
 - Fixed overly strict test tolerance that caused tests to fail on CRAN.
 
 - [`binned_residuals()`](https://easystats.github.io/performance/reference/binned_residuals.md)

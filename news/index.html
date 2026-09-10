@@ -57,7 +57,9 @@
 <h2 class="pkg-version" data-toc-text="0.18.1" id="performance-0181">performance 0.18.1<a class="anchor" aria-label="anchor" href="#performance-0181"></a></h2><p class="text-muted">CRAN release: 2026-09-01</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-18-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-18-1"></a></h3>
-<ul><li><p>Fixed overly strict test tolerance that caused tests to fail on CRAN.</p></li>
+<ul><li><p><code><a href="../reference/check_singularity.html">check_singularity()</a></code> for models from package <em>nlme</em> now applies the tolerance to the absolute values of the variance-covariance diagonal.</p></li>
+<li><p><code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> now includes the hint about overdispersion and zero-inflation in the message for count models.</p></li>
+<li><p>Fixed overly strict test tolerance that caused tests to fail on CRAN.</p></li>
 <li><p><code><a href="../reference/binned_residuals.html">binned_residuals()</a></code> still defaults to using response residuals, however, only for Bernoulli models. For other binomial models, the default is deviance residuals.</p></li>
 </ul></div>
 </div>
