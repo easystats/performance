@@ -1,8 +1,6 @@
 # Changelog
 
-## performance 0.18.1
-
-CRAN release: 2026-09-01
+## performance 0.18.2
 
 ### Bug fixes
 
@@ -13,6 +11,14 @@ CRAN release: 2026-09-01
 - [`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
   now includes the hint about overdispersion and zero-inflation in the
   message for count models.
+
+- Updated tests to fix CRAN check failures.
+
+## performance 0.18.1
+
+CRAN release: 2026-09-01
+
+### Bug fixes
 
 - Fixed overly strict test tolerance that caused tests to fail on CRAN.
 
