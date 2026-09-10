@@ -126,6 +126,7 @@ Suggests:
     loo,
     MASS,
     Matrix,
+    matchednull (>= 0.2.1),
     mclogit,
     mclust,
     metadat,
