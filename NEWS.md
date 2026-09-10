@@ -1,4 +1,4 @@
-# performance 0.18.1
+# performance 0.18.2
 
 ## Bug fixes
 
@@ -7,6 +7,12 @@
 
 * `check_heteroscedasticity()` now includes the hint about overdispersion and
   zero-inflation in the message for count models.
+
+* Updated tests to fix CRAN check failures.
+
+# performance 0.18.1
+
+## Bug fixes
 
 * Fixed overly strict test tolerance that caused tests to fail on CRAN.
 
