@@ -1,3 +1,15 @@
+# performance 0.18.2
+
+## Bug fixes
+
+* `check_singularity()` for models from package *nlme* now applies the
+  tolerance to the absolute values of the variance-covariance diagonal.
+
+* `check_heteroscedasticity()` now includes the hint about overdispersion and
+  zero-inflation in the message for count models.
+
+* Updated tests to fix CRAN check failures.
+
 # performance 0.18.1
 
 ## Bug fixes
