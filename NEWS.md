@@ -2,6 +2,12 @@
 
 ## Bug fixes
 
+* `check_singularity()` for models from package *nlme* now applies the
+  tolerance to the absolute values of the variance-covariance diagonal.
+
+* `check_heteroscedasticity()` now includes the hint about overdispersion and
+  zero-inflation in the message for count models.
+
 * Fixed overly strict test tolerance that caused tests to fail on CRAN.
 
 * `binned_residuals()` still defaults to using response residuals, however, only

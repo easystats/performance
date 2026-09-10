@@ -225,7 +225,7 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
   insight::check_if_installed("nlme")
 
-  any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x)))) < tolerance))
+  any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x))))) < tolerance)
 }
 
 
