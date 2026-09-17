@@ -382,9 +382,9 @@ check_model.default <- function(
   if (
     !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
   ) {
-    show_ci = FALSE
+    show_ci <- FALSE
   } else {
-    show_ci = TRUE
+    show_ci <- TRUE
   }
 
   attr(assumptions_data, "panel") <- panel
