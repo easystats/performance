@@ -59,8 +59,8 @@ indicates either overdispersion or underdispersion (the first being more common)
 
 \section{Overdispersion in Poisson Models}{
 
-For Poisson models, the overdispersion test is based on the code from
-\emph{Gelman and Hill (2007), page 115}.
+For Poisson generalized linear models, the overdispersion test is based on
+the code from \emph{Gelman and Hill (2007), page 115}. For mixed models, see below.
 }
 
 \section{Overdispersion in Negative Binomial or Zero-Inflated Models}{
@@ -71,15 +71,20 @@ the overdispersion test is based simulated residuals (see \code{\link[=simulate_
 
 \section{Overdispersion in Mixed Models}{
 
-For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()}
-is based on the code in the
+For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()} uses simulated
+residuals by default (equivalent to
+\code{check_overdispersion(simulate_residuals(model))}). Setting
+\code{residual_type = "normal"} uses the Pearson chi-squared approximation from the
 \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
-section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
-function only returns an \emph{approximate} estimate of an overdispersion
-parameter. Using this approach would be inaccurate for zero-inflated or
-negative binomial mixed models (fitted with \code{glmmTMB}), thus, in such cases,
-the overdispersion test is based on \code{\link[=simulate_residuals]{simulate_residuals()}} (which is identical
-to \code{check_overdispersion(simulate_residuals(model))}).
+section \emph{How can I deal with overdispersion in GLMMs?}. This approximation
+can underestimate dispersion when there are many random effects, because
+the effective residual degrees of freedom depend on their shrinkage.
+
+Plots based on simulated residuals compare squared observed response
+residuals with the mean squared residuals from the simulations, using the
+same fitted predictions for both. This accounts for the random-effects
+contribution under the chosen simulation settings. The plot is a pointwise
+diagnostic, whereas the test compares residual variances across observations.
 }
 
 \section{How to fix Overdispersion}{

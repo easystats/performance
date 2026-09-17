@@ -34,23 +34,28 @@
 #' indicates either overdispersion or underdispersion (the first being more common).
 #'
 #' @section Overdispersion in Poisson Models:
-#' For Poisson models, the overdispersion test is based on the code from
-#' _Gelman and Hill (2007), page 115_.
+#' For Poisson generalized linear models, the overdispersion test is based on
+#' the code from _Gelman and Hill (2007), page 115_. For mixed models, see below.
 #'
 #' @section Overdispersion in Negative Binomial or Zero-Inflated Models:
 #' For negative binomial (mixed) models or models with zero-inflation component,
 #' the overdispersion test is based simulated residuals (see [`simulate_residuals()`]).
 #'
 #' @section Overdispersion in Mixed Models:
-#' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
-#' is based on the code in the
+#' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()` uses simulated
+#' residuals by default (equivalent to
+#' `check_overdispersion(simulate_residuals(model))`). Setting
+#' `residual_type = "normal"` uses the Pearson chi-squared approximation from the
 #' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
-#' section *How can I deal with overdispersion in GLMMs?*. Note that this
-#' function only returns an *approximate* estimate of an overdispersion
-#' parameter. Using this approach would be inaccurate for zero-inflated or
-#' negative binomial mixed models (fitted with `glmmTMB`), thus, in such cases,
-#' the overdispersion test is based on [`simulate_residuals()`] (which is identical
-#' to `check_overdispersion(simulate_residuals(model))`).
+#' section *How can I deal with overdispersion in GLMMs?*. This approximation
+#' can underestimate dispersion when there are many random effects, because
+#' the effective residual degrees of freedom depend on their shrinkage.
+#'
+#' Plots based on simulated residuals compare squared observed response
+#' residuals with the mean squared residuals from the simulations, using the
+#' same fitted predictions for both. This accounts for the random-effects
+#' contribution under the chosen simulation settings. The plot is a pointwise
+#' diagnostic, whereas the test compares residual variances across observations.
 #'
 #' @inheritSection check_zeroinflation Tests based on simulated residuals
 #'

@@ -319,17 +319,19 @@
     d <- .safe({
       simres <- simulate_residuals(model, ...)
       predicted <- simres$fittedPredictedResponse
-      # Use response-scale residuals (observed - predicted) so that Res2 and V
-      # are on the same scale as the family variance formula.
+      # Compare observed and simulated squared residuals around the same
+      # prediction. DHARMa's fitted predictions can exclude random effects,
+      # so the family variance alone does not describe these residuals.
       raw_res <- simres$observedResponse - predicted
+      simulated_res <- simres$simulatedResponse - predicted
       data.frame(
         Predicted = predicted,
         Residuals = raw_res,
-        Res2 = raw_res^2
+        Res2 = raw_res^2,
+        V = rowMeans(simulated_res^2)
       )
     })
     if (!is.null(d)) {
-      d$V <- .expected_variance(model, faminfo, d)
       # Pearson-like standardized residuals: divide by sqrt of expected variance.
       # Use 1e-6 floor to avoid division by near-zero values when predicted
       # means are very small, while keeping the value practically interpretable.

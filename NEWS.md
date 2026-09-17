@@ -1,3 +1,12 @@
+# performance (development version)
+
+## Bug fixes
+
+* Overdispersion plots from `check_overdispersion()` and `check_model()` now
+  compare squared observed residuals with squared simulated residuals when
+  using simulations. This accounts for random effects and avoids suggesting
+  overdispersion for correctly specified mixed models (#464).
+
 # performance 0.18.2
 
 ## Bug fixes
