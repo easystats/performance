@@ -49,13 +49,31 @@
 #' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
 #' section *How can I deal with overdispersion in GLMMs?*. This approximation
 #' can underestimate dispersion when there are many random effects, because
-#' the effective residual degrees of freedom depend on their shrinkage.
+#' the effective residual degrees of freedom depend on their shrinkage. Leite
+#' et al. (2025, preprint) compare these approaches and discuss this bias, as
+#' well as the computational cost and power of simulation-based alternatives.
 #'
-#' Plots based on simulated residuals compare squared observed response
-#' residuals with the mean squared residuals from the simulations, using the
-#' same fitted predictions for both. This accounts for the random-effects
-#' contribution under the chosen simulation settings. The plot is a pointwise
-#' diagnostic, whereas the test compares residual variances across observations.
+#' @section Plots based on simulations:
+#' The default test in [`DHARMa::testDispersion()`] compares the variance of
+#' observed and simulated response residuals around the same fitted predictions
+#' (Hartig, 2026). The plots extend this comparison to each observation: squared
+#' observed residuals are compared with the mean squared simulated residuals.
+#'
+#' For a fixed prediction \eqn{a_i}, the reference estimates
+#' \deqn{E[(Y_i - a_i)^2] = Var(Y_i) + (E[Y_i] - a_i)^2.}
+#' DHARMa's fitted predictions can exclude random effects. In that case, the
+#' mean response under the chosen simulation settings can differ from
+#' \eqn{a_i}, and the second term accounts for that difference. Using the family
+#' variance alone, or centering each observation's simulations at their own
+#' mean, would omit this contribution. The plot is a pointwise diagnostic,
+#' whereas the test compares residual variances across observations; their
+#' aggregate ratios need not be identical.
+#'
+#' The reference depends on the simulation settings and Monte Carlo variability.
+#' Conditional simulations generally provide greater power for detecting
+#' dispersion problems in mixed models than unconditional simulations (Leite
+#' et al., 2025, preprint). See [`DHARMa::simulateResiduals()`] for these options,
+#' which can be passed through `...`.
 #'
 #' @inheritSection check_zeroinflation Tests based on simulated residuals
 #'
@@ -73,6 +91,15 @@
 #' - Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
+#'
+#' - Hartig, F. (2026). DHARMa: Residual Diagnostics for Hierarchical
+#'  (Multi-Level / Mixed) Regression Models. R package version 0.5.0.
+#'  \doi{10.32614/CRAN.package.DHARMa}.
+#'
+#' - Leite, M. S., Rettelbach, D., and Hartig, F. (2025). Dispersion tests in
+#'  generalized linear mixed-effects models: A methods comparison and practical
+#'  guide for ecologists. EcoEvoRxiv preprint (revised 2026).
+#'  \doi{10.32942/X23M14}.
 #'
 #' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB")
 #' data(Salamanders, package = "glmmTMB")
