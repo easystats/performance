@@ -1,4 +1,5 @@
 test_that("check_group_variation-1", {
+  skip_if_not_installed("effectsize")
   dat1 <- data.frame(
     group = rep(LETTERS[1:3], each = 3),
     constant = "a",
@@ -6,7 +7,8 @@ test_that("check_group_variation-1", {
     variable1b = rep(letters[1:2], times = c(6, 3)),
     variable2 = rep(letters[1:3], times = 3),
     variable3 = letters[1:9],
-    variable4 = c(letters[1:5], letters[1:4])
+    variable4 = c(letters[1:5], letters[1:4]),
+    stringsAsFactors = FALSE
   )
   out1 <- check_group_variation(dat1, by = "group")
 
@@ -29,8 +31,8 @@ test_that("check_group_variation-1", {
     ignore_attr = TRUE
   )
 
-  expect_equal(out1$r[out1$Variation %in% "between"], c(1, 1), tolerance = 1e-4)
-  expect_equal(out1$r[out1$Variation %in% "within"], 0, tolerance = 1e-4)
+  expect_equal(out1$r[which(out1$Variation == "between")], c(1, 1), tolerance = 1e-4)
+  expect_equal(out1$r[which(out1$Variation == "within")], 0, tolerance = 1e-4)
   expect_false(any(out1$r[!out1$Variation %in% c("between", "within")] %in% c(1, 0)))
   expect_equal(out1$r[1:4], c(NA, 1, 1, 0), tolerance = 1e-4)
   expect_true(all(0.45 < out1$r[5:6] & out1$r[5:6] < 0.75))
@@ -76,8 +78,8 @@ test_that("check_group_variation-1", {
     ignore_attr = TRUE
   )
 
-  expect_equal(out2$r[out2$Variation %in% "between"], c(1, 1), tolerance = 1e-4)
-  expect_equal(out2$r[out2$Variation %in% "within"], c(0, 0), tolerance = 1e-4)
+  expect_equal(out2$r[which(out2$Variation == "between")], c(1, 1), tolerance = 1e-4)
+  expect_equal(out2$r[which(out2$Variation == "within")], c(0, 0), tolerance = 1e-4)
   expect_false(any(out2$r[!out2$Variation %in% c("between", "within")] %in% c(1, 0)))
   expect_equal(out2$r[-c(3, 6)], c(1, 0, 1, 0), tolerance = 1e-4)
   expect_true(all(0.7 < out2$r[c(3, 6)] & out2$r[c(3, 6)] < 0.8))
@@ -99,7 +101,8 @@ test_that("check_group_variation-2", {
       Group = c("ID", "ID"),
       Variable = c("Sepal.Length", "Petal.Length"),
       Variation = c("both", "both"),
-      Design = c(NA_character_)
+      Design = NA_character_,
+      stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
   )
@@ -117,6 +120,7 @@ test_that("check_group_variation-2", {
   )
 
   skip_if_not_installed("parameters")
+  skip_if_not_installed("effectsize")
   data(qol_cancer, package = "parameters")
   out4 <- check_group_variation(
     qol_cancer,
@@ -129,7 +133,7 @@ test_that("check_group_variation-2", {
       Group = c("ID", "ID", "ID", "ID"),
       Variable = c("age", "phq4", "QoL", "education"),
       Variation = c("between", "both", "both", "between"),
-      Design = c(NA_character_),
+      Design = NA_character_,
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
@@ -160,14 +164,14 @@ test_that("check_group_variation-2", {
       Group = c("ID", "ID", "ID", "ID", "ID", "ID"),
       Variable = c("age", "phq4", "QoL", "education", "phq4w", "phq4b"),
       Variation = c("between", "both", "both", "between", "within", "between"),
-      Design = c(NA_character_),
+      Design = NA_character_,
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
   )
 
-  expect_equal(out6$r[out6$Variation %in% "between"], c(1, 1, 1), tolerance = 1e-4)
-  expect_equal(out6$r[out6$Variation %in% "within"], 0, tolerance = 1e-4)
+  expect_equal(out6$r[which(out6$Variation == "between")], c(1, 1, 1), tolerance = 1e-4)
+  expect_equal(out6$r[which(out6$Variation == "within")], 0, tolerance = 1e-4)
   expect_false(any(out6$r[!out6$Variation %in% c("between", "within")] %in% c(1, 0)))
   expect_equal(out6$r[-(2:3)], c(1, 1, 0, 1), tolerance = 1e-4)
   expect_true(all(0.8 < out6$r[2:3] & out6$r[2:3] < 0.85))
@@ -175,6 +179,7 @@ test_that("check_group_variation-2", {
 
 
 test_that("check_group_variation, multiple by", {
+  skip_if_not_installed("effectsize")
   egsingle <- data.frame(
     schoolid = factor(rep(c("2020", "2820"), times = c(18, 6))),
     lowinc = rep(c(TRUE, FALSE), times = c(18, 6)),
@@ -216,12 +221,13 @@ test_that("check_group_variation, multiple by", {
         "within",
         "both"
       ),
-      Design = rep(c("nested", NA_character_), c(1, 7))
+      Design = rep(c("nested", NA_character_), c(1, 7)),
+      stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
   )
-  expect_equal(out7$r[out7$Variation %in% "between"], c(1, 1, 1), tolerance = 1e-4)
-  expect_equal(out7$r[out7$Variation %in% "within"], c(0, 0), tolerance = 1e-4)
+  expect_equal(out7$r[which(out7$Variation == "between")], c(1, 1, 1), tolerance = 1e-4)
+  expect_equal(out7$r[which(out7$Variation == "within")], c(0, 0), tolerance = 1e-4)
   expect_false(any(out7$r[!out7$Variation %in% c("between", "within")] %in% c(1, 0)))
   expect_equal(out7$r[-c(2, 4, 8)], c(1, 0, 1, 1, 0), tolerance = 1e-4)
   expect_true(all(0.25 < out7$r[c(2, 4, 8)] & out7$r[c(2, 4, 8)] < 0.6))
@@ -259,12 +265,17 @@ test_that("check_group_variation, multiple by", {
         "within",
         "both"
       ),
-      Design = rep(c("nested", NA_character_), c(2, 8))
+      Design = rep(c("nested", NA_character_), c(2, 8)),
+      stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
   )
-  expect_equal(out8$r[out8$Variation %in% "between"], c(1, 1, 1, 1), tolerance = 1e-4)
-  expect_equal(out8$r[out8$Variation %in% "within"], c(0, 0), tolerance = 1e-4)
+  expect_equal(
+    out8$r[which(out8$Variation == "between")],
+    c(1, 1, 1, 1),
+    tolerance = 1e-4
+  )
+  expect_equal(out8$r[which(out8$Variation == "within")], c(0, 0), tolerance = 1e-4)
   expect_false(any(out8$r[!out8$Variation %in% c("between", "within")] %in% c(1, 0)))
   expect_equal(out8$r[-c(1, 3, 5, 10)], c(1, 0, 1, 1, 1, 0), tolerance = 1e-4)
   expect_true(all(0.25 < out8$r[c(1, 3, 5, 10)] & out8$r[c(1, 3, 5, 10)] < 0.8))
@@ -292,7 +303,8 @@ test_that("check_group_variation, models", {
       Variable = "Days",
       Variation = "within",
       Design = NA_character_,
-      r = 0
+      r = 0,
+      stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
   )

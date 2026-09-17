@@ -21,7 +21,6 @@
 ^.github/.
 ^CODE_OF_CONDUCT\.md$
 ^revdep$
-^tests/testthat/_snaps/.
 ^cran-comments\.md$
 ^\.github$
 \.code-workspace$

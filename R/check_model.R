@@ -355,11 +355,13 @@ check_model.default <- function(
   }
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli ||
-    minfo$is_count ||
-    minfo$is_ordinal ||
-    minfo$is_categorical ||
-    minfo$is_multinomial) # nolint
+  suggest_dots <- any(
+    minfo$is_bernoulli,
+    minfo$is_count,
+    minfo$is_ordinal,
+    minfo$is_categorical,
+    minfo$is_multinomial
+  )
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -379,13 +381,8 @@ check_model.default <- function(
 
   # if we have only categorical predictors, we don't show CI by default
   parameter_types <- .safe(parameters::parameters_type(model))
-  if (
-    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
-  ) {
-    show_ci <- FALSE
-  } else {
-    show_ci <- TRUE
-  }
+  show_ci <- is.null(parameter_types) ||
+    !all(parameter_types$Type %in% c("intercept", "factor"))
 
   attr(assumptions_data, "panel") <- panel
   attr(assumptions_data, "dot_size") <- size_dot
