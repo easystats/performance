@@ -33,16 +33,36 @@ test_that("check_collinearity, interaction", {
 test_that("check_collinearity, fallback path keeps interactions", {
   m <- lm(mpg ~ wt * cyl, data = mtcars)
   m_no_int <- lm(mpg ~ 0 + wt * cyl, data = mtcars)
+  mm <- stats::model.matrix(stats::terms(m), data = mtcars)
+  mm_no_int <- stats::model.matrix(stats::terms(m_no_int), data = mtcars)
+  params <- insight::clean_names(insight::find_parameters(m)[["conditional"]])
+  params_no_int <- insight::clean_names(insight::find_parameters(m_no_int)[["conditional"]])
+  coef_names <- insight::clean_names(colnames(mm))
+  coef_names_no_int <- insight::clean_names(colnames(mm_no_int))
+  assign <- attr(mm, "assign")
+  assign_no_int <- attr(mm_no_int, "assign")
+  if (!"intercept" %in% params && "intercept" %in% coef_names) {
+    int_pos <- which(coef_names == "intercept")
+    coef_names <- coef_names[-int_pos]
+    assign <- assign[-int_pos]
+  }
+  if (!"intercept" %in% params_no_int && "intercept" %in% coef_names_no_int) {
+    int_pos <- which(coef_names_no_int == "intercept")
+    coef_names_no_int <- coef_names_no_int[-int_pos]
+    assign_no_int <- assign_no_int[-int_pos]
+  }
+  expected <- assign[match(params, coef_names)]
+  expected_no_int <- assign_no_int[match(params_no_int, coef_names_no_int)]
+
   testthat::local_mocked_bindings(
     get_modelmatrix = function(...) structure(matrix(0, nrow = 1, ncol = 1), assign = NULL),
     .package = "insight"
   )
   out <- performance:::.term_assignments(m, component = "conditional")
   out_no_int <- performance:::.term_assignments(m_no_int, component = "conditional")
-  expect_true(all(c(1, 2, 3) %in% out))
-  expect_true(3 %in% out)
+  expect_identical(out, expected)
   expect_false(anyNA(out))
-  expect_true(all(c(1, 2, 3) %in% out_no_int))
+  expect_identical(out_no_int, expected_no_int)
   expect_false(anyNA(out_no_int))
 })
 
