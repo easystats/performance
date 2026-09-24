@@ -30,10 +30,14 @@ test_that("check_collinearity, interaction", {
 })
 
 
-test_that("check_collinearity, fallback term-assignment keeps interactions", {
+test_that("check_collinearity, fallback path keeps interactions", {
   m <- lm(mpg ~ wt * cyl, data = mtcars)
+  testthat::local_mocked_bindings(
+    get_modelmatrix = function(...) structure(matrix(0, nrow = 1, ncol = 1), assign = NULL),
+    .package = "insight"
+  )
   expect_identical(
-    performance:::.find_term_assignment(m, component = "conditional"),
+    performance:::.term_assignments(m, component = "conditional"),
     c(0, 1, 2, 3)
   )
 })
