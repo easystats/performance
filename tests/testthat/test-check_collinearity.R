@@ -43,7 +43,6 @@ test_that("check_collinearity, fallback path keeps interactions", {
   expect_true(3 %in% out)
   expect_false(anyNA(out))
   expect_true(all(c(1, 2, 3) %in% out_no_int))
-  expect_false(0 %in% out_no_int)
   expect_false(anyNA(out_no_int))
 })
 

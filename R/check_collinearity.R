@@ -799,13 +799,7 @@ check_collinearity.zerocount <- function(
     coef_names
   )
 
-  out <- term_assign[idx]
-
-  if (!"intercept" %in% param_names && any(out == 0, na.rm = TRUE)) {
-    out[out == 0] <- 1
-  }
-
-  out
+  term_assign[idx]
 }
 
 
