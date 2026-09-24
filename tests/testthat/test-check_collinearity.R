@@ -32,14 +32,19 @@ test_that("check_collinearity, interaction", {
 
 test_that("check_collinearity, fallback path keeps interactions", {
   m <- lm(mpg ~ wt * cyl, data = mtcars)
+  m_no_int <- lm(mpg ~ 0 + wt * cyl, data = mtcars)
   testthat::local_mocked_bindings(
     get_modelmatrix = function(...) structure(matrix(0, nrow = 1, ncol = 1), assign = NULL),
     .package = "insight"
   )
   out <- performance:::.term_assignments(m, component = "conditional")
+  out_no_int <- performance:::.term_assignments(m_no_int, component = "conditional")
   expect_true(all(c(1, 2, 3) %in% out))
   expect_true(3 %in% out)
   expect_false(anyNA(out))
+  expect_true(all(c(1, 2, 3) %in% out_no_int))
+  expect_false(0 %in% out_no_int)
+  expect_false(anyNA(out_no_int))
 })
 
 
