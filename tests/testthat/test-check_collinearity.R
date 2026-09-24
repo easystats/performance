@@ -47,6 +47,22 @@ test_that("check_collinearity, fallback path keeps interactions", {
 })
 
 
+test_that("check_collinearity, fallback returns NULL if matrix rebuild fails", {
+  m <- lm(mpg ~ wt * cyl, data = mtcars)
+  testthat::local_mocked_bindings(
+    get_data = function(...) NULL,
+    .package = "insight"
+  )
+  testthat::local_mocked_bindings(
+    model.matrix = function(...) stop("rebuild failed"),
+    .package = "stats"
+  )
+  expect_null(
+    performance:::.find_term_assignment(m, component = "conditional")
+  )
+})
+
+
 test_that("check_collinearity", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
