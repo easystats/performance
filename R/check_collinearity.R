@@ -785,9 +785,18 @@ check_collinearity.zerocount <- function(
     model_params <- insight::find_parameters(x)[[component]]
   }
 
+  coef_names <- insight::clean_names(colnames(mm))
+  param_names <- insight::clean_names(model_params)
+
+  if (!"intercept" %in% param_names && "intercept" %in% coef_names) {
+    int_pos <- which(coef_names == "intercept")
+    coef_names <- coef_names[-int_pos]
+    term_assign <- term_assign[-int_pos]
+  }
+
   idx <- match(
-    insight::clean_names(model_params),
-    insight::clean_names(colnames(mm))
+    param_names,
+    coef_names
   )
 
   term_assign[idx]
