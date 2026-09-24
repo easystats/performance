@@ -761,11 +761,25 @@ check_collinearity.zerocount <- function(
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = FALSE)
-  mm <- tryCatch(
-    stats::model.matrix(stats::terms(f), data = dat),
-    error = function(e) NULL
-  )
+  mm <- NULL
+  mf <- insight::get_data(x, source = "mf", verbose = FALSE)
+  if (!is.null(mf)) {
+    mf_terms <- attr(mf, "terms")
+    if (!is.null(mf_terms)) {
+      mm <- tryCatch(
+        stats::model.matrix(mf_terms, data = mf),
+        error = function(e) NULL
+      )
+    }
+  }
+
+  if (is.null(mm)) {
+    dat <- insight::get_data(x, verbose = FALSE)
+    mm <- tryCatch(
+      stats::model.matrix(stats::terms(f), data = dat),
+      error = function(e) NULL
+    )
+  }
 
   if (is.null(mm)) {
     return(NULL)
