@@ -832,6 +832,10 @@ check_collinearity.zerocount <- function(
     coef_names
   )
 
+  if (anyNA(idx)) {
+    return(NULL)
+  }
+
   term_assign[idx]
 }
 
