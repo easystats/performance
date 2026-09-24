@@ -778,7 +778,7 @@ check_collinearity.zerocount <- function(
     if (is.null(dat)) {
       return(NULL)
     }
-    fallback_terms <- list(.safe(stats::terms(x)), .safe(stats::terms(f)))
+    fallback_terms <- list(.safe(stats::terms(x)), .safe(stats::terms(f)), f)
     for (trm in fallback_terms) {
       if (is.null(trm)) {
         next
