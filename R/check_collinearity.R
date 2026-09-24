@@ -756,25 +756,25 @@ check_collinearity.zerocount <- function(
 
 
 .find_term_assignment <- function(x, component, verbose = TRUE) {
-  pred <- insight::find_predictors(x)[[component]]
-
-  if (is.null(pred)) {
+  f <- insight::find_formula(x, verbose = FALSE)[[component]]
+  if (is.null(f)) {
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
+  dat <- insight::get_data(x, verbose = FALSE)
+  mm <- tryCatch(
+    stats::model.matrix(stats::terms(f), data = dat),
+    error = function(e) NULL
+  )
 
-  parms <- unlist(lapply(seq_along(pred), function(i) {
-    p <- pred[i]
-    if (is.factor(dat[[p]])) {
-      ps <- paste0(p, levels(dat[[p]]))
-      names(ps)[seq_along(ps)] <- i
-      ps
-    } else {
-      names(p) <- i
-      p
-    }
-  }))
+  if (is.null(mm)) {
+    return(NULL)
+  }
+
+  term_assign <- attr(mm, "assign")
+  if (is.null(term_assign)) {
+    return(NULL)
+  }
 
   if (insight::is_gam_model(x)) {
     model_params <- as.vector(unlist(insight::find_parameters(x)[c(
@@ -785,10 +785,12 @@ check_collinearity.zerocount <- function(
     model_params <- insight::find_parameters(x)[[component]]
   }
 
-  as.numeric(names(parms)[match(
+  idx <- match(
     insight::clean_names(model_params),
-    parms
-  )])
+    insight::clean_names(colnames(mm))
+  )
+
+  term_assign[idx]
 }
 
 

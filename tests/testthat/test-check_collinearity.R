@@ -30,6 +30,15 @@ test_that("check_collinearity, interaction", {
 })
 
 
+test_that("check_collinearity, fallback term-assignment keeps interactions", {
+  m <- lm(mpg ~ wt * cyl, data = mtcars)
+  expect_identical(
+    performance:::.find_term_assignment(m, component = "conditional"),
+    c(0, 1, 2, 3)
+  )
+})
+
+
 test_that("check_collinearity", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")

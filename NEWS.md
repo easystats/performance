@@ -1,3 +1,10 @@
+# performance (devel)
+
+## Bug fixes
+
+* `check_collinearity()` no longer drops interaction terms when fallback term
+  assignment is used (for example, in some `brmsfit` models, #936).
+
 # performance 0.18.2
 
 ## Bug fixes
