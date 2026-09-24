@@ -780,8 +780,12 @@ check_collinearity.zerocount <- function(
       if (is.null(trm)) {
         next
       }
+      dat_trm <- tryCatch(
+        stats::model.frame(trm, data = dat, na.action = stats::na.pass),
+        error = function(e) dat
+      )
       mm <- tryCatch(
-        stats::model.matrix(trm, data = dat),
+        stats::model.matrix(trm, data = dat_trm),
         error = function(e) NULL
       )
       if (!is.null(mm)) {
