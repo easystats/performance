@@ -775,8 +775,12 @@ check_collinearity.zerocount <- function(
 
   if (is.null(mm)) {
     dat <- insight::get_data(x, verbose = FALSE)
+    fallback_terms <- .safe(stats::terms(x))
+    if (is.null(fallback_terms)) {
+      fallback_terms <- stats::terms(f)
+    }
     mm <- tryCatch(
-      stats::model.matrix(stats::terms(f), data = dat),
+      stats::model.matrix(fallback_terms, data = dat),
       error = function(e) NULL
     )
   }
