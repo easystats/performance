@@ -802,7 +802,7 @@ check_collinearity.zerocount <- function(
   out <- term_assign[idx]
 
   if (!"intercept" %in% param_names && any(out == 0, na.rm = TRUE)) {
-    out <- out + 1
+    out[out == 0] <- 1
   }
 
   out
