@@ -92,13 +92,14 @@
 #' Inspect the margins for pronounced multimodality first, for example with
 #' [`check_multimodal()`] on single variables. Groups that differ only in
 #' their means are detected at moderate separations. At large separations the
-#' separation is expressed in the margins themselves, and the twins preserve
-#' the margins exactly, so the reference model can reproduce such groups and
-#' the comparison may then report no detected excess. This behaviour was
-#' observed in the simulation constructions of Meng (2026); it is not asserted
-#' as a general rule. Whether the joint distribution has clustering tendency is a different
-#' question again; see [`check_clusterstructure()`], which uses a
-#' spatial-uniformity null.
+#' separation shows in the margins themselves. The twins keep the margins
+#' exactly, so the pipeline can select as many clusters in the twins (which
+#' contain no groups) as in the data, and the comparison may then report no
+#' detected excess. This behaviour was observed in the simulation
+#' constructions of Meng (2026); it is not asserted as a general rule. Whether
+#' the joint distribution has clustering tendency is a different question
+#' again; see [`check_clusterstructure()`], which uses a spatial-uniformity
+#' null.
 #'
 #' @examplesIf all(insight::check_if_installed(c("matchednull", "mclust", "cluster"), quietly = TRUE))
 #' \donttest{
