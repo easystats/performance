@@ -756,25 +756,58 @@ check_collinearity.zerocount <- function(
 
 
 .find_term_assignment <- function(x, component, verbose = TRUE) {
-  pred <- insight::find_predictors(x)[[component]]
-
-  if (is.null(pred)) {
+  f <- insight::find_formula(x, verbose = FALSE)[[component]]
+  if (is.null(f)) {
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
-
-  parms <- unlist(lapply(seq_along(pred), function(i) {
-    p <- pred[i]
-    if (is.factor(dat[[p]])) {
-      ps <- paste0(p, levels(dat[[p]]))
-      names(ps)[seq_along(ps)] <- i
-      ps
-    } else {
-      names(p) <- i
-      p
+  mm <- NULL
+  mf <- insight::get_data(x, source = "mf", verbose = FALSE)
+  if (!is.null(mf)) {
+    mf_terms <- attr(mf, "terms")
+    if (!is.null(mf_terms)) {
+      mm <- tryCatch(
+        stats::model.matrix(mf_terms, data = mf),
+        error = function(e) NULL
+      )
     }
-  }))
+  }
+
+  if (is.null(mm)) {
+    dat <- insight::get_data(x, verbose = FALSE)
+    if (is.null(dat)) {
+      return(NULL)
+    }
+    fallback_terms <- list(.safe(stats::terms(x)), .safe(stats::terms(f)), f)
+    for (trm in fallback_terms) {
+      if (is.null(trm)) {
+        next
+      }
+      dat_trm <- tryCatch(
+        stats::model.frame(trm, data = dat, na.action = stats::na.pass),
+        error = function(e) NULL
+      )
+      if (is.null(dat_trm)) {
+        next
+      }
+      mm <- tryCatch(
+        stats::model.matrix(trm, data = dat_trm),
+        error = function(e) NULL
+      )
+      if (!is.null(mm)) {
+        break
+      }
+    }
+  }
+
+  if (is.null(mm)) {
+    return(NULL)
+  }
+
+  term_assign <- attr(mm, "assign")
+  if (is.null(term_assign)) {
+    return(NULL)
+  }
 
   if (insight::is_gam_model(x)) {
     model_params <- as.vector(unlist(insight::find_parameters(x)[c(
@@ -785,10 +818,25 @@ check_collinearity.zerocount <- function(
     model_params <- insight::find_parameters(x)[[component]]
   }
 
-  as.numeric(names(parms)[match(
-    insight::clean_names(model_params),
-    parms
-  )])
+  coef_names <- insight::clean_names(colnames(mm))
+  param_names <- insight::clean_names(model_params)
+
+  if (!"intercept" %in% param_names && "intercept" %in% coef_names) {
+    int_pos <- which(coef_names == "intercept")
+    coef_names <- coef_names[-int_pos]
+    term_assign <- term_assign[-int_pos]
+  }
+
+  idx <- match(
+    param_names,
+    coef_names
+  )
+
+  if (anyNA(idx)) {
+    return(NULL)
+  }
+
+  term_assign[idx]
 }
 
 
