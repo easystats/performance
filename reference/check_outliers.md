@@ -447,7 +447,7 @@ outliers_list <- check_outliers(data, method = c(
 ))
 outliers_list
 #> OK: No outliers detected.
-#> - Based on the following methods and thresholds: mahalanobis (3.291), iqr (2), zscore (31.264).
+#> - Based on the following methods and thresholds: mahalanobis (31.264), iqr (2), zscore (3.291).
 #> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb
 #> 
 #> 

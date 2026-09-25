@@ -2,6 +2,8 @@
 
 ## performance 0.18.2
 
+CRAN release: 2026-09-10
+
 ### Bug fixes
 
 - [`check_singularity()`](https://easystats.github.io/performance/reference/check_singularity.md)
