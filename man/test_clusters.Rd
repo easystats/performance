@@ -2,7 +2,7 @@
 % Please edit documentation in R/test_clusters.R
 \name{test_clusters}
 \alias{test_clusters}
-\title{Test a clustering result against matched nulls}
+\title{Test a cluster count against matched-null data}
 \usage{
 test_clusters(
   x,
@@ -16,11 +16,13 @@ test_clusters(
 \arguments{
 \item{x}{A numeric matrix or data frame with no missing or infinite values.}
 
-\item{cluster_function}{A function that takes a numeric matrix and returns one
-number. By default, \code{mclust::Mclust()} selects the number of mixture
-components by BIC.}
+\item{cluster_function}{A function that takes a numeric matrix and returns a
+single finite number, typically the selected number of clusters. By
+default, \code{mclust::Mclust()} selects the number of mixture components by
+BIC. The function is called once on the observed data and once on every
+twin, and its return value is checked each time (see 'Details').}
 
-\item{iterations}{Number of matched-null data sets to evaluate.}
+\item{iterations}{Number of matched-null twins to evaluate.}
 
 \item{n_max}{Maximum number of clusters considered by the default
 \code{mclust::Mclust()} pipeline. Ignored when \code{cluster_function} is supplied.}
@@ -33,49 +35,125 @@ observed and matched-null cluster counts are computed.}
 \code{ridge}, or \code{parallel}.}
 }
 \value{
-An object of class \code{"test_clusters"} and \code{"matched_null_test"}. It
-contains the observed statistic (\code{real}), matched-null statistics (\code{null}),
-null interval (\code{interval}), one-sided Monte Carlo p-value (\code{p_exceed}), and
-interval verdict (\code{within}).
+An object of class \code{"test_clusters"} and \code{"matched_null_test"}: a
+list with the observed statistic (\code{real}), the twin statistics (\code{null}),
+the reference interval (\code{interval}), the Monte Carlo exceedance
+probability (\code{p_exceed}), the interval verdict (\code{within}), the number of
+twins (\code{R}), and the copula family (\code{copula}, with \code{df} for the t copula).
+The attribute \code{"outcome"} is \code{"within"}, \code{"above"}, or \code{"below"}: the
+position of the observed statistic relative to the reference interval.
+The attributes \code{"standardize"} and \code{"n_max"} record the preprocessing and
+the maximum number of components of the default pipeline (\code{n_max} is
+\code{NULL} when \code{cluster_function} is supplied).
 }
 \description{
-\code{test_clusters()} compares the number of clusters selected from observed data
-with the numbers selected from matched-null versions of those data. The null
-data preserve the observed marginal distributions and correlation structure
-but contain no cluster structure by construction. This complements
-\code{\link[=check_clusterstructure]{check_clusterstructure()}}, which evaluates clustering tendency against a
-spatial-uniformity null. The matched-null comparison is implemented with
-\code{\link[matchednull:matched_null_test]{matchednull::matched_null_test()}}.
+\code{test_clusters()} runs a cluster-count selector on the observed data and on
+\code{iterations} matched-null twins of those data, and compares the observed
+count with the counts the twins produce. The twins keep the observed values
+of every variable exactly and reproduce the observed correlations
+approximately, but contain no cluster structure by construction. The test
+reports one of three outcomes: no detected excess, a departure from the
+reference model, or a count below the reference range. The comparison is
+implemented with \code{\link[matchednull:matched_null_test]{matchednull::matched_null_test()}}. It asks a different
+question from \code{\link[=check_clusterstructure]{check_clusterstructure()}}, which evaluates clustering
+tendency against a spatial-uniformity null.
 }
 \details{
-The default cluster-count pipeline fits Gaussian mixture models for one to
-\code{n_max} components and returns the BIC-selected count. A custom
-\code{cluster_function} receives the same preprocessed data as the default
-pipeline and must return one non-missing number.
+The default cluster-count pipeline fits Gaussian mixture models with one to
+\code{n_max} components using \code{mclust::Mclust()} and returns the BIC-selected
+number of components. A user-supplied \code{cluster_function} receives the same
+preprocessed data matrix as the default pipeline. Its return value is
+checked on the observed data and on every twin: it must be a single finite
+number, and any other value (\code{NA}, a character string, a factor, a logical
+value, a vector of length two, \code{NULL}) is an error. The check runs here so
+that invalid values are rejected whatever matchednull version is installed:
+matchednull 0.2.1 dropped missing twin values from the exceedance
+probability without notice, and later versions stop with an error of their
+own.
+\subsection{Reference model}{
 
-The Gaussian matched null tests for structure beyond the observed margins
-and correlations; rejection alone does not establish the existence of
-discrete types. When tail dependence is plausible, rerun the test with
-\code{copula = "t"} as a sensitivity analysis.
+Each twin is drawn from a Gaussian copula whose latent correlation matrix
+is the observed correlation matrix. Every column of a twin contains exactly
+the observed values of that variable, rearranged in the rank order of the
+copula draw. The margins are therefore reproduced exactly, but the
+correlations only approximately: non-normal margins change the Pearson
+correlations of the output relative to the latent correlation matrix. With
+\code{copula = "t"}, the draw comes from a t copula instead, a sensitivity
+variant with heavier-tailed dependence. Rerunning with \code{copula = "t"} shows
+whether the outcome changes under that reference model; it does not by
+itself establish or rule out clusters.
+}
+
+\subsection{Outcomes}{
+
+The observed count is compared with the interval between the \code{probs}
+quantiles of the twin counts (by default the 2.5\% and 97.5\% quantiles).
+\itemize{
+\item A count above the interval is a departure from the specified reference
+model. The test does not settle what kind of departure it is, and the
+result is not evidence that clusters exist: typeless data with joint
+asymmetry, for example, can exceed the reference model as well.
+\item A count inside the interval is no detected excess for the statistic that
+was compared, the cluster count. It is not evidence that there are no
+clusters, and it does not establish that the joint distribution belongs
+to the reference family.
+\item A count below the interval is a diagnostic signal, not a verdict. It
+calls for checking the pipeline and the reference before any
+interpretation: whether the fits converged, whether the twins reproduce
+the intended margins and correlations, and whether data and twins were
+compared at the same sample size with the same statistic.
+}
+
+\code{p_exceed} is a Monte Carlo exceedance probability under a reference model
+fitted to the same data. It equals \code{(1 + k) / (iterations + 1)}, where \code{k}
+is the number of twins whose count is at least the observed count. It is
+not an exact finite-sample p-value.
+}
+
+\subsection{Before running the test}{
+
+Inspect the margins for pronounced multimodality first, for example with
+\code{\link[=check_multimodal]{check_multimodal()}} on single variables. Groups that differ only in
+their means are detected at moderate separations. At large separations the
+separation is expressed in the margins themselves, and the twins preserve
+the margins exactly, so the reference model can reproduce such groups and
+the comparison may then report no detected excess. This behaviour was
+observed in the simulation constructions of Meng (2026); it is not asserted
+as a general rule. Whether the joint distribution has clustering tendency is a different
+question again; see \code{\link[=check_clusterstructure]{check_clusterstructure()}}, which uses a
+spatial-uniformity null.
+}
 }
 \examples{
-\dontshow{if (requireNamespace("matchednull", quietly = TRUE) && requireNamespace("mclust", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("matchednull", "mclust", "cluster"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 \donttest{
 set.seed(42)
 test_clusters(iris[, 1:4], iterations = 19, n_max = 4)
 
-# Any scalar-returning clustering pipeline can be tested.
-pick_two <- function(data) 2
-test_clusters(iris[, 1:4], cluster_function = pick_two, iterations = 19)
+# Any pipeline that returns one number can be tested, for example k-means
+# with the number of clusters chosen by the mean silhouette width.
+select_k <- function(data) {
+  ks <- 2:5
+  sil <- vapply(ks, function(k) {
+    cl <- stats::kmeans(data, centers = k, nstart = 5)$cluster
+    mean(cluster::silhouette(cl, stats::dist(data))[, "sil_width"])
+  }, numeric(1))
+  ks[which.max(sil)]
+}
+test_clusters(iris[, 1:4], cluster_function = select_k, iterations = 19)
 }
 \dontshow{\}) # examplesIf}
 }
 \references{
-Meng, M. (2026). Types Without Taxa: A Covariance-Matched-Null Multiverse
-Test of Categorical Versus Continuous Personality Structure. Manuscript
-under review. \doi{10.17605/OSF.IO/2EKCG}
+\itemize{
+\item Meng, M. (2026). matchednull: Matched-null tests for cluster-count claims.
+R package version 0.2.1. \url{https://CRAN.R-project.org/package=matchednull}
+\item Meng, M. (2026). Types Without Taxa: A Covariance-Matched-Null Multiverse
+Test of Categorical Versus Continuous Personality Structure.
+Preregistration, Open Science Framework. \doi{10.17605/OSF.IO/2EKCG}
+}
 }
 \seealso{
 \code{\link[matchednull:matched_null_test]{matchednull::matched_null_test()}},
-\code{\link[=check_clusterstructure]{check_clusterstructure()}}
+\code{\link[=check_clusterstructure]{check_clusterstructure()}}, \code{\link[=check_multimodal]{check_multimodal()}}
 }
