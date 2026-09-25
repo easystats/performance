@@ -147,6 +147,17 @@ test_that("zscore print", {
   )
 })
 
+test_that("multiple methods print keeps method-threshold order", {
+  expect_output(
+    print(check_outliers(
+      mtcars,
+      method = c("mahalanobis", "iqr", "zscore"),
+      threshold = list(mahalanobis = 20, iqr = 1.2, zscore = 2.2)
+    )),
+    "Based on the following methods and thresholds: mahalanobis \\(20\\), iqr \\(1.2\\), zscore \\(2.2\\)."
+  )
+})
+
 # 3. Next, we check some attributes since it looks harder than
 # expected to test the complex print output itself
 
