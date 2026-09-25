@@ -1,3 +1,10 @@
+# performance (devel)
+
+## Bug fixes
+
+* Preserve method–threshold alignment in `print()` method for `check_outliers()`
+  for multi-method input.
+
 # performance 0.18.2
 
 ## Bug fixes
