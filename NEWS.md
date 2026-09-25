@@ -5,6 +5,9 @@
 * `check_collinearity()` no longer drops interaction terms when fallback term
   assignment is used (for example, in some `brmsfit` models, #936).
 
+* Preserve method–threshold alignment in `print()` method for `check_outliers()`
+  for multi-method input.
+
 # performance 0.18.2
 
 ## Bug fixes

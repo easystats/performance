@@ -652,6 +652,9 @@ print.check_outliers <- function(x, ...) {
   }
 
   thresholds <- lapply(attr(x, "threshold"), round_to_last_digit, 3)
+  if (!is.null(names(thresholds)) && length(method) > 1) {
+    thresholds <- thresholds[method]
+  }
 
   method.thresholds <- data.frame(
     method = method,
