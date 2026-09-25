@@ -1,3 +1,14 @@
+# performance (devel)
+
+## Changes
+
+* New function `test_clusters()` uses the `matchednull` package to compare a
+  selected cluster count with the counts obtained from matched-null data that
+  keep the observed margins and approximately the observed correlations. It
+  reports one of three outcomes (no detected excess, departure from the
+  reference model, below the reference range) and validates the return values
+  of the clustering function.
+
 # performance 0.18.2
 
 ## Bug fixes

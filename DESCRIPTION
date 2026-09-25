@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.18.2
+Version: 0.18.2.1
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -95,6 +95,7 @@ Suggests:
     brms,
     car,
     carData,
+    cluster,
     CompQuadForm,
     correlation (>= 0.8.8),
     cplm,
@@ -126,6 +127,7 @@ Suggests:
     loo,
     MASS,
     Matrix,
+    matchednull (>= 0.2.1),
     mclogit,
     mclust,
     metadat,
