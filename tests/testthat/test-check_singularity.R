@@ -26,6 +26,26 @@ test_that("check_singularity, lme4", {
 })
 
 
+test_that("check_singularity, nlme", {
+  skip_on_cran()
+  skip_if_not_installed("nlme")
+
+  data(Pixel, package = "nlme")
+  model <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+
+  expect_false(check_singularity(model))
+
+  data(Orthodont, package = "nlme")
+  negative_model <- nlme::lme(distance ~ age, random = ~ 1 | Subject, data = Orthodont)
+  negative_model$modelStruct$reStruct[[1]] <- structure(
+    matrix(-1, nrow = 1, dimnames = list("(Intercept)", "(Intercept)")),
+    class = c("fake_pdMat", "matrix")
+  )
+
+  expect_false(check_singularity(negative_model))
+})
+
+
 test_that("check_singularity", {
   skip_on_cran()
   skip_if_not_installed("glmmTMB")
