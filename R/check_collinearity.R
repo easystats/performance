@@ -871,3 +871,44 @@ check_collinearity.zerocount <- function(
 .has_intercept <- function(x) {
   any(tolower(x) %in% .intercepts() | startsWith(tolower(x), "intercept"))
 }
+
+# ========================================================================
+# old code - we keep this as backup for a while, to check whether
+# https://github.com/easystats/performance/pull/952/ works as intended
+# ========================================================================
+
+# .find_term_assignment <- function(x, component, verbose = TRUE) {
+#   pred <- insight::find_predictors(x)[[component]]
+#
+#   if (is.null(pred)) {
+#     return(NULL)
+#   }
+#
+#   dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
+#
+#   parms <- unlist(lapply(seq_along(pred), function(i) {
+#     p <- pred[i]
+#     if (is.factor(dat[[p]])) {
+#       ps <- paste0(p, levels(dat[[p]]))
+#       names(ps)[seq_along(ps)] <- i
+#       ps
+#     } else {
+#       names(p) <- i
+#       p
+#     }
+#   }))
+#
+#   if (insight::is_gam_model(x)) {
+#     model_params <- as.vector(unlist(insight::find_parameters(x)[c(
+#       component,
+#       "smooth_terms"
+#     )]))
+#   } else {
+#     model_params <- insight::find_parameters(x)[[component]]
+#   }
+#
+#   as.numeric(names(parms)[match(
+#     insight::clean_names(model_params),
+#     parms
+#   )])
+# }
