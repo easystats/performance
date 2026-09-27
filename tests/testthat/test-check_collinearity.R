@@ -36,7 +36,9 @@ test_that("check_collinearity, fallback path keeps interactions", {
   mm <- stats::model.matrix(stats::terms(m), data = mtcars)
   mm_no_int <- stats::model.matrix(stats::terms(m_no_int), data = mtcars)
   params <- insight::clean_names(insight::find_parameters(m)[["conditional"]])
-  params_no_int <- insight::clean_names(insight::find_parameters(m_no_int)[["conditional"]])
+  params_no_int <- insight::clean_names(insight::find_parameters(m_no_int)[[
+    "conditional"
+  ]])
   coef_names <- insight::clean_names(colnames(mm))
   coef_names_no_int <- insight::clean_names(colnames(mm_no_int))
   assign <- attr(mm, "assign")
@@ -55,7 +57,9 @@ test_that("check_collinearity, fallback path keeps interactions", {
   expected_no_int <- assign_no_int[match(params_no_int, coef_names_no_int)]
 
   testthat::local_mocked_bindings(
-    get_modelmatrix = function(...) structure(matrix(0, nrow = 1, ncol = 1), assign = NULL),
+    get_modelmatrix = function(...) {
+      structure(matrix(0, nrow = 1, ncol = 1), assign = NULL)
+    },
     .package = "insight"
   )
   out <- performance:::.term_assignments(m, component = "conditional")
