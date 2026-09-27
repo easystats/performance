@@ -821,8 +821,8 @@ check_collinearity.zerocount <- function(
   coef_names <- insight::clean_names(colnames(mm))
   param_names <- insight::clean_names(model_params)
 
-  if (!"intercept" %in% param_names && "intercept" %in% coef_names) {
-    int_pos <- which(coef_names == "intercept")
+  if (!.has_intercept(param_names) && .has_intercept(coef_names)) {
+    int_pos <- which(tolower(coef_names) %in% .intercepts())[1]
     coef_names <- coef_names[-int_pos]
     term_assign <- term_assign[-int_pos]
   }
@@ -833,7 +833,7 @@ check_collinearity.zerocount <- function(
   )
 
   if (anyNA(idx)) {
-    return(NULL)
+    idx <- idx[!is.na(idx)]
   }
 
   term_assign[idx]
@@ -851,4 +851,23 @@ check_collinearity.zerocount <- function(
       NULL
     }
   )
+}
+
+#' @keywords internal
+.intercepts <- function() {
+  c(
+    "(intercept)_zi",
+    "intercept (zero-inflated)",
+    "intercept (zero-inflation)",
+    "intercept",
+    "zi_intercept",
+    "(intercept)",
+    "b_intercept",
+    "b_zi_intercept"
+  )
+}
+
+#' @keywords internal
+.has_intercept <- function(x) {
+  any(tolower(x) %in% .intercepts() | startsWith(tolower(x), "intercept"))
 }
