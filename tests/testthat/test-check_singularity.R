@@ -35,16 +35,14 @@ test_that("check_singularity, nlme", {
 
   expect_false(check_singularity(model))
 
-  fake_model <- structure(
-    list(
-      modelStruct = list(
-        reStruct = matrix(-1, nrow = 1, dimnames = list("(Intercept)", "(Intercept)"))
-      )
-    ),
-    class = "lme"
+  data(Orthodont, package = "nlme")
+  negative_model <- nlme::lme(distance ~ age, random = ~ 1 | Subject, data = Orthodont)
+  negative_model$modelStruct$reStruct[[1]] <- structure(
+    matrix(-1, nrow = 1, dimnames = list("(Intercept)", "(Intercept)")),
+    class = c("fake_pdMat", "matrix")
   )
 
-  expect_false(check_singularity(fake_model))
+  expect_false(check_singularity(negative_model))
 })
 
 
