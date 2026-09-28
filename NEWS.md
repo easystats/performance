@@ -2,6 +2,10 @@
 
 ## Bug fixes
 
+* `check_model()` now correctly returns the random-effects normality panel for
+  mixed models that specify random slopes using split terms such as
+  `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).
+
 * `check_singularity()` for models from package *nlme* no longer errors for
   nested random effects with more than one grouping level and now applies the
   tolerance check to the absolute values of the variance-covariance diagonal.
