@@ -139,6 +139,23 @@ test_that("`check_model()` works for quantreg", {
   expect_s3_class(x, "check_model")
 })
 
+test_that("`check_model()` includes random-effects QQ for split random terms", {
+  skip_if_not_installed("lme4")
+  data(sleepstudy, package = "lme4")
+
+  model <- lme4::lmer(
+    Reaction ~ Days + (1 | Subject) + (0 + Days | Subject),
+    data = sleepstudy
+  )
+
+  out <- check_model(model, check = "reqq", verbose = FALSE)
+  expect_true("REQQ" %in% names(out))
+  expect_length(out$REQQ, 1)
+  expect_s3_class(out$REQQ[[1]], "data.frame")
+  expect_equal(nrow(out$REQQ[[1]]), 2 * nrow(lme4::ranef(model)$Subject))
+  expect_setequal(as.character(unique(out$REQQ[[1]]$facet)), c("(Intercept)", "Days"))
+})
+
 test_that("`check_model()` warnings for tweedie", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
