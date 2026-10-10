@@ -30,6 +30,27 @@ test_that("check_collinearity, interaction", {
 })
 
 
+test_that("check_collinearity, brms models keep interaction terms", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  # r | trials(n) ~ treat * c2, where treat is a factor
+  m <- insight::download_model("brms_2")
+  skip_if(is.null(m))
+
+  out <- check_collinearity(m, verbose = FALSE)
+  expect_identical(out$Term, c("treat", "c2", "treat:c2"))
+
+  # each term has one coefficient, so its VIF is the diagonal of the inverse
+  # correlation matrix of the slope coefficients
+  R <- stats::cov2cor(stats::vcov(m)[-1, -1])
+  expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
+})
+
+
 test_that("check_collinearity, fallback path keeps interactions", {
   m <- lm(mpg ~ wt * cyl, data = mtcars)
   m_no_int <- lm(mpg ~ 0 + wt * cyl, data = mtcars)

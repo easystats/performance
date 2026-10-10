@@ -738,6 +738,13 @@ check_collinearity.zerocount <- function(
           conditional = attr(insight::get_modelmatrix(x, type = "fixed"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, type = "zi_fixed"), "assign")
         )
+      } else if (inherits(x, "brmsfit")) {
+        # the model matrix of brms models drops interaction terms, so build
+        # the term assignment from the model formula instead
+        term_assign <- .find_term_assignment(x, component, verbose = verbose)
+        if (!length(term_assign)) {
+          term_assign <- attr(insight::get_modelmatrix(x), "assign")
+        }
       } else {
         term_assign <- attr(insight::get_modelmatrix(x), "assign")
       }
@@ -778,7 +785,14 @@ check_collinearity.zerocount <- function(
     if (is.null(dat)) {
       return(NULL)
     }
-    fallback_terms <- list(.safe(stats::terms(x)), .safe(stats::terms(f)), f)
+    # without the response, a response such as `r | trials(n)` in brms is
+    # not evaluated
+    fallback_terms <- list(
+      .safe(stats::terms(x)),
+      .safe(stats::terms(f)),
+      .safe(stats::delete.response(stats::terms(f))),
+      f
+    )
     for (trm in fallback_terms) {
       if (is.null(trm)) {
         next
@@ -816,6 +830,11 @@ check_collinearity.zerocount <- function(
     )]))
   } else {
     model_params <- insight::find_parameters(x)[[component]]
+  }
+
+  # brms names population-level effects "b_<name>"
+  if (inherits(x, "brmsfit")) {
+    model_params <- sub("^b_", "", model_params)
   }
 
   coef_names <- insight::clean_names(colnames(mm))
