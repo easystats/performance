@@ -148,9 +148,9 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
   )
 
   for (case in cases) {
-    local_mocked_bindings(.update_model = function(x, data, start) {
-      fit <- update_model(x, data = data, start = start)
-      removed <- match(setdiff(rownames(d), rownames(data)), rownames(d))
+    local_mocked_bindings(.update_model = function(x, data, start, weights) {
+      fit <- update_model(x, data = data, start = start, weights = weights)
+      removed <- which(weights == 0)
       if (removed %in% case$rows) {
         fit <- failures[[case$failure]](fit)
       }
@@ -185,6 +185,66 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
       expect_match(cook_alerts, "for rows 5 and 20,", fixed = TRUE, info = info)
     }
   }
+})
+
+
+test_that("check_outliers, glmmTMB failed refits for all or many rows", {
+  m <- glmmTMB::glmmTMB(mpg ~ wt + hp, data = mtcars)
+  update_model <- .update_model
+
+  local_mocked_bindings(.update_model = function(x, data, start, weights) {
+    stop("forced refit error", call. = FALSE)
+  })
+  expect_message(
+    out <- check_outliers(m, method = "cook"),
+    "could not be computed for any row",
+    fixed = TRUE
+  )
+  expect_true(all(is.na(as.data.frame(out)$Distance_Cook)))
+  expect_false(any(out))
+
+  local_mocked_bindings(.update_model = function(x, data, start, weights) {
+    if (which(weights == 0) <= 12) {
+      stop("forced refit error", call. = FALSE)
+    }
+    update_model(x, data = data, start = start, weights = weights)
+  })
+  alert <- tryCatch(
+    check_outliers(m, method = "cook"),
+    message = function(msg) gsub("\\s+", " ", conditionMessage(msg))
+  )
+  expect_match(alert, "rows 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 and 2 more,", fixed = TRUE)
+})
+
+
+test_that("check_outliers, glmmTMB Cook's distance with data-dependent terms", {
+  m <- glmmTMB::glmmTMB(mpg ~ scale(wt) + poly(hp, 2), data = mtcars, REML = TRUE)
+  expect_equal(
+    as.data.frame(check_outliers(m, method = "cook"))$Distance_Cook,
+    unname(stats::cooks.distance(stats::lm(mpg ~ scale(wt) + poly(hp, 2), data = mtcars))),
+    tolerance = 1e-6
+  )
+})
+
+
+test_that("check_outliers, glmmTMB Cook's distance with external weights and offset", {
+  w <- mtcars$cyl
+  m1 <- glmmTMB::glmmTMB(mpg ~ wt + hp, data = mtcars, weights = w)
+  out1 <- as.data.frame(check_outliers(m1, method = "cook"))$Distance_Cook
+  m2 <- glmmTMB::glmmTMB(mpg ~ wt + hp, data = mtcars, weights = cyl)
+  out2 <- as.data.frame(check_outliers(m2, method = "cook"))$Distance_Cook
+  expect_false(anyNA(out1))
+  expect_equal(out1, out2, tolerance = 1e-6)
+
+  o <- log(mtcars$disp)
+  m3 <- glmmTMB::glmmTMB(carb ~ wt + offset(o), family = poisson, data = mtcars)
+  out3 <- as.data.frame(check_outliers(m3, method = "cook"))$Distance_Cook
+  d <- mtcars
+  d$o <- log(d$disp)
+  m4 <- glmmTMB::glmmTMB(carb ~ wt + offset(o), family = poisson, data = d)
+  out4 <- as.data.frame(check_outliers(m4, method = "cook"))$Distance_Cook
+  expect_false(anyNA(out3))
+  expect_equal(out3, out4, tolerance = 1e-6)
 })
 
 

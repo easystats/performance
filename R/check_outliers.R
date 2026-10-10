@@ -2023,13 +2023,29 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     # glmmTMB has no hat values, so we compute case-deletion Cook's distance
     d <- .cooks_distance_refit(x)
     failed <- which(is.na(d))
-    if (length(failed) && verbose) {
+    if (length(failed) == length(d) && verbose) {
+      insight::format_alert(paste(
+        "Cook's distance could not be computed for any row, because every model",
+        "refit failed, did not converge, or had a non-positive-definite Hessian.",
+        "No row is flagged as outlier by this method."
+      ))
+    } else if (length(failed) && verbose) {
+      if (length(failed) > 10) {
+        failed_rows <- paste(
+          toString(failed[1:10]),
+          "and",
+          length(failed) - 10,
+          "more"
+        )
+      } else {
+        failed_rows <- datawizard::text_concatenate(failed)
+      }
       insight::format_alert(paste0(
         "Cook's distance could not be computed for ",
-        ifelse(length(failed) == 1, "row ", "rows "),
-        datawizard::text_concatenate(failed),
+        if (length(failed) == 1) "row " else "rows ",
+        failed_rows,
         ", because the model refit without ",
-        ifelse(length(failed) == 1, "this row", "these rows"),
+        if (length(failed) == 1) "this row" else "these rows",
         " failed, did not converge, or had a non-positive-definite Hessian."
       ))
     }
@@ -2056,29 +2072,43 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # Case-deletion Cook's distance for the conditional fixed effects, computed
 # by refitting the model without each row (generalizing Cook, 1977):
 # D_i = (b - b_(i))' V(b)^-1 (b - b_(i)) / p
-# Each refit starts at the full model's estimates of the fixed effects and
-# variance parameters. Rows where the refit fails, does not converge, or has a
-# non-positive-definite Hessian get NA.
+# A row is left out by giving it a weight of zero, so that data-dependent terms
+# like scale() or poly(), and weights or offsets defined outside the data, are
+# the same as in the full model. Each refit starts at the full model's
+# estimates of the fixed effects and variance parameters. Rows where the refit
+# fails, does not converge, or has a non-positive-definite Hessian get NA.
 .cooks_distance_refit <- function(x) {
   model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
-  b <- insight::get_parameters(x, component = "conditional", effects = "fixed")$Estimate
+  n_obs <- nrow(model_data)
+  fixed <- insight::get_parameters(x, component = "conditional", effects = "fixed")
+  b <- stats::setNames(fixed$Estimate, fixed$Parameter)
   vcov_inv <- solve(as.matrix(insight::get_varcov(x, component = "conditional")))
   n_params <- length(b)
 
-  # starting values, without random effects (their length can change when
-  # a row is removed)
+  prior_weights <- insight::get_weights(x, remove_na = TRUE)
+  if (is.null(prior_weights)) {
+    prior_weights <- rep(1, n_obs)
+  }
+  if (length(prior_weights) != n_obs) {
+    return(rep(NA_real_, n_obs))
+  }
+
+  # starting values, without the random effects
   start <- x$obj$env$parList(x$fit$par)
   start <- start[!names(start) %in% c("b", "bzi", "bdisp") & lengths(start) > 0]
 
   vapply(
-    seq_len(nrow(model_data)),
+    seq_len(n_obs),
     function(i) {
-      refit <- .refit_without_rows(x, model_data, i, start)
+      refit <- .refit_without_rows(x, model_data, i, start, prior_weights)
       if (!.refit_converged(refit)) {
         return(NA_real_)
       }
-      b_i <- insight::get_parameters(refit, component = "conditional", effects = "fixed")$Estimate
-      delta <- b - b_i
+      fixed_i <- insight::get_parameters(refit, component = "conditional", effects = "fixed")
+      if (!identical(fixed_i$Parameter, names(b))) {
+        return(NA_real_)
+      }
+      delta <- b - fixed_i$Estimate
       as.vector(t(delta) %*% vcov_inv %*% delta) / n_params
     },
     numeric(1)
@@ -2086,18 +2116,25 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.refit_without_rows <- function(x, model_data, rows, start) {
+.refit_without_rows <- function(x, model_data, rows, start, weights) {
+  weights[rows] <- 0
   tryCatch(
     suppressWarnings(suppressMessages(
-      .update_model(x, data = model_data[-rows, , drop = FALSE], start = start)
+      .update_model(x, data = model_data, start = start, weights = weights)
     )),
     error = function(e) NULL
   )
 }
 
 
-.update_model <- function(x, data, start) {
-  stats::update(x, data = data, start = start)
+.update_model <- function(x, data, start, weights) {
+  # evaluate in the environment of the model formula, so that variables
+  # defined outside the data (like an offset vector) are found
+  model_call <- stats::update(x, evaluate = FALSE)
+  model_call$data <- data
+  model_call$start <- start
+  model_call$weights <- weights
+  eval(model_call, envir = environment(stats::formula(x)))
 }
 
 

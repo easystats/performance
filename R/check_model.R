@@ -673,7 +673,15 @@ check_model.DHARMa <- check_model.performance_simres
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
     # glmmTMB needs one refit per row for Cook's distance, which is too slow here
-    if (!inherits(model, "glmmTMB")) {
+    if (inherits(model, "glmmTMB")) {
+      if (verbose) {
+        insight::format_alert(paste(
+          "The check for influential observations is skipped for models of class",
+          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
+          "Use `check_outliers()` to compute it."
+        ))
+      }
+    } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
     }
     if (is.null(dat$OUTLIERS)) {
@@ -739,7 +747,15 @@ check_model.DHARMa <- check_model.performance_simres
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
     # glmmTMB needs one refit per row for Cook's distance, which is too slow here
-    if (!inherits(model, "glmmTMB")) {
+    if (inherits(model, "glmmTMB")) {
+      if (verbose) {
+        insight::format_alert(paste(
+          "The check for influential observations is skipped for models of class",
+          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
+          "Use `check_outliers()` to compute it."
+        ))
+      }
+    } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
     }
     if (is.null(dat$OUTLIERS)) {
