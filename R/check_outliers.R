@@ -2028,9 +2028,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     if (length(failed) == length(d) && verbose) {
       insight::format_alert(paste(
         "Cook's distance could not be computed for any row, because the model",
-        "refits failed, did not converge, or had a non-positive-definite Hessian,",
-        "or the model weights could not be matched to the data rows.",
-        "No row is flagged as outlier by this method."
+        "refits failed, did not converge, had a non-positive-definite Hessian, or",
+        "returned different fixed-effect terms, or because the variance-covariance",
+        "matrix of the model could not be inverted, or the model weights could not",
+        "be matched to the data rows. No row is flagged as outlier by this method."
       ))
     } else if (length(failed) && verbose) {
       if (length(failed) > 10) {
@@ -2049,7 +2050,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
         failed_rows,
         ", because the model refit without ",
         if (length(failed) == 1) "this row" else "these rows",
-        " failed, did not converge, or had a non-positive-definite Hessian."
+        " failed, did not converge, had a non-positive-definite Hessian, or",
+        " returned different fixed-effect terms."
       ))
     }
   } else {
@@ -2081,13 +2083,24 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # estimates of the fixed effects and variance parameters. Rows where the refit
 # fails, does not converge, has a non-positive-definite Hessian, or returns
 # different fixed-effect terms get NA. All rows get NA if the model weights do
-# not match the data rows.
+# not match the data rows or the variance-covariance matrix cannot be inverted.
+# Fixed effects that are dropped (rank deficiency) or mapped are left out.
 .cooks_distance_refit <- function(x) {
   model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
   n_obs <- nrow(model_data)
+
+  # only use fixed effects that are estimated (not dropped or mapped), which
+  # are those in the variance-covariance matrix
+  vcov_cond <- as.matrix(insight::get_varcov(x, component = "conditional"))
+  vcov_inv <- .safe(solve(vcov_cond))
+  if (is.null(vcov_inv)) {
+    return(rep(NA_real_, n_obs))
+  }
   fixed <- insight::get_parameters(x, component = "conditional", effects = "fixed")
-  b <- stats::setNames(fixed$Estimate, fixed$Parameter)
-  vcov_inv <- solve(as.matrix(insight::get_varcov(x, component = "conditional")))
+  b <- stats::setNames(fixed$Estimate, fixed$Parameter)[colnames(vcov_cond)]
+  if (anyNA(b)) {
+    return(rep(NA_real_, n_obs))
+  }
   n_params <- length(b)
 
   prior_weights <- insight::get_weights(x, remove_na = TRUE)
@@ -2110,10 +2123,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
         return(NA_real_)
       }
       fixed_i <- insight::get_parameters(refit, component = "conditional", effects = "fixed")
-      if (!identical(fixed_i$Parameter, names(b))) {
+      b_i <- stats::setNames(fixed_i$Estimate, fixed_i$Parameter)[names(b)]
+      if (anyNA(b_i)) {
         return(NA_real_)
       }
-      delta <- b - fixed_i$Estimate
+      delta <- b - b_i
       as.vector(t(delta) %*% vcov_inv %*% delta) / n_params
     },
     numeric(1)

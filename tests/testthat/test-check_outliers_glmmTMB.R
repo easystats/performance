@@ -248,6 +248,30 @@ test_that("check_outliers, glmmTMB Cook's distance with external weights and off
 })
 
 
+test_that("check_outliers, glmmTMB Cook's distance with dropped or mapped fixed effects", {
+  d <- mtcars
+  d$wt2 <- d$wt * 2
+  m1 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ wt + wt2 + hp, data = d, REML = TRUE))
+  # insight warns that the model matrix is rank deficient
+  out1 <- as.data.frame(suppressWarnings(check_outliers(m1, method = "cook")))$Distance_Cook
+  expect_equal(
+    out1,
+    unname(stats::cooks.distance(stats::lm(mpg ~ wt + hp, data = d))),
+    tolerance = 1e-6
+  )
+
+  m2 <- glmmTMB::glmmTMB(
+    mpg ~ wt + hp,
+    data = mtcars,
+    map = list(beta = factor(c(1, NA, 2))),
+    start = list(beta = c(30, -3, 0))
+  )
+  out2 <- as.data.frame(suppressWarnings(check_outliers(m2, method = "cook")))$Distance_Cook
+  expect_length(out2, nrow(mtcars))
+  expect_false(anyNA(out2))
+})
+
+
 test_that("check_model, glmmTMB models do not run Cook's distance refits", {
   skip_if_not_installed("see")
   refit_calls <- 0
