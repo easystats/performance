@@ -228,3 +228,97 @@ test_that("`check_model()` with transformed response when named as function", {
   out <- check_predictions(model)
   expect_s3_class(out, "performance_pp_check")
 })
+
+
+# brms models that cannot be converted to frequentist models ----------------
+
+skip_if_brms_fixture_unavailable <- function() {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("bayestestR")
+  skip_if_offline()
+}
+
+mock_failed_conversion <- function(env = parent.frame()) {
+  testthat::local_mocked_bindings(
+    bayesian_as_frequentist = function(...) stop("conversion failed", call. = FALSE),
+    .package = "bayestestR",
+    .env = env
+  )
+}
+
+test_that("`check_model()` falls back to Bayesian checks if brms conversion fails", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  mock_failed_conversion()
+
+  out <- suppressMessages(check_model(m))
+  expect_s3_class(out, "check_model")
+  expect_named(out, c("VIF", "PP_CHECK"), ignore.order = TRUE)
+  expect_true(all(c("x", "y", "group") %in% colnames(out$VIF)))
+  expect_s3_class(out$PP_CHECK, "performance_pp_check")
+  expect_identical(attr(out, "check"), "all")
+  expect_identical(attr(out, "model_class"), "brmsfit")
+  expect_false(is.null(attr(out, "model_info")))
+
+  out <- suppressMessages(check_model(m, check = "vif"))
+  expect_named(out, "VIF")
+})
+
+test_that("`check_model()` fallback for brms models can be plotted", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  mock_failed_conversion()
+
+  out <- suppressMessages(check_model(m))
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_no_error(print(plot(out)))
+})
+
+test_that("`check_model()` alerts about skipped checks if brms conversion fails", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  mock_failed_conversion()
+
+  for (verbose in c(FALSE, TRUE)) {
+    msgs <- capture_messages(check_model(m, verbose = verbose))
+    msgs <- gsub("\\s+", " ", msgs)
+    alert <- msgs[grepl("conversion to a frequentist model failed", msgs, fixed = TRUE)]
+    expect_length(alert, 1)
+    for (panel in c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS")) {
+      expect_match(alert, paste0("\\b", panel, "\\b"))
+    }
+  }
+})
+
+test_that("`check_model()` errors for multivariate brms models before conversion", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+  called <- FALSE
+  testthat::local_mocked_bindings(
+    bayesian_as_frequentist = function(...) {
+      called <<- TRUE
+      stop("conversion failed", call. = FALSE)
+    },
+    .package = "bayestestR"
+  )
+
+  expect_error(check_model(m), "multivariate models are not supported", fixed = TRUE)
+  expect_false(called)
+})
+
+test_that("`check_model()` keeps all panels for brms models that can be converted", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+
+  out <- check_model(m)
+  expect_true(setequal(
+    names(out),
+    c("VIF", "QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL", "PP_CHECK")
+  ))
+})
