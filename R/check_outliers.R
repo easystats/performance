@@ -496,7 +496,8 @@ check_outliers.default <- function(
   if ("cook" %in% method && !m_info$is_bayesian && !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
-      threshold = thresholds$cook
+      threshold = thresholds$cook,
+      verbose = verbose
     )$data_cook
 
     my_df <- datawizard::data_merge(list(my_df, data_cook), join = "full", by = "Row")
@@ -1997,19 +1998,82 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_cook <- function(x, threshold = NULL, ID.names = NULL) {
+.check_outliers_cook <- function(x, threshold = NULL, ID.names = NULL, verbose = TRUE) {
   # Compute
-  d <- unname(stats::cooks.distance(x))
+  if (inherits(x, "glmmTMB")) {
+    # glmmTMB has no hat values, so we compute case-deletion Cook's distance
+    d <- .cooks_distance_refit(x)
+    failed <- which(is.na(d))
+    if (length(failed) && verbose) {
+      insight::format_alert(paste0(
+        "Cook's distance could not be computed for ",
+        ifelse(length(failed) == 1, "row ", "rows "),
+        datawizard::text_concatenate(failed),
+        ", because the model refit without ",
+        ifelse(length(failed) == 1, "this row", "these rows"),
+        " failed or did not converge."
+      ))
+    }
+  } else {
+    d <- unname(stats::cooks.distance(x))
+  }
   out <- data.frame(Row = seq_along(d))
   out$Distance_Cook <- d
 
   # Filter
-  out$Outlier_Cook <- as.numeric(out$Distance_Cook > threshold)
+  out$Outlier_Cook <- as.numeric(!is.na(d) & d > threshold)
 
   list(
     data_cook = out,
     threshold_cook = threshold
   )
+}
+
+
+# Case-deletion Cook's distance for the conditional fixed effects, computed
+# by refitting the model without each row (Cook, 1977):
+# D_i = (b - b_(i))' V(b)^-1 (b - b_(i)) / p
+# Each refit starts at the estimates of the full model. Rows where the refit
+# fails or does not converge get NA.
+.cooks_distance_refit <- function(x) {
+  model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
+  b <- insight::get_parameters(x, component = "conditional", effects = "fixed")$Estimate
+  vcov_inv <- solve(as.matrix(insight::get_varcov(x, component = "conditional")))
+  n_params <- length(b)
+
+  # starting values, without random effects (their length can change when
+  # a row is removed)
+  start <- x$obj$env$parList(x$fit$par)
+  start <- start[!names(start) %in% c("b", "bzi", "bdisp") & lengths(start) > 0]
+
+  vapply(
+    seq_len(nrow(model_data)),
+    function(i) {
+      refit <- .refit_without_rows(x, model_data, i, start)
+      if (!.refit_converged(refit)) {
+        return(NA_real_)
+      }
+      b_i <- insight::get_parameters(refit, component = "conditional", effects = "fixed")$Estimate
+      delta <- b - b_i
+      as.vector(t(delta) %*% vcov_inv %*% delta) / n_params
+    },
+    numeric(1)
+  )
+}
+
+
+.refit_without_rows <- function(x, model_data, rows, start) {
+  tryCatch(
+    suppressWarnings(suppressMessages(
+      stats::update(x, data = model_data[-rows, , drop = FALSE], start = start)
+    )),
+    error = function(e) NULL
+  )
+}
+
+
+.refit_converged <- function(refit) {
+  !is.null(refit) && isTRUE(refit$fit$convergence == 0) && isTRUE(refit$sdr$pdHess)
 }
 
 
@@ -2325,7 +2389,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # Non-supported model classes ---------------------------------------
 
 #' @export
-check_outliers.glmmTMB <- function(x, ...) {
+check_outliers.lmrob <- function(x, ...) {
   insight::format_alert(paste0(
     "`check_outliers()` does not yet support models of class `",
     class(x)[1],
@@ -2335,16 +2399,13 @@ check_outliers.glmmTMB <- function(x, ...) {
 }
 
 #' @export
-check_outliers.lmrob <- check_outliers.glmmTMB
+check_outliers.glmrob <- check_outliers.lmrob
 
 #' @export
-check_outliers.glmrob <- check_outliers.glmmTMB
+check_outliers.rq <- check_outliers.lmrob
 
 #' @export
-check_outliers.rq <- check_outliers.glmmTMB
+check_outliers.rqs <- check_outliers.lmrob
 
 #' @export
-check_outliers.rqs <- check_outliers.glmmTMB
-
-#' @export
-check_outliers.rqss <- check_outliers.glmmTMB
+check_outliers.rqss <- check_outliers.lmrob
