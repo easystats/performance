@@ -2,6 +2,11 @@
 
 ## Bug fixes
 
+* `compare_performance()` no longer fails when only some of the models have
+  LOOIC, for example a *brms* model and a `glm` (#738). It now computes
+  stacking weights for the models that have LOOIC and gives `NA` for the
+  others. A missing weight now prints as an empty cell, not as `(>.999)`.
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).

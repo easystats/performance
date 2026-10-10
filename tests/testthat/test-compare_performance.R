@@ -251,6 +251,42 @@ test_that("compare_performance, Log_loss ranks in the right direction", {
 })
 
 
+test_that("compare_performance, LOOIC weights when not all models have LOOIC", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("loo")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  m_brms <- insight::download_model("brms_1")
+  skip_if(is.null(m_brms))
+  m_brms2 <- m_brms
+  m_lm <- lm(insight::find_formula(m_brms)$conditional, data = insight::get_data(m_brms))
+
+  # only one model has LOOIC, so there are no stacking weights (#738)
+  out <- compare_performance(m_lm, m_brms, verbose = FALSE)
+  expect_identical(out$Name, c("m_lm", "m_brms"))
+  expect_true(is.na(out$LOOIC[1]))
+  expect_false(is.na(out$LOOIC[2]))
+  expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
+  # a missing weight prints as an empty cell, not as a weight of 1
+  formatted <- format(out)
+  expect_identical(formatted[["LOOIC (weights)"]][1], "")
+  expect_identical(formatted[["AIC (weights)"]][2], "")
+  expect_identical(formatted[["AIC (weights)"]][1], "156.0")
+
+  # stacking weights for the models that have LOOIC, NA for the others
+  out <- compare_performance(m_lm, m_brms, m_brms2, verbose = FALSE)
+  expect_identical(out$Name, c("m_lm", "m_brms", "m_brms2"))
+  expect_true(is.na(out$LOOIC_wt[1]))
+  expect_equal(sum(out$LOOIC_wt[2:3]), 1, tolerance = 1e-6)
+
+  out <- compare_performance(m_lm, m_brms, m_brms2, rank = TRUE, verbose = FALSE)
+  expect_identical(nrow(out), 3L)
+})
+
+
 test_that("compare_performance, RMSE and Sigma still rank in the right direction", {
   data(mtcars)
   l_best <- lm(mpg ~ wt + cyl + hp, data = mtcars)
