@@ -94,13 +94,15 @@
 #'
 #'    For models from package **glmmTMB**, Cook's distance is computed for the
 #'    fixed effects of the conditional model by refitting the model once per
-#'    row, leaving out that row, and comparing the estimates with those of the
-#'    full model. Thus, computation time grows with the number of observations.
-#'    Each refit starts at the full model's estimates of the fixed effects and
-#'    variance parameters, while the random effects are re-estimated from
-#'    scratch. Rows where the refit fails, does not converge or has a
-#'    non-positive-definite Hessian get a missing distance and are not counted
-#'    as outliers by this method. `check_model()` skips this computation for
+#'    row, leaving out that row (by giving it a weight of zero, so that terms
+#'    like `scale()` or `poly()` are computed on the full data), and comparing
+#'    the estimates with those of the full model. Thus, computation time grows
+#'    with the number of observations. Each refit starts at the full model's
+#'    estimates of the fixed effects and variance parameters, while the random
+#'    effects are re-estimated from scratch. Rows where the refit fails, does
+#'    not converge, has a non-positive-definite Hessian or returns different
+#'    fixed-effect terms get a missing distance and are not counted as outliers
+#'    by this method. `check_model()` skips this computation for
 #'    **glmmTMB** models.
 #'
 #' - **Pareto**:
@@ -2025,8 +2027,9 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     failed <- which(is.na(d))
     if (length(failed) == length(d) && verbose) {
       insight::format_alert(paste(
-        "Cook's distance could not be computed for any row, because every model",
-        "refit failed, did not converge, or had a non-positive-definite Hessian.",
+        "Cook's distance could not be computed for any row, because the model",
+        "refits failed, did not converge, or had a non-positive-definite Hessian,",
+        "or the model weights could not be matched to the data rows.",
         "No row is flagged as outlier by this method."
       ))
     } else if (length(failed) && verbose) {
@@ -2076,7 +2079,9 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # like scale() or poly(), and weights or offsets defined outside the data, are
 # the same as in the full model. Each refit starts at the full model's
 # estimates of the fixed effects and variance parameters. Rows where the refit
-# fails, does not converge, or has a non-positive-definite Hessian get NA.
+# fails, does not converge, has a non-positive-definite Hessian, or returns
+# different fixed-effect terms get NA. All rows get NA if the model weights do
+# not match the data rows.
 .cooks_distance_refit <- function(x) {
   model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
   n_obs <- nrow(model_data)
