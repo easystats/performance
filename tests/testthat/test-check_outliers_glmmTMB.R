@@ -169,7 +169,11 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
 
     expect_true(all(is.na(out_data$Distance_Cook[case$rows])), info = info)
     expect_false(anyNA(out_data$Distance_Cook[-case$rows]), info = info)
-    expect_identical(out_data$Outlier_Cook[case$rows], rep(0, length(case$rows)), info = info)
+    expect_identical(
+      out_data$Outlier_Cook[case$rows],
+      rep(0, length(case$rows)),
+      info = info
+    )
     expect_identical(
       out_data$Outlier[case$rows],
       out_data$Outlier_Zscore_robust[case$rows],
@@ -221,7 +225,10 @@ test_that("check_outliers, glmmTMB Cook's distance with data-dependent terms", {
   m <- glmmTMB::glmmTMB(mpg ~ scale(wt) + poly(hp, 2), data = mtcars, REML = TRUE)
   expect_equal(
     as.data.frame(check_outliers(m, method = "cook"))$Distance_Cook,
-    unname(stats::cooks.distance(stats::lm(mpg ~ scale(wt) + poly(hp, 2), data = mtcars))),
+    unname(stats::cooks.distance(stats::lm(
+      mpg ~ scale(wt) + poly(hp, 2),
+      data = mtcars
+    ))),
     tolerance = 1e-6
   )
 })
@@ -253,7 +260,10 @@ test_that("check_outliers, glmmTMB Cook's distance with dropped or mapped fixed 
   d$wt2 <- d$wt * 2
   m1 <- suppressWarnings(glmmTMB::glmmTMB(mpg ~ wt + wt2 + hp, data = d, REML = TRUE))
   # insight warns that the model matrix is rank deficient
-  out1 <- as.data.frame(suppressWarnings(check_outliers(m1, method = "cook")))$Distance_Cook
+  out1 <- as.data.frame(suppressWarnings(check_outliers(
+    m1,
+    method = "cook"
+  )))$Distance_Cook
   expect_equal(
     out1,
     unname(stats::cooks.distance(stats::lm(mpg ~ wt + hp, data = d))),
@@ -266,7 +276,10 @@ test_that("check_outliers, glmmTMB Cook's distance with dropped or mapped fixed 
     map = list(beta = factor(c(1, NA, 2))),
     start = list(beta = c(30, -3, 0))
   )
-  out2 <- as.data.frame(suppressWarnings(check_outliers(m2, method = "cook")))$Distance_Cook
+  out2 <- as.data.frame(suppressWarnings(check_outliers(
+    m2,
+    method = "cook"
+  )))$Distance_Cook
   expect_length(out2, nrow(mtcars))
   expect_false(anyNA(out2))
 })

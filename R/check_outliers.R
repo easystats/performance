@@ -2122,7 +2122,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
       if (!.refit_converged(refit)) {
         return(NA_real_)
       }
-      fixed_i <- insight::get_parameters(refit, component = "conditional", effects = "fixed")
+      fixed_i <- insight::get_parameters(
+        refit,
+        component = "conditional",
+        effects = "fixed"
+      )
       b_i <- stats::setNames(fixed_i$Estimate, fixed_i$Parameter)[names(b)]
       if (anyNA(b_i)) {
         return(NA_real_)
