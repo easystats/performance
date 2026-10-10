@@ -122,6 +122,72 @@ for (method in names(data_methods)) {
 }
 
 
+test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
+  d <- mtcars
+  d$mpg[5] <- 100 # extreme response, so the zscore_robust vote is 1
+  m <- glmmTMB::glmmTMB(mpg ~ wt + hp, data = d)
+  update_model <- .update_model
+
+  # each case changes one thing about a real refit without the failing rows
+  failures <- list(
+    error = function(fit) stop("forced refit error", call. = FALSE),
+    convergence = function(fit) {
+      fit$fit$convergence <- 1L
+      fit
+    },
+    pdHess = function(fit) {
+      fit$sdr$pdHess <- FALSE
+      fit
+    }
+  )
+  cases <- list(
+    list(failure = "error", rows = c(5L, 20L)),
+    list(failure = "convergence", rows = c(5L, 20L)),
+    list(failure = "pdHess", rows = c(5L, 20L)),
+    list(failure = "pdHess", rows = 5L)
+  )
+
+  for (case in cases) {
+    local_mocked_bindings(.update_model = function(x, data, start) {
+      fit <- update_model(x, data = data, start = start)
+      removed <- match(setdiff(rownames(d), rownames(data)), rownames(d))
+      if (removed %in% case$rows) {
+        fit <- failures[[case$failure]](fit)
+      }
+      fit
+    })
+    alerts <- character()
+    out <- withCallingHandlers(
+      check_outliers(m, method = c("cook", "zscore_robust")),
+      message = function(msg) {
+        alerts <<- c(alerts, conditionMessage(msg))
+        invokeRestart("muffleMessage")
+      }
+    )
+    out_data <- as.data.frame(out)
+    info <- paste(case$failure, toString(case$rows))
+
+    expect_true(all(is.na(out_data$Distance_Cook[case$rows])), info = info)
+    expect_false(anyNA(out_data$Distance_Cook[-case$rows]), info = info)
+    expect_identical(out_data$Outlier_Cook[case$rows], rep(0, length(case$rows)), info = info)
+    expect_identical(
+      out_data$Outlier[case$rows],
+      out_data$Outlier_Zscore_robust[case$rows],
+      info = info
+    )
+    expect_identical(out_data$Outlier_Zscore_robust[5], 1, info = info)
+
+    cook_alerts <- grep("could not be computed", alerts, fixed = TRUE, value = TRUE)
+    expect_length(cook_alerts, 1)
+    if (length(case$rows) == 1) {
+      expect_match(cook_alerts, "for row 5,", fixed = TRUE, info = info)
+    } else {
+      expect_match(cook_alerts, "for rows 5 and 20,", fixed = TRUE, info = info)
+    }
+  }
+})
+
+
 test_that("check_outliers, unsupported classes return NULL", {
   data(stackloss)
   models <- list()

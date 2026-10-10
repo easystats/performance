@@ -603,7 +603,15 @@ check_outliers.default <- function(
   thresholds <- thresholds[names(thresholds) %in% method]
 
   # Composite outlier score
-  my_df$Outlier <- rowMeans(my_df[grepl("Outlier_", names(my_df), fixed = TRUE)])
+  votes <- my_df[grepl("Outlier_", names(my_df), fixed = TRUE)]
+  if (inherits(x, "glmmTMB") && "Outlier_Cook" %in% names(votes)) {
+    # rows where the refit failed have no Cook's distance, so they don't vote
+    votes$Outlier_Cook[is.na(my_df$Distance_Cook)] <- NA
+    my_df$Outlier <- rowMeans(votes, na.rm = TRUE)
+    my_df$Outlier[is.nan(my_df$Outlier)] <- 0
+  } else {
+    my_df$Outlier <- rowMeans(votes)
+  }
   my_df <- my_df[c(names(my_df)[names(my_df) != "Outlier"], "Outlier")]
 
   # Out
@@ -2021,7 +2029,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   out$Distance_Cook <- d
 
   # Filter
-  out$Outlier_Cook <- as.numeric(!is.na(d) & d > threshold)
+  if (inherits(x, "glmmTMB")) {
+    out$Outlier_Cook <- as.numeric(!is.na(d) & d > threshold)
+  } else {
+    out$Outlier_Cook <- as.numeric(d > threshold)
+  }
 
   list(
     data_cook = out,
@@ -2065,10 +2077,15 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 .refit_without_rows <- function(x, model_data, rows, start) {
   tryCatch(
     suppressWarnings(suppressMessages(
-      stats::update(x, data = model_data[-rows, , drop = FALSE], start = start)
+      .update_model(x, data = model_data[-rows, , drop = FALSE], start = start)
     )),
     error = function(e) NULL
   )
+}
+
+
+.update_model <- function(x, data, start) {
+  stats::update(x, data = data, start = start)
 }
 
 
