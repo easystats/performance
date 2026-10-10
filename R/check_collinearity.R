@@ -507,6 +507,29 @@ check_collinearity.zerocount <- function(
       },
       error = function(e) NULL
     )
+  } else if (inherits(x, "brmsfit")) {
+    # brms models can have more than one intercept, for example ordinal
+    # models, so drop all intercepts and match coefficients to terms by name
+    keep_idx <- !.is_intercept(colnames(v))
+    term_assign <- term_assign[match(
+      insight::clean_names(colnames(v)[keep_idx]),
+      names(term_assign)
+    )]
+    # a coefficient without a term would give VIFs for the wrong terms
+    if (!length(term_assign) || anyNA(term_assign)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (all(keep_idx) && isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
   } else {
     keep_idx <- rep(TRUE, ncol(v))
     if (insight::has_intercept(x)) {
@@ -743,7 +766,11 @@ check_collinearity.zerocount <- function(
         # the term assignment from the model formula instead
         term_assign <- .find_term_assignment(x, component, verbose = verbose)
         if (!length(term_assign)) {
-          term_assign <- attr(insight::get_modelmatrix(x), "assign")
+          mm <- insight::get_modelmatrix(x)
+          term_assign <- stats::setNames(
+            attr(mm, "assign"),
+            insight::clean_names(colnames(mm))
+          )
         }
       } else {
         term_assign <- attr(insight::get_modelmatrix(x), "assign")
@@ -846,6 +873,10 @@ check_collinearity.zerocount <- function(
     term_assign <- term_assign[-int_pos]
   }
 
+  # brms models match coefficients to terms by name, see `.check_collinearity()`
+  if (inherits(x, "brmsfit")) {
+    names(term_assign) <- coef_names
+  }
   idx <- match(
     param_names,
     coef_names
@@ -888,7 +919,12 @@ check_collinearity.zerocount <- function(
 
 #' @keywords internal
 .has_intercept <- function(x) {
-  any(tolower(x) %in% .intercepts() | startsWith(tolower(x), "intercept"))
+  any(.is_intercept(x))
+}
+
+#' @keywords internal
+.is_intercept <- function(x) {
+  tolower(x) %in% .intercepts() | startsWith(tolower(x), "intercept")
 }
 
 # ========================================================================

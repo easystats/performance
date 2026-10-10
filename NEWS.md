@@ -4,7 +4,9 @@
 
 * `check_collinearity()` now returns interaction terms for *brms* models.
   Before, a model such as `y ~ a * b` gave no `a:b` row, and the VIFs of the
-  other terms belonged to the wrong coefficients.
+  other terms belonged to the wrong coefficients. Models with more than one
+  intercept, such as ordinal models, also gave VIFs for the wrong
+  coefficients.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as

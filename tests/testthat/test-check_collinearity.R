@@ -51,6 +51,28 @@ test_that("check_collinearity, brms models keep interaction terms", {
 })
 
 
+test_that("check_collinearity, brms models with more than one intercept", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  # cumulative model rating ~ treat + period + carry, with three intercepts
+  m <- insight::download_model("brms_ordinal_2")
+  skip_if(is.null(m))
+
+  out <- check_collinearity(m, verbose = FALSE)
+  expect_identical(out$Term, c("treat", "period", "carry"))
+
+  # the VIFs come from the slope coefficients only, without the intercepts
+  v <- stats::vcov(m)
+  slopes <- c("treat", "period", "carry")
+  R <- stats::cov2cor(v[slopes, slopes])
+  expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
+})
+
+
 test_that("check_collinearity, fallback path keeps interactions", {
   m <- lm(mpg ~ wt * cyl, data = mtcars)
   m_no_int <- lm(mpg ~ 0 + wt * cyl, data = mtcars)
