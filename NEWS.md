@@ -2,6 +2,10 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now labels terms correctly for *brms* models that use
+  the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
+  of the previous term and the last term was missing (#417).
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).
