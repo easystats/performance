@@ -291,7 +291,23 @@ test_that("`check_model()` alerts about skipped checks if brms conversion fails"
     for (panel in c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")) {
       expect_match(alert, paste0("\\b", panel, "\\b"))
     }
+    # panels that do not apply to a non-mixed gaussian model are not listed
+    expect_no_match(alert, "REQQ|BINNED_RESID|OVERDISPERSION")
+    # the alert includes the error from the failed conversion
+    expect_match(alert, "Reason for the failed conversion: conversion failed", fixed = TRUE)
   }
+})
+
+test_that("`check_model()` errors if no check works after brms conversion fails", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  mock_failed_conversion()
+
+  expect_error(
+    check_model(m, check = c("qq", "normality")),
+    "none\\s+of\\s+the\\s+requested\\s+checks\\s+could\\s+be\\s+computed"
+  )
 })
 
 test_that("`check_model()` errors for multivariate brms models before conversion", {
@@ -309,6 +325,9 @@ test_that("`check_model()` errors for multivariate brms models before conversion
 
   expect_error(check_model(m), "Multivariate\\s+models\\s+are\\s+not\\s+supported")
   expect_false(called)
+  # the mock is in reach of `bayestestR::`, so `called` can become TRUE
+  try(bayestestR::bayesian_as_frequentist(m), silent = TRUE)
+  expect_true(called)
 })
 
 test_that("`check_model()` keeps all panels for brms models that can be converted", {

@@ -81,7 +81,9 @@
 #' the checks that work on the Bayesian model itself: the posterior predictive
 #' check (`"pp_check"`) and the check for multicollinearity (`"vif"`). A message
 #' then lists the panels of the requested checks that were skipped (for
-#' example, `NORM` for `"normality"`). Multivariate **brms**
+#' example, `NORM` for `"normality"`) and the reason why the conversion failed.
+#' If none of the requested checks can be computed, `check_model()` gives an
+#' error. Multivariate **brms**
 #' models (models with more than one response) are not supported. A more
 #' advanced model-check for Bayesian models will be implemented at a later
 #' stage.
@@ -383,7 +385,7 @@ check_model.default <- function(
     colors = colors,
     theme = theme,
     verbose = verbose,
-    ...
+    plot_type = list(...)$plot_type
   )
 }
 
@@ -413,7 +415,7 @@ check_model.default <- function(
   colors,
   theme,
   verbose,
-  ...
+  plot_type = NULL
 ) {
   # try to find sensible default for "type" argument
   suggest_dots <- (isTRUE(minfo$is_bernoulli) ||
@@ -463,7 +465,7 @@ check_model.default <- function(
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
   attr(assumptions_data, "model_info") <- minfo
-  attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
+  attr(assumptions_data, "overdisp_type") <- plot_type
   attr(assumptions_data, "bandwidth") <- bandwidth
   attr(assumptions_data, "type") <- type
   attr(assumptions_data, "ppc_range") <- ppc_range
@@ -534,12 +536,21 @@ check_model.stanreg <- function(
     )
   }
 
-  freq_model <- .safe(bayestestR::bayesian_as_frequentist(model))
+  freq_model <- tryCatch(
+    bayestestR::bayesian_as_frequentist(model),
+    error = function(e) e
+  )
+  conversion_error <- NULL
+  if (inherits(freq_model, "error")) {
+    conversion_error <- conditionMessage(freq_model)
+    freq_model <- NULL
+  }
 
   # if the conversion fails, return the checks that work on the brms model
   if (is.null(freq_model) && inherits(model, "brmsfit")) {
     return(.check_model_bayesian_fallback(
       model,
+      conversion_error = conversion_error,
       panel = panel,
       check = check,
       detrend = detrend,
@@ -598,6 +609,7 @@ check_model.brmsfit <- check_model.stanreg
 
 .check_model_bayesian_fallback <- function(
   model,
+  conversion_error,
   panel,
   check,
   detrend,
@@ -619,6 +631,11 @@ check_model.brmsfit <- check_model.stanreg
   verbose,
   ...
 ) {
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
   minfo <- insight::model_info(model, verbose = FALSE)
 
   dat <- list()
@@ -640,6 +657,27 @@ check_model.brmsfit <- check_model.stanreg
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
 
+  # reason why the conversion failed
+  if (is.null(conversion_error)) {
+    reason <- NULL
+  } else {
+    reason <- paste(
+      "Reason for the failed conversion:",
+      gsub("(\n|\\s{2,})", " ", conversion_error)
+    )
+  }
+
+  # no check could be computed
+  if (!length(dat)) {
+    insight::format_error(
+      paste(
+        "The conversion to a frequentist model failed, and none of the",
+        "requested checks could be computed for the Bayesian model."
+      ),
+      reason
+    )
+  }
+
   # tell user which panels of the requested checks need a frequentist model
   skipped <- .skipped_frequentist_checks(model, minfo, check)
   msg <- paste(
@@ -649,7 +687,7 @@ check_model.brmsfit <- check_model.stanreg
   if (length(skipped)) {
     msg <- paste0(msg, " Skipped checks: ", toString(skipped), ".")
   }
-  insight::format_alert(msg)
+  insight::format_alert(msg, reason)
 
   .add_check_model_attributes(
     dat,
@@ -674,7 +712,7 @@ check_model.brmsfit <- check_model.stanreg
     colors = colors,
     theme = theme,
     verbose = verbose,
-    ...
+    plot_type = list(...)$plot_type
   )
 }
 
