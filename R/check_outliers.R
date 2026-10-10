@@ -92,14 +92,16 @@
 #'  outliers are detected). This only works for frequentist models. For Bayesian
 #'  models, see `pareto`.
 #'
-#'  For models from package **glmmTMB**, Cook's distance is computed for the
-#'  fixed effects of the conditional model by refitting the model once per row,
-#'  leaving out that row, and comparing the estimates with those of the full
-#'  model. Thus, computation time grows with the number of observations. Each
-#'  refit starts at the estimates of the full model. Rows where the refit fails,
-#'  does not converge or has a non-positive-definite Hessian get a missing
-#'  distance and are not counted as outliers by this method. `check_model()`
-#'  skips this computation for **glmmTMB** models.
+#'    For models from package **glmmTMB**, Cook's distance is computed for the
+#'    fixed effects of the conditional model by refitting the model once per
+#'    row, leaving out that row, and comparing the estimates with those of the
+#'    full model. Thus, computation time grows with the number of observations.
+#'    Each refit starts at the full model's estimates of the fixed effects and
+#'    variance parameters, while the random effects are re-estimated from
+#'    scratch. Rows where the refit fails, does not converge or has a
+#'    non-positive-definite Hessian get a missing distance and are not counted
+#'    as outliers by this method. `check_model()` skips this computation for
+#'    **glmmTMB** models.
 #'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
@@ -2028,7 +2030,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
         datawizard::text_concatenate(failed),
         ", because the model refit without ",
         ifelse(length(failed) == 1, "this row", "these rows"),
-        " failed or did not converge."
+        " failed, did not converge, or had a non-positive-definite Hessian."
       ))
     }
   } else {
@@ -2052,10 +2054,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 # Case-deletion Cook's distance for the conditional fixed effects, computed
-# by refitting the model without each row (Cook, 1977):
+# by refitting the model without each row (generalizing Cook, 1977):
 # D_i = (b - b_(i))' V(b)^-1 (b - b_(i)) / p
-# Each refit starts at the estimates of the full model. Rows where the refit
-# fails or does not converge get NA.
+# Each refit starts at the full model's estimates of the fixed effects and
+# variance parameters. Rows where the refit fails, does not converge, or has a
+# non-positive-definite Hessian get NA.
 .cooks_distance_refit <- function(x) {
   model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
   b <- insight::get_parameters(x, component = "conditional", effects = "fixed")$Estimate

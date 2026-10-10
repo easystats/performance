@@ -131,17 +131,17 @@ approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
 outliers are detected). This only works for frequentist models. For Bayesian
 models, see \code{pareto}.
-}
 
 For models from package \strong{glmmTMB}, Cook's distance is computed for the
-fixed effects of the conditional model by refitting the model once per row,
-leaving out that row, and comparing the estimates with those of the full
-model. Thus, computation time grows with the number of observations. Each
-refit starts at the estimates of the full model. Rows where the refit fails,
-does not converge or has a non-positive-definite Hessian get a missing
-distance and are not counted as outliers by this method. \code{check_model()}
-skips this computation for \strong{glmmTMB} models.
-\itemize{
+fixed effects of the conditional model by refitting the model once per
+row, leaving out that row, and comparing the estimates with those of the
+full model. Thus, computation time grows with the number of observations.
+Each refit starts at the full model's estimates of the fixed effects and
+variance parameters, while the random effects are re-estimated from
+scratch. Rows where the refit fails, does not converge or has a
+non-positive-definite Hessian get a missing distance and are not counted
+as outliers by this method. \code{check_model()} skips this computation for
+\strong{glmmTMB} models.
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
