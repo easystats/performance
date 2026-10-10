@@ -235,6 +235,9 @@ test_that("`check_model()` with transformed response when named as function", {
 skip_if_brms_fixture_unavailable <- function() {
   skip_if_not_installed("brms")
   skip_if_not_installed("bayestestR")
+  skip_if_not_installed("modelbased")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
   skip_if_offline()
 }
 
@@ -296,6 +299,16 @@ test_that("`check_model()` alerts about skipped checks if brms conversion fails"
     # the alert includes the error from the failed conversion
     expect_match(alert, "Reason for the failed conversion: conversion failed", fixed = TRUE)
   }
+})
+
+test_that("`check_model()` lets conversion errors propagate with `easystats_errors`", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  mock_failed_conversion()
+  withr::local_options(easystats_errors = TRUE)
+
+  expect_error(check_model(m), "conversion failed", fixed = TRUE)
 })
 
 test_that("`check_model()` errors if no check works after brms conversion fails", {

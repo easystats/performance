@@ -538,7 +538,13 @@ check_model.stanreg <- function(
 
   freq_model <- tryCatch(
     bayestestR::bayesian_as_frequentist(model),
-    error = function(e) e
+    error = function(e) {
+      # let errors propagate when debugging, see `.safe()`
+      if (isTRUE(getOption("easystats_errors", FALSE))) {
+        stop(e)
+      }
+      e
+    }
   )
   conversion_error <- NULL
   if (inherits(freq_model, "error")) {
