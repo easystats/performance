@@ -85,6 +85,43 @@ test_that("check_outliers, glmmTMB default method flags influential rows", {
 })
 
 
+data_methods <- list(
+  zscore = NULL,
+  zscore_robust = NULL,
+  iqr = NULL,
+  ci = "bayestestR",
+  hdi = "bayestestR",
+  eti = "bayestestR",
+  bci = "bayestestR",
+  mahalanobis = NULL,
+  mahalanobis_robust = "bigutilsr",
+  mcd = "MASS",
+  ics = c("ICS", "ICSOutlier"),
+  optics = "dbscan",
+  lof = "dbscan"
+)
+
+for (method in names(data_methods)) {
+  test_that(paste0("check_outliers, glmmTMB method '", method, "' equals lmer result"), {
+    for (pkg in data_methods[[method]]) {
+      skip_if_not_installed(pkg)
+    }
+    data(sleepstudy, package = "lme4")
+    m_tmb <- glmmTMB::glmmTMB(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+    m_lmer <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+    # "hdi" warns once per value, for lmer models too
+    set.seed(123)
+    out_tmb <- suppressWarnings(check_outliers(m_tmb, method = method))
+    set.seed(123)
+    out_lmer <- suppressWarnings(check_outliers(m_lmer, method = method))
+    expect_identical(
+      as.data.frame(out_tmb)$Outlier,
+      as.data.frame(out_lmer)$Outlier
+    )
+  })
+}
+
+
 test_that("check_outliers, unsupported classes return NULL", {
   data(stackloss)
   models <- list()
