@@ -1,5 +1,12 @@
 # performance (devel)
 
+## Changes
+
+* `check_outliers()` now supports models from package *glmmTMB*. Cook's
+  distance is computed by refitting the model without each observation, and
+  all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
+  well (#95).
+
 ## Bug fixes
 
 * `check_model()` now correctly returns the random-effects normality panel for

@@ -92,6 +92,15 @@
 #'  outliers are detected). This only works for frequentist models. For Bayesian
 #'  models, see `pareto`.
 #'
+#'  For models from package **glmmTMB**, Cook's distance is computed for the
+#'  fixed effects of the conditional model by refitting the model once per row,
+#'  leaving out that row, and comparing the estimates with those of the full
+#'  model. Thus, computation time grows with the number of observations. Each
+#'  refit starts at the estimates of the full model. Rows where the refit fails,
+#'  does not converge or has a non-positive-definite Hessian get a missing
+#'  distance and are not counted as outliers by this method. `check_model()`
+#'  skips this computation for **glmmTMB** models.
+#'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
 #' assessed using the estimates for the shape parameter k of the generalized
