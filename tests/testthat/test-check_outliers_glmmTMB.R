@@ -269,24 +269,35 @@ test_that("check_model, glmmTMB models do not run Cook's distance refits", {
 })
 
 
-test_that("check_outliers, unsupported classes return NULL", {
-  data(stackloss)
-  models <- list()
-  if (requireNamespace("robustbase", quietly = TRUE)) {
-    models$lmrob <- robustbase::lmrob(stack.loss ~ ., data = stackloss)
-    models$glmrob <- robustbase::glmrob(
-      am ~ wt,
-      family = binomial,
-      data = mtcars
+test_that("check_outliers, unsupported robustbase classes return NULL", {
+  # robustbase is not a dependency, and these methods only look at the class
+  models <- list(
+    structure(list(), class = "lmrob"),
+    structure(list(), class = "glmrob")
+  )
+  for (model in models) {
+    expect_message(
+      expect_null(check_outliers(model)),
+      paste0("does not yet support models of class `", class(model)[1]),
+      fixed = TRUE
     )
   }
-  if (requireNamespace("quantreg", quietly = TRUE)) {
-    models$rq <- quantreg::rq(stack.loss ~ ., data = stackloss)
-    models$rqs <- quantreg::rq(stack.loss ~ ., data = stackloss, tau = c(0.25, 0.5))
-    qss <- quantreg::qss
-    models$rqss <- quantreg::rqss(stack.loss ~ qss(Air.Flow), data = stackloss)
-  }
-  skip_if(length(models) == 0)
+})
+
+
+test_that("check_outliers, unsupported quantreg classes return NULL", {
+  skip_if_not_installed("quantreg")
+  data(stackloss)
+  qss <- quantreg::qss
+  models <- list(
+    quantreg::rq(stack.loss ~ ., data = stackloss),
+    quantreg::rq(stack.loss ~ ., data = stackloss, tau = c(0.25, 0.5)),
+    quantreg::rqss(stack.loss ~ qss(Air.Flow), data = stackloss)
+  )
+  expect_identical(
+    vapply(models, function(m) class(m)[1], character(1)),
+    c("rq", "rqs", "rqss")
+  )
   for (model in models) {
     expect_message(
       expect_null(check_outliers(model)),
