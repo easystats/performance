@@ -188,6 +188,27 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
 })
 
 
+test_that("check_model, glmmTMB models do not run Cook's distance refits", {
+  skip_if_not_installed("see")
+  refit_calls <- 0
+  local_mocked_bindings(.cooks_distance_refit = function(x) {
+    refit_calls <<- refit_calls + 1
+    rep(0, insight::n_obs(x))
+  })
+  data(sleepstudy, package = "lme4")
+  m1 <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+  out1 <- suppressWarnings(suppressMessages(check_model(m1, verbose = FALSE)))
+  expect_s3_class(out1, "check_model")
+
+  data(Salamanders, package = "glmmTMB")
+  m2 <- glmmTMB::glmmTMB(count ~ mined + (1 | site), family = poisson, data = Salamanders)
+  out2 <- suppressWarnings(suppressMessages(check_model(m2, verbose = FALSE)))
+  expect_s3_class(out2, "check_model")
+
+  expect_identical(refit_calls, 0)
+})
+
+
 test_that("check_outliers, unsupported classes return NULL", {
   data(stackloss)
   models <- list()

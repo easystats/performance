@@ -672,7 +672,10 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
+    if (!inherits(model, "glmmTMB")) {
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    }
     if (is.null(dat$OUTLIERS)) {
       threshold <- NULL
     } else {
@@ -735,7 +738,10 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
+    if (!inherits(model, "glmmTMB")) {
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    }
     if (is.null(dat$OUTLIERS)) {
       threshold <- NULL
     } else {
