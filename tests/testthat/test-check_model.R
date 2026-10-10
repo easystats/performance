@@ -307,7 +307,7 @@ test_that("`check_model()` errors for multivariate brms models before conversion
     .package = "bayestestR"
   )
 
-  expect_error(check_model(m), "multivariate models are not supported", fixed = TRUE)
+  expect_error(check_model(m), "Multivariate\\s+models\\s+are\\s+not\\s+supported")
   expect_false(called)
 })
 
