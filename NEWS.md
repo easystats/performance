@@ -2,6 +2,11 @@
 
 ## Bug fixes
 
+* `check_model()` no longer fails for *brms* models that cannot be converted
+  to a frequentist model. It now returns the posterior predictive check and
+  multicollinearity panels, and a message names the skipped checks.
+  Multivariate *brms* models now give an informative error (#461).
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).

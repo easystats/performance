@@ -77,8 +77,13 @@
 #' @details For Bayesian models from packages **rstanarm** or **brms**,
 #' models will be "converted" to their frequentist counterpart, using
 #' [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
-#' A more advanced model-check for Bayesian models will be implemented at a
-#' later stage.
+#' If this conversion fails for a **brms** model, `check_model()` returns only
+#' the checks that work on the Bayesian model itself: the posterior predictive
+#' check (`"pp_check"`) and the check for multicollinearity (`"vif"`). A message
+#' then names the requested checks that were skipped. Multivariate **brms**
+#' models (models with more than one response) are not supported. A more
+#' advanced model-check for Bayesian models will be implemented at a later
+#' stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
