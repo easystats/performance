@@ -80,7 +80,8 @@
 #' If this conversion fails for a **brms** model, `check_model()` returns only
 #' the checks that work on the Bayesian model itself: the posterior predictive
 #' check (`"pp_check"`) and the check for multicollinearity (`"vif"`). A message
-#' then names the requested checks that were skipped. Multivariate **brms**
+#' then lists the panels of the requested checks that were skipped (for
+#' example, `NORM` for `"normality"`). Multivariate **brms**
 #' models (models with more than one response) are not supported. A more
 #' advanced model-check for Bayesian models will be implemented at a later
 #' stage.
@@ -639,7 +640,7 @@ check_model.brmsfit <- check_model.stanreg
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
 
-  # tell user which of the requested checks need a frequentist model
+  # tell user which panels of the requested checks need a frequentist model
   skipped <- .skipped_frequentist_checks(model, minfo, check)
   msg <- paste(
     "The conversion to a frequentist model failed, so `check_model()` only",
@@ -678,8 +679,9 @@ check_model.brmsfit <- check_model.stanreg
 }
 
 
-# names of the panels that `.check_assumptions_linear()` and
-# `.check_assumptions_glm()` would return for the requested checks
+# names of the panels, other than VIF and PP_CHECK, that
+# `.check_assumptions_linear()` and `.check_assumptions_glm()` would return
+# for the requested checks
 
 .skipped_frequentist_checks <- function(model, minfo, check) {
   panels <- list(
@@ -689,6 +691,7 @@ check_model.brmsfit <- check_model.stanreg
     NCV = c("ncv", "linearity"),
     HOMOGENEITY = "homogeneity",
     OUTLIERS = "outliers",
+    INFLUENTIAL = "outliers",
     BINNED_RESID = "binned_residuals",
     OVERDISPERSION = "overdispersion"
   )

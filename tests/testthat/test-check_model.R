@@ -288,7 +288,7 @@ test_that("`check_model()` alerts about skipped checks if brms conversion fails"
     msgs <- gsub("\\s+", " ", msgs)
     alert <- msgs[grepl("conversion to a frequentist model failed", msgs, fixed = TRUE)]
     expect_length(alert, 1)
-    for (panel in c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS")) {
+    for (panel in c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")) {
       expect_match(alert, paste0("\\b", panel, "\\b"))
     }
   }

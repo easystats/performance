@@ -131,7 +131,8 @@ models will be "converted" to their frequentist counterpart, using
 If this conversion fails for a \strong{brms} model, \code{check_model()} returns only
 the checks that work on the Bayesian model itself: the posterior predictive
 check (\code{"pp_check"}) and the check for multicollinearity (\code{"vif"}). A message
-then names the requested checks that were skipped. Multivariate \strong{brms}
+then lists the panels of the requested checks that were skipped (for
+example, \code{NORM} for \code{"normality"}). Multivariate \strong{brms}
 models (models with more than one response) are not supported. A more
 advanced model-check for Bayesian models will be implemented at a later
 stage.
