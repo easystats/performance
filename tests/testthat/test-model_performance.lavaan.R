@@ -261,7 +261,7 @@ test_that("model_performance.lavaan.mi", {
   out <- model_performance(model, metrics = c("RMSEA", "Chi2"))
   expect_named(out, c("RMSEA", "Chi2"))
 
-  # "estimator" (passed by compare_performance()) is dropped
+  # "estimator" (which compare_performance() passes for other models) is dropped
   expect_identical(model_performance(model, estimator = "ML"), model_performance(model))
 
   # some imputations did not converge: lavaan.mi pools the converged ones

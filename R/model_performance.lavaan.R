@@ -27,8 +27,8 @@
 #' pools the test statistics across imputations (by default with the `"D4"`
 #' method). Pooling arguments, such as `pool.method`, pass through `...`. If no
 #' imputation converged, all indices are `NA`. `compare_performance()` does not
-#' accept **lavaan.mi** models yet, because **insight** does not recognize them
-#' as supported models.
+#' accept **lavaan.mi** models yet: it drops them, because **insight** does not
+#' list them as supported models and they are not **lavaan** models.
 #'
 #' @details \subsection{Indices of fit}{
 #'
