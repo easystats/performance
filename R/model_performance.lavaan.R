@@ -26,7 +26,9 @@
 #' come from the `fitMeasures()` method of the **lavaan.mi** package, which
 #' pools the test statistics across imputations (by default with the `"D4"`
 #' method). Pooling arguments, such as `pool.method`, pass through `...`. If no
-#' imputation converged, all indices are `NA`.
+#' imputation converged, all indices are `NA`. `compare_performance()` does not
+#' accept **lavaan.mi** models yet, because **insight** does not recognize them
+#' as supported models.
 #'
 #' @details \subsection{Indices of fit}{
 #'
