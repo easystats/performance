@@ -42,7 +42,13 @@
 
 * `model_performance()` for *lavaan* models now passes further arguments in
   `...` to `lavaan::fitMeasures()` by name. Before, any extra argument other
-  than `estimator` caused an error.
+  than `estimator` caused an error, even an argument that `fitMeasures()`
+  accepts, such as `fm_args`.
+
+* `model_performance()` for *lavaan* models no longer errors when
+  `lavaan::fitMeasures()` does not return an index, for example the
+  loglikelihood, AIC, and BIC of models with ordinal indicators. These
+  indices are now `NA`.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
