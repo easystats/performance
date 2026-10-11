@@ -378,13 +378,10 @@ check_model.default <- function(
   }
 
   # if we have only categorical predictors, we don't show CI by default
-  parameter_types <- .safe(parameters::parameters_type(model))
-  if (
-    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
-  ) {
-    show_ci = FALSE
-  } else {
-    show_ci = TRUE
+  if (is.null(show_ci)) {
+    parameter_types <- .safe(parameters::parameters_type(model))
+    show_ci <- is.null(parameter_types) ||
+      !all(parameter_types$Type %in% c("intercept", "factor"))
   }
 
   attr(assumptions_data, "panel") <- panel

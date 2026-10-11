@@ -2,6 +2,11 @@
 
 ## Bug fixes
 
+* `check_model()` now uses the value of `show_ci` that the user sets. Before,
+  it ignored that value. It always hid the confidence bands for models with
+  only categorical predictors and always showed them for other models
+  (#642, #490).
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).
