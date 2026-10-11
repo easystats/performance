@@ -142,7 +142,10 @@ model_performance.lavaan.mi <- function(model, metrics = "all", verbose = TRUE, 
     converged = any(converged),
     metrics = metrics,
     verbose = verbose,
-    not_converged = "This lavaan.mi model did not converge in any imputation, no performance indices can be computed. Returning `NA`.",
+    not_converged = paste(
+      "This lavaan.mi model did not converge in any imputation,",
+      "no performance indices can be computed. Returning `NA`."
+    ),
     ...
   )
 }
