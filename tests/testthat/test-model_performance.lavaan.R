@@ -53,6 +53,20 @@ test_that("model_performance.lavaan", {
   expect_silent(model_performance(model, verbose = FALSE))
 })
 
+test_that("model_performance.lavaan passes arguments to fitmeasures", {
+  data(HolzingerSwineford1939, package = "lavaan")
+  structure <- " visual  =~ x1 + x2 + x3
+                textual =~ x4 + x5 + x6
+                speed   =~ x7 + x8 + x9 "
+  model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  fm_args <- list(rmsea.ci.level = 0.5)
+  out <- model_performance(model, fm_args = fm_args)
+  expected <- lavaan::fitmeasures(model, fm_args = fm_args)
+  expect_equal(out$RMSEA_CI_low, unname(expected[["rmsea.ci.lower"]]))
+  # a narrower interval than the default 90% interval
+  expect_gt(out$RMSEA_CI_low, model_performance(model)$RMSEA_CI_low)
+})
+
 
 # entries of lavaan::fitMeasures() and the columns they map to
 lavaan_fit_map <- c(
@@ -83,32 +97,61 @@ lavaan_fit_map <- c(
   bic2 = "BIC_adjusted"
 )
 
+# the value a column should take: AGFI reads "agfi", or "agfi_lisrel" when
+# "agfi" is absent (lavaan >= 0.7 returns only "agfi_lisrel")
+expected_fit_value <- function(measures, entry) {
+  if (entry == "agfi" && !"agfi" %in% names(measures)) {
+    entry <- "agfi_lisrel"
+  }
+  if (entry %in% names(measures)) unname(measures[[entry]]) else NA_real_
+}
+
 test_that("lavaan fit-index map returns NA for missing entries", {
-  measures <- stats::setNames(seq_along(lavaan_fit_map) / 100, names(lavaan_fit_map))
+  data(HolzingerSwineford1939, package = "lavaan")
+  structure <- " visual  =~ x1 + x2 + x3
+                textual =~ x4 + x5 + x6
+                speed   =~ x7 + x8 + x9 "
+  model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  measures <- unclass(lavaan::fitmeasures(model))
   out <- .lavaan_fit_indices(measures)
   expect_named(out, unname(lavaan_fit_map))
-  expect_equal(unlist(out[1, ], use.names = FALSE), unname(measures), ignore_attr = TRUE)
-
-  # each entry removed alone
   for (entry in names(lavaan_fit_map)) {
-    out <- .lavaan_fit_indices(measures[names(measures) != entry])
+    expect_equal(out[[lavaan_fit_map[[entry]]]], expected_fit_value(measures, entry), info = entry)
+  }
+  expect_false(is.na(out$AGFI))
+
+  # each entry removed alone, for AGFI both "agfi" and "agfi_lisrel"
+  for (entry in names(lavaan_fit_map)) {
+    drop <- if (entry == "agfi") c("agfi", "agfi_lisrel") else entry
+    out <- .lavaan_fit_indices(measures[!names(measures) %in% drop])
     expect_named(out, unname(lavaan_fit_map))
     expect_identical(out[[lavaan_fit_map[[entry]]]], NA_real_, info = entry)
-    others <- setdiff(names(lavaan_fit_map), entry)
-    expect_equal(
-      unlist(out[1, lavaan_fit_map[others]], use.names = FALSE),
-      unname(measures[others]),
-      info = entry
-    )
+    for (other in setdiff(names(lavaan_fit_map), entry)) {
+      expect_equal(
+        out[[lavaan_fit_map[[other]]]],
+        expected_fit_value(measures, other),
+        info = paste(entry, other)
+      )
+    }
   }
 
   # several entries removed
-  out <- .lavaan_fit_indices(measures[!names(measures) %in% c("gfi", "agfi", "rmr")])
-  expect_named(out, unname(lavaan_fit_map))
+  drop <- c("gfi", "agfi", "agfi_lisrel", "rmr")
+  out <- .lavaan_fit_indices(measures[!names(measures) %in% drop])
   expect_identical(out$GFI, NA_real_)
   expect_identical(out$AGFI, NA_real_)
   expect_identical(out$RMR, NA_real_)
-  expect_equal(out$CFI, measures[["cfi"]])
+  for (other in setdiff(names(lavaan_fit_map), c("gfi", "agfi", "rmr"))) {
+    expect_equal(out[[lavaan_fit_map[[other]]]], expected_fit_value(measures, other), info = other)
+  }
+
+  # "agfi" wins over "agfi_lisrel", wherever it is in the output
+  out <- .lavaan_fit_indices(c(measures, agfi = 0.123))
+  expect_identical(out$AGFI, 0.123)
+  out <- .lavaan_fit_indices(c(agfi = 0.123, measures))
+  expect_identical(out$AGFI, 0.123)
+  out <- .lavaan_fit_indices(c(measures[names(measures) != "agfi_lisrel"], agfi = 0.456))
+  expect_identical(out$AGFI, 0.456)
 })
 
 
@@ -135,6 +178,8 @@ skip_if_lavaan_mi_broken <- function(model) {
 
 test_that("model_performance.lavaan.mi", {
   skip_if_not_installed("lavaan.mi")
+  # lavaan.mi warns when it is not attached
+  withr::local_package("lavaan.mi")
   data(HS20imps, package = "lavaan.mi")
   model <- lavaan.mi::cfa.mi(lavaan_mi_structure, data = HS20imps)
   skip_if_lavaan_mi_broken(model)
@@ -152,9 +197,14 @@ test_that("model_performance.lavaan.mi", {
     fm <- do.call(lavaan::fitMeasures, c(list(model), pool))
     out <- do.call(model_performance, c(list(model), pool))
     for (entry in names(lavaan_fit_map)) {
-      expected <- if (entry %in% names(fm)) unname(fm[[entry]]) else NA_real_
-      expect_equal(out[[lavaan_fit_map[[entry]]]], expected, info = entry)
+      expect_equal(
+        out[[lavaan_fit_map[[entry]]]],
+        expected_fit_value(unclass(fm), entry),
+        info = entry
+      )
     }
+    # pooled output has "agfi_lisrel" but no "agfi"
+    expect_equal(out$AGFI, unname(fm[["agfi_lisrel"]]))
   }
   # D2 pooling gives a different statistic than the default
   expect_false(isTRUE(all.equal(
@@ -169,6 +219,7 @@ test_that("model_performance.lavaan.mi", {
 
 test_that("model_performance.lavaan.mi, no imputation converged", {
   skip_if_not_installed("lavaan.mi")
+  withr::local_package("lavaan.mi")
   data(HS20imps, package = "lavaan.mi")
   small <- lapply(HS20imps[1:3], function(d) d[1:10, ])
   model <- suppressWarnings(lavaan.mi::cfa.mi(lavaan_mi_structure, data = small))

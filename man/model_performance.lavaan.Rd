@@ -2,9 +2,12 @@
 % Please edit documentation in R/model_performance.lavaan.R
 \name{model_performance.lavaan}
 \alias{model_performance.lavaan}
+\alias{model_performance.lavaan.mi}
 \title{Performance of lavaan SEM / CFA Models}
 \usage{
 \method{model_performance}{lavaan}(model, metrics = "all", verbose = TRUE, ...)
+
+\method{model_performance}{lavaan.mi}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A \strong{lavaan} model.}
