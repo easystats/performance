@@ -46,8 +46,9 @@
 #' dispersion parameter, and their standard errors account for it. For these
 #' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
 #' The returned statistic is the unscaled Pearson chi-squared test, which
-#' compares the residuals with the variance of a Poisson or binomial model. The
-#' dispersion ratio of a `glm` model is then the same as its estimated dispersion.
+#' compares the residuals with the variance of a Poisson or binomial model. For
+#' a `glm` model, the dispersion ratio then equals its estimated dispersion, up
+#' to the fitting tolerance.
 #' Simulated residuals are not used, because they are not available for quasi
 #' families.
 #'
@@ -261,8 +262,8 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
   n <- stats::nobs(x)
   k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
 
-  # Pearson residuals are on the response scale also for binomial models with
-  # a two-column `cbind()` response
+  # use the model's own Pearson residuals - computing them by hand from
+  # `get_response()` is wrong for a two-column `cbind()` response
   zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
   if (is.null(zi)) {
     yhat <- stats::fitted(x)
@@ -291,7 +292,7 @@ check_overdispersion.fixest <- check_overdispersion.glm
 
 #' @export
 check_overdispersion.fixest_multi <- function(x, verbose = TRUE, ...) {
-  lapply(x, check_overdispersion.fixest)
+  lapply(x, check_overdispersion.fixest, verbose = verbose, ...)
 }
 
 #' @export

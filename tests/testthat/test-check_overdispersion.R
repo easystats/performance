@@ -482,4 +482,11 @@ test_that("check_overdispersion, fixest quasipoisson warns", {
   expect_length(warns, 1)
   expect_match(warns, "already estimates a dispersion parameter", fixed = TRUE)
   expect_no_warning(check_overdispersion(m_fixest, verbose = FALSE))
+
+  m_fixest_multi <- fixest::feglm(
+    c(DriversKilled, VanKilled) ~ PetrolPrice,
+    data = as.data.frame(Seatbelts),
+    family = "quasipoisson"
+  )
+  expect_no_warning(check_overdispersion(m_fixest_multi, verbose = FALSE))
 })

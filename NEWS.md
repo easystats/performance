@@ -9,8 +9,8 @@
 
 * `check_overdispersion()` now warns for models with a `quasipoisson` or
   `quasibinomial` family. These models already estimate a dispersion
-  parameter, so their standard errors account for overdispersion. The printed
-  conclusion also says so (#734).
+  parameter, so their standard errors account for overdispersion. When over- or
+  underdispersion is detected, the printed conclusion also says so (#734).
 
 ## Bug fixes
 
@@ -41,9 +41,9 @@
   the values, and the documentation of both functions now says so (#428).
 
 * `check_overdispersion()` with `residual_type = "normal"` now returns the
-  correct Pearson chi-squared statistic for binomial models with a
-  two-column `cbind()` response. Before, the dispersion ratio was much too
-  large.
+  correct Pearson chi-squared statistic for binomial models with more than one
+  trial per observation (a `cbind()` response, or proportions with `weights`).
+  Before, the statistic used Poisson-style residuals and could be far off.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as

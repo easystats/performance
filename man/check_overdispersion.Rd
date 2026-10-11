@@ -75,8 +75,9 @@ Models with a \code{quasipoisson} or \code{quasibinomial} family already estimat
 dispersion parameter, and their standard errors account for it. For these
 models, \code{check_overdispersion()} gives a warning (unless \code{verbose = FALSE}).
 The returned statistic is the unscaled Pearson chi-squared test, which
-compares the residuals with the variance of a Poisson or binomial model. The
-dispersion ratio of a \code{glm} model is then the same as its estimated dispersion.
+compares the residuals with the variance of a Poisson or binomial model. For
+a \code{glm} model, the dispersion ratio then equals its estimated dispersion, up
+to the fitting tolerance.
 Simulated residuals are not used, because they are not available for quasi
 families.
 }
