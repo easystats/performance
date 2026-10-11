@@ -60,7 +60,11 @@ test_that("model_performance.lavaan passes arguments to fitmeasures", {
                 speed   =~ x7 + x8 + x9 "
   model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
   # lavaan >= 0.7 names the argument "fm_args", older versions "fm.args"
-  fm_name <- if ("fm_args" %in% names(formals(lavaan::fitmeasures))) "fm_args" else "fm.args"
+  fm_name <- if ("fm_args" %in% names(formals(lavaan::fitmeasures))) {
+    "fm_args"
+  } else {
+    "fm.args"
+  }
   fm_args <- stats::setNames(list(list(rmsea.ci.level = 0.5)), fm_name)
   out <- do.call(model_performance, c(list(model), fm_args))
   expected <- do.call(lavaan::fitmeasures, c(list(model), fm_args))
@@ -141,7 +145,11 @@ test_that("lavaan fit-index map returns NA for missing entries", {
   out <- .lavaan_fit_indices(measures)
   expect_named(out, unname(lavaan_fit_map))
   for (entry in names(lavaan_fit_map)) {
-    expect_equal(out[[lavaan_fit_map[[entry]]]], expected_fit_value(measures, entry), info = entry)
+    expect_equal(
+      out[[lavaan_fit_map[[entry]]]],
+      expected_fit_value(measures, entry),
+      info = entry
+    )
   }
   expect_false(is.na(out$AGFI))
   # known value of agfi_lisrel for this model (lavaan 0.7.2)
@@ -169,7 +177,11 @@ test_that("lavaan fit-index map returns NA for missing entries", {
   expect_identical(out$AGFI, NA_real_)
   expect_identical(out$RMR, NA_real_)
   for (other in setdiff(names(lavaan_fit_map), c("gfi", "agfi", "rmr"))) {
-    expect_equal(out[[lavaan_fit_map[[other]]]], expected_fit_value(measures, other), info = other)
+    expect_equal(
+      out[[lavaan_fit_map[[other]]]],
+      expected_fit_value(measures, other),
+      info = other
+    )
   }
 
   # "agfi" wins over "agfi_lisrel", wherever it is in the output
@@ -281,7 +293,11 @@ test_that("model_performance.lavaan.mi, no imputation converged", {
   expect_named(out, unname(lavaan_fit_map))
   expect_true(all(is.na(unlist(out))))
 
-  out <- expect_silent(model_performance(model, metrics = c("CFI", "SRMR"), verbose = FALSE))
+  out <- expect_silent(model_performance(
+    model,
+    metrics = c("CFI", "SRMR"),
+    verbose = FALSE
+  ))
   expect_named(out, c("CFI", "SRMR"))
   expect_true(all(is.na(unlist(out))))
 })
