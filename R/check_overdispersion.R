@@ -47,8 +47,8 @@
 #' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
 #' The returned statistic is the unscaled Pearson chi-squared test, which
 #' compares the residuals with the variance of a Poisson or binomial model. For
-#' a `glm` model, the dispersion ratio then equals its estimated dispersion, up
-#' to the fitting tolerance.
+#' a `glm` model without aliased coefficients, the dispersion ratio then equals
+#' its estimated dispersion, up to the fitting tolerance.
 #' Simulated residuals are not used, because they are not available for quasi
 #' families.
 #'
@@ -269,7 +269,8 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     yhat <- stats::fitted(x)
     zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
   }
-  chisq <- sum(zi^2)
+  # residuals of models with `na.action = na.exclude` are padded with NA
+  chisq <- sum(zi^2, na.rm = TRUE)
   ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
 

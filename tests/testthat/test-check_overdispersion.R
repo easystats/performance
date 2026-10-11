@@ -490,3 +490,20 @@ test_that("check_overdispersion, fixest quasipoisson warns", {
   )
   expect_no_warning(check_overdispersion(m_fixest_multi, verbose = FALSE))
 })
+
+
+test_that("check_overdispersion, glm with na.exclude", {
+  d <- as.data.frame(Seatbelts)
+  d$PetrolPrice[c(3, 50, 120)] <- NA
+  m_pois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = poisson,
+    data = d,
+    na.action = na.exclude
+  )
+  out <- check_overdispersion(m_pois)
+  pearson_chisq <- sum(stats::residuals(m_pois, type = "pearson")^2, na.rm = TRUE)
+  expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+  expect_identical(out$residual_df, stats::df.residual(m_pois))
+  expect_message(capture.output(print(out)), "Overdispersion detected")
+})

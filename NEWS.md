@@ -40,10 +40,12 @@
   `insight::get_variance()`. For these models, a shift of a predictor changes
   the values, and the documentation of both functions now says so (#428).
 
-* `check_overdispersion()` with `residual_type = "normal"` now returns the
-  correct Pearson chi-squared statistic for binomial models with more than one
-  trial per observation (a `cbind()` response, or proportions with `weights`).
-  Before, the statistic used Poisson-style residuals and could be far off.
+* `check_overdispersion()` now computes the Pearson chi-squared statistic from
+  the model's own Pearson residuals whenever it does not use simulated
+  residuals. Results change, and are now correct, for binomial models with
+  more than one trial per observation (a `cbind()` response, or proportions
+  with `weights`) and for models with prior weights. Before, the statistic
+  used unweighted Poisson-style residuals and could be far off.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
