@@ -41,8 +41,8 @@
   the values, and the documentation of both functions now says so (#428).
 
 * `model_performance()` for *lavaan* models now passes further arguments in
-  `...` to `lavaan::fitMeasures()` by name. Before, any extra argument caused
-  an error.
+  `...` to `lavaan::fitMeasures()` by name. Before, any extra argument other
+  than `estimator` caused an error.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as

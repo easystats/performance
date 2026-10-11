@@ -13,14 +13,16 @@
 #'   `"AIC"`, `"BIC"`, and `"BIC_adjusted"`.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods. For **lavaan** and
-#'   **lavaan.mi** models, they are passed to `lavaan::fitMeasures()`, for
-#'   example `pool.method = "D2"` for **lavaan.mi** models.
+#'   **lavaan.mi** models, they are passed to `lavaan::fitMeasures()` (except
+#'   `estimator`, which is ignored), for example `pool.method = "D2"` for
+#'   **lavaan.mi** models.
 #'
 #' @return A data frame (with one row) and one column per "index" (see
 #'   `metrics`). An index that `lavaan::fitMeasures()` does not return is `NA`.
 #'
 #' @section Models fitted to multiple imputed data:
-#' For models from `lavaan.mi::sem.mi()` or `lavaan.mi::cfa.mi()`, the indices
+#' For **lavaan.mi** models (for example, from `lavaan.mi::sem.mi()` or
+#' `lavaan.mi::cfa.mi()`), the indices
 #' come from the `fitMeasures()` method of the **lavaan.mi** package, which
 #' pools the test statistics across imputations (by default with the `"D4"`
 #' method). Pooling arguments, such as `pool.method`, pass through `...`. If no

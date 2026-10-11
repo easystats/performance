@@ -23,8 +23,9 @@ computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Basel
 \item{verbose}{Toggle off warnings.}
 
 \item{...}{Arguments passed to or from other methods. For \strong{lavaan} and
-\strong{lavaan.mi} models, they are passed to \code{lavaan::fitMeasures()}, for
-example \code{pool.method = "D2"} for \strong{lavaan.mi} models.}
+\strong{lavaan.mi} models, they are passed to \code{lavaan::fitMeasures()} (except
+\code{estimator}, which is ignored), for example \code{pool.method = "D2"} for
+\strong{lavaan.mi} models.}
 }
 \value{
 A data frame (with one row) and one column per "index" (see
@@ -84,7 +85,8 @@ and the \strong{SRMR}.
 }
 \section{Models fitted to multiple imputed data}{
 
-For models from \code{lavaan.mi::sem.mi()} or \code{lavaan.mi::cfa.mi()}, the indices
+For \strong{lavaan.mi} models (for example, from \code{lavaan.mi::sem.mi()} or
+\code{lavaan.mi::cfa.mi()}), the indices
 come from the \code{fitMeasures()} method of the \strong{lavaan.mi} package, which
 pools the test statistics across imputations (by default with the \code{"D4"}
 method). Pooling arguments, such as \code{pool.method}, pass through \code{...}. If no
