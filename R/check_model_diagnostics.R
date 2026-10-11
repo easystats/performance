@@ -217,7 +217,20 @@
   infl <- stats::influence(model, do.coef = FALSE)
   model_resid <- as.numeric(insight::get_residuals(model))
 
-  std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) model_resid)
+  std_resid <- tryCatch(
+    stats::rstandard(model, infl),
+    error = function(e) {
+      # no rstandard() method (e.g., lmerMod): standardize Pearson residuals,
+      # so that the Cook's distance contours match `cooks.distance()`
+      .safe(
+        as.numeric(
+          stats::residuals(model, type = "pearson") /
+            (stats::sigma(model) * sqrt(1 - infl$hat))
+        ),
+        model_resid
+      )
+    }
+  )
 
   plot_data <- data.frame(
     Hat = infl$hat,

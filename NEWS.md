@@ -55,6 +55,11 @@
   Before, these functions returned inaccurate values or failed with an unclear
   error (#165).
 
+* The influential observations plot of `check_model()` and `check_outliers()`
+  for linear mixed models from package *lme4* now shows standardized residuals
+  instead of raw residuals. Before this fix, points fell outside the Cook's
+  distance lines but were not flagged as outliers (#857).
+
 # performance 0.18.2
 
 ## Bug fixes
