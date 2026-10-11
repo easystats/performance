@@ -60,6 +60,12 @@
   instead of raw residuals. Before this fix, points fell outside the Cook's
   distance lines but were not flagged as outliers (#857).
 
+* The Cook's distance lines in the influential observations plot of
+  `check_model()` and `check_outliers()` now use the threshold of
+  `check_outliers()`, including a user-supplied `threshold`. Before this fix,
+  linear models always used a threshold from the model's F statistic, so the
+  lines did not match the flagged outliers (#916).
+
 # performance 0.18.2
 
 ## Bug fixes

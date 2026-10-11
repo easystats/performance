@@ -497,6 +497,22 @@ test_that("influential observations plot data uses standardized residuals for lm
 })
 
 
+test_that("influential observations plot data uses the Cook's distance threshold for lm models", {
+  # the contour lines must follow the threshold that check_outliers() uses,
+  # including a user-supplied threshold (#916)
+  m <- lm(disp ~ mpg + hp, data = mtcars)
+  for (th in list(NULL, list(cook = 2))) {
+    out <- check_outliers(m, method = "cook", threshold = th)
+    d <- attributes(out)$influential_obs
+    expect_equal(attributes(d)$cook_levels, attributes(out)$threshold$cook)
+    expect_identical(
+      which(d$Influential == "Influential"),
+      which(as.numeric(out) == 1)
+    )
+  }
+})
+
+
 test_that("check_outliers with psych", {
   skip_if_not_installed("psych")
   data(Harman.5, package = "psych")

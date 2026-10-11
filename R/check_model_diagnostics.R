@@ -204,12 +204,14 @@
 .model_diagnostic_outlier <- function(model, threshold = NULL) {
   s <- summary(model)
 
-  if (inherits(model, "lm", which = TRUE) == 1) {
-    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
-  } else if (is.null(threshold)) {
-    cook_levels <- c(0.5, 1)
-  } else {
+  # use the threshold from `check_outliers()`, so that the contour lines
+  # match the flagged outliers
+  if (!is.null(threshold)) {
     cook_levels <- threshold
+  } else if (inherits(model, "lm", which = TRUE) == 1) {
+    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
+  } else {
+    cook_levels <- c(0.5, 1)
   }
 
   n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
