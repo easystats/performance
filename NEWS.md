@@ -7,6 +7,11 @@
   all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
   well (#95).
 
+* `check_overdispersion()` now warns for models with a `quasipoisson` or
+  `quasibinomial` family. These models already estimate a dispersion
+  parameter, so their standard errors account for overdispersion. The printed
+  conclusion also says so (#734).
+
 ## Bug fixes
 
 * `check_collinearity()` now returns interaction terms for *brms* models.
@@ -34,6 +39,11 @@
   models with uncorrelated random slopes, such as `(x || group)`. The fix is in
   `insight::get_variance()`. For these models, a shift of a predictor changes
   the values, and the documentation of both functions now says so (#428).
+
+* `check_overdispersion()` with `residual_type = "normal"` now returns the
+  correct Pearson chi-squared statistic for binomial models with a
+  two-column `cbind()` response. Before, the dispersion ratio was much too
+  large.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
