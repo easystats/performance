@@ -507,3 +507,18 @@ test_that("check_overdispersion, glm with na.exclude", {
   expect_identical(out$residual_df, stats::df.residual(m_pois))
   expect_message(capture.output(print(out)), "Overdispersion detected")
 })
+
+
+test_that("check_overdispersion, glm poisson with prior weights", {
+  d <- as.data.frame(Seatbelts)
+  d$w <- rep(1:3, length.out = nrow(d))
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = d, weights = w)
+  out <- check_overdispersion(m_pois)
+  pearson_chisq <- sum(stats::residuals(m_pois, type = "pearson")^2)
+  expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+  expect_equal(
+    out$dispersion_ratio,
+    pearson_chisq / stats::df.residual(m_pois),
+    tolerance = 1e-6
+  )
+})
