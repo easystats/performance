@@ -43,7 +43,7 @@
 * `model_performance()` for *lavaan* models now passes further arguments in
   `...` to `lavaan::fitMeasures()` by name. Before, any extra argument other
   than `estimator` caused an error, even an argument that `fitMeasures()`
-  accepts, such as `fm_args`.
+  accepts, such as `fm_args` (`fm.args` in *lavaan* before 0.7).
 
 * `model_performance()` for *lavaan* models no longer errors when
   `lavaan::fitMeasures()` does not return an index, for example the

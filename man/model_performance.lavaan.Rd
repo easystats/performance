@@ -91,8 +91,9 @@ come from the \code{fitMeasures()} method of the \strong{lavaan.mi} package, whi
 pools the test statistics across imputations (by default with the \code{"D4"}
 method). Pooling arguments, such as \code{pool.method}, pass through \code{...}. If no
 imputation converged, all indices are \code{NA}. \code{compare_performance()} does not
-accept \strong{lavaan.mi} models yet: it drops them, because \strong{insight} does not
-list them as supported models and they are not \strong{lavaan} models.
+accept \strong{lavaan.mi} models yet, because \strong{insight} does not recognize them
+as models. It drops them with a warning, and it errors when no other model
+remains.
 }
 
 \examples{
