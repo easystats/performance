@@ -68,7 +68,7 @@ test_that("model_performance.lavaan passes arguments to fitmeasures", {
   fm_args <- stats::setNames(list(list(rmsea.ci.level = 0.5)), fm_name)
   out <- do.call(model_performance, c(list(model), fm_args))
   expected <- do.call(lavaan::fitmeasures, c(list(model), fm_args))
-  expect_equal(out$RMSEA_CI_low, unname(expected[["rmsea.ci.lower"]]))
+  expect_identical(out$RMSEA_CI_low, unname(expected[["rmsea.ci.lower"]]))
   # a narrower interval than the default 90% interval
   expect_gt(out$RMSEA_CI_low, model_performance(model)$RMSEA_CI_low)
 
@@ -84,7 +84,9 @@ test_that("model_performance.lavaan, fit measures without likelihood", {
   # ordinal indicators, estimated with WLSMV, which gives no loglikelihood
   ordinal <- as.data.frame(lapply(
     HolzingerSwineford1939[paste0("x", 1:9)],
-    function(x) cut(x, 3, labels = FALSE)
+    cut,
+    breaks = 3,
+    labels = FALSE
   ))
   model <- lavaan::cfa(structure, data = ordinal, ordered = TRUE)
   out <- model_performance(model)
@@ -93,7 +95,7 @@ test_that("model_performance.lavaan, fit measures without likelihood", {
   expect_identical(out$AIC, NA_real_)
   expect_identical(out$BIC, NA_real_)
   expect_identical(out$BIC_adjusted, NA_real_)
-  expect_equal(out$CFI, unname(lavaan::fitmeasures(model)[["cfi"]]))
+  expect_identical(out$CFI, unname(lavaan::fitmeasures(model)[["cfi"]]))
 })
 
 
@@ -238,7 +240,7 @@ test_that("model_performance.lavaan.mi", {
     out <- model_performance(model)
   })
   expect_s3_class(out, "performance_lavaan")
-  expect_identical(nrow(out), 1L)
+  expect_length(out$Chi2, 1L)
   expect_named(out, unname(lavaan_fit_map))
 
   # values match the pooled fit measures, default pooling and D2
@@ -253,7 +255,7 @@ test_that("model_performance.lavaan.mi", {
       )
     }
     # pooled output has "agfi_lisrel" but no "agfi"
-    expect_equal(out$AGFI, unname(fm[["agfi_lisrel"]]))
+    expect_identical(out$AGFI, unname(fm[["agfi_lisrel"]]))
   }
   # D2 pooling gives a different statistic than the default
   expect_false(isTRUE(all.equal(
@@ -272,7 +274,7 @@ test_that("model_performance.lavaan.mi", {
   expect_true(any(converged))
   skip_if(all(converged), "all imputations of the partial fixture converged")
   out <- model_performance(model)
-  expect_equal(out$Chi2, unname(lavaan::fitMeasures(model)[["chisq"]]))
+  expect_identical(out$Chi2, unname(lavaan::fitMeasures(model)[["chisq"]]))
   expect_false(is.na(out$Chi2))
 })
 
