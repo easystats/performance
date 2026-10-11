@@ -10,7 +10,8 @@
 \method{model_performance}{lavaan.mi}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
-\item{model}{A \strong{lavaan} model.}
+\item{model}{A \strong{lavaan} model, or a \strong{lavaan.mi} model fitted to
+multiple imputed data sets.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be
 computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Baseline"},
@@ -21,11 +22,13 @@ computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Basel
 
 \item{verbose}{Toggle off warnings.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Arguments passed to or from other methods. For \strong{lavaan} and
+\strong{lavaan.mi} models, they are passed to \code{lavaan::fitMeasures()}, for
+example \code{pool.method = "D2"} for \strong{lavaan.mi} models.}
 }
 \value{
 A data frame (with one row) and one column per "index" (see
-\code{metrics}).
+\code{metrics}). An index that \code{lavaan::fitMeasures()} does not return is \code{NA}.
 }
 \description{
 Compute indices of model performance for SEM or CFA models from the
@@ -79,6 +82,15 @@ reported: The model \strong{chi-square}, the \strong{RMSEA}, the \strong{CFI}
 and the \strong{SRMR}.
 }
 }
+\section{Models fitted to multiple imputed data}{
+
+For models from \code{lavaan.mi::sem.mi()} or \code{lavaan.mi::cfa.mi()}, the indices
+come from the \code{fitMeasures()} method of the \strong{lavaan.mi} package, which
+pools the test statistics across imputations (by default with the \code{"D4"}
+method). Pooling arguments, such as \code{pool.method}, pass through \code{...}. If no
+imputation converged, all indices are \code{NA}.
+}
+
 \examples{
 \dontshow{if (require("lavaan")) withAutoprint(\{ # examplesIf}
 # Confirmatory Factor Analysis (CFA) ---------

@@ -3,7 +3,8 @@
 #' Compute indices of model performance for SEM or CFA models from the
 #' **lavaan** package.
 #'
-#' @param model A **lavaan** model.
+#' @param model A **lavaan** model, or a **lavaan.mi** model fitted to
+#'   multiple imputed data sets.
 #' @param metrics Can be `"all"` or a character vector of metrics to be
 #'   computed (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"Baseline"`,
 #'   `"Baseline_df"`, `"p_Baseline"`, `"GFI"`, `"AGFI"`, `"NFI"`, `"NNFI"`,
@@ -11,10 +12,19 @@
 #'   `"RMR"`, `"SRMR"`, `"RFI"`, `"PNFI"`, `"IFI"`, `"RNI"`, `"Loglikelihood"`,
 #'   `"AIC"`, `"BIC"`, and `"BIC_adjusted"`.
 #' @param verbose Toggle off warnings.
-#' @param ... Arguments passed to or from other methods.
+#' @param ... Arguments passed to or from other methods. For **lavaan** and
+#'   **lavaan.mi** models, they are passed to `lavaan::fitMeasures()`, for
+#'   example `pool.method = "D2"` for **lavaan.mi** models.
 #'
 #' @return A data frame (with one row) and one column per "index" (see
-#'   `metrics`).
+#'   `metrics`). An index that `lavaan::fitMeasures()` does not return is `NA`.
+#'
+#' @section Models fitted to multiple imputed data:
+#' For models from `lavaan.mi::sem.mi()` or `lavaan.mi::cfa.mi()`, the indices
+#' come from the `fitMeasures()` method of the **lavaan.mi** package, which
+#' pools the test statistics across imputations (by default with the `"D4"`
+#' method). Pooling arguments, such as `pool.method`, pass through `...`. If no
+#' imputation converged, all indices are `NA`.
 #'
 #' @details \subsection{Indices of fit}{
 #'

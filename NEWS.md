@@ -7,6 +7,11 @@
   all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
   well (#95).
 
+* `model_performance()` now supports models fitted to multiple imputed data
+  sets with package *lavaan.mi*. The fit indices are pooled across imputations
+  by `lavaan::fitMeasures()`, and pooling arguments such as `pool.method` can
+  be passed through `...` (#888).
+
 ## Bug fixes
 
 * `check_collinearity()` now returns interaction terms for *brms* models.
@@ -34,6 +39,10 @@
   models with uncorrelated random slopes, such as `(x || group)`. The fix is in
   `insight::get_variance()`. For these models, a shift of a predictor changes
   the values, and the documentation of both functions now says so (#428).
+
+* `model_performance()` for *lavaan* models now passes further arguments in
+  `...` to `lavaan::fitMeasures()` by name. Before, any extra argument caused
+  an error.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
