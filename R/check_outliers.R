@@ -32,13 +32,10 @@
 #' by `simulate_residuals()` or of class `DHARMa`. See 'Details' in
 #' `?DHARMa::testOutliers` for a detailed description of the types.
 #' @param verbose Toggle warnings.
-#' @param group Optional, the name of a grouping variable for models from
-#' packages **glmmTMB** and **lme4** (classes `glmmTMB`, `lmerMod` and
-#' `glmerMod`). It can be any variable of the data given in the `data`
-#' argument of the model, also one that is not in the model formula. If given,
-#' Cook's distance is computed for each level of this variable, not for each
-#' observation. Only `method = "cook"` is supported, and `ID` is not used.
-#' See section 'Model-specific methods'.
+#' @param group Optional, name of a grouping variable in the data used to fit
+#' a **glmmTMB** or **lme4** model. If given, Cook's distance is computed for
+#' each level of this variable rather than for each observation (only for
+#' `method = "cook"`). See section 'Model-specific methods'.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
 #' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
@@ -116,41 +113,18 @@
 #'    **glmmTMB** models.
 #'
 #'    For models from packages **glmmTMB** and **lme4**, the `group` argument
-#'    gives Cook's distance for each level of a grouping variable. Each level
-#'    is left out in turn and the model is refit. **glmmTMB** models leave out
-#'    a level by giving its rows a weight of zero, and **lme4** models use the
-#'    `subset` argument. Cook's distance for level g is
-#'    `D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p`. Here, `b` are the fixed
-#'    effects of the full model, `b_(g)` are those of the model without level
-#'    g, `V(b)` is the variance-covariance matrix of the fixed effects of the
-#'    full model, and `p` is the number of fixed effects. This is the formula
-#'    used for each observation of **glmmTMB** models, with a level in place of
-#'    an observation. The default threshold is `4 / G`, with `G` the number of
-#'    levels used to fit the model (Nieuwenhuis et al., 2012, p. 41). This
-#'    threshold is a rule of thumb: the gap between a level and the other
-#'    levels tells more than the threshold itself. Levels where the refit
-#'    fails, does not converge, has a non-positive-definite Hessian
-#'    (**glmmTMB**), or returns different fixed-effect terms get a missing
-#'    distance and are not counted as outliers. For **lme4** models, a refit
-#'    counts as converged when the
-#'    optimizer converged without warnings, the same rule that
-#'    `stats::influence()` uses, so warnings from the convergence checks of
-#'    **lme4** (like a large gradient) do not lead to a missing distance.
-#'    The refits use the data that the `data` argument of the model refers
-#'    to. If a refit that leaves nothing out does not give the fixed effects
-#'    of the model, this data changed after the model was fitted, and an
-#'    error is given. The values of a grouping variable that is not in the
-#'    model formula cannot be checked in this way.
-#'    Rows with a missing value in the grouping variable stay in every refit
-#'    and are not counted as a level. For models from `lme4::glmer.nb()`, the
-#'    refits keep the negative binomial parameter theta of the full model, as
-#'    `stats::influence()` does. Other implementations use a different scale.
-#'    For **lme4** models, `cooks.distance(stats::influence(model, groups = ))`
-#'    multiplies the distance by `(G - p) / G`, so its values are smaller.
-#'    Multiply them by `G / (G - p)` to compare them with the values of
-#'    `check_outliers()`. `cooks.distance()` from package **influence.ME** uses
-#'    the variance-covariance matrix of the model without level g in place of
-#'    `V(b)`.
+#'    gives Cook's distance for each level of a grouping variable (e.g.,
+#'    participants or schools) rather than for each observation. The model is
+#'    refit once per level, leaving out that level, and Cook's distance is
+#'    `D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p`, where `b` and `b_(g)` are
+#'    the fixed effects of the full model and of the model without level g,
+#'    `V(b)` is their variance-covariance matrix in the full model, and `p` is
+#'    the number of fixed effects. The default threshold is `4 / G`, with `G`
+#'    the number of levels (Nieuwenhuis et al., 2012). Levels where the refit
+#'    fails or does not converge get a missing distance and are not counted as
+#'    outliers. Note that `cooks.distance(stats::influence(model, groups = ))`
+#'    from **lme4** multiplies the distance by `(G - p) / G`, so its values are
+#'    smaller.
 #'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
@@ -2378,7 +2352,12 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # of the level out with `subset`, because lmer treats weights as variance
 # weights and still counts rows with a weight of zero. Levels where the refit
 # fails, does not converge, has a non-positive-definite Hessian (glmmTMB), or
-# returns different fixed-effect terms get NA.
+# returns different fixed-effect terms get NA. lme4 refits count as converged
+# by the rule of stats::influence() (see .refit_converged()), and glmer.nb()
+# refits keep theta of the full model, as stats::influence() does. Rows with a
+# missing value in the grouping variable stay in every refit. For comparison,
+# stats::influence() for lme4 multiplies D_g by (G - p) / G, and
+# influence.ME::cooks.distance() uses V(b) of the model without level g.
 .cooks_distance_group <- function(x, group_values, model_data, model_rows) {
   levels <- .group_levels(group_values)
   level_index <- match(group_values, levels)

@@ -60,13 +60,10 @@ correlation of residuals (by default, 0.05).}
 
 \item{verbose}{Toggle warnings.}
 
-\item{group}{Optional, the name of a grouping variable for models from
-packages \strong{glmmTMB} and \strong{lme4} (classes \code{glmmTMB}, \code{lmerMod} and
-\code{glmerMod}). It can be any variable of the data given in the \code{data}
-argument of the model, also one that is not in the model formula. If given,
-Cook's distance is computed for each level of this variable, not for each
-observation. Only \code{method = "cook"} is supported, and \code{ID} is not used.
-See section 'Model-specific methods'.}
+\item{group}{Optional, name of a grouping variable in the data used to fit
+a \strong{glmmTMB} or \strong{lme4} model. If given, Cook's distance is computed for
+each level of this variable rather than for each observation (only for
+\code{method = "cook"}). See section 'Model-specific methods'.}
 
 \item{type}{Type of method to test for outliers. Can be one of \code{"default"},
 \code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
@@ -158,41 +155,18 @@ by this method. \code{check_model()} skips this computation for
 \strong{glmmTMB} models.
 
 For models from packages \strong{glmmTMB} and \strong{lme4}, the \code{group} argument
-gives Cook's distance for each level of a grouping variable. Each level
-is left out in turn and the model is refit. \strong{glmmTMB} models leave out
-a level by giving its rows a weight of zero, and \strong{lme4} models use the
-\code{subset} argument. Cook's distance for level g is
-\verb{D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p}. Here, \code{b} are the fixed
-effects of the full model, \code{b_(g)} are those of the model without level
-g, \code{V(b)} is the variance-covariance matrix of the fixed effects of the
-full model, and \code{p} is the number of fixed effects. This is the formula
-used for each observation of \strong{glmmTMB} models, with a level in place of
-an observation. The default threshold is \code{4 / G}, with \code{G} the number of
-levels used to fit the model (Nieuwenhuis et al., 2012, p. 41). This
-threshold is a rule of thumb: the gap between a level and the other
-levels tells more than the threshold itself. Levels where the refit
-fails, does not converge, has a non-positive-definite Hessian
-(\strong{glmmTMB}), or returns different fixed-effect terms get a missing
-distance and are not counted as outliers. For \strong{lme4} models, a refit
-counts as converged when the
-optimizer converged without warnings, the same rule that
-\code{stats::influence()} uses, so warnings from the convergence checks of
-\strong{lme4} (like a large gradient) do not lead to a missing distance.
-The refits use the data that the \code{data} argument of the model refers
-to. If a refit that leaves nothing out does not give the fixed effects
-of the model, this data changed after the model was fitted, and an
-error is given. The values of a grouping variable that is not in the
-model formula cannot be checked in this way.
-Rows with a missing value in the grouping variable stay in every refit
-and are not counted as a level. For models from \code{lme4::glmer.nb()}, the
-refits keep the negative binomial parameter theta of the full model, as
-\code{stats::influence()} does. Other implementations use a different scale.
-For \strong{lme4} models, \code{cooks.distance(stats::influence(model, groups = ))}
-multiplies the distance by \code{(G - p) / G}, so its values are smaller.
-Multiply them by \code{G / (G - p)} to compare them with the values of
-\code{check_outliers()}. \code{cooks.distance()} from package \strong{influence.ME} uses
-the variance-covariance matrix of the model without level g in place of
-\code{V(b)}.
+gives Cook's distance for each level of a grouping variable (e.g.,
+participants or schools) rather than for each observation. The model is
+refit once per level, leaving out that level, and Cook's distance is
+\verb{D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p}, where \code{b} and \code{b_(g)} are
+the fixed effects of the full model and of the model without level g,
+\code{V(b)} is their variance-covariance matrix in the full model, and \code{p} is
+the number of fixed effects. The default threshold is \code{4 / G}, with \code{G}
+the number of levels (Nieuwenhuis et al., 2012). Levels where the refit
+fails or does not converge get a missing distance and are not counted as
+outliers. Note that \code{cooks.distance(stats::influence(model, groups = ))}
+from \strong{lme4} multiplies the distance by \code{(G - p) / G}, so its values are
+smaller.
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
