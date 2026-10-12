@@ -2,6 +2,10 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now labels terms correctly for *brms* models that use
+  the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
+  of the previous term and the last term was missing (#417).
+
 * `r2_nakagawa()` and `icc()` now include the random-slope variance for *lme4*
   models with uncorrelated random slopes, such as `(x || group)`. The fix is in
   `insight::get_variance()`. For these models, a shift of a predictor changes
