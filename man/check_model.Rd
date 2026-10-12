@@ -305,10 +305,10 @@ to date. You can update your packages (paying special attention to
 \item \emph{Update relevant software:} Finally, ensure your R version, and the IDE
 you use, are up to date. Running the most recent versions of R and, e.g.,
 RStudio or Positron can resolve any remaining issues.
-\item \strong{Plot single panels:} If none of the solutions above work, generate
+\item \emph{Plot single panels:} If none of the solutions above work, generate
 individual plots for each check using the \code{panel} argument:
 \code{plot(check_model(model, panel = FALSE))}
-\item \strong{Save plot as file:} Instead of rendering plots interactively,
+\item \emph{Save plot as file:} Instead of rendering plots interactively,
 you can save them directly to a file, for example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
