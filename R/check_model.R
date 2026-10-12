@@ -218,10 +218,10 @@
 #' - *Update relevant software:* Finally, ensure your R version, and the IDE
 #'   you use, are up to date. Running the most recent versions of R and, e.g.,
 #'   RStudio or Positron can resolve any remaining issues.
-#' - **Plot single panels:** If none of the solutions above work, generate
+#' - *Plot single panels:* If none of the solutions above work, generate
 #'   individual plots for each check using the `panel` argument:
 #'   `plot(check_model(model, panel = FALSE))`
-#' - **Save plot as file:** Instead of rendering plots interactively,
+#' - *Save plot as file:* Instead of rendering plots interactively,
 #'   you can save them directly to a file, for example:
 #'   ```r
 #'   pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
