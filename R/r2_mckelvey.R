@@ -43,6 +43,14 @@ r2_mckelvey.default <- function(model) {
 
 .r2_mckelvey <- function(model) {
   faminfo <- insight::model_info(model)
+
+  if (isTRUE(faminfo$is_binomial) && !isTRUE(faminfo$is_bernoulli)) {
+    insight::format_warning(
+      "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+    )
+    return(NULL)
+  }
+
   n <- insight::n_obs(model, disaggregate = TRUE)
 
   if (faminfo$is_binomial || faminfo$is_ordinal || faminfo$is_multinomial) {

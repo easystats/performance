@@ -128,10 +128,21 @@ get hints about possible problems.
 For Bayesian models from packages \strong{rstanarm} or \strong{brms},
 models will be "converted" to their frequentist counterpart, using
 \href{https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html}{\code{bayestestR::bayesian_as_frequentist}}.
-A more advanced model-check for Bayesian models will be implemented at a
-later stage.
+If this conversion fails for a \strong{brms} model, \code{check_model()} returns only
+the checks that work on the Bayesian model itself: the posterior predictive
+check (\code{"pp_check"}) and the check for multicollinearity (\code{"vif"}). A message
+then lists the panels of the requested checks that were skipped (for
+example, \code{NORM} for \code{"normality"}) and the reason why the conversion failed.
+If none of the requested checks can be computed, \code{check_model()} gives an
+error. Multivariate \strong{brms}
+models (models with more than one response) are not supported. A more
+advanced model-check for Bayesian models will be implemented at a later
+stage.
 
 See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
+
+If you encounter problems with creating the plots, please see section
+\emph{Troubleshooting}.
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
@@ -294,6 +305,16 @@ to date. You can update your packages (paying special attention to
 \item \emph{Update relevant software:} Finally, ensure your R version, and the IDE
 you use, are up to date. Running the most recent versions of R and, e.g.,
 RStudio or Positron can resolve any remaining issues.
+\item \emph{Plot single panels:} If none of the solutions above work, generate
+individual plots for each check using the \code{panel} argument:
+\code{plot(check_model(model, panel = FALSE))}
+\item \emph{Save plot as file:} Instead of rendering plots interactively,
+you can save them directly to a file, for example:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
+check_model(model)
+dev.off()
+}\if{html}{\out{</div>}}
 }
 }
 

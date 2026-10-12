@@ -38,6 +38,14 @@ r2_tjur.default <- function(model, ...) {
     insight::format_error("`model` must be binomial.")
   }
 
+  # Tjur's R2 is only defined for binary (Bernoulli) outcomes
+  if (!info$is_bernoulli) {
+    insight::format_warning(
+      "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+    )
+    return(NULL)
+  }
+
   y <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
   pred <- stats::predict(model, type = "response", re.form = NULL)
 
