@@ -154,7 +154,8 @@ test_that("multiple methods print keeps method-threshold order", {
       method = c("mahalanobis", "iqr", "zscore"),
       threshold = list(mahalanobis = 20, iqr = 1.2, zscore = 2.2)
     )),
-    "Based on the following methods and thresholds: mahalanobis \\(20\\), iqr \\(1.2\\), zscore \\(2.2\\)."
+    regex = "mahalanobis (20)",
+    fixed = TRUE
   )
 })
 

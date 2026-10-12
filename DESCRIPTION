@@ -89,6 +89,7 @@ Suggests:
     BayesFactor,
     bayesplot,
     betareg,
+    BH,
     bigutilsr,
     blavaan,
     boot,
