@@ -178,6 +178,11 @@ counts as converged when the
 optimizer converged without warnings, the same rule that
 \code{stats::influence()} uses, so warnings from the convergence checks of
 \strong{lme4} (like a large gradient) do not lead to a missing distance.
+The refits use the data that the \code{data} argument of the model refers
+to. If a refit that leaves nothing out does not give the fixed effects
+of the model, this data changed after the model was fitted, and an
+error is given. The values of a grouping variable that is not in the
+model formula cannot be checked in this way.
 Rows with a missing value in the grouping variable stay in every refit
 and are not counted as a level. For models from \code{lme4::glmer.nb()}, the
 refits keep the negative binomial parameter theta of the full model, as

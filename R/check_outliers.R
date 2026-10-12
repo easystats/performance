@@ -136,6 +136,11 @@
 #'    optimizer converged without warnings, the same rule that
 #'    `stats::influence()` uses, so warnings from the convergence checks of
 #'    **lme4** (like a large gradient) do not lead to a missing distance.
+#'    The refits use the data that the `data` argument of the model refers
+#'    to. If a refit that leaves nothing out does not give the fixed effects
+#'    of the model, this data changed after the model was fitted, and an
+#'    error is given. The values of a grouping variable that is not in the
+#'    model formula cannot be checked in this way.
 #'    Rows with a missing value in the grouping variable stay in every refit
 #'    and are not counted as a level. For models from `lme4::glmer.nb()`, the
 #'    refits keep the negative binomial parameter theta of the full model, as
@@ -2214,6 +2219,15 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   )
 
   d <- .cooks_distance_group(x, group_values, model_data, model_rows)
+  if (is.null(d$distance)) {
+    insight::format_error(paste0(
+      "The data of the model (`",
+      insight::safe_deparse(data_call),
+      "`) is not the data the model was fitted on, because a refit on this ",
+      "data gives different fixed effects. It may have changed after the ",
+      "model was fitted. Please fit the model again."
+    ))
+  }
   failed <- which(is.na(d$distance))
   if (length(failed) == length(d$distance) && verbose) {
     insight::format_alert(paste0(
@@ -2388,29 +2402,38 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   }
   start <- .cooks_refit_start(x)
 
+  refit_without <- function(in_level) {
+    tryCatch(
+      suppressWarnings(suppressMessages(
+        if (inherits(x, "merMod")) {
+          .update_model(x, data = model_data, start = start, subset = model_rows & !in_level)
+        } else {
+          level_weights <- prior_weights
+          level_weights[in_level] <- 0
+          .update_model(
+            x,
+            data = model_data,
+            start = start,
+            weights = level_weights,
+            subset = model_rows
+          )
+        }
+      )),
+      error = function(e) NULL
+    )
+  }
+
+  # a refit that leaves nothing out must give the fixed effects of the model.
+  # If it does not, the data changed after the model was fitted.
+  same_data <- .cooks_distance_from_refit(refit_without(rep(FALSE, nrow(model_data))), full)
+  if (!is.na(same_data) && same_data > 1e-6) {
+    return(list(levels = levels, distance = NULL))
+  }
+
   distance <- vapply(
     seq_along(levels),
     function(i) {
-      in_level <- !is.na(level_index) & level_index == i
-      refit <- tryCatch(
-        suppressWarnings(suppressMessages(
-          if (inherits(x, "merMod")) {
-            .update_model(x, data = model_data, start = start, subset = model_rows & !in_level)
-          } else {
-            level_weights <- prior_weights
-            level_weights[in_level] <- 0
-            .update_model(
-              x,
-              data = model_data,
-              start = start,
-              weights = level_weights,
-              subset = model_rows
-            )
-          }
-        )),
-        error = function(e) NULL
-      )
-      .cooks_distance_from_refit(refit, full)
+      .cooks_distance_from_refit(refit_without(!is.na(level_index) & level_index == i), full)
     },
     numeric(1)
   )

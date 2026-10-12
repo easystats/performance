@@ -457,3 +457,27 @@ test_that("check_outliers, group print names levels without a distance", {
     fixed = TRUE
   )
 })
+
+
+test_that("check_outliers, group detects changed variables behind model terms", {
+  # `Days` is only in the model frame as `scale(Days)`, so the columns of the
+  # model frame cannot show the change. The refit that leaves nothing out can.
+  data(sleepstudy, package = "lme4")
+  d <- sleepstudy
+  m <- lme4::lmer(Reaction ~ scale(Days) + (1 | Subject), d)
+  d$Days <- d$Days^2
+  expect_error(
+    check_outliers(m, group = "Subject"),
+    "a refit on this",
+    fixed = TRUE
+  )
+
+  d <- sleepstudy
+  m_tmb <- glmmTMB::glmmTMB(Reaction ~ scale(Days) + (1 | Subject), d)
+  d$Days <- d$Days^2
+  expect_error(
+    check_outliers(m_tmb, group = "Subject"),
+    "a refit on this",
+    fixed = TRUE
+  )
+})
