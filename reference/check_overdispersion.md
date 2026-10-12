@@ -84,6 +84,18 @@ For negative binomial (mixed) models or models with zero-inflation
 component, the overdispersion test is based simulated residuals (see
 [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md)).
 
+## Overdispersion in Quasi-Poisson and Quasi-Binomial Models
+
+Models with a `quasipoisson` or `quasibinomial` family already estimate
+a dispersion parameter, and their standard errors account for it. For
+these models, `check_overdispersion()` gives a warning (unless
+`verbose = FALSE`). The returned statistic is the unscaled Pearson
+chi-squared test, which compares the residuals with the variance of a
+Poisson or binomial model. For a `glm` model without aliased
+coefficients, the dispersion ratio then equals its estimated dispersion,
+up to the fitting tolerance. Simulated residuals are not used, because
+they are not available for quasi families.
+
 ## Overdispersion in Mixed Models
 
 For `merMod`- and `glmmTMB`-objects, `check_overdispersion()` is based

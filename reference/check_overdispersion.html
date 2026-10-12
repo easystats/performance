@@ -144,6 +144,20 @@ indicates either overdispersion or underdispersion (the first being more common)
 the overdispersion test is based simulated residuals (see <code><a href="simulate_residuals.html">simulate_residuals()</a></code>).</p>
     </div>
     <div class="section level2">
+    <h2 id="overdispersion-in-quasi-poisson-and-quasi-binomial-models">Overdispersion in Quasi-Poisson and Quasi-Binomial Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-quasi-poisson-and-quasi-binomial-models"></a></h2>
+
+
+<p>Models with a <code>quasipoisson</code> or <code>quasibinomial</code> family already estimate a
+dispersion parameter, and their standard errors account for it. For these
+models, <code>check_overdispersion()</code> gives a warning (unless <code>verbose = FALSE</code>).
+The returned statistic is the unscaled Pearson chi-squared test, which
+compares the residuals with the variance of a Poisson or binomial model. For
+a <code>glm</code> model without aliased coefficients, the dispersion ratio then equals
+its estimated dispersion, up to the fitting tolerance.
+Simulated residuals are not used, because they are not available for quasi
+families.</p>
+    </div>
+    <div class="section level2">
     <h2 id="overdispersion-in-mixed-models">Overdispersion in Mixed Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-mixed-models"></a></h2>
 
 
