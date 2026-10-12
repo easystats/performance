@@ -114,3 +114,45 @@ test_that("icc, by_group", {
   expect_equal(out$ICC, c(0.3200625, 0.1096797), tolerance = 1e-2)
   expect_identical(out$Group, c("a2", "a1"))
 })
+
+test_that("r2_nakagawa and icc, uncorrelated random slopes", {
+  # #428: the random-slope variance was missing from var.random
+  data(sleepstudy, package = "lme4")
+  m <- lme4::lmer(Reaction ~ Days + (Days || Subject), data = sleepstudy)
+
+  # Johnson (2014): mean random-effect variance over the observed Days
+  vc <- as.data.frame(lme4::VarCorr(m))
+  var_random <- vc$vcov[vc$var1 == "(Intercept)" & vc$grp == "Subject"] +
+    vc$vcov[vc$var1 == "Days" & vc$grp == "Subject.1"] *
+      mean(sleepstudy$Days^2)
+  var_fixed <- stats::var(as.vector(lme4::getME(m, "X") %*% lme4::fixef(m)))
+  var_residual <- stats::sigma(m)^2
+  var_total <- var_fixed + var_random + var_residual
+
+  out <- r2_nakagawa(m)
+  expect_equal(
+    out$R2_conditional,
+    (var_fixed + var_random) / var_total,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$R2_marginal,
+    var_fixed / var_total,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    unlist(out),
+    c(0.7965226, 0.2829806),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  out <- icc(m)
+  expect_equal(
+    out$ICC_adjusted,
+    var_random / (var_random + var_residual),
+    tolerance = 1e-3
+  )
+})

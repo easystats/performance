@@ -117,6 +117,11 @@
 #' For more details on the computation of the variances, see
 #' `?insight::get_variance`.
 #'
+#' For models with uncorrelated random slopes, such as `(x || group)` in
+#' **lme4**, the ICC changes when a predictor is shifted (for example,
+#' centered), because the shift changes the model itself. See the details in
+#' [`r2_nakagawa()`].
+#'
 #' ## ICC for unconditional and conditional models
 #' Usually, the ICC is calculated for the null model ("unconditional model").
 #' However, according to _Raudenbush and Bryk (2002)_ or

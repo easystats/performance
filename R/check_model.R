@@ -90,6 +90,9 @@
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
+#' If you encounter problems with creating the plots, please see section
+#' *Troubleshooting*.
+#'
 #' @section Posterior Predictive Checks:
 #' Posterior predictive checks can be used to look for systematic discrepancies
 #' between real and simulated data. It helps to see whether the type of model
@@ -223,6 +226,16 @@
 #' - *Update relevant software:* Finally, ensure your R version, and the IDE
 #'   you use, are up to date. Running the most recent versions of R and, e.g.,
 #'   RStudio or Positron can resolve any remaining issues.
+#' - **Plot single panels:** If none of the solutions above work, generate
+#'   individual plots for each check using the `panel` argument:
+#'   `plot(check_model(model, panel = FALSE))`
+#' - **Save plot as file:** Instead of rendering plots interactively,
+#'   you can save them directly to a file, for example:
+#'   ```r
+#'   pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
+#'   check_model(model)
+#'   dev.off()
+#'   ```
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -349,7 +362,7 @@ check_model.default <- function(
         "\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `",
         class(model)[1],
         "` are not yet supported."
-      ) # nolint
+      )
     )
   }
 
@@ -445,9 +458,9 @@ check_model.default <- function(
   if (
     !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
   ) {
-    show_ci = FALSE
+    show_ci <- FALSE
   } else {
-    show_ci = TRUE
+    show_ci <- TRUE
   }
 
   attr(assumptions_data, "panel") <- panel
@@ -934,7 +947,18 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
+    if (inherits(model, "glmmTMB")) {
+      if (verbose) {
+        insight::format_alert(paste(
+          "The check for influential observations is skipped for models of class",
+          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
+          "Use `check_outliers()` to compute it."
+        ))
+      }
+    } else {
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    }
     if (is.null(dat$OUTLIERS)) {
       threshold <- NULL
     } else {
@@ -997,7 +1021,18 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
+    if (inherits(model, "glmmTMB")) {
+      if (verbose) {
+        insight::format_alert(paste(
+          "The check for influential observations is skipped for models of class",
+          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
+          "Use `check_outliers()` to compute it."
+        ))
+      }
+    } else {
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    }
     if (is.null(dat$OUTLIERS)) {
       threshold <- NULL
     } else {
