@@ -9,6 +9,11 @@
 
 ## Bug fixes
 
+* `compare_performance()` no longer fails when only some of the models have
+  LOOIC, for example a *brms* model and a `glm` (#738). It now computes
+  stacking weights for the models that have LOOIC and gives `NA` for the
+  others. A missing weight now prints as an empty cell, not as `(>.999)`.
+
 * `check_model()` no longer fails for *brms* models that cannot be converted
   to a frequentist model. It now returns only the posterior predictive check
   and multicollinearity panels, and a message lists the panels that were
