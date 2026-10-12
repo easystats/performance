@@ -310,10 +310,10 @@ test_that("check_overdispersion, glm can use normal residuals", {
     out,
     structure(
       list(
-        chisq_statistic = 105583.222033006,
-        dispersion_ratio = 5557.01168594766,
+        chisq_statistic = 137.09656611108,
+        dispersion_ratio = 7.21560874268842,
         residual_df = 19L,
-        p_value = 0
+        p_value = 6.54224660869874e-20
       ),
       class = c("check_overdisp", "see_check_overdisp"),
       object_name = "mod1"
@@ -332,5 +332,193 @@ test_that("check_overdispersion, glm can use normal residuals", {
       simulated = TRUE
     ),
     tolerance = 1e-4
+  )
+})
+
+
+test_that("check_overdispersion, glm binomial with cbind() uses Pearson residuals", {
+  #fmt: skip
+  dat <- data.frame(
+    n = c(
+      55, 59, 74, 7, 54, 54, 57, 48, 55, 57, 41,
+      20, 13, 21, 13, 32, 38, 42, 37, 14, 19
+    ),
+    success = c(
+      26, 35, 28, 6, 16, 35, 28, 21, 31, 10, 2, 9, 7,
+      18, 1, 26, 28, 3, 17, 11, 17
+    ),
+    x = c(
+      3.464, 1.599, 3.39, 3.047, 2.442, 1.777, 3.363,
+      4.626, 2.701, 4.636, 3.622, 2.031, 1.666, 2.218, 3.338, 4.255,
+      2.476, 4.727, 3.317, 3.925, 2.854
+    )
+  )
+  mod1 <- glm(cbind(success, n - success) ~ x, data = dat, family = binomial)
+  m_binom <- glm(cbind(ncases, ncontrols) ~ agegp, family = binomial, data = esoph)
+
+  for (fit in list(mod1, m_binom)) {
+    out <- check_overdispersion(fit, residual_type = "normal")
+    pearson_chisq <- sum(stats::residuals(fit, type = "pearson")^2)
+    expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+    expect_equal(
+      out$dispersion_ratio,
+      pearson_chisq / stats::df.residual(fit),
+      tolerance = 1e-6
+    )
+  }
+})
+
+
+test_that("check_overdispersion, quasi families warn", {
+  m_quasipois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = quasipoisson,
+    data = Seatbelts
+  )
+  m_quasibinom <- glm(
+    cbind(ncases, ncontrols) ~ agegp,
+    family = quasibinomial,
+    data = esoph
+  )
+
+  for (fit in list(m_quasipois, m_quasibinom)) {
+    fam <- stats::family(fit)$family
+    for (rt in list(NULL, "simulated")) {
+      warns <- character(0)
+      withCallingHandlers(
+        check_overdispersion(fit, residual_type = rt),
+        warning = function(w) {
+          warns <<- c(warns, gsub("\\s+", " ", conditionMessage(w)))
+          invokeRestart("muffleWarning")
+        }
+      )
+      expect_length(warns, 1)
+      expect_match(warns, fam, fixed = TRUE)
+      expect_match(warns, "already estimates a dispersion parameter", fixed = TRUE)
+      expect_match(warns, "Simulated residuals are not available", fixed = TRUE)
+    }
+    expect_no_warning(check_overdispersion(fit, verbose = FALSE))
+    expect_no_warning(
+      check_overdispersion(fit, residual_type = "simulated", verbose = FALSE)
+    )
+  }
+})
+
+
+test_that("check_overdispersion, quasi families return the unscaled Pearson test", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+  m_quasipois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = quasipoisson,
+    data = Seatbelts
+  )
+  m_binom <- glm(cbind(ncases, ncontrols) ~ agegp, family = binomial, data = esoph)
+  m_quasibinom <- glm(
+    cbind(ncases, ncontrols) ~ agegp,
+    family = quasibinomial,
+    data = esoph
+  )
+  stats_names <- c("chisq_statistic", "dispersion_ratio", "residual_df", "p_value")
+
+  out_pois <- check_overdispersion(m_pois)
+  out_quasipois <- check_overdispersion(m_quasipois, verbose = FALSE)
+  expect_equal(unclass(out_quasipois)[stats_names], unclass(out_pois)[stats_names])
+
+  out_binom <- check_overdispersion(m_binom, residual_type = "normal")
+  out_quasibinom <- check_overdispersion(m_quasibinom, verbose = FALSE)
+  expect_equal(unclass(out_quasibinom)[stats_names], unclass(out_binom)[stats_names])
+})
+
+
+test_that("check_overdispersion, print notes quasi families", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+  m_quasipois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = quasipoisson,
+    data = Seatbelts
+  )
+
+  expect_no_warning(check_overdispersion(m_pois))
+  out_pois <- check_overdispersion(m_pois)
+  msgs <- character(0)
+  withCallingHandlers(
+    capture.output(print(out_pois)),
+    message = function(m) {
+      msgs <<- c(msgs, conditionMessage(m))
+      invokeRestart("muffleMessage")
+    }
+  )
+  expect_identical(msgs, "Overdispersion detected.\n")
+
+  out_quasipois <- check_overdispersion(m_quasipois, verbose = FALSE)
+  msgs <- character(0)
+  withCallingHandlers(
+    capture.output(print(out_quasipois)),
+    message = function(m) {
+      msgs <<- c(msgs, conditionMessage(m))
+      invokeRestart("muffleMessage")
+    }
+  )
+  expect_length(msgs, 1)
+  expect_match(msgs, "Overdispersion detected\\..*dispersion")
+})
+
+
+test_that("check_overdispersion, fixest quasipoisson warns", {
+  skip_if_not_installed("fixest")
+  m_fixest <- fixest::feglm(
+    DriversKilled ~ PetrolPrice,
+    data = as.data.frame(Seatbelts),
+    family = "quasipoisson"
+  )
+  warns <- character(0)
+  withCallingHandlers(
+    check_overdispersion(m_fixest),
+    warning = function(w) {
+      warns <<- c(warns, gsub("\\s+", " ", conditionMessage(w)))
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_length(warns, 1)
+  expect_match(warns, "already estimates a dispersion parameter", fixed = TRUE)
+  expect_no_warning(check_overdispersion(m_fixest, verbose = FALSE))
+
+  m_fixest_multi <- fixest::feglm(
+    c(DriversKilled, VanKilled) ~ PetrolPrice,
+    data = as.data.frame(Seatbelts),
+    family = "quasipoisson"
+  )
+  expect_no_warning(check_overdispersion(m_fixest_multi, verbose = FALSE))
+})
+
+
+test_that("check_overdispersion, glm with na.exclude", {
+  d <- as.data.frame(Seatbelts)
+  d$PetrolPrice[c(3, 50, 120)] <- NA
+  m_pois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = poisson,
+    data = d,
+    na.action = na.exclude
+  )
+  out <- check_overdispersion(m_pois)
+  pearson_chisq <- sum(stats::residuals(m_pois, type = "pearson")^2, na.rm = TRUE)
+  expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+  expect_identical(out$residual_df, stats::df.residual(m_pois))
+  expect_message(capture.output(print(out)), "Overdispersion detected")
+})
+
+
+test_that("check_overdispersion, glm poisson with prior weights", {
+  d <- as.data.frame(Seatbelts)
+  d$w <- rep(1:3, length.out = nrow(d))
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = d, weights = w)
+  out <- check_overdispersion(m_pois)
+  pearson_chisq <- sum(stats::residuals(m_pois, type = "pearson")^2)
+  expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+  expect_equal(
+    out$dispersion_ratio,
+    pearson_chisq / stats::df.residual(m_pois),
+    tolerance = 1e-6
   )
 })

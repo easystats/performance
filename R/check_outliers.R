@@ -712,7 +712,7 @@ check_outliers.default <- function(
   attr(outlier, "text_size") <- 3
   attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(
     x,
-    threshold = unlist(thresholds)
+    threshold = thresholds$cook
   )) # nolint
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data

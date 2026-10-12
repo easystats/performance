@@ -156,6 +156,21 @@ test_that("`check_model()` includes random-effects QQ for split random terms", {
   expect_setequal(as.character(unique(out$REQQ[[1]]$facet)), c("(Intercept)", "Days"))
 })
 
+test_that("`check_model()` respects user-supplied `show_ci`", {
+  data(iris)
+  data(mtcars)
+  m_factor <- lm(Sepal.Length ~ Species, data = iris)
+  m_numeric <- lm(mpg ~ wt, data = mtcars)
+
+  # defaults: no CI for models with only categorical predictors
+  expect_false(attr(check_model(m_factor), "show_ci"))
+  expect_true(attr(check_model(m_numeric), "show_ci"))
+
+  # user choice overrides the defaults
+  expect_true(attr(check_model(m_factor, show_ci = TRUE), "show_ci"))
+  expect_false(attr(check_model(m_numeric, show_ci = FALSE), "show_ci"))
+})
+
 test_that("`check_model()` warnings for tweedie", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
