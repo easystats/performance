@@ -163,6 +163,21 @@ is re-scaled to range from 0 to 1.
   detected). This only works for frequentist models. For Bayesian
   models, see `pareto`.
 
+  For models from package **glmmTMB**, Cook's distance is computed for
+  the fixed effects of the conditional model by refitting the model once
+  per row, leaving out that row (by giving it a weight of zero, so that
+  terms like [`scale()`](https://rdrr.io/r/base/scale.html) or
+  [`poly()`](https://rdrr.io/r/stats/poly.html) are computed on the full
+  data), and comparing the estimates with those of the full model. Thus,
+  computation time grows with the number of observations. Each refit
+  starts at the full model's estimates of the fixed effects and variance
+  parameters, while the random effects are re-estimated from scratch.
+  Rows where the refit fails, does not converge, has a
+  non-positive-definite Hessian or returns different fixed-effect terms
+  get a missing distance and are not counted as outliers by this method.
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  skips this computation for **glmmTMB** models.
+
 - **Pareto**: The reliability and approximate convergence of Bayesian
   models can be assessed using the estimates for the shape parameter k
   of the generalized Pareto distribution. If the estimated tail shape

@@ -94,8 +94,7 @@ For now, we want to focus on the *posterior predictive checks*,
 residuals*).
 
 \
-[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model1``, size_dot ``=`` ``1.2``)`\
-`` #> `check_outliers()` does not yet support models of class `glmmTMB`. ``
+[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model1``, size_dot ``=`` ``1.2``)`
 
 ![](check_model_practical_files/figure-html/unnamed-chunk-4-1.png)
 
@@ -149,8 +148,7 @@ zero-inflation component:
 `  family ``=`` ``poisson``,`\
 `  data ``=`` ``glmmTMB``::`[`Salamanders`](https://rdrr.io/pkg/glmmTMB/man/Salamanders.html)\
 `)`\
-[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model2``, size_dot ``=`` ``1.2``)`\
-`` #> `check_outliers()` does not yet support models of class `glmmTMB`. ``
+[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model2``, size_dot ``=`` ``1.2``)`
 
 ![](check_model_practical_files/figure-html/unnamed-chunk-6-1.png)
 
@@ -194,8 +192,7 @@ instead of using a Poisson distribution.
 `  family ``=`` ``glmmTMB``::`[`nbinom1`](https://rdrr.io/pkg/glmmTMB/man/nbinom2.html)`,`\
 `  data ``=`` ``glmmTMB``::`[`Salamanders`](https://rdrr.io/pkg/glmmTMB/man/Salamanders.html)\
 `)`\
-[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model3``, size_dot ``=`` ``1.2``)`\
-`` #> `check_outliers()` does not yet support models of class `glmmTMB`. ``
+[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model3``, size_dot ``=`` ``1.2``)`
 
 ![](check_model_practical_files/figure-html/unnamed-chunk-8-1.png)
 
@@ -364,8 +361,7 @@ better distributional family for our model, and try `nbinom2` now.
 `  family ``=`` ``glmmTMB``::`[`nbinom2`](https://rdrr.io/pkg/glmmTMB/man/nbinom2.html)`,`\
 `  data ``=`` ``glmmTMB``::`[`Salamanders`](https://rdrr.io/pkg/glmmTMB/man/Salamanders.html)\
 `)`\
-[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model4``, size_dot ``=`` ``1.2``)`\
-`` #> `check_outliers()` does not yet support models of class `glmmTMB`. ``
+[`check_model`](https://easystats.github.io/performance/reference/check_model.md)`(``model4``, size_dot ``=`` ``1.2``)`
 
 ![](check_model_practical_files/figure-html/unnamed-chunk-14-1.png)
 
