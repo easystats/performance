@@ -32,11 +32,13 @@
 #' by `simulate_residuals()` or of class `DHARMa`. See 'Details' in
 #' `?DHARMa::testOutliers` for a detailed description of the types.
 #' @param verbose Toggle warnings.
-#' @param group Optional, the name of a grouping variable in the model data,
-#' for models from packages **glmmTMB** and **lme4** (classes `glmmTMB`,
-#' `lmerMod` and `glmerMod`). If given, Cook's distance is computed for each
-#' level of this variable, not for each observation. Only `method = "cook"` is
-#' supported. See section 'Model-specific methods'.
+#' @param group Optional, the name of a grouping variable for models from
+#' packages **glmmTMB** and **lme4** (classes `glmmTMB`, `lmerMod` and
+#' `glmerMod`). It can be any variable of the data given in the `data`
+#' argument of the model, also one that is not in the model formula. If given,
+#' Cook's distance is computed for each level of this variable, not for each
+#' observation. Only `method = "cook"` is supported, and `ID` is not used.
+#' See section 'Model-specific methods'.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
 #' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
@@ -51,7 +53,10 @@
 #' information on the distance measure and whether or not an observation is
 #' considered as outlier can be recovered with the [as.data.frame] function.
 #' Note that the function will (silently) return a vector of `FALSE` for
-#' non-supported data types such as character strings.
+#' non-supported data types such as character strings. If `group` is given,
+#' the vector has one element per level of the grouping variable, and the data
+#' returned by `as.data.frame()` has one row per level, with the level in the
+#' `Group` column.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -121,8 +126,14 @@
 #'    full model, and `p` is the number of fixed effects. This is the formula
 #'    used for each observation of **glmmTMB** models, with a level in place of
 #'    an observation. The default threshold is `4 / G`, with `G` the number of
-#'    levels (Nieuwenhuis et al., 2012). Levels where the refit fails or does
-#'    not converge get a missing distance and are not counted as outliers.
+#'    levels used to fit the model (Nieuwenhuis et al., 2012, p. 41). This
+#'    threshold is a rule of thumb: the gap between a level and the other
+#'    levels tells more than the threshold itself. Levels where the refit
+#'    fails or does not converge get a missing distance and are not counted
+#'    as outliers. For **lme4** models, a refit counts as converged when the
+#'    optimizer converged without warnings, the same rule that
+#'    `stats::influence()` uses, so warnings from the convergence checks of
+#'    **lme4** (like a large gradient) do not lead to a missing distance.
 #'    Other implementations use a different scale. For **lme4** models,
 #'    `cooks.distance(stats::influence(model, groups = ))` multiplies the
 #'    distance by `(G - p) / G`. `cooks.distance()` from package
@@ -419,9 +430,22 @@ check_outliers.default <- function(
   ...
 ) {
   if (!is.null(group)) {
-    if (!missing(method) && !identical(method, "cook")) {
+    if (!inherits(x, c("glmmTMB", "lmerMod", "glmerMod"))) {
+      insight::format_error(paste0(
+        "The `group` argument is only supported for models of class `glmmTMB`, ",
+        "`lmerMod` or `glmerMod`, not for models of class `",
+        class(x)[1],
+        "`."
+      ))
+    }
+    if (!identical(method, "cook") && !identical(method, c("cook", "pareto"))) {
       insight::format_error(
         "Only `method = \"cook\"` can be used when `group` is specified."
+      )
+    }
+    if (!is.null(ID) && verbose) {
+      insight::format_warning(
+        "The `ID` argument is not used when `group` is specified."
       )
     }
     return(.check_outliers_group(x, group, threshold = threshold, verbose = verbose))
@@ -760,12 +784,24 @@ print.check_outliers <- function(x, ...) {
     case.plural <- "case"
   }
 
-  group <- attr(x, "group")
+  # exact match, so that the "grouped" attribute of grouped data frames does
+  # not match
+  group <- attr(x, "group", exact = TRUE)
   if (!is.null(group)) {
     # outliers are levels of a grouping variable, not rows
     case.plural <- ifelse(length(outliers) > 1, "levels", "level")
     var.plural <- "grouping variable"
     vars <- group
+    if (all(is.na(attr(x, "data")$Distance_Cook))) {
+      insight::print_color(
+        sprintf(
+          "Cook's distance could not be computed for any level of grouping variable %s.\n",
+          group
+        ),
+        "yellow"
+      )
+      return(invisible(x))
+    }
   }
 
   if (length(outliers) >= 1) {
@@ -2070,15 +2106,18 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 .check_outliers_group <- function(x, group, threshold = NULL, verbose = TRUE) {
-  if (!inherits(x, c("glmmTMB", "lmerMod", "glmerMod"))) {
-    insight::format_error(paste0(
-      "The `group` argument is only supported for models of class `glmmTMB`, ",
-      "`lmerMod` or `glmerMod`, not for models of class `",
-      class(x)[1],
-      "`."
-    ))
+  # the data given to the model function, so that refits compute terms like
+  # scale() or poly() on the same rows as the model, and variables that are
+  # not in the formula can be used as grouping variable
+  model_data <- .safe(as.data.frame(eval(
+    stats::getCall(x)$data,
+    environment(stats::formula(x))
+  )))
+  if (is.null(model_data) || !nrow(model_data)) {
+    insight::format_error(
+      "The `group` argument requires a model that was fitted with the `data` argument."
+    )
   }
-  model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
   if (!is.character(group) || length(group) != 1 || !group %in% colnames(model_data)) {
     insight::format_error(paste0(
       "`group` must be the name of one variable in the model data. Variable `",
@@ -2087,7 +2126,13 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     ))
   }
 
-  n_groups <- length(.group_levels(model_data[[group]]))
+  # rows of the data that were used to fit the model (after `subset` and
+  # removing missing values)
+  model_rows <- rownames(model_data) %in% rownames(stats::model.frame(x))
+  group_values <- model_data[[group]]
+  group_values[!model_rows] <- NA
+
+  n_groups <- length(.group_levels(group_values))
   n_params <- ncol(as.matrix(insight::get_varcov(x, component = "conditional")))
   if (n_groups <= n_params) {
     insight::format_error(paste0(
@@ -2106,24 +2151,44 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold <- 4 / n_groups
   } else if (is.list(threshold) && !is.null(threshold$cook)) {
     threshold <- threshold$cook
-  } else if (!is.numeric(threshold) || length(threshold) != 1) {
+  }
+  if (!is.numeric(threshold) || length(threshold) != 1 || !is.finite(threshold)) {
     insight::format_error(
-      "The `threshold` argument must be NULL (for the default value), a number, or a list with a `cook` element."
+      "The `threshold` argument must be NULL (for the default value), a number, or a list with a numeric `cook` element."
     )
   }
 
-  d <- .cooks_distance_group(x, group, model_data)
+  d <- .cooks_distance_group(x, group_values, model_data, model_rows)
   failed <- which(is.na(d$distance))
-  if (length(failed) && verbose) {
+  if (length(failed) == length(d$distance) && verbose) {
+    insight::format_alert(paste0(
+      "Cook's distance could not be computed for any level of `",
+      group,
+      "`, because the model refits failed, did not converge, or returned ",
+      "different fixed-effect terms, or because the variance-covariance ",
+      "matrix of the model could not be inverted, or the model weights could ",
+      "not be matched to the data rows. No level is flagged as outlier."
+    ))
+  } else if (length(failed) && verbose) {
+    if (length(failed) > 10) {
+      failed_levels <- paste(
+        toString(d$levels[failed[1:10]]),
+        "and",
+        length(failed) - 10,
+        "more"
+      )
+    } else {
+      failed_levels <- datawizard::text_concatenate(as.character(d$levels[failed]))
+    }
     insight::format_alert(paste0(
       "Cook's distance could not be computed for ",
       if (length(failed) == 1) "level " else "levels ",
-      datawizard::text_concatenate(as.character(d$levels[failed])),
+      failed_levels,
       " of `",
       group,
       "`, because the model refit without ",
       if (length(failed) == 1) "this level" else "these levels",
-      " failed, did not converge or returned different fixed-effect terms."
+      " failed, did not converge, or returned different fixed-effect terms."
     ))
   }
 
@@ -2235,23 +2300,29 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # the model without the rows of that level:
 # D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p
 # This is the formula of .cooks_distance_refit(), with a level in place of a
-# row. glmmTMB models leave out a level by giving its rows a weight of zero.
-# lme4 models use `subset`, because lmer treats weights as variance weights and
-# still counts rows with a weight of zero. Both ways compute terms like scale()
-# or poly() on the full data. Levels where the refit fails or does not
-# converge get NA.
-.cooks_distance_group <- function(x, group, model_data) {
-  group_values <- model_data[[group]]
+# row. The refits use the data given to the model function, with `subset`
+# set to the rows used to fit the model, so that terms like scale() or poly()
+# are computed on the same rows as in the model. glmmTMB models leave out a
+# level by giving its rows a weight of zero. lme4 models also leave the rows
+# of the level out with `subset`, because lmer treats weights as variance
+# weights and still counts rows with a weight of zero. Levels where the refit
+# fails or does not converge get NA.
+.cooks_distance_group <- function(x, group_values, model_data, model_rows) {
   levels <- .group_levels(group_values)
-  n_obs <- nrow(model_data)
+  level_index <- match(group_values, levels)
 
   full <- .cooks_full_model(x)
   if (inherits(x, "merMod")) {
     prior_weights <- NULL
   } else {
-    prior_weights <- .cooks_prior_weights(x, n_obs)
-    if (is.null(prior_weights)) {
+    # weights for all rows of the data, rows not used in the model are left
+    # out by `subset`
+    fit_weights <- .cooks_prior_weights(x, sum(model_rows))
+    if (is.null(fit_weights)) {
       full <- NULL
+    } else {
+      prior_weights <- rep(1, nrow(model_data))
+      prior_weights[model_rows] <- fit_weights
     }
   }
   if (is.null(full)) {
@@ -2262,8 +2333,25 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   distance <- vapply(
     seq_along(levels),
     function(i) {
-      rows <- which(as.character(group_values) %in% as.character(levels[i]))
-      refit <- .refit_without_rows(x, model_data, rows, start, prior_weights)
+      in_level <- !is.na(level_index) & level_index == i
+      refit <- tryCatch(
+        suppressWarnings(suppressMessages(
+          if (inherits(x, "merMod")) {
+            .update_model(x, data = model_data, start = start, subset = model_rows & !in_level)
+          } else {
+            level_weights <- prior_weights
+            level_weights[in_level] <- 0
+            .update_model(
+              x,
+              data = model_data,
+              start = start,
+              weights = level_weights,
+              subset = model_rows
+            )
+          }
+        )),
+        error = function(e) NULL
+      )
       .cooks_distance_from_refit(refit, full)
     },
     numeric(1)
@@ -2307,9 +2395,14 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 # Prior weights given by the user. These come from the model frame, because
 # insight::get_weights() returns the number of trials for binomial models with
-# a cbind() response. Returns NULL if the weights do not match the data rows.
+# a cbind() response. Returns NULL if the model frame cannot be retrieved or
+# the weights do not match the data rows.
 .cooks_prior_weights <- function(x, n_obs) {
-  prior_weights <- .safe(stats::model.weights(stats::model.frame(x)))
+  model_frame <- .safe(stats::model.frame(x))
+  if (is.null(model_frame)) {
+    return(NULL)
+  }
+  prior_weights <- stats::model.weights(model_frame)
   if (is.null(prior_weights)) {
     prior_weights <- rep(1, n_obs)
   }
@@ -2356,24 +2449,17 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 .refit_without_rows <- function(x, model_data, rows, start, weights) {
+  weights[rows] <- 0
   tryCatch(
     suppressWarnings(suppressMessages(
-      if (inherits(x, "merMod")) {
-        keep <- rep(TRUE, nrow(model_data))
-        keep[rows] <- FALSE
-        model_data$.performance_keep <- keep
-        .update_model(x, data = model_data, start = start, subset = TRUE)
-      } else {
-        weights[rows] <- 0
-        .update_model(x, data = model_data, start = start, weights = weights)
-      }
+      .update_model(x, data = model_data, start = start, weights = weights)
     )),
     error = function(e) NULL
   )
 }
 
 
-.update_model <- function(x, data, start, weights = NULL, subset = FALSE) {
+.update_model <- function(x, data, start, weights = NULL, subset = NULL) {
   # evaluate in the environment of the model formula, so that variables
   # defined outside the data (like an offset vector) are found
   model_call <- stats::update(x, evaluate = FALSE)
@@ -2382,9 +2468,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   if (!is.null(weights)) {
     model_call$weights <- weights
   }
-  if (subset) {
-    # rows are left out after the model frame is built from the full data
-    model_call$subset <- as.name(".performance_keep")
+  if (!is.null(subset)) {
+    # a logical vector over the rows of `data`. Rows are left out after the
+    # model frame is built from all rows of `data`.
+    model_call$subset <- subset
   }
   eval(model_call, envir = environment(stats::formula(x)))
 }

@@ -60,11 +60,13 @@ correlation of residuals (by default, 0.05).}
 
 \item{verbose}{Toggle warnings.}
 
-\item{group}{Optional, the name of a grouping variable in the model data,
-for models from packages \strong{glmmTMB} and \strong{lme4} (classes \code{glmmTMB},
-\code{lmerMod} and \code{glmerMod}). If given, Cook's distance is computed for each
-level of this variable, not for each observation. Only \code{method = "cook"} is
-supported. See section 'Model-specific methods'.}
+\item{group}{Optional, the name of a grouping variable for models from
+packages \strong{glmmTMB} and \strong{lme4} (classes \code{glmmTMB}, \code{lmerMod} and
+\code{glmerMod}). It can be any variable of the data given in the \code{data}
+argument of the model, also one that is not in the model formula. If given,
+Cook's distance is computed for each level of this variable, not for each
+observation. Only \code{method = "cook"} is supported, and \code{ID} is not used.
+See section 'Model-specific methods'.}
 
 \item{type}{Type of method to test for outliers. Can be one of \code{"default"},
 \code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
@@ -82,7 +84,10 @@ method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
 considered as outlier can be recovered with the \link{as.data.frame} function.
 Note that the function will (silently) return a vector of \code{FALSE} for
-non-supported data types such as character strings.
+non-supported data types such as character strings. If \code{group} is given,
+the vector has one element per level of the grouping variable, and the data
+returned by \code{as.data.frame()} has one row per level, with the level in the
+\code{Group} column.
 }
 \description{
 Checks for and locates influential observations (i.e.,
@@ -163,8 +168,14 @@ g, \code{V(b)} is the variance-covariance matrix of the fixed effects of the
 full model, and \code{p} is the number of fixed effects. This is the formula
 used for each observation of \strong{glmmTMB} models, with a level in place of
 an observation. The default threshold is \code{4 / G}, with \code{G} the number of
-levels (Nieuwenhuis et al., 2012). Levels where the refit fails or does
-not converge get a missing distance and are not counted as outliers.
+levels used to fit the model (Nieuwenhuis et al., 2012, p. 41). This
+threshold is a rule of thumb: the gap between a level and the other
+levels tells more than the threshold itself. Levels where the refit
+fails or does not converge get a missing distance and are not counted
+as outliers. For \strong{lme4} models, a refit counts as converged when the
+optimizer converged without warnings, the same rule that
+\code{stats::influence()} uses, so warnings from the convergence checks of
+\strong{lme4} (like a large gradient) do not lead to a missing distance.
 Other implementations use a different scale. For \strong{lme4} models,
 \code{cooks.distance(stats::influence(model, groups = ))} multiplies the
 distance by \code{(G - p) / G}. \code{cooks.distance()} from package

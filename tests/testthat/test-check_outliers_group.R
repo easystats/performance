@@ -165,3 +165,164 @@ test_that("check_outliers, group argument errors", {
     fixed = TRUE
   )
 })
+
+
+test_that("check_outliers, group refits keep the rows and terms of the model", {
+  # the model drops rows by `subset` and by missing values, and computes
+  # scale() on all rows of the data. Test-local loop: refit on the same data
+  # with the rows of the model, without the rows of each level.
+  data(sleepstudy, package = "lme4")
+  d <- sleepstudy
+  d$Reaction[c(3, 50)] <- NA
+  rows_out <- -seq(1, 180, 3)
+  loop_distances <- function(model, fixed, varcov) {
+    model_rows <- rownames(d) %in% rownames(stats::model.frame(model))
+    b <- fixed(model)
+    v_inv <- solve(varcov(model))
+    start <- .cooks_refit_start(model)
+    vapply(
+      levels(d$Subject),
+      function(s) {
+        d_keep <- d
+        d_keep$keep <- model_rows & d$Subject != s
+        refit <- suppressWarnings(stats::update(model, data = d_keep, subset = keep, start = start))
+        delta <- b - fixed(refit)
+        sum(delta * (v_inv %*% delta)) / length(b)
+      },
+      numeric(1)
+    )
+  }
+
+  m_lmer <- lme4::lmer(Reaction ~ scale(Days) + (1 | Subject), d, subset = rows_out)
+  expected <- loop_distances(m_lmer, lme4::fixef, function(m) as.matrix(stats::vcov(m)))
+  actual <- .test_group_distances(m_lmer, "Subject")
+  expect_equal(actual[names(expected)], expected, tolerance = 1e-6)
+
+  m_tmb <- glmmTMB::glmmTMB(Reaction ~ scale(Days) + (1 | Subject), d, subset = rows_out)
+  expected <- loop_distances(
+    m_tmb,
+    function(m) glmmTMB::fixef(m)$cond,
+    function(m) as.matrix(stats::vcov(m)$cond)
+  )
+  actual <- .test_group_distances(m_tmb, "Subject")
+  expect_equal(actual[names(expected)], expected, tolerance = 1e-6)
+})
+
+
+test_that("check_outliers, group levels and variables of the data", {
+  data(sleepstudy, package = "lme4")
+  d <- sleepstudy
+  d$cluster <- rep(1:20, 9)
+  d$Reaction[1:3] <- NA
+  w <- rep(c(1, 2), 90)
+
+  # a variable that is not in the formula, a dot formula, missing values, and
+  # a weights vector that is not in the data
+  m <- lme4::lmer(Reaction ~ . - Subject - cluster + (1 | Subject), d, weights = w)
+  out <- as.data.frame(check_outliers(m, group = "cluster"))
+  expect_identical(out$Group, 1:20)
+  expect_false(anyNA(out$Distance_Cook))
+
+  # levels without rows in the model are not counted
+  m_tmb <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), sleepstudy, subset = -(1:10))
+  out <- check_outliers(m_tmb, group = "Subject")
+  expect_identical(nrow(as.data.frame(out)), 17L)
+  expect_false("308" %in% as.character(as.data.frame(out)$Group))
+  expect_identical(attr(out, "threshold"), list(cook = 4 / 17))
+})
+
+
+test_that("check_outliers, group arguments", {
+  data(cbpp, package = "lme4")
+  m <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+  default <- check_outliers(m, group = "herd")
+  expect_identical(
+    as.data.frame(check_outliers(m, group = "herd", method = c("cook", "pareto"))),
+    as.data.frame(default)
+  )
+  expect_identical(attr(check_outliers(m, group = "herd", threshold = 0.1), "threshold"), list(cook = 0.1))
+  expect_identical(
+    attr(check_outliers(m, group = "herd", threshold = list(cook = 0.1)), "threshold"),
+    list(cook = 0.1)
+  )
+  expect_error(
+    check_outliers(m, group = "herd", threshold = list(cook = "a")),
+    "a list with a numeric `cook` element",
+    fixed = TRUE
+  )
+  expect_error(
+    check_outliers(m, group = "herd", threshold = list(cook = c(0.1, 1))),
+    "a list with a numeric `cook` element",
+    fixed = TRUE
+  )
+  expect_warning(
+    check_outliers(m, group = "herd", ID = "herd"),
+    "The `ID` argument is not used",
+    fixed = TRUE
+  )
+})
+
+
+test_that("check_outliers, group on classes with their own method", {
+  skip_if_not_installed("nlme")
+  data(sleepstudy, package = "lme4")
+  m <- nlme::lme(Reaction ~ Days, random = ~ 1 | Subject, data = sleepstudy)
+  expect_error(
+    check_outliers(m, group = "Subject"),
+    "models of class `lme`",
+    fixed = TRUE
+  )
+})
+
+
+test_that("check_outliers, group alerts and print for failed refits", {
+  data(sleepstudy, package = "lme4")
+  m <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+  update_model <- .update_model
+
+  local_mocked_bindings(.update_model = function(x, data, start, weights = NULL, subset = NULL) {
+    stop("forced refit error", call. = FALSE)
+  })
+  expect_message(
+    out <- check_outliers(m, group = "Subject"),
+    "could not be computed for any level of `Subject`",
+    fixed = TRUE
+  )
+  expect_true(all(is.na(as.data.frame(out)$Distance_Cook)))
+  expect_false(any(out))
+  expect_output(
+    print(out),
+    "Cook's distance could not be computed for any level of grouping variable Subject.",
+    fixed = TRUE
+  )
+
+  # refits without the first 12 levels fail
+  failing <- levels(sleepstudy$Subject)[1:12]
+  local_mocked_bindings(.update_model = function(x, data, start, weights = NULL, subset = NULL) {
+    if (any(data$Subject[!subset] %in% failing)) {
+      stop("forced refit error", call. = FALSE)
+    }
+    update_model(x, data = data, start = start, weights = weights, subset = subset)
+  })
+  alert <- tryCatch(
+    check_outliers(m, group = "Subject"),
+    message = function(msg) gsub("\\s+", " ", conditionMessage(msg))
+  )
+  expect_match(
+    alert,
+    paste("levels", toString(failing[1:10]), "and 2 more of `Subject`"),
+    fixed = TRUE
+  )
+})
+
+
+test_that("check_outliers, print of grouped data frames is unchanged", {
+  out <- check_outliers(datawizard::data_group(iris, "Species"), method = c("zscore", "iqr"))
+  expect_null(attr(out, "group", exact = TRUE))
+  expect_output(print(out), "outlier detected: case 44.", fixed = TRUE)
+  expect_output(print(out), "For variables: Sepal.Length", fixed = TRUE)
+})
