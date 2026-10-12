@@ -136,11 +136,16 @@
 #'    optimizer converged without warnings, the same rule that
 #'    `stats::influence()` uses, so warnings from the convergence checks of
 #'    **lme4** (like a large gradient) do not lead to a missing distance.
-#'    Other implementations use a different scale. For **lme4** models,
-#'    `cooks.distance(stats::influence(model, groups = ))` multiplies the
-#'    distance by `(G - p) / G`. `cooks.distance()` from package
-#'    **influence.ME** uses the variance-covariance matrix of the model without
-#'    level g in place of `V(b)`.
+#'    Rows with a missing value in the grouping variable stay in every refit
+#'    and are not counted as a level. For models from `lme4::glmer.nb()`, the
+#'    refits keep the negative binomial parameter theta of the full model, as
+#'    `stats::influence()` does. Other implementations use a different scale.
+#'    For **lme4** models, `cooks.distance(stats::influence(model, groups = ))`
+#'    multiplies the distance by `(G - p) / G`, so its values are smaller.
+#'    Multiply them by `G / (G - p)` to compare them with the values of
+#'    `check_outliers()`. `cooks.distance()` from package **influence.ME** uses
+#'    the variance-covariance matrix of the model without level g in place of
+#'    `V(b)`.
 #'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
@@ -440,7 +445,7 @@ check_outliers.default <- function(
         "`."
       ))
     }
-    if (!identical(method, "cook") && !identical(method, c("cook", "pareto"))) {
+    if (!"cook" %in% method || !all(method %in% c("cook", "pareto"))) {
       insight::format_error(
         "Only `method = \"cook\"` can be used when `group` is specified."
       )
@@ -882,6 +887,21 @@ print.check_outliers <- function(x, ...) {
       ),
       "green"
     )
+  }
+  if (!is.null(group)) {
+    n_missing <- sum(is.na(attr(x, "data")$Distance_Cook))
+    if (n_missing > 0) {
+      insight::print_color(
+        sprintf(
+          "Cook's distance could not be computed for %i %s, which %s not counted as %s.\n",
+          n_missing,
+          ifelse(n_missing > 1, "levels", "level"),
+          ifelse(n_missing > 1, "are", "is"),
+          ifelse(n_missing > 1, "outliers", "outlier")
+        ),
+        "yellow"
+      )
+    }
   }
   invisible(x)
 }
@@ -2111,26 +2131,44 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   # the data given to the model function, so that refits compute terms like
   # scale() or poly() on the same rows as the model, and variables that are
   # not in the formula can be used as grouping variable
-  model_data <- .safe(as.data.frame(eval(
-    stats::getCall(x)$data,
-    environment(stats::formula(x))
-  )))
-  if (is.null(model_data) || !nrow(model_data)) {
+  if (!is.character(group) || length(group) != 1 || is.na(group)) {
+    insight::format_error("`group` must be a single character string, the name of a variable.")
+  }
+  data_call <- stats::getCall(x)$data
+  if (is.null(data_call)) {
     insight::format_error(
       "The `group` argument requires a model that was fitted with the `data` argument."
     )
   }
-  if (!is.character(group) || length(group) != 1 || !group %in% colnames(model_data)) {
+  model_data <- .safe(as.data.frame(eval(data_call, environment(stats::formula(x)))))
+  model_frame <- .safe(stats::model.frame(x))
+  if (is.null(model_data) || !nrow(model_data) || is.null(model_frame)) {
+    insight::format_error(paste0(
+      "The data of the model (`",
+      insight::safe_deparse(data_call),
+      "`) could not be found from the environment of the model formula. ",
+      "Try to fit the model with a formula that is defined where the data is."
+    ))
+  }
+  if (!group %in% colnames(model_data)) {
     insight::format_error(paste0(
       "`group` must be the name of one variable in the model data. Variable `",
-      toString(group),
+      group,
       "` was not found."
     ))
   }
 
   # rows of the data that were used to fit the model (after `subset` and
   # removing missing values)
-  model_rows <- rownames(model_data) %in% rownames(stats::model.frame(x))
+  model_rows <- rownames(model_data) %in% rownames(model_frame)
+  if (!.model_rows_match(model_frame, model_data, model_rows)) {
+    insight::format_error(paste0(
+      "The data of the model (`",
+      insight::safe_deparse(data_call),
+      "`) is not the data the model was fitted on. It may have changed after ",
+      "the model was fitted. Please fit the model again."
+    ))
+  }
   group_values <- model_data[[group]]
   group_values[!model_rows] <- NA
 
@@ -2154,11 +2192,26 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   } else if (is.list(threshold) && !is.null(threshold$cook)) {
     threshold <- threshold$cook
   }
-  if (!is.numeric(threshold) || length(threshold) != 1 || !is.finite(threshold)) {
+  if (
+    !is.numeric(threshold) ||
+      length(threshold) != 1 ||
+      !is.finite(threshold) ||
+      threshold < 0
+  ) {
     insight::format_error(
-      "The `threshold` argument must be NULL (for the default value), a number, or a list with a numeric `cook` element."
+      "The `threshold` argument must be NULL (for the default value), a non-negative number, or a list with a numeric `cook` element."
     )
   }
+  threshold <- unname(threshold)
+
+  # glmmTMB refits are also checked for a positive-definite Hessian, and
+  # glmmTMB weights are matched to the data rows
+  is_glmmtmb <- inherits(x, "glmmTMB")
+  refit_reasons <- paste0(
+    "failed, did not converge, ",
+    if (is_glmmtmb) "had a non-positive-definite Hessian, ",
+    "or returned different fixed-effect terms"
+  )
 
   d <- .cooks_distance_group(x, group_values, model_data, model_rows)
   failed <- which(is.na(d$distance))
@@ -2166,11 +2219,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     insight::format_alert(paste0(
       "Cook's distance could not be computed for any level of `",
       group,
-      "`, because the model refits failed, did not converge, had a ",
-      "non-positive-definite Hessian, or returned different fixed-effect ",
-      "terms, or because the variance-covariance ",
-      "matrix of the model could not be inverted, or the model weights could ",
-      "not be matched to the data rows. No level is flagged as outlier."
+      "`, because the model refits ",
+      refit_reasons,
+      ", or because the variance-covariance matrix of the model could not be inverted",
+      if (is_glmmtmb) ", or the model weights could not be matched to the data rows",
+      ". No level is flagged as outlier."
     ))
   } else if (length(failed) && verbose) {
     if (length(failed) > 10) {
@@ -2190,9 +2243,9 @@ check_outliers.DHARMa <- check_outliers.performance_simres
       " of `",
       group,
       "`, because the model refit without ",
-      if (length(failed) == 1) "this level" else "these levels",
-      " failed, did not converge, had a non-positive-definite Hessian, or",
-      " returned different fixed-effect terms."
+      if (length(failed) == 1) "this level " else "these levels ",
+      refit_reasons,
+      "."
     ))
   }
 
@@ -2366,16 +2419,39 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 # distinct non-missing values of the grouping variable, in the order of the
-# factor levels, or sorted for other types
+# factor levels, or sorted (independent of the locale) for other types
 .group_levels <- function(group_values) {
   if (is.factor(group_values)) {
-    factor(
-      levels(group_values)[levels(group_values) %in% group_values],
-      levels = levels(group_values)
-    )
+    kept <- levels(group_values)[levels(group_values) %in% group_values]
+    factor(kept, levels = kept)
   } else {
-    sort(unique(group_values[!is.na(group_values)]))
+    sort(unique(group_values[!is.na(group_values)]), method = "radix")
   }
+}
+
+
+# TRUE if the rows of `model_data` that are marked by `model_rows` hold the
+# same values as the model frame, for each model frame column that is also a
+# column of `model_data`. This fails if the data changed after the model was
+# fitted.
+.model_rows_match <- function(model_frame, model_data, model_rows) {
+  if (sum(model_rows) != nrow(model_frame)) {
+    return(FALSE)
+  }
+  shared <- intersect(colnames(model_frame), colnames(model_data))
+  all(vapply(
+    shared,
+    function(i) {
+      frame_values <- model_frame[[i]]
+      data_values <- model_data[[i]][model_rows]
+      if (is.factor(frame_values) || is.factor(data_values)) {
+        frame_values <- as.character(frame_values)
+        data_values <- as.character(data_values)
+      }
+      isTRUE(all.equal(frame_values, data_values, check.attributes = FALSE))
+    },
+    logical(1)
+  ))
 }
 
 

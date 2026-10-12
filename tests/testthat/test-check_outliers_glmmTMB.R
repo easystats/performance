@@ -346,6 +346,7 @@ test_that("check_outliers, unsupported quantreg classes return NULL", {
 
 
 test_that("check_outliers, glmmTMB Cook's distance for binomial models with a cbind() response", {
+  skip_on_cran()
   # the number of trials must not be passed to the refits as prior weights.
   # `size` is a predictor because the data checks need a numeric predictor.
   data(cbpp, package = "lme4")

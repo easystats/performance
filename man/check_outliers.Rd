@@ -178,11 +178,16 @@ counts as converged when the
 optimizer converged without warnings, the same rule that
 \code{stats::influence()} uses, so warnings from the convergence checks of
 \strong{lme4} (like a large gradient) do not lead to a missing distance.
-Other implementations use a different scale. For \strong{lme4} models,
-\code{cooks.distance(stats::influence(model, groups = ))} multiplies the
-distance by \code{(G - p) / G}. \code{cooks.distance()} from package
-\strong{influence.ME} uses the variance-covariance matrix of the model without
-level g in place of \code{V(b)}.
+Rows with a missing value in the grouping variable stay in every refit
+and are not counted as a level. For models from \code{lme4::glmer.nb()}, the
+refits keep the negative binomial parameter theta of the full model, as
+\code{stats::influence()} does. Other implementations use a different scale.
+For \strong{lme4} models, \code{cooks.distance(stats::influence(model, groups = ))}
+multiplies the distance by \code{(G - p) / G}, so its values are smaller.
+Multiply them by \code{G / (G - p)} to compare them with the values of
+\code{check_outliers()}. \code{cooks.distance()} from package \strong{influence.ME} uses
+the variance-covariance matrix of the model without level g in place of
+\code{V(b)}.
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
