@@ -9,6 +9,11 @@
 
 ## Bug fixes
 
+* `check_model()` now uses the value of `show_ci` that the user sets. Before,
+  it ignored that value. It always hid the confidence bands for models with
+  only categorical predictors and always showed them for other models
+  (#642, #490).
+
 * `check_collinearity()` now returns interaction terms for *brms* models.
   Before, a model such as `y ~ a * b` gave no `a:b` row, and the VIFs of the
   other terms belonged to the wrong coefficients. Models with more than one

@@ -386,6 +386,7 @@ check_model.default <- function(
     type = type,
     type_missing = missing(type),
     show_dots = show_dots,
+    show_ci = show_ci,
     maximum_dots = maximum_dots,
     size_dot = size_dot,
     size_line = size_line,
@@ -416,6 +417,7 @@ check_model.default <- function(
   type,
   type_missing,
   show_dots,
+  show_ci,
   maximum_dots,
   size_dot,
   size_line,
@@ -454,13 +456,10 @@ check_model.default <- function(
   }
 
   # if we have only categorical predictors, we don't show CI by default
-  parameter_types <- .safe(parameters::parameters_type(model))
-  if (
-    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
-  ) {
-    show_ci <- FALSE
-  } else {
-    show_ci <- TRUE
+  if (is.null(show_ci)) {
+    parameter_types <- .safe(parameters::parameters_type(model))
+    show_ci <- is.null(parameter_types) ||
+      !all(parameter_types$Type %in% c("intercept", "factor"))
   }
 
   attr(assumptions_data, "panel") <- panel
@@ -577,6 +576,7 @@ check_model.stanreg <- function(
       type = type,
       type_missing = missing(type),
       show_dots = show_dots,
+      show_ci = show_ci,
       maximum_dots = maximum_dots,
       size_dot = size_dot,
       size_line = size_line,
@@ -636,6 +636,7 @@ check_model.brmsfit <- check_model.stanreg
   type,
   type_missing,
   show_dots,
+  show_ci,
   maximum_dots,
   size_dot,
   size_line,
@@ -719,6 +720,7 @@ check_model.brmsfit <- check_model.stanreg
     type = type,
     type_missing = type_missing,
     show_dots = show_dots,
+    show_ci = show_ci,
     maximum_dots = maximum_dots,
     size_dot = size_dot,
     size_line = size_line,

@@ -1,3 +1,6 @@
+skip_if_not_installed("datawizard")
+skip_if_not_installed("effectsize")
+
 test_that("check_group_variation-1", {
   dat1 <- data.frame(
     group = rep(LETTERS[1:3], each = 3),
@@ -272,6 +275,8 @@ test_that("check_group_variation, multiple by", {
 
 
 test_that("check_group_variation, models", {
+  skip_if_not_installed("lme4")
+
   data(iris)
   set.seed(123)
   iris$ID <- sample.int(4, nrow(iris), replace = TRUE) # fake-ID
