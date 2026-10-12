@@ -30,6 +30,49 @@ test_that("check_collinearity, interaction", {
 })
 
 
+test_that("check_collinearity, brms models keep interaction terms", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  # r | trials(n) ~ treat * c2, where treat is a factor
+  m <- insight::download_model("brms_2")
+  skip_if(is.null(m))
+
+  out <- check_collinearity(m, verbose = FALSE)
+  expect_identical(out$Term, c("treat", "c2", "treat:c2"))
+
+  # each term has one coefficient, so its VIF is the diagonal of the inverse
+  # correlation matrix of the slope coefficients
+  R <- stats::cov2cor(stats::vcov(m)[-1, -1])
+  expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
+})
+
+
+test_that("check_collinearity, brms models with more than one intercept", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  # cumulative model rating ~ treat + period + carry, with three intercepts
+  m <- insight::download_model("brms_ordinal_2")
+  skip_if(is.null(m))
+
+  out <- check_collinearity(m, verbose = FALSE)
+  expect_identical(out$Term, c("treat", "period", "carry"))
+
+  # the VIFs come from the slope coefficients only, without the intercepts
+  v <- stats::vcov(m)
+  slopes <- c("treat", "period", "carry")
+  R <- stats::cov2cor(v[slopes, slopes])
+  expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
+})
+
+
 test_that("check_collinearity, fallback path keeps interactions", {
   m <- lm(mpg ~ wt * cyl, data = mtcars)
   m_no_int <- lm(mpg ~ 0 + wt * cyl, data = mtcars)
@@ -486,4 +529,27 @@ test_that("check_collinearity, rank deficient.", {
     out2 <- check_collinearity(m2)
   })
   expect_identical(out1$VIF, out2$VIF)
+})
+
+
+test_that("check_collinearity, brms with 0 + Intercept syntax", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  m <- suppressMessages(suppressWarnings(brms::brm(
+    mpg ~ 0 + Intercept + cyl + disp + hp,
+    data = mtcars,
+    chains = 1,
+    iter = 500,
+    refresh = 0,
+    seed = 123,
+    silent = 2
+  )))
+  expect_silent({
+    out <- check_collinearity(m, ci = NULL)
+  })
+  expect_identical(out$Term, c("cyl", "disp", "hp"))
+  # VIFs for slopes, computed from the posterior correlation matrix
+  v <- insight::get_varcov(m)
+  R <- stats::cov2cor(v[-1, -1])
+  expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
 })

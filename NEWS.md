@@ -1,11 +1,44 @@
 # performance (devel)
 
+## Changes
+
+* `check_outliers()` now supports models from package *glmmTMB*. Cook's
+  distance is computed by refitting the model without each observation, and
+  all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
+  well (#95).
+
 ## Bug fixes
 
 * `check_model()` now uses the value of `show_ci` that the user sets. Before,
   it ignored that value. It always hid the confidence bands for models with
   only categorical predictors and always showed them for other models
   (#642, #490).
+
+* `check_collinearity()` now returns interaction terms for *brms* models.
+  Before, a model such as `y ~ a * b` gave no `a:b` row, and the VIFs of the
+  other terms belonged to the wrong coefficients. Models with more than one
+  intercept, such as ordinal models, also gave VIFs for the wrong
+  coefficients.
+
+* `compare_performance()` no longer fails when only some of the models have
+  LOOIC, for example a *brms* model and a `glm` (#738). It now computes
+  stacking weights for the models that have LOOIC and gives `NA` for the
+  others. A missing weight now prints as an empty cell, not as `(>.999)`.
+
+* `check_model()` no longer fails for *brms* models that cannot be converted
+  to a frequentist model. It now returns only the posterior predictive check
+  and multicollinearity panels, and a message lists the panels that were
+  skipped (#461). Multivariate *brms* models now give an informative error
+  (#908).
+
+* `check_collinearity()` now labels terms correctly for *brms* models that use
+  the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
+  of the previous term and the last term was missing (#417).
+
+* `r2_nakagawa()` and `icc()` now include the random-slope variance for *lme4*
+  models with uncorrelated random slopes, such as `(x || group)`. The fix is in
+  `insight::get_variance()`. For these models, a shift of a predictor changes
+  the values, and the documentation of both functions now says so (#428).
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
@@ -20,6 +53,12 @@
 
 * Preserve method–threshold alignment in `print()` method for `check_outliers()`
   for multi-method input.
+
+* `r2_tjur()`, `r2_somers()`, `r2_efron()` and `r2_mckelvey()` now warn and
+  return `NULL` for binomial models that are not Bernoulli models, like `r2()`.
+  Examples are a proportion response with weights and a `cbind()` response.
+  Before, these functions returned inaccurate values or failed with an unclear
+  error (#165).
 
 # performance 0.18.2
 

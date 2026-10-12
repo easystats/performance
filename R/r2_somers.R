@@ -26,6 +26,13 @@ r2_somers <- function(model) {
     insight::format_error("`r2_somers()` only accepts logistic regression models.")
   }
 
+  if (!info$is_bernoulli) {
+    insight::format_warning(
+      "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+    )
+    return(NULL)
+  }
+
   input <- data.frame(
     y = .recode_to_zero(insight::get_response(model, verbose = FALSE)),
     pred = stats::predict(model, type = "response"),
