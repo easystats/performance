@@ -2,6 +2,11 @@
 
 ## Bug fixes
 
+* `r2_nakagawa()` and `icc()` now include the random-slope variance for *lme4*
+  models with uncorrelated random slopes, such as `(x || group)`. The fix is in
+  `insight::get_variance()`. For these models, a shift of a predictor changes
+  the values, and the documentation of both functions now says so (#428).
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).
