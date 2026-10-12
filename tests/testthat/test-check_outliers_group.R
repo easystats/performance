@@ -43,8 +43,11 @@ test_that("check_outliers, group Cook's distance for lmer equals stats::influenc
 
 test_that("check_outliers, group Cook's distance for glmmTMB equals lmer", {
   # glmmTMB and lme4 give the same REML estimates and covariance matrices on
-  # this balanced design. On unbalanced data the REML covariance matrices
-  # differ by about one percent, so the tolerance only holds for balanced data.
+  # this balanced design. On unbalanced data the estimates still agree, but
+  # single entries of the REML covariance matrices of the fixed effects differ
+  # by up to about 5%, and the distances by up to about 1% (measured on the
+  # unbalanced data of the lmer test above, with lme4 2.0.6 and glmmTMB
+  # 1.1.15.2, 2026-10-12). So the tolerance only holds for balanced data.
   data(sleepstudy, package = "lme4")
   m_lmer <- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
   m_tmb <- glmmTMB::glmmTMB(
