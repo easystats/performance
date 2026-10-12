@@ -156,8 +156,15 @@ compare_performance <- function(
   }
 
   if ("LOOIC" %in% names(dfs)) {
-    lpd_point <- do.call(cbind, lapply(attri, function(x) x$loo$pointwise[, "elpd_loo"]))
-    dfs$LOOIC_wt <- as.numeric(loo::stacking_weights(lpd_point))
+    # stacking weights only for models that have LOO, e.g. not for a glm
+    # compared with a brms model. NA for the other models.
+    has_loo <- !vapply(attri, function(x) is.null(x$loo), logical(1))
+    dfs$LOOIC_wt <- NA_real_
+    if (sum(has_loo) > 1) {
+      lpd_point <- do.call(cbind, lapply(attri[has_loo], function(x) x$loo$pointwise[, "elpd_loo"]))
+      loo_names <- vapply(m[has_loo], function(x) x$Name[1], character(1))
+      dfs$LOOIC_wt[match(loo_names, dfs$Name)] <- as.numeric(loo::stacking_weights(lpd_point))
+    }
   }
 
   # check if all models were fit from same data
@@ -181,7 +188,7 @@ compare_performance <- function(
   }
   if (all(c("AIC", "AIC_wt") %in% names(dfs))) {
     idx1 <- grep("^AIC$", names(dfs))
-    idx2 <- grep("AIC_wt", names(dfs), fixed = TRUE)
+    idx2 <- grep("^AIC_wt$", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }

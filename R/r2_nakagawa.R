@@ -71,6 +71,13 @@
 #' The contribution of random effects can be deduced by subtracting the
 #' marginal R2 from the conditional R2 or by computing the [`icc()`].
 #'
+#' For models with uncorrelated random slopes, such as `(x || group)` in
+#' **lme4**, the r-squared values change when a predictor is shifted (for
+#' example, centered). The shift changes the model itself: with the correlation
+#' between random intercepts and slopes fixed at zero, the random intercept
+#' variance cannot adjust to the new origin of the predictor. For models with
+#' correlated random slopes, such as `(x | group)`, the values do not change.
+#'
 #' @references
 #'  - Hox, J. J. (2010). Multilevel analysis: techniques and applications
 #'    (2nd ed). New York: Routledge.

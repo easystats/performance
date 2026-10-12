@@ -530,3 +530,26 @@ test_that("check_collinearity, rank deficient.", {
   })
   expect_identical(out1$VIF, out2$VIF)
 })
+
+
+test_that("check_collinearity, brms with 0 + Intercept syntax", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  m <- suppressMessages(suppressWarnings(brms::brm(
+    mpg ~ 0 + Intercept + cyl + disp + hp,
+    data = mtcars,
+    chains = 1,
+    iter = 500,
+    refresh = 0,
+    seed = 123,
+    silent = 2
+  )))
+  expect_silent({
+    out <- check_collinearity(m, ci = NULL)
+  })
+  expect_identical(out$Term, c("cyl", "disp", "hp"))
+  # VIFs for slopes, computed from the posterior correlation matrix
+  v <- insight::get_varcov(m)
+  R <- stats::cov2cor(v[-1, -1])
+  expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
+})

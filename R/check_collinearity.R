@@ -597,6 +597,12 @@ check_collinearity.zerocount <- function(
     model_terms <- labels(stats::terms(f[[component]]))
   }
 
+  # brms formulas like `y ~ 0 + Intercept + x` list "Intercept" as a term, but
+  # it is the model's intercept, which is not part of the term assignment
+  if (inherits(x, "brmsfit")) {
+    model_terms <- setdiff(model_terms, "Intercept")
+  }
+
   if ("instruments" %in% names(f)) {
     model_terms <- unique(c(model_terms, labels(stats::terms(f[["instruments"]]))))
   }
