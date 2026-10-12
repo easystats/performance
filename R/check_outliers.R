@@ -129,8 +129,10 @@
 #'    levels used to fit the model (Nieuwenhuis et al., 2012, p. 41). This
 #'    threshold is a rule of thumb: the gap between a level and the other
 #'    levels tells more than the threshold itself. Levels where the refit
-#'    fails or does not converge get a missing distance and are not counted
-#'    as outliers. For **lme4** models, a refit counts as converged when the
+#'    fails, does not converge, has a non-positive-definite Hessian
+#'    (**glmmTMB**), or returns different fixed-effect terms get a missing
+#'    distance and are not counted as outliers. For **lme4** models, a refit
+#'    counts as converged when the
 #'    optimizer converged without warnings, the same rule that
 #'    `stats::influence()` uses, so warnings from the convergence checks of
 #'    **lme4** (like a large gradient) do not lead to a missing distance.
@@ -2164,8 +2166,9 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     insight::format_alert(paste0(
       "Cook's distance could not be computed for any level of `",
       group,
-      "`, because the model refits failed, did not converge, or returned ",
-      "different fixed-effect terms, or because the variance-covariance ",
+      "`, because the model refits failed, did not converge, had a ",
+      "non-positive-definite Hessian, or returned different fixed-effect ",
+      "terms, or because the variance-covariance ",
       "matrix of the model could not be inverted, or the model weights could ",
       "not be matched to the data rows. No level is flagged as outlier."
     ))
@@ -2188,7 +2191,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
       group,
       "`, because the model refit without ",
       if (length(failed) == 1) "this level" else "these levels",
-      " failed, did not converge, or returned different fixed-effect terms."
+      " failed, did not converge, had a non-positive-definite Hessian, or",
+      " returned different fixed-effect terms."
     ))
   }
 
@@ -2306,7 +2310,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # level by giving its rows a weight of zero. lme4 models also leave the rows
 # of the level out with `subset`, because lmer treats weights as variance
 # weights and still counts rows with a weight of zero. Levels where the refit
-# fails or does not converge get NA.
+# fails, does not converge, has a non-positive-definite Hessian (glmmTMB), or
+# returns different fixed-effect terms get NA.
 .cooks_distance_group <- function(x, group_values, model_data, model_rows) {
   levels <- .group_levels(group_values)
   level_index <- match(group_values, levels)

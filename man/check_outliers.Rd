@@ -171,8 +171,10 @@ an observation. The default threshold is \code{4 / G}, with \code{G} the number 
 levels used to fit the model (Nieuwenhuis et al., 2012, p. 41). This
 threshold is a rule of thumb: the gap between a level and the other
 levels tells more than the threshold itself. Levels where the refit
-fails or does not converge get a missing distance and are not counted
-as outliers. For \strong{lme4} models, a refit counts as converged when the
+fails, does not converge, has a non-positive-definite Hessian
+(\strong{glmmTMB}), or returns different fixed-effect terms get a missing
+distance and are not counted as outliers. For \strong{lme4} models, a refit
+counts as converged when the
 optimizer converged without warnings, the same rule that
 \code{stats::influence()} uses, so warnings from the convergence checks of
 \strong{lme4} (like a large gradient) do not lead to a missing distance.
