@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.18.2.4
+Version: 0.18.2.5
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -162,6 +162,8 @@ Suggests:
     tweedie,
     VGAM,
     withr (>= 3.0.0)
+Remotes:
+    easystats/insight
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)

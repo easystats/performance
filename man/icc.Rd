@@ -156,6 +156,11 @@ structures, like models with random slopes or nested design (more than two
 levels) and is applicable for models with other distributions than Gaussian.
 For more details on the computation of the variances, see
 \code{?insight::get_variance}.
+
+For models with uncorrelated random slopes, such as \code{(x || group)} in
+\strong{lme4}, the ICC changes when a predictor is shifted (for example,
+centered), because the shift changes the model itself. See the details in
+\code{\link[=r2_nakagawa]{r2_nakagawa()}}.
 }
 
 \subsection{ICC for unconditional and conditional models}{
