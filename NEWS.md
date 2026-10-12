@@ -2,6 +2,11 @@
 
 ## Changes
 
+* `check_outliers()` gets a `group` argument for models from packages
+  *glmmTMB* and *lme4*. It gives Cook's distance for each level of a grouping
+  variable. The model is refit without each level in turn. With `G` the
+  number of levels, levels above `4 / G` are flagged (#95).
+
 * `check_outliers()` now supports models from package *glmmTMB*. Cook's
   distance is computed by refitting the model without each observation, and
   all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as

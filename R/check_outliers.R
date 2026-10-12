@@ -32,6 +32,11 @@
 #' by `simulate_residuals()` or of class `DHARMa`. See 'Details' in
 #' `?DHARMa::testOutliers` for a detailed description of the types.
 #' @param verbose Toggle warnings.
+#' @param group Optional, the name of a grouping variable in the model data,
+#' for models from packages **glmmTMB** and **lme4** (classes `glmmTMB`,
+#' `lmerMod` and `glmerMod`). If given, Cook's distance is computed for each
+#' level of this variable, not for each observation. Only `method = "cook"` is
+#' supported. See section 'Model-specific methods'.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
 #' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
@@ -104,6 +109,25 @@
 #'    fixed-effect terms get a missing distance and are not counted as outliers
 #'    by this method. `check_model()` skips this computation for
 #'    **glmmTMB** models.
+#'
+#'    For models from packages **glmmTMB** and **lme4**, the `group` argument
+#'    gives Cook's distance for each level of a grouping variable. Each level
+#'    is left out in turn and the model is refit. **glmmTMB** models leave out
+#'    a level by giving its rows a weight of zero, and **lme4** models use the
+#'    `subset` argument. Cook's distance for level g is
+#'    `D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p`. Here, `b` are the fixed
+#'    effects of the full model, `b_(g)` are those of the model without level
+#'    g, `V(b)` is the variance-covariance matrix of the fixed effects of the
+#'    full model, and `p` is the number of fixed effects. This is the formula
+#'    used for each observation of **glmmTMB** models, with a level in place of
+#'    an observation. The default threshold is `4 / G`, with `G` the number of
+#'    levels (Nieuwenhuis et al., 2012). Levels where the refit fails or does
+#'    not converge get a missing distance and are not counted as outliers.
+#'    Other implementations use a different scale. For **lme4** models,
+#'    `cooks.distance(stats::influence(model, groups = ))` multiplies the
+#'    distance by `(G - p) / G`. `cooks.distance()` from package
+#'    **influence.ME** uses the variance-covariance matrix of the model without
+#'    level g in place of `V(b)`.
 #'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
@@ -295,6 +319,10 @@
 #' - Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
 #' multivariate outliers: Use a robust variant of Mahalanobis distance. *Journal
 #' of Experimental Social Psychology*, 74, 150-156.
+#'
+#' - Nieuwenhuis, R., te Grotenhuis, M., and Pelzer, B. (2012). influence.ME:
+#' Tools for detecting influential data in mixed effects models. *The R
+#' Journal*, *4*(2), 38-47. \doi{10.32614/RJ-2012-011}
 #'
 #' - Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation forest.
 #' In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
