@@ -9,6 +9,15 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now labels terms correctly for *brms* models that use
+  the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
+  of the previous term and the last term was missing (#417).
+
+* `r2_nakagawa()` and `icc()` now include the random-slope variance for *lme4*
+  models with uncorrelated random slopes, such as `(x || group)`. The fix is in
+  `insight::get_variance()`. For these models, a shift of a predictor changes
+  the values, and the documentation of both functions now says so (#428).
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).
@@ -22,6 +31,12 @@
 
 * Preserve method–threshold alignment in `print()` method for `check_outliers()`
   for multi-method input.
+
+* `r2_tjur()`, `r2_somers()`, `r2_efron()` and `r2_mckelvey()` now warn and
+  return `NULL` for binomial models that are not Bernoulli models, like `r2()`.
+  Examples are a proportion response with weights and a `cbind()` response.
+  Before, these functions returned inaccurate values or failed with an unclear
+  error (#165).
 
 # performance 0.18.2
 
