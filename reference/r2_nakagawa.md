@@ -140,6 +140,14 @@ The contribution of random effects can be deduced by subtracting the
 marginal R2 from the conditional R2 or by computing the
 [`icc()`](https://easystats.github.io/performance/reference/icc.md).
 
+For models with uncorrelated random slopes, such as `(x || group)` in
+**lme4**, the r-squared values change when a predictor is shifted (for
+example, centered). The shift changes the model itself: with the
+correlation between random intercepts and slopes fixed at zero, the
+random intercept variance cannot adjust to the new origin of the
+predictor. For models with correlated random slopes, such as
+`(x | group)`, the values do not change.
+
 ## Supported models and model families
 
 The single variance components that are required to calculate the

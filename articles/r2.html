@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -238,9 +238,8 @@ sequential multiple regression (i.e., <a href="https://easystats.github.io/perfo
 models</strong></a>). That is, when comparing two models, we can examine
 the ratio between the increase in <span class="math inline">R^2</span>
 and the unexplained variance:</p>
-<p><span class="math display">
-f^{2}={R_{AB}^{2}-R_{A}^{2} \over 1-R_{AB}^{2}}
-</span></p>
+<p><span class="math display">f^{2}={R_{AB}^{2}-R_{A}^{2} \over
+1-R_{AB}^{2}}</span></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">data</span>(hardlyworking)</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> xtra_hours, <span class="at">data =</span> hardlyworking)</span>

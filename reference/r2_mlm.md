@@ -34,28 +34,28 @@ provide a single fit value collapsed across all responses.
 The two returned indexes were proposed by *Van den Burg and Lewis
 (1988)* as an extension of the metrics proposed by *Cramer and
 Nicewander (1979)*. Of the numerous indexes proposed across these two
-papers, only two metrics, the \\R\_{xy}\\ and \\P\_{xy}\\, are
+papers, only two metrics, the \\(R\_{xy}\\) and \\(P\_{xy}\\), are
 recommended for use by *Azen and Budescu (2006)*.
 
-For a multivariate linear regression with \\p\\ predictors and \\q\\
-responses where \\p \> q\\, the \\R\_{xy}\\ index is computed as:
+For a multivariate linear regression with \\(p\\) predictors and \\(q\\)
+responses where \\(p \> q\\), the \\(R\_{xy}\\) index is computed as:
 
 \$\$R\_{xy} = 1 - \prod\_{i=1}^p (1 - \rho_i^2)\$\$
 
-Where \\\rho\\ is a canonical variate from a [canonical
+Where \\(\rho\\) is a canonical variate from a [canonical
 correlation](https://rdrr.io/r/stats/cancor.html) between the predictors
 and responses. This metric is symmetric and its value does not change
 when the roles of the variables as predictors or responses are swapped.
 
-The \\P\_{xy}\\ is computed as:
+The \\(P\_{xy}\\) is computed as:
 
 \$\$P\_{xy} = \frac{q -
 trace(\bf{S}\_{\bf{YY}}^{-1}\bf{S}\_{\bf{YY\|X}})}{q}\$\$
 
-Where \\\bf{S}\_{\bf{YY}}\\ is the matrix of response covariances and
-\\\bf{S}\_{\bf{YY\|X}}\\ is the matrix of residual covariances given the
-predictors. This metric is asymmetric and can change depending on which
-variables are considered predictors versus responses.
+Where \\(\bf{S}\_{\bf{YY}}\\) is the matrix of response covariances and
+\\(\bf{S}\_{\bf{YY\|X}}\\) is the matrix of residual covariances given
+the predictors. This metric is asymmetric and can change depending on
+which variables are considered predictors versus responses.
 
 ## References
 

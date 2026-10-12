@@ -49,22 +49,22 @@ framework of Rouder & Mehrvarz (2024), defining reliability as the
 
 where:
 
-- \\\sigma_B^2\\ is the **between-subject variance** (i.e., variability
-  across groups).
+- \\(\sigma_B^2\\) is the **between-subject variance** (i.e.,
+  variability across groups).
 
-- \\\sigma_W^2\\ is the **within-subject variance** (i.e., trial-level
+- \\(\sigma_W^2\\) is the **within-subject variance** (i.e., trial-level
   measurement noise).
 
 This metric quantifies **how much observed variability is due to actual
 differences between groups**, rather than measurement error or
 within-group fluctuations.
 
-To account for **trial count (\\L\\)**, reliability is adjusted
+To account for **trial count (\\(L\\))**, reliability is adjusted
 following:
 
 \$\$E(r) = \frac{\gamma^2}{\gamma^2 + 1/L}\$\$
 
-where \\L\\ is the number of **observations per random effect level**
+where \\(L\\) is the number of **observations per random effect level**
 (note that Rouder (2024) recommends 2/L to adjust for contrast effects).
 
 ### Variability-Over-Uncertainty Ratio (d-vour)
@@ -78,10 +78,10 @@ uncertainty in random effect estimates**. This is defined as:
 
 where:
 
-- \\\sigma_B^2\\ is the **between-group variability** (computed as the
+- \\(\sigma_B^2\\) is the **between-group variability** (computed as the
   SD of the random effect estimates).
 
-- \\\mu\_{\text{SE}}^2\\ is the **mean squared uncertainty** in random
+- \\(\mu\_{\text{SE}}^2\\) is the **mean squared uncertainty** in random
   effect estimates (i.e., the average uncertainty).
 
 #### Interpretation:
@@ -171,14 +171,14 @@ m <- lme4::lmer(
 )
 performance_reliability(m)
 #>         Group           Parameter Reliability
-#> 1       Trial         (Intercept) 0.005869221
-#> 3 Participant         (Intercept) 0.221961581
-#> 4 Participant Illusion_Difference 0.170477785
+#> 1       Trial         (Intercept) 0.005869418
+#> 3 Participant         (Intercept) 0.221945419
+#> 4 Participant Illusion_Difference 0.170468123
 performance_dvour(m)
 #>         Group           Parameter    D_vour
 #> 1 Participant         (Intercept) 0.9673865
-#> 2 Participant Illusion_Difference 0.7655642
-#> 3       Trial         (Intercept) 0.5648709
+#> 2 Participant Illusion_Difference 0.7655621
+#> 3       Trial         (Intercept) 0.5648742
 
 m <- glmmTMB::glmmTMB(
   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
