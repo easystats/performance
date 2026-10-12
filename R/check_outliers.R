@@ -2234,7 +2234,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   distance <- vapply(
     seq_along(levels),
     function(i) {
-      rows <- which(!is.na(group_values) & group_values == levels[i])
+      rows <- which(as.character(group_values) %in% as.character(levels[i]))
       refit <- .refit_without_rows(x, model_data, rows, start, prior_weights)
       .cooks_distance_from_refit(refit, full)
     },
