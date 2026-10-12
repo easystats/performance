@@ -479,6 +479,41 @@ test_that("check_outliers numeric, z-score", {
 })
 
 
+test_that("influential observations plot data uses standardized residuals for lmer models", {
+  skip_if_not_installed("lme4")
+
+  # the plot draws Cook's distance contours from leverage, standardized
+  # residuals and the number of parameters, so these must reproduce the
+  # Cook's distance that check_outliers() tests (#857)
+  m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = lme4::sleepstudy)
+  out <- check_outliers(m)
+  d <- attributes(out)$influential_obs
+  p <- attributes(d)$n_params
+  implied_cook <- d$Std_Residuals^2 * d$Hat / (p * (1 - d$Hat))
+  expect_equal(implied_cook, d$Cooks_Distance, tolerance = 1e-6, ignore_attr = TRUE)
+  expect_identical(
+    which(implied_cook > attributes(out)$threshold$cook),
+    which(as.numeric(out) == 1)
+  )
+})
+
+
+test_that("influential observations plot data uses the Cook's distance threshold for lm models", {
+  # the contour lines must follow the threshold that check_outliers() uses,
+  # including a user-supplied threshold (#916)
+  m <- lm(disp ~ mpg + hp, data = mtcars)
+  for (th in list(NULL, list(cook = 2))) {
+    out <- check_outliers(m, method = "cook", threshold = th)
+    d <- attributes(out)$influential_obs
+    expect_equal(attributes(d)$cook_levels, attributes(out)$threshold$cook)
+    expect_identical(
+      which(d$Influential == "Influential"),
+      which(as.numeric(out) == 1)
+    )
+  }
+})
+
+
 test_that("check_outliers with psych", {
   skip_if_not_installed("psych")
   data(Harman.5, package = "psych")
