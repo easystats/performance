@@ -235,6 +235,8 @@ models will be "converted" to their frequentist counterpart, using
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.</p>
 <p>See also the related <a href="https://easystats.github.io/performance/articles/check_model.html">vignette</a>.</p>
+<p>If you encounter problems with creating the plots, please see section
+<em>Troubleshooting</em>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -405,6 +407,14 @@ to date. You can update your packages (paying special attention to
 <li><p><em>Update relevant software:</em> Finally, ensure your R version, and the IDE
 you use, are up to date. Running the most recent versions of R and, e.g.,
 RStudio or Positron can resolve any remaining issues.</p></li>
+<li><p><strong>Plot single panels:</strong> If none of the solutions above work, generate
+individual plots for each check using the <code>panel</code> argument:
+<code>plot(check_model(model, panel = FALSE))</code></p></li>
+<li><p><strong>Save plot as file:</strong> Instead of rendering plots interactively,
+you can save them directly to a file, for example:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"myfile.pdf"</span>, width <span class="op">=</span> <span class="fl">12</span>, height <span class="op">=</span> <span class="fl">16</span>, pointsize <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span></code></pre><p></p></div></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -181,6 +181,9 @@ later stage.
 See also the related
 [vignette](https://easystats.github.io/performance/articles/check_model.html).
 
+If you encounter problems with creating the plots, please see section
+*Troubleshooting*.
+
 ## Note
 
 This function just prepares the data for plotting. To create the plots,
@@ -360,6 +363,17 @@ resolve the issue:
 - *Update relevant software:* Finally, ensure your R version, and the
   IDE you use, are up to date. Running the most recent versions of R
   and, e.g., RStudio or Positron can resolve any remaining issues.
+
+- **Plot single panels:** If none of the solutions above work, generate
+  individual plots for each check using the `panel` argument:
+  `plot(check_model(model, panel = FALSE))`
+
+- **Save plot as file:** Instead of rendering plots interactively, you
+  can save them directly to a file, for example:
+
+      pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
+      check_model(model)
+      dev.off()
 
 ## See also
 
