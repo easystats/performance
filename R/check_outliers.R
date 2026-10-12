@@ -387,8 +387,18 @@ check_outliers.default <- function(
   threshold = NULL,
   ID = NULL,
   verbose = TRUE,
+  group = NULL,
   ...
 ) {
+  if (!is.null(group)) {
+    if (!missing(method) && !identical(method, "cook")) {
+      insight::format_error(
+        "Only `method = \"cook\"` can be used when `group` is specified."
+      )
+    }
+    return(.check_outliers_group(x, group, threshold = threshold, verbose = verbose))
+  }
+
   # Check args
   if (all(method == "all")) {
     method <- c(
@@ -722,9 +732,21 @@ print.check_outliers <- function(x, ...) {
     case.plural <- "case"
   }
 
+  group <- attr(x, "group")
+  if (!is.null(group)) {
+    # outliers are levels of a grouping variable, not rows
+    case.plural <- ifelse(length(outliers) > 1, "levels", "level")
+    var.plural <- "grouping variable"
+    vars <- group
+  }
+
   if (length(outliers) >= 1) {
     outlier.count <- attr(x, "outlier_count")
-    o <- toString(outliers)
+    if (is.null(group)) {
+      o <- toString(outliers)
+    } else {
+      o <- toString(attr(x, "data")$Group[outliers])
+    }
     insight::print_color(
       insight::format_message(
         sprintf(
@@ -2019,6 +2041,80 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
+.check_outliers_group <- function(x, group, threshold = NULL, verbose = TRUE) {
+  if (!inherits(x, c("glmmTMB", "lmerMod", "glmerMod"))) {
+    insight::format_error(paste0(
+      "The `group` argument is only supported for models of class `glmmTMB`, ",
+      "`lmerMod` or `glmerMod`, not for models of class `",
+      class(x)[1],
+      "`."
+    ))
+  }
+  model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
+  if (!is.character(group) || length(group) != 1 || !group %in% colnames(model_data)) {
+    insight::format_error(paste0(
+      "`group` must be the name of one variable in the model data. Variable `",
+      toString(group),
+      "` was not found."
+    ))
+  }
+
+  n_groups <- length(.group_levels(model_data[[group]]))
+  n_params <- ncol(as.matrix(insight::get_varcov(x, component = "conditional")))
+  if (n_groups <= n_params) {
+    insight::format_error(paste0(
+      "The number of levels of `",
+      group,
+      "` (G = ",
+      n_groups,
+      ") must be larger than the number of fixed effects (p = ",
+      n_params,
+      ")."
+    ))
+  }
+
+  # Thresholds
+  if (is.null(threshold)) {
+    threshold <- 4 / n_groups
+  } else if (is.list(threshold) && !is.null(threshold$cook)) {
+    threshold <- threshold$cook
+  } else if (!is.numeric(threshold) || length(threshold) != 1) {
+    insight::format_error(
+      "The `threshold` argument must be NULL (for the default value), a number, or a list with a `cook` element."
+    )
+  }
+
+  d <- .cooks_distance_group(x, group, model_data)
+  failed <- which(is.na(d$distance))
+  if (length(failed) && verbose) {
+    insight::format_alert(paste0(
+      "Cook's distance could not be computed for ",
+      if (length(failed) == 1) "level " else "levels ",
+      datawizard::text_concatenate(as.character(d$levels[failed])),
+      " of `",
+      group,
+      "`, because the model refit without ",
+      if (length(failed) == 1) "this level" else "these levels",
+      " failed, did not converge or returned different fixed-effect terms."
+    ))
+  }
+
+  my_df <- data.frame(Group = d$levels, Distance_Cook = d$distance)
+  my_df$Outlier_Cook <- as.numeric(!is.na(d$distance) & d$distance > threshold)
+  my_df$Outlier <- my_df$Outlier_Cook
+
+  outlier <- my_df$Outlier > 0.5
+  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
+  attr(outlier, "data") <- my_df
+  attr(outlier, "threshold") <- list(cook = threshold)
+  attr(outlier, "method") <- "cook"
+  attr(outlier, "text_size") <- 3
+  attr(outlier, "variables") <- "(Whole model)"
+  attr(outlier, "group") <- group
+  outlier
+}
+
+
 .check_outliers_cook <- function(x, threshold = NULL, ID.names = NULL, verbose = TRUE) {
   # Compute
   if (inherits(x, "glmmTMB")) {
@@ -2089,80 +2185,193 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
   n_obs <- nrow(model_data)
 
-  # only use fixed effects that are estimated (not dropped or mapped), which
-  # are those in the variance-covariance matrix
-  vcov_cond <- as.matrix(insight::get_varcov(x, component = "conditional"))
-  vcov_inv <- .safe(solve(vcov_cond))
-  if (is.null(vcov_inv)) {
+  full <- .cooks_full_model(x)
+  prior_weights <- .cooks_prior_weights(x, n_obs)
+  if (is.null(full) || is.null(prior_weights)) {
     return(rep(NA_real_, n_obs))
   }
-  fixed <- insight::get_parameters(x, component = "conditional", effects = "fixed")
-  b <- stats::setNames(fixed$Estimate, fixed$Parameter)[colnames(vcov_cond)]
-  if (anyNA(b)) {
-    return(rep(NA_real_, n_obs))
-  }
-  n_params <- length(b)
-
-  prior_weights <- insight::get_weights(x, remove_na = TRUE)
-  if (is.null(prior_weights)) {
-    prior_weights <- rep(1, n_obs)
-  }
-  if (length(prior_weights) != n_obs) {
-    return(rep(NA_real_, n_obs))
-  }
-
-  # starting values, without the random effects
-  start <- x$obj$env$parList(x$fit$par)
-  start <- start[!names(start) %in% c("b", "bzi", "bdisp") & lengths(start) > 0]
+  start <- .cooks_refit_start(x)
 
   vapply(
     seq_len(n_obs),
     function(i) {
       refit <- .refit_without_rows(x, model_data, i, start, prior_weights)
-      if (!.refit_converged(refit)) {
-        return(NA_real_)
-      }
-      fixed_i <- insight::get_parameters(
-        refit,
-        component = "conditional",
-        effects = "fixed"
-      )
-      b_i <- stats::setNames(fixed_i$Estimate, fixed_i$Parameter)[names(b)]
-      if (anyNA(b_i)) {
-        return(NA_real_)
-      }
-      delta <- b - b_i
-      as.vector(t(delta) %*% vcov_inv %*% delta) / n_params
+      .cooks_distance_from_refit(refit, full)
     },
     numeric(1)
   )
 }
 
 
+# Cook's distance for each level of a grouping variable, computed by refitting
+# the model without the rows of that level:
+# D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p
+# This is the formula of .cooks_distance_refit(), with a level in place of a
+# row. glmmTMB models leave out a level by giving its rows a weight of zero.
+# lme4 models use `subset`, because lmer treats weights as variance weights and
+# still counts rows with a weight of zero. Both ways compute terms like scale()
+# or poly() on the full data. Levels where the refit fails or does not
+# converge get NA.
+.cooks_distance_group <- function(x, group, model_data) {
+  group_values <- model_data[[group]]
+  levels <- .group_levels(group_values)
+  n_obs <- nrow(model_data)
+
+  full <- .cooks_full_model(x)
+  if (inherits(x, "merMod")) {
+    prior_weights <- NULL
+  } else {
+    prior_weights <- .cooks_prior_weights(x, n_obs)
+    if (is.null(prior_weights)) {
+      full <- NULL
+    }
+  }
+  if (is.null(full)) {
+    return(list(levels = levels, distance = rep(NA_real_, length(levels))))
+  }
+  start <- .cooks_refit_start(x)
+
+  distance <- vapply(
+    seq_along(levels),
+    function(i) {
+      rows <- which(!is.na(group_values) & group_values == levels[i])
+      refit <- .refit_without_rows(x, model_data, rows, start, prior_weights)
+      .cooks_distance_from_refit(refit, full)
+    },
+    numeric(1)
+  )
+  list(levels = levels, distance = distance)
+}
+
+
+# distinct non-missing values of the grouping variable, in the order of the
+# factor levels, or sorted for other types
+.group_levels <- function(group_values) {
+  if (is.factor(group_values)) {
+    factor(
+      levels(group_values)[levels(group_values) %in% group_values],
+      levels = levels(group_values)
+    )
+  } else {
+    sort(unique(group_values[!is.na(group_values)]))
+  }
+}
+
+
+# Fixed effects of the conditional model and the inverse of their
+# variance-covariance matrix. Only fixed effects that are estimated (not
+# dropped or mapped) are used, which are those in the variance-covariance
+# matrix. Returns NULL if the matrix cannot be inverted.
+.cooks_full_model <- function(x) {
+  vcov_cond <- as.matrix(insight::get_varcov(x, component = "conditional"))
+  vcov_inv <- .safe(solve(vcov_cond))
+  if (is.null(vcov_inv)) {
+    return(NULL)
+  }
+  fixed <- insight::get_parameters(x, component = "conditional", effects = "fixed")
+  b <- stats::setNames(fixed$Estimate, fixed$Parameter)[colnames(vcov_cond)]
+  if (anyNA(b)) {
+    return(NULL)
+  }
+  list(b = b, vcov_inv = vcov_inv)
+}
+
+
+# Prior weights given by the user. These come from the model frame, because
+# insight::get_weights() returns the number of trials for binomial models with
+# a cbind() response. Returns NULL if the weights do not match the data rows.
+.cooks_prior_weights <- function(x, n_obs) {
+  prior_weights <- .safe(stats::model.weights(stats::model.frame(x)))
+  if (is.null(prior_weights)) {
+    prior_weights <- rep(1, n_obs)
+  }
+  if (length(prior_weights) != n_obs) {
+    return(NULL)
+  }
+  prior_weights
+}
+
+
+# Starting values for the refits. For glmmTMB, these are the estimates of the
+# full model without the random effects. For lme4, these are the starting
+# values that stats::influence() uses for lme4 models.
+.cooks_refit_start <- function(x) {
+  if (inherits(x, "merMod")) {
+    start <- list(theta = lme4::getME(x, "theta"))
+    if (inherits(x, "glmerMod") && lme4::getME(x, "devcomp")$dims[["nAGQ"]] > 0) {
+      start$fixef <- lme4::fixef(x)
+    }
+  } else {
+    start <- x$obj$env$parList(x$fit$par)
+    start <- start[!names(start) %in% c("b", "bzi", "bdisp") & lengths(start) > 0]
+  }
+  start
+}
+
+
+.cooks_distance_from_refit <- function(refit, full) {
+  if (!.refit_converged(refit)) {
+    return(NA_real_)
+  }
+  fixed_i <- insight::get_parameters(
+    refit,
+    component = "conditional",
+    effects = "fixed"
+  )
+  b_i <- stats::setNames(fixed_i$Estimate, fixed_i$Parameter)[names(full$b)]
+  if (anyNA(b_i)) {
+    return(NA_real_)
+  }
+  delta <- full$b - b_i
+  as.vector(t(delta) %*% full$vcov_inv %*% delta) / length(full$b)
+}
+
+
 .refit_without_rows <- function(x, model_data, rows, start, weights) {
-  weights[rows] <- 0
   tryCatch(
     suppressWarnings(suppressMessages(
-      .update_model(x, data = model_data, start = start, weights = weights)
+      if (inherits(x, "merMod")) {
+        keep <- rep(TRUE, nrow(model_data))
+        keep[rows] <- FALSE
+        model_data$.performance_keep <- keep
+        .update_model(x, data = model_data, start = start, subset = TRUE)
+      } else {
+        weights[rows] <- 0
+        .update_model(x, data = model_data, start = start, weights = weights)
+      }
     )),
     error = function(e) NULL
   )
 }
 
 
-.update_model <- function(x, data, start, weights) {
+.update_model <- function(x, data, start, weights = NULL, subset = FALSE) {
   # evaluate in the environment of the model formula, so that variables
   # defined outside the data (like an offset vector) are found
   model_call <- stats::update(x, evaluate = FALSE)
   model_call$data <- data
   model_call$start <- start
-  model_call$weights <- weights
+  if (!is.null(weights)) {
+    model_call$weights <- weights
+  }
+  if (subset) {
+    # rows are left out after the model frame is built from the full data
+    model_call$subset <- as.name(".performance_keep")
+  }
   eval(model_call, envir = environment(stats::formula(x)))
 }
 
 
 .refit_converged <- function(refit) {
-  !is.null(refit) && isTRUE(refit$fit$convergence == 0) && isTRUE(refit$sdr$pdHess)
+  if (is.null(refit)) {
+    return(FALSE)
+  }
+  if (inherits(refit, "merMod")) {
+    # the same rule as stats::influence() for lme4 models
+    optinfo <- refit@optinfo
+    return(isTRUE(optinfo$conv$opt == 0) && length(optinfo$warnings) == 0)
+  }
+  isTRUE(refit$fit$convergence == 0) && isTRUE(refit$sdr$pdHess)
 }
 
 
