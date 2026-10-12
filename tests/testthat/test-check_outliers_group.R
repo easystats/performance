@@ -94,3 +94,71 @@ test_that("check_outliers, group Cook's distance for glmer and glmmTMB", {
   expect_length(actual, 23)
   expect_equal(actual[sites], expected, tolerance = 1e-6)
 })
+
+
+test_that("check_outliers, group result, default threshold, and print", {
+  data(cbpp, package = "lme4")
+  m <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+  out <- check_outliers(m, group = "herd")
+  out_data <- as.data.frame(out)
+  n_groups <- nlevels(cbpp$herd)
+
+  expect_identical(nrow(out_data), n_groups)
+  expect_identical(as.character(out_data$Group), levels(cbpp$herd))
+  expect_identical(attr(out, "threshold"), list(cook = 4 / n_groups))
+
+  flagged <- as.character(out_data$Group[out_data$Distance_Cook > 4 / n_groups])
+  expect_identical(as.character(out_data$Group[out]), flagged)
+  expect_gte(length(flagged), 1)
+  expect_output(
+    print(out),
+    paste0(
+      length(flagged),
+      " outliers detected: levels ",
+      toString(flagged),
+      "."
+    ),
+    fixed = TRUE
+  )
+  expect_output(print(out), "For grouping variable: herd.", fixed = TRUE)
+})
+
+
+test_that("check_outliers, group argument errors", {
+  data(cbpp, package = "lme4")
+  m <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+  expect_error(
+    check_outliers(m, group = "not_a_variable"),
+    "not_a_variable",
+    fixed = TRUE
+  )
+  expect_error(
+    check_outliers(m, method = "zscore_robust", group = "herd"),
+    "`group`",
+    fixed = TRUE
+  )
+  expect_error(
+    check_outliers(m, method = c("cook", "iqr"), group = "herd"),
+    "`group`",
+    fixed = TRUE
+  )
+  expect_error(
+    check_outliers(stats::lm(mpg ~ wt, data = mtcars), group = "cyl"),
+    "models of class `lm`",
+    fixed = TRUE
+  )
+  # period has 4 levels and the model has 4 fixed effects
+  expect_error(
+    check_outliers(m, group = "period"),
+    "(G = 4)",
+    fixed = TRUE
+  )
+})
