@@ -9,6 +9,12 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now returns interaction terms for *brms* models.
+  Before, a model such as `y ~ a * b` gave no `a:b` row, and the VIFs of the
+  other terms belonged to the wrong coefficients. Models with more than one
+  intercept, such as ordinal models, also gave VIFs for the wrong
+  coefficients.
+
 * `compare_performance()` no longer fails when only some of the models have
   LOOIC, for example a *brms* model and a `glm` (#738). It now computes
   stacking weights for the models that have LOOIC and gives `NA` for the
