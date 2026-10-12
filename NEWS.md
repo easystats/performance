@@ -21,6 +21,12 @@
 * Preserve method–threshold alignment in `print()` method for `check_outliers()`
   for multi-method input.
 
+* `r2_tjur()`, `r2_somers()`, `r2_efron()` and `r2_mckelvey()` now warn and
+  return `NULL` for binomial models that are not Bernoulli models, like `r2()`.
+  Examples are a proportion response with weights and a `cbind()` response.
+  Before, these functions returned inaccurate values or failed with an unclear
+  error (#165).
+
 # performance 0.18.2
 
 ## Bug fixes
