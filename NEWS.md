@@ -9,6 +9,12 @@
 
 ## Bug fixes
 
+* `check_model()` no longer fails for *brms* models that cannot be converted
+  to a frequentist model. It now returns only the posterior predictive check
+  and multicollinearity panels, and a message lists the panels that were
+  skipped (#461). Multivariate *brms* models now give an informative error
+  (#908).
+
 * `check_collinearity()` now labels terms correctly for *brms* models that use
   the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
   of the previous term and the last term was missing (#417).
