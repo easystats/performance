@@ -15,7 +15,7 @@ get hints about possible problems."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -232,8 +232,16 @@ for dots, and third color for outliers or extreme values.</p></dd>
     <p>For Bayesian models from packages <strong>rstanarm</strong> or <strong>brms</strong>,
 models will be "converted" to their frequentist counterpart, using
 <a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html" class="external-link"><code>bayestestR::bayesian_as_frequentist</code></a>.
-A more advanced model-check for Bayesian models will be implemented at a
-later stage.</p>
+If this conversion fails for a <strong>brms</strong> model, <code>check_model()</code> returns only
+the checks that work on the Bayesian model itself: the posterior predictive
+check (<code>"pp_check"</code>) and the check for multicollinearity (<code>"vif"</code>). A message
+then lists the panels of the requested checks that were skipped (for
+example, <code>NORM</code> for <code>"normality"</code>) and the reason why the conversion failed.
+If none of the requested checks can be computed, <code>check_model()</code> gives an
+error. Multivariate <strong>brms</strong>
+models (models with more than one response) are not supported. A more
+advanced model-check for Bayesian models will be implemented at a later
+stage.</p>
 <p>See also the related <a href="https://easystats.github.io/performance/articles/check_model.html">vignette</a>.</p>
 <p>If you encounter problems with creating the plots, please see section
 <em>Troubleshooting</em>.</p>

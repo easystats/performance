@@ -175,8 +175,15 @@ The data frame that is used for plotting.
 For Bayesian models from packages **rstanarm** or **brms**, models will
 be "converted" to their frequentist counterpart, using
 [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
-A more advanced model-check for Bayesian models will be implemented at a
-later stage.
+If this conversion fails for a **brms** model, `check_model()` returns
+only the checks that work on the Bayesian model itself: the posterior
+predictive check (`"pp_check"`) and the check for multicollinearity
+(`"vif"`). A message then lists the panels of the requested checks that
+were skipped (for example, `NORM` for `"normality"`) and the reason why
+the conversion failed. If none of the requested checks can be computed,
+`check_model()` gives an error. Multivariate **brms** models (models
+with more than one response) are not supported. A more advanced
+model-check for Bayesian models will be implemented at a later stage.
 
 See also the related
 [vignette](https://easystats.github.io/performance/articles/check_model.html).
