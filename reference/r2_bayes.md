@@ -141,14 +141,10 @@ model <- suppressWarnings(brms::brm(
   silent = 2,
   refresh = 0
 ))
-#> Error in .fun(model_code = .x1) : 
-#>   Boost not found; call install.packages('BH')
-#> Error in .fun(model_code = .x1): Boost not found; call install.packages('BH')
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
-#>      Marginal R2: 0.387 (95% CI [0.174, 0.611])
+#>   Conditional R2: 0.826 (95% CI [0.759, 0.855])
 
 model <- suppressWarnings(brms::brm(
   Petal.Length ~ Petal.Width + (1 | Species),
@@ -156,13 +152,10 @@ model <- suppressWarnings(brms::brm(
   silent = 2,
   refresh = 0
 ))
-#> Error in .fun(model_code = .x1) : 
-#>   Boost not found; call install.packages('BH')
-#> Error in .fun(model_code = .x1): Boost not found; call install.packages('BH')
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
 #>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
-#>      Marginal R2: 0.387 (95% CI [0.174, 0.611])
+#>      Marginal R2: 0.383 (95% CI [0.169, 0.615])
 # }
 ```
