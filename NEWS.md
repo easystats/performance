@@ -7,6 +7,11 @@
   all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
   well (#95).
 
+* `model_performance()` now supports models fitted to multiple imputed data
+  sets with package *lavaan.mi*. The fit indices are pooled across imputations
+  by `lavaan::fitMeasures()`, and pooling arguments such as `pool.method` can
+  be passed through `...` (#888).
+
 * `check_overdispersion()` now warns for models with a `quasipoisson` or
   `quasibinomial` family. These models already estimate a dispersion
   parameter, so their standard errors account for overdispersion. When over- or
@@ -44,6 +49,16 @@
   models with uncorrelated random slopes, such as `(x || group)`. The fix is in
   `insight::get_variance()`. For these models, a shift of a predictor changes
   the values, and the documentation of both functions now says so (#428).
+
+* `model_performance()` for *lavaan* models now passes further arguments in
+  `...` to `lavaan::fitMeasures()` by name. Before, any extra argument other
+  than `estimator` caused an error, even an argument that `fitMeasures()`
+  accepts, such as `fm_args` (`fm.args` in *lavaan* before 0.7).
+
+* `model_performance()` for *lavaan* models no longer errors when
+  `lavaan::fitMeasures()` does not return an index, for example the
+  loglikelihood, AIC, and BIC of models with ordinal indicators. These
+  indices are now `NA`.
 
 * `check_overdispersion()` now computes the Pearson chi-squared statistic from
   the model's own Pearson residuals whenever it does not use simulated

@@ -2,12 +2,16 @@
 % Please edit documentation in R/model_performance.lavaan.R
 \name{model_performance.lavaan}
 \alias{model_performance.lavaan}
+\alias{model_performance.lavaan.mi}
 \title{Performance of lavaan SEM / CFA Models}
 \usage{
 \method{model_performance}{lavaan}(model, metrics = "all", verbose = TRUE, ...)
+
+\method{model_performance}{lavaan.mi}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
-\item{model}{A \strong{lavaan} model.}
+\item{model}{A \strong{lavaan} model, or a \strong{lavaan.mi} model fitted to
+multiple imputed data sets.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be
 computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Baseline"},
@@ -18,11 +22,14 @@ computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Basel
 
 \item{verbose}{Toggle off warnings.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Arguments passed to or from other methods. For \strong{lavaan} and
+\strong{lavaan.mi} models, they are passed to \code{lavaan::fitMeasures()} (except
+\code{estimator}, which is ignored), for example \code{pool.method = "D2"} for
+\strong{lavaan.mi} models.}
 }
 \value{
 A data frame (with one row) and one column per "index" (see
-\code{metrics}).
+\code{metrics}). An index that \code{lavaan::fitMeasures()} does not return is \code{NA}.
 }
 \description{
 Compute indices of model performance for SEM or CFA models from the
@@ -76,6 +83,19 @@ reported: The model \strong{chi-square}, the \strong{RMSEA}, the \strong{CFI}
 and the \strong{SRMR}.
 }
 }
+\section{Models fitted to multiple imputed data}{
+
+For \strong{lavaan.mi} models (for example, from \code{lavaan.mi::sem.mi()} or
+\code{lavaan.mi::cfa.mi()}), the indices
+come from the \code{fitMeasures()} method of the \strong{lavaan.mi} package, which
+pools the test statistics across imputations (by default with the \code{"D4"}
+method). Pooling arguments, such as \code{pool.method}, pass through \code{...}. If no
+imputation converged, all indices are \code{NA}. \code{compare_performance()} does not
+accept \strong{lavaan.mi} models yet, because \strong{insight} does not recognize them
+as models. It drops them with a warning, and it errors when no other model
+remains.
+}
+
 \examples{
 \dontshow{if (require("lavaan")) withAutoprint(\{ # examplesIf}
 # Confirmatory Factor Analysis (CFA) ---------
