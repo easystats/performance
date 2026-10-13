@@ -643,6 +643,8 @@ test_that("check_collinearity, mclogit::mblogit with three outcome levels", {
   expect_identical(out$Term, c("x1", "x3", "x2", "f", "x1:x3", "x1:f"))
   expected <- .gvif_by_term(stats::vcov(m), c("b", "c"), "~", .multinom_terms)
   expect_equal(out$VIF, unname(expected), tolerance = 1e-6)
+  m_coef <- c(x1 = 2, x3 = 2, x2 = 2, f = 4, `x1:x3` = 2, `x1:f` = 4)
+  expect_equal(out$SE_factor, unname(out$VIF^(1 / (2 * m_coef))), tolerance = 1e-6)
 
   # agrees with nnet::multinom on the same data
   m2 <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
@@ -659,4 +661,36 @@ test_that("check_collinearity, nnet::multinom with two outcome levels", {
   out2 <- check_collinearity(m2)
   expect_identical(out1$Term, out2$Term)
   expect_equal(out1$VIF, out2$VIF, tolerance = 1e-3)
+})
+
+test_that("check_collinearity, multinomial models with unusual names", {
+  skip_if_not_installed("nnet")
+  skip_if_not_installed("mclogit")
+  d <- .multinom_data(levels = c("a", "b c", "d:e"))
+  d$intercept_shift <- d$x3
+  terms <- c(x1 = "x1", x2 = "x2", intercept_shift = "intercept_shift")
+  m1 <- nnet::multinom(y ~ x1 + x2 + intercept_shift, data = d, trace = FALSE)
+  out1 <- check_collinearity(m1)
+  expect_identical(out1$Term, c("x1", "x2", "intercept_shift"))
+  expected <- .gvif_by_term(stats::vcov(m1), c("b c", "d:e"), ":", terms)
+  expect_equal(out1$VIF, unname(expected), tolerance = 1e-6)
+  m2 <- suppressWarnings(
+    mclogit::mblogit(y ~ x1 + x2 + intercept_shift, data = d, trace = FALSE)
+  )
+  out2 <- check_collinearity(m2)
+  expect_identical(out2$Term, c("x1", "x2", "intercept_shift"))
+  expected <- .gvif_by_term(stats::vcov(m2), c("b c", "d:e"), "~", terms)
+  expect_equal(out2$VIF, unname(expected), tolerance = 1e-6)
+})
+
+test_that("check_collinearity, multinomial models with ambiguous names", {
+  skip_if_not_installed("nnet")
+  # "b" with "x1:x3" and "b:x1" with "x3" give the same coefficient name
+  d <- .multinom_data(levels = c("a", "b", "b:x1"))
+  m <- nnet::multinom(y ~ x1 * x3, data = d, trace = FALSE)
+  expect_message(
+    out <- check_collinearity(m),
+    "Could not extract model terms"
+  )
+  expect_null(out)
 })

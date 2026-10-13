@@ -521,7 +521,7 @@ check_collinearity.zerocount <- function(
     # match coefficients to terms by name. All slopes of a term, across the
     # outcome levels, are one block of the generalized VIF.
     coef_names <- .multinom_coef_names(x, colnames(v))
-    keep_idx <- !is.na(coef_names) & !.is_intercept(coef_names)
+    keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
     mm <- .safe(insight::get_modelmatrix(x))
     term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], colnames(mm))]
     # a coefficient without a term would give VIFs for the wrong terms
@@ -969,6 +969,11 @@ check_collinearity.zerocount <- function(
     return(coef_names)
   }
   prefixed <- outer(rownames(cm), colnames(cm), paste, sep = sep)
+  # level and coefficient names can combine into the same name, for example
+  # level "b" with "x1:x3" and level "b:x1" with "x3"
+  if (anyDuplicated(as.vector(prefixed))) {
+    return(rep(NA_character_, length(coef_names)))
+  }
   predictors <- matrix(colnames(cm), nrow(cm), ncol(cm), byrow = TRUE)
   predictors[match(coef_names, prefixed)]
 }
