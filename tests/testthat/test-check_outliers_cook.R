@@ -174,6 +174,7 @@ test_that("check_outliers, Cook's distance for a saturated model gives an error"
 
 
 test_that("check_outliers, methods that skip a model still need numeric data", {
+  skip_if_not_installed("lme4")
   data(cbpp, package = "lme4")
   m <- glm(
     cbind(incidence, size - incidence) ~ period,
@@ -244,6 +245,32 @@ test_that("check_outliers, glmmTMB Cook's distance refits use the data given to 
     expect_true(all(is.finite(out$Distance_Cook)))
     expect_lte(max(abs(out$Distance_Cook - oracles[[i]])), 1e-4)
   }
+})
+
+
+test_that("check_outliers, glmmTMB Cook's distance errors if the data changed after the fit", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+  data(sleepstudy, package = "lme4")
+
+  # a variable that is only used inside a term of the formula
+  d1 <- sleepstudy
+  m1 <- glmmTMB::glmmTMB(Reaction ~ log(Days + 1) + (1 | Subject), data = d1)
+  d1$Days <- rev(d1$Days)
+  expect_error(
+    check_outliers(m1, method = "cook"),
+    regex = "because\\s+a\\s+refit\\s+on\\s+this\\s+data\\s+gives\\s+different"
+  )
+
+  # a variable of the model frame
+  d2 <- sleepstudy
+  m2 <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = d2)
+  d2$Reaction <- rev(d2$Reaction)
+  expect_error(
+    check_outliers(m2, method = "cook"),
+    regex = "fitted\\s+on\\.\\s+It\\s+may\\s+have\\s+changed"
+  )
 })
 
 

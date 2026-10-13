@@ -2393,10 +2393,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # the rows used to fit the model (as .cooks_distance_group() does), and a row is
 # left out by giving it a weight of zero. Thus, data-dependent terms like
 # scale() or poly(), and weights or offsets defined outside the data, are the
-# same as in the full model, also with missing values or a `subset`. Models
-# fitted without `data`, or whose data cannot be found or has changed, are
-# refit on insight::get_data(). There is one distance per row used to fit the
-# model. Each refit starts at the full model's estimates of the fixed effects
+# same as in the full model, also with missing values or a `subset`. If the
+# data changed after the model was fitted, this is an error, as in
+# .check_outliers_group(). Models fitted without `data`, or whose data cannot
+# be found, are refit on insight::get_data(). There is one distance per row
+# used to fit the model. Each refit starts at the full model's estimates of the fixed effects
 # and variance parameters. A refit that fails, does not converge, or has a
 # non-positive-definite Hessian with these start values is tried once more
 # without them. Rows where the refit still fails, or where it returns
@@ -2405,6 +2406,14 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # Fixed effects that are dropped (rank deficiency) or mapped are left out.
 .cooks_distance_refit <- function(x) {
   call_data <- .model_call_data(x)
+  if (identical(call_data$problem, "changed")) {
+    insight::format_error(paste0(
+      "The data of the model (`",
+      insight::safe_deparse(call_data$data_call),
+      "`) is not the data the model was fitted on. It may have changed after ",
+      "the model was fitted. Please fit the model again."
+    ))
+  }
   if (is.null(call_data$problem)) {
     model_data <- call_data$data
     model_rows <- call_data$rows
@@ -2429,6 +2438,26 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     return(rep(NA_real_, length(fit_rows)))
   }
   start <- .cooks_refit_start(x)
+
+  # a refit on the data given to the model that leaves nothing out must give
+  # the fixed effects of the model. If it does not, the data changed after the
+  # model was fitted, for example in a variable that is only used inside a
+  # term like log() or scale().
+  if (!is.null(model_rows)) {
+    same_data <- .cooks_distance_from_refit(
+      .refit_without_rows(x, model_data, integer(0), start, prior_weights, model_rows),
+      full
+    )
+    if (!is.na(same_data) && same_data > 1e-6) {
+      insight::format_error(paste0(
+        "The data of the model (`",
+        insight::safe_deparse(call_data$data_call),
+        "`) is not the data the model was fitted on, because a refit on this ",
+        "data gives different fixed effects. It may have changed after the ",
+        "model was fitted. Please fit the model again."
+      ))
+    }
+  }
 
   vapply(
     fit_rows,
