@@ -4,9 +4,9 @@
 
 * `check_outliers()` now computes the default threshold for Cook's distance as
   `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the number of
-  fixed effects of the model, and `n` is the number of observations in the
-  fit. Before, `p` was the number of numeric variables in the data. If `n - p`
-  is less than 1, `method = "cook"` gives an error.
+  fixed effects of the conditional model, and `n` is the number of
+  observations in the fit. Before, `p` was the number of numeric variables in
+  the data. If `n - p` is less than 1, `method = "cook"` gives an error.
 
 * `check_outliers()` gets a `group` argument for models from packages
   *glmmTMB* and *lme4*. It gives Cook's distance for each level of a grouping

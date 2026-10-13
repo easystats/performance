@@ -331,8 +331,8 @@ Default thresholds are currently specified as follows:
 )
 }\if{html}{\out{</div>}}
 
-For \code{cook}, \code{p} is the number of fixed effects of the model and \code{n} the
-number of observations used to fit it.
+For \code{cook}, \code{p} is the number of fixed effects of the conditional model and
+\code{n} the number of observations used to fit it.
 }
 
 \section{Meta-analysis models}{

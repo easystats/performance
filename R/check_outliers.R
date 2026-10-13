@@ -287,8 +287,8 @@
 #' )
 #' ```
 #'
-#' For `cook`, `p` is the number of fixed effects of the model and `n` the
-#' number of observations used to fit it.
+#' For `cook`, `p` is the number of fixed effects of the conditional model and
+#' `n` the number of observations used to fit it.
 #'
 #' @section Meta-analysis models:
 #' For meta-analysis models (e.g. objects of class `rma` from the *metafor*
