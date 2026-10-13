@@ -585,13 +585,15 @@ test_that("check_collinearity, brms with 0 + Intercept syntax", {
     colnames(v)
   )
   keep <- coef_names != "(Intercept)"
-  R <- stats::cov2cor(v[keep, keep])
+  cor_mat <- stats::cov2cor(v[keep, keep])
   coef_terms <- terms[coef_names[keep]]
   vapply(
     unique(terms),
     function(i) {
       idx <- which(coef_terms == i)
-      det(R[idx, idx, drop = FALSE]) * det(R[-idx, -idx, drop = FALSE]) / det(R)
+      det(cor_mat[idx, idx, drop = FALSE]) *
+        det(cor_mat[-idx, -idx, drop = FALSE]) /
+        det(cor_mat)
     },
     numeric(1)
   )
@@ -613,9 +615,10 @@ test_that("check_collinearity, nnet::multinom with three outcome levels", {
   d <- .multinom_data()
   m <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
   expect_no_message(
-    out <- check_collinearity(m),
+    check_collinearity(m),
     message = "Model without intercept"
   )
+  out <- check_collinearity(m)
   expect_identical(out$Term, c("x1", "x3", "x2", "f", "x1:x3", "x1:f"))
   expected <- .gvif_by_term(stats::vcov(m), c("b", "c"), ":", .multinom_terms)
   expect_equal(out$VIF, unname(expected), tolerance = 1e-6)
@@ -689,8 +692,8 @@ test_that("check_collinearity, multinomial models with ambiguous names", {
   d <- .multinom_data(levels = c("a", "b", "b:x1"))
   m <- nnet::multinom(y ~ x1 * x3, data = d, trace = FALSE)
   expect_message(
-    out <- check_collinearity(m),
+    check_collinearity(m),
     "Could not extract model terms"
   )
-  expect_null(out)
+  expect_null(suppressMessages(check_collinearity(m)))
 })

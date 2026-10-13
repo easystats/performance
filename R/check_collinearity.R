@@ -957,24 +957,24 @@ check_collinearity.zerocount <- function(
 # Names are returned unchanged when there is no prefix.
 .multinom_coef_names <- function(x, coef_names) {
   if (inherits(x, "mblogit")) {
-    cm <- x$coefmat
+    coef_mat <- x$coefmat
     sep <- "~"
   } else {
-    cm <- stats::coef(x)
+    coef_mat <- stats::coef(x)
     sep <- ":"
   }
   # nnet::multinom models with two outcome levels have no prefix, because
   # coef() returns a vector
-  if (!is.matrix(cm)) {
+  if (!is.matrix(coef_mat)) {
     return(coef_names)
   }
-  prefixed <- outer(rownames(cm), colnames(cm), paste, sep = sep)
+  prefixed <- outer(rownames(coef_mat), colnames(coef_mat), paste, sep = sep)
   # level and coefficient names can combine into the same name, for example
   # level "b" with "x1:x3" and level "b:x1" with "x3"
   if (anyDuplicated(as.vector(prefixed))) {
     return(rep(NA_character_, length(coef_names)))
   }
-  predictors <- matrix(colnames(cm), nrow(cm), ncol(cm), byrow = TRUE)
+  predictors <- matrix(colnames(coef_mat), nrow(coef_mat), ncol(coef_mat), byrow = TRUE)
   predictors[match(coef_names, prefixed)]
 }
 
