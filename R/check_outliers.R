@@ -108,10 +108,11 @@
 #'    the estimates with those of the full model. Thus, computation time grows
 #'    with the number of observations. Each refit starts at the full model's
 #'    estimates of the fixed effects and variance parameters, while the random
-#'    effects are re-estimated from scratch. Rows where the refit fails, does
-#'    not converge, has a non-positive-definite Hessian or returns different
-#'    fixed-effect terms get a missing distance and are not counted as outliers
-#'    by this method. `check_model()` skips this computation for
+#'    effects are re-estimated from scratch. A refit that fails with these
+#'    start values is tried once more without them. Rows where the refit fails,
+#'    does not converge, has a non-positive-definite Hessian or returns
+#'    different fixed-effect terms get a missing distance and are not counted
+#'    as outliers by this method. `check_model()` skips this computation for
 #'    **glmmTMB** models.
 #'
 #'    For models from packages **glmmTMB** and **lme4**, the `group` argument
@@ -2379,9 +2380,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # fitted without `data`, or whose data cannot be found or has changed, are
 # refit on insight::get_data(). There is one distance per row used to fit the
 # model. Each refit starts at the full model's estimates of the fixed effects
-# and variance parameters. Rows where the refit fails, does not converge, has a
-# non-positive-definite Hessian, or returns different fixed-effect terms get
-# NA. All rows get NA if the model weights do not match the data rows or the
+# and variance parameters. A refit that fails, does not converge, or has a
+# non-positive-definite Hessian with these start values is tried once more
+# without them. Rows where the refit still fails, or returns different
+# fixed-effect terms get NA. All rows get NA if the model weights do not match the data rows or the
 # variance-covariance matrix cannot be inverted. Fixed effects that are
 # dropped (rank deficiency) or mapped are left out.
 .cooks_distance_refit <- function(x) {
@@ -2415,6 +2417,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     fit_rows,
     function(i) {
       refit <- .refit_without_rows(x, model_data, i, start, prior_weights, model_rows)
+      if (!.refit_converged(refit)) {
+        # the start values can lead to a non-positive-definite Hessian, which
+        # a refit without them may not have
+        refit <- .refit_without_rows(x, model_data, i, NULL, prior_weights, model_rows)
+      }
       .cooks_distance_from_refit(refit, full)
     },
     numeric(1)

@@ -215,3 +215,40 @@ test_that("check_outliers, glmmTMB Cook's distance for a model fitted without da
   expect_true(all(is.finite(out$Distance_Cook)))
 })
 
+
+test_that("check_outliers, glmmTMB refits rejected with start values are tried without", {
+  skip_on_cran()
+  skip_if_not_installed("glmmTMB")
+  set.seed(18)
+  d <- data.frame(g = factor(rep(1:10, each = 5)), x = rnorm(50))
+  d$y <- 1 + 0.5 * d$x + rnorm(50) + rep(rnorm(10, sd = 0.15), each = 5)
+  m <- glmmTMB::glmmTMB(y ~ x + (1 | g), data = d)
+
+  # the case needs a refit that fails with the full model's estimates as
+  # start values, which depends on the optimizer
+  start <- m$obj$env$parList(m$fit$par)
+  start <- start[!names(start) %in% c("b", "bzi", "bdisp") & lengths(start) > 0]
+  warm_rejected <- vapply(
+    seq_len(nrow(d)),
+    function(i) {
+      w <- rep(1, nrow(d))
+      w[i] <- 0
+      refit <- try(
+        suppressWarnings(stats::update(m, data = d, weights = w, start = start)),
+        silent = TRUE
+      )
+      inherits(refit, "try-error") || !isTRUE(refit$sdr$pdHess)
+    },
+    logical(1)
+  )
+  skip_if_not(any(warm_rejected), "No warm-started refit has a non-positive-definite Hessian.")
+
+  out <- as.data.frame(check_outliers(m, method = "cook"))
+  expect_length(out$Distance_Cook, 50)
+  expect_true(all(is.finite(out$Distance_Cook)))
+  oracle <- .test_cooks_refit_loop(m, d, function(data_i) {
+    glmmTMB::glmmTMB(y ~ x + (1 | g), data = data_i)
+  })
+  expect_lte(max(abs(out$Distance_Cook - oracle)), 1e-4)
+})
+

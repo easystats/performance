@@ -150,10 +150,11 @@ like \code{scale()} or \code{poly()} are computed on the full data), and compari
 the estimates with those of the full model. Thus, computation time grows
 with the number of observations. Each refit starts at the full model's
 estimates of the fixed effects and variance parameters, while the random
-effects are re-estimated from scratch. Rows where the refit fails, does
-not converge, has a non-positive-definite Hessian or returns different
-fixed-effect terms get a missing distance and are not counted as outliers
-by this method. \code{check_model()} skips this computation for
+effects are re-estimated from scratch. A refit that fails with these
+start values is tried once more without them. Rows where the refit fails,
+does not converge, has a non-positive-definite Hessian or returns
+different fixed-effect terms get a missing distance and are not counted
+as outliers by this method. \code{check_model()} skips this computation for
 \strong{glmmTMB} models.
 
 For models from packages \strong{glmmTMB} and \strong{lme4}, the \code{group} argument
