@@ -108,11 +108,10 @@
 #'    the estimates with those of the full model. Thus, computation time grows
 #'    with the number of observations. Each refit starts at the full model's
 #'    estimates of the fixed effects and variance parameters, while the random
-#'    effects are re-estimated from scratch. A refit that fails with these
-#'    start values is tried once more without them. Rows where the refit fails,
-#'    does not converge, has a non-positive-definite Hessian or returns
-#'    different fixed-effect terms get a missing distance and are not counted
-#'    as outliers by this method. `check_model()` skips this computation for
+#'    effects are re-estimated from scratch. Rows where the refit fails, does
+#'    not converge, has a non-positive-definite Hessian or returns different
+#'    fixed-effect terms get a missing distance and are not counted as outliers
+#'    by this method. `check_model()` skips this computation for
 #'    **glmmTMB** models.
 #'
 #'    For models from packages **glmmTMB** and **lme4**, the `group` argument
@@ -528,8 +527,10 @@ check_outliers.default <- function(
   # check if any data left. Cook's distance and Pareto k need no data, so
   # binomial models with only factor predictors can use them. Other models
   # without numeric variables have a response that is not numeric.
+  model_method <- ("cook" %in% method && !m_info$is_bayesian && !inherits(x, "bife")) ||
+    ("pareto" %in% method && m_info$is_bayesian)
   if (is.null(my_data) || ncol(my_data) == 0) {
-    if (!all(method %in% c("cook", "pareto")) || !m_info$is_binomial) {
+    if (!all(method %in% c("cook", "pareto")) || !model_method || !m_info$is_binomial) {
       insight::format_error("No numeric variables found. No data to check for outliers.")
     }
     my_data <- data.frame()
@@ -1984,15 +1985,27 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   n_params <- .safe(ncol(suppressWarnings(as.matrix(
     insight::get_varcov(x, component = "conditional")
   ))))
-  if (is.null(n_params)) {
+  # a saturated model has a variance-covariance matrix of NaN, from which
+  # insight::get_varcov() removes all columns
+  if (is.null(n_params) || n_params == 0) {
     n_params <- .safe(insight::n_parameters(
       x,
       effects = "fixed",
       component = "conditional"
     ))
   }
+  if (is.null(n_params)) {
+    # n_parameters() for lm and glm has no `effects` argument
+    n_params <- .safe(insight::n_parameters(x))
+  }
   n_obs <- .safe(stats::nobs(x))
-  if (is.null(n_params) || is.null(n_obs)) {
+  if (
+    length(n_params) != 1 ||
+      length(n_obs) != 1 ||
+      is.na(n_params) ||
+      is.na(n_obs) ||
+      n_params == 0
+  ) {
     return(NULL)
   }
   if (n_obs - n_params < 1) {
@@ -2175,12 +2188,12 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 .check_outliers_group <- function(x, group, threshold = NULL, verbose = TRUE) {
-  # the data given to the model function, so that refits compute terms like
-  # scale() or poly() on the same rows as the model, and variables that are
-  # not in the formula can be used as grouping variable
   if (!is.character(group) || length(group) != 1 || is.na(group)) {
     insight::format_error("`group` must be a single character string, the name of a variable.")
   }
+  # the data given to the model function, so that refits compute terms like
+  # scale() or poly() on the same rows as the model, and variables that are
+  # not in the formula can be used as grouping variable
   call_data <- .model_call_data(x)
   data_call <- call_data$data_call
   if (identical(call_data$problem, "no_data")) {

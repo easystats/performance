@@ -163,6 +163,31 @@ test_that("check_outliers, default Cook's distance threshold uses p and n of the
 })
 
 
+test_that("check_outliers, Cook's distance for a saturated model gives an error", {
+  # all residuals are zero, so the variance-covariance matrix is NaN
+  m <- lm(mpg ~ wt + hp, data = mtcars[1:3, ])
+  expect_error(
+    check_outliers(m, method = "cook"),
+    regex = "n\\s+=\\s+3\\s+observations\\s+and\\s+p\\s+=\\s+3\\s+fixed"
+  )
+})
+
+
+test_that("check_outliers, methods that skip a model still need numeric data", {
+  data(cbpp, package = "lme4")
+  m <- glm(
+    cbind(incidence, size - incidence) ~ period,
+    family = binomial,
+    data = cbpp
+  )
+  # Pareto k is only computed for Bayesian models
+  expect_error(
+    check_outliers(m, method = "pareto"),
+    regex = "No numeric variables found"
+  )
+})
+
+
 test_that("check_outliers, glmmTMB Cook's distance refits use the data given to the model", {
   skip_on_cran()
   skip_if_not_installed("lme4")
