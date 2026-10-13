@@ -12,6 +12,7 @@
 - [`model_performance(`*`<kmeans>`*`)`](https://easystats.github.io/performance/reference/model_performance.kmeans.md)
   : Model summary for k-means clustering
 - [`model_performance(`*`<lavaan>`*`)`](https://easystats.github.io/performance/reference/model_performance.lavaan.md)
+  [`model_performance(`*`<lavaan.mi>`*`)`](https://easystats.github.io/performance/reference/model_performance.lavaan.md)
   : Performance of lavaan SEM / CFA Models
 - [`model_performance(`*`<lm>`*`)`](https://easystats.github.io/performance/reference/model_performance.lm.md)
   : Performance of Regression Models

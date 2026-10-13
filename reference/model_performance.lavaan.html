@@ -9,7 +9,7 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,9 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'lavaan'</span></span>
+<span><span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'lavaan.mi'</span></span>
 <span><span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,7 +75,8 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
 
 
 <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>A <strong>lavaan</strong> model.</p></dd>
+<dd><p>A <strong>lavaan</strong> model, or a <strong>lavaan.mi</strong> model fitted to
+multiple imputed data sets.</p></dd>
 
 
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
@@ -89,13 +93,16 @@ computed (some of <code>"Chi2"</code>, <code>"Chi2_df"</code>, <code>"p_Chi2"</c
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Arguments passed to or from other methods.</p></dd>
+<dd><p>Arguments passed to or from other methods. For <strong>lavaan</strong> and
+<strong>lavaan.mi</strong> models, they are passed to <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code> (except
+<code>estimator</code>, which is ignored), for example <code>pool.method = "D2"</code> for
+<strong>lavaan.mi</strong> models.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame (with one row) and one column per "index" (see
-<code>metrics</code>).</p>
+<code>metrics</code>). An index that <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code> does not return is <code>NA</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -148,6 +155,20 @@ reported: The model <strong>chi-square</strong>, the <strong>RMSEA</strong>, the
 and the <strong>SRMR</strong>.</p>
 </div>
 
+    </div>
+    <div class="section level2">
+    <h2 id="models-fitted-to-multiple-imputed-data">Models fitted to multiple imputed data<a class="anchor" aria-label="anchor" href="#models-fitted-to-multiple-imputed-data"></a></h2>
+
+
+<p>For <strong>lavaan.mi</strong> models (for example, from <code><a href="https://rdrr.io/pkg/lavaan.mi/man/lavaan.mi.html" class="external-link">lavaan.mi::sem.mi()</a></code> or
+<code><a href="https://rdrr.io/pkg/lavaan.mi/man/lavaan.mi.html" class="external-link">lavaan.mi::cfa.mi()</a></code>), the indices
+come from the <code>fitMeasures()</code> method of the <strong>lavaan.mi</strong> package, which
+pools the test statistics across imputations (by default with the <code>"D4"</code>
+method). Pooling arguments, such as <code>pool.method</code>, pass through <code>...</code>. If no
+imputation converged, all indices are <code>NA</code>. <code><a href="compare_performance.html">compare_performance()</a></code> does not
+accept <strong>lavaan.mi</strong> models yet, because <strong>insight</strong> does not recognize them
+as models. It drops them with a warning, and it errors when no other model
+remains.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

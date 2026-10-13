@@ -8,13 +8,17 @@ Compute indices of model performance for SEM or CFA models from the
 ``` r
 # S3 method for class 'lavaan'
 model_performance(model, metrics = "all", verbose = TRUE, ...)
+
+# S3 method for class 'lavaan.mi'
+model_performance(model, metrics = "all", verbose = TRUE, ...)
 ```
 
 ## Arguments
 
 - model:
 
-  A **lavaan** model.
+  A **lavaan** model, or a **lavaan.mi** model fitted to multiple
+  imputed data sets.
 
 - metrics:
 
@@ -31,11 +35,18 @@ model_performance(model, metrics = "all", verbose = TRUE, ...)
 
 - ...:
 
-  Arguments passed to or from other methods.
+  Arguments passed to or from other methods. For **lavaan** and
+  **lavaan.mi** models, they are passed to
+  [`lavaan::fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html)
+  (except `estimator`, which is ignored), for example
+  `pool.method = "D2"` for **lavaan.mi** models.
 
 ## Value
 
 A data frame (with one row) and one column per "index" (see `metrics`).
+An index that
+[`lavaan::fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html)
+does not return is `NA`.
 
 ## Details
 
@@ -92,6 +103,21 @@ See the documentation for
 Kline (2015) suggests that at a minimum the following indices should be
 reported: The model **chi-square**, the **RMSEA**, the **CFI** and the
 **SRMR**.
+
+## Models fitted to multiple imputed data
+
+For **lavaan.mi** models (for example, from
+[`lavaan.mi::sem.mi()`](https://rdrr.io/pkg/lavaan.mi/man/lavaan.mi.html)
+or
+[`lavaan.mi::cfa.mi()`](https://rdrr.io/pkg/lavaan.mi/man/lavaan.mi.html)),
+the indices come from the `fitMeasures()` method of the **lavaan.mi**
+package, which pools the test statistics across imputations (by default
+with the `"D4"` method). Pooling arguments, such as `pool.method`, pass
+through `...`. If no imputation converged, all indices are `NA`.
+[`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
+does not accept **lavaan.mi** models yet, because **insight** does not
+recognize them as models. It drops them with a warning, and it errors
+when no other model remains.
 
 ## References
 
