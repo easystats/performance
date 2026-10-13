@@ -60,7 +60,8 @@ Monette 1992), which is identical to the square root of the VIF for numeric
 predictors, or for categorical variables with two levels.
 
 For multinomial models from \code{nnet::multinom()} and \code{mclogit::mblogit()},
-each term has one slope for each outcome level except the reference level.
+each term has its own set of slopes for each outcome level except the
+reference level.
 These models get one VIF per term, computed from the slopes of that term
 across all outcome levels, so the VIF does not depend on the reference
 level. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where \verb{<n>} is the number

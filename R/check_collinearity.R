@@ -40,7 +40,8 @@
 #' predictors, or for categorical variables with two levels.
 #'
 #' For multinomial models from `nnet::multinom()` and `mclogit::mblogit()`,
-#' each term has one slope for each outcome level except the reference level.
+#' each term has its own set of slopes for each outcome level except the
+#' reference level.
 #' These models get one VIF per term, computed from the slopes of that term
 #' across all outcome levels, so the VIF does not depend on the reference
 #' level. The adjusted VIF is then `VIF^(1/(2*<n>))`, where `<n>` is the number
@@ -953,6 +954,7 @@ check_collinearity.zerocount <- function(
 # coefficient names of multinomial models are prefixed with the outcome level,
 # like "b:x1" (nnet::multinom) or "b~x1" (mclogit::mblogit). This returns the
 # names without that prefix, and NA for names that could not be matched.
+# Names are returned unchanged when there is no prefix.
 .multinom_coef_names <- function(x, coef_names) {
   if (inherits(x, "mblogit")) {
     cm <- x$coefmat
@@ -961,7 +963,8 @@ check_collinearity.zerocount <- function(
     cm <- stats::coef(x)
     sep <- ":"
   }
-  # models with two outcome levels have no prefix
+  # nnet::multinom models with two outcome levels have no prefix, because
+  # coef() returns a vector
   if (!is.matrix(cm)) {
     return(coef_names)
   }

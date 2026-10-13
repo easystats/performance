@@ -16,7 +16,8 @@
 
 * `check_collinearity()` now gives correct VIFs for multinomial models from
   packages *nnet* (`multinom()`) and *mclogit* (`mblogit()`). Before, only the
-  first intercept was removed, so the VIFs belonged to the wrong coefficients.
+  first intercept was removed and coefficients were matched to terms by
+  position, so the VIFs belonged to the wrong coefficients.
   Now each term gets one VIF, computed from its slopes across all outcome
   levels, so it does not depend on the reference level (#907).
 
