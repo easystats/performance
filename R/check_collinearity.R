@@ -654,6 +654,20 @@ check_collinearity.zerocount <- function(
   }
 
   R <- stats::cov2cor(v)
+
+  # a singular correlation matrix, for example from exactly collinear
+  # predictors whose model keeps all coefficients, gives meaningless VIFs
+  rc <- .safe(rcond(R))
+  if (!is.null(rc) && is.finite(rc) && rc < 1e-10) {
+    if (isTRUE(verbose)) {
+      insight::format_warning(
+        "The correlation matrix of the model coefficients is singular, so VIFs cannot be computed.",
+        "Check for predictors that are linear combinations of other predictors."
+      )
+    }
+    return(NULL)
+  }
+
   detR <- det(R)
 
   result <- vector("numeric")

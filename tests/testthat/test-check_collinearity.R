@@ -697,3 +697,20 @@ test_that("check_collinearity, multinomial models with ambiguous names", {
   )
   expect_null(suppressMessages(check_collinearity(m)))
 })
+
+test_that("check_collinearity, exactly collinear multinomial model", {
+  skip_if_not_installed("nnet")
+  d <- .multinom_data()
+  d$x4 <- d$x1 + d$x3
+  m <- nnet::multinom(y ~ x1 + x3 + x4 + x2, data = d, trace = FALSE)
+  expect_warning(
+    out <- check_collinearity(m),
+    "singular"
+  )
+  expect_null(out)
+  expect_null(check_collinearity(m, verbose = FALSE))
+
+  # correlated but not exactly collinear predictors give no warning
+  m2 <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
+  expect_no_warning(check_collinearity(m2))
+})
