@@ -2176,15 +2176,15 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   if (!is.character(group) || length(group) != 1 || is.na(group)) {
     insight::format_error("`group` must be a single character string, the name of a variable.")
   }
-  data_call <- stats::getCall(x)$data
-  if (is.null(data_call)) {
+  call_data <- .model_call_data(x)
+  data_call <- call_data$data_call
+  if (identical(call_data$problem, "no_data")) {
     insight::format_error(
       "The `group` argument requires a model that was fitted with the `data` argument."
     )
   }
-  model_data <- .safe(as.data.frame(eval(data_call, environment(stats::formula(x)))))
-  model_frame <- .safe(stats::model.frame(x))
-  if (is.null(model_data) || !nrow(model_data) || is.null(model_frame)) {
+  model_data <- call_data$data
+  if (identical(call_data$problem, "not_found")) {
     insight::format_error(paste0(
       "The data of the model (`",
       insight::safe_deparse(data_call),
@@ -2199,11 +2199,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
       "` was not found."
     ))
   }
-
-  # rows of the data that were used to fit the model (after `subset` and
-  # removing missing values)
-  model_rows <- rownames(model_data) %in% rownames(model_frame)
-  if (!.model_rows_match(model_frame, model_data, model_rows)) {
+  if (identical(call_data$problem, "changed")) {
     insight::format_error(paste0(
       "The data of the model (`",
       insight::safe_deparse(data_call),
@@ -2211,6 +2207,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
       "the model was fitted. Please fit the model again."
     ))
   }
+  model_rows <- call_data$rows
   group_values <- model_data[[group]]
   group_values[!model_rows] <- NA
 
@@ -2374,29 +2371,50 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # Case-deletion Cook's distance for the conditional fixed effects, computed
 # by refitting the model without each row (generalizing Cook, 1977):
 # D_i = (b - b_(i))' V(b)^-1 (b - b_(i)) / p
-# A row is left out by giving it a weight of zero, so that data-dependent terms
-# like scale() or poly(), and weights or offsets defined outside the data, are
-# the same as in the full model. Each refit starts at the full model's
-# estimates of the fixed effects and variance parameters. Rows where the refit
-# fails, does not converge, has a non-positive-definite Hessian, or returns
-# different fixed-effect terms get NA. All rows get NA if the model weights do
-# not match the data rows or the variance-covariance matrix cannot be inverted.
-# Fixed effects that are dropped (rank deficiency) or mapped are left out.
+# The refits use the data given to the model function, with `subset` set to
+# the rows used to fit the model (as .cooks_distance_group() does), and a row is
+# left out by giving it a weight of zero. Thus, data-dependent terms like
+# scale() or poly(), and weights or offsets defined outside the data, are the
+# same as in the full model, also with missing values or a `subset`. Models
+# fitted without `data`, or whose data cannot be found or has changed, are
+# refit on insight::get_data(). There is one distance per row used to fit the
+# model. Each refit starts at the full model's estimates of the fixed effects
+# and variance parameters. Rows where the refit fails, does not converge, has a
+# non-positive-definite Hessian, or returns different fixed-effect terms get
+# NA. All rows get NA if the model weights do not match the data rows or the
+# variance-covariance matrix cannot be inverted. Fixed effects that are
+# dropped (rank deficiency) or mapped are left out.
 .cooks_distance_refit <- function(x) {
-  model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
-  n_obs <- nrow(model_data)
+  call_data <- .model_call_data(x)
+  if (is.null(call_data$problem)) {
+    model_data <- call_data$data
+    model_rows <- call_data$rows
+    fit_rows <- which(model_rows)
+    # weights for all rows of the data, rows not used in the model are left
+    # out by `subset`
+    fit_weights <- .cooks_prior_weights(x, length(fit_rows))
+    prior_weights <- NULL
+    if (!is.null(fit_weights)) {
+      prior_weights <- rep(1, nrow(model_data))
+      prior_weights[model_rows] <- fit_weights
+    }
+  } else {
+    model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
+    model_rows <- NULL
+    fit_rows <- seq_len(nrow(model_data))
+    prior_weights <- .cooks_prior_weights(x, length(fit_rows))
+  }
 
   full <- .cooks_full_model(x)
-  prior_weights <- .cooks_prior_weights(x, n_obs)
   if (is.null(full) || is.null(prior_weights)) {
-    return(rep(NA_real_, n_obs))
+    return(rep(NA_real_, length(fit_rows)))
   }
   start <- .cooks_refit_start(x)
 
   vapply(
-    seq_len(n_obs),
+    fit_rows,
     function(i) {
-      refit <- .refit_without_rows(x, model_data, i, start, prior_weights)
+      refit <- .refit_without_rows(x, model_data, i, start, prior_weights, model_rows)
       .cooks_distance_from_refit(refit, full)
     },
     numeric(1)
@@ -2480,6 +2498,31 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     numeric(1)
   )
   list(levels = levels, distance = distance)
+}
+
+
+# The data given to the model function (the `data` argument of the call), and
+# the rows of it that were used to fit the model (after `subset` and removing
+# missing values). Refits on this data compute terms like scale() or poly() on
+# the same rows as the model. `problem` is "no_data" if the model was fitted
+# without `data`, "not_found" if the data cannot be found from the environment
+# of the model formula, and "changed" if the data no longer matches the model
+# frame.
+.model_call_data <- function(x) {
+  data_call <- stats::getCall(x)$data
+  if (is.null(data_call)) {
+    return(list(problem = "no_data"))
+  }
+  model_data <- .safe(as.data.frame(eval(data_call, environment(stats::formula(x)))))
+  model_frame <- .safe(stats::model.frame(x))
+  if (is.null(model_data) || !nrow(model_data) || is.null(model_frame)) {
+    return(list(problem = "not_found", data_call = data_call))
+  }
+  model_rows <- rownames(model_data) %in% rownames(model_frame)
+  if (!.model_rows_match(model_frame, model_data, model_rows)) {
+    return(list(problem = "changed", data = model_data, data_call = data_call))
+  }
+  list(data = model_data, rows = model_rows, data_call = data_call)
 }
 
 
@@ -2594,11 +2637,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.refit_without_rows <- function(x, model_data, rows, start, weights) {
+.refit_without_rows <- function(x, model_data, rows, start, weights, subset = NULL) {
   weights[rows] <- 0
   tryCatch(
     suppressWarnings(suppressMessages(
-      .update_model(x, data = model_data, start = start, weights = weights)
+      .update_model(x, data = model_data, start = start, weights = weights, subset = subset)
     )),
     error = function(e) NULL
   )

@@ -143,3 +143,75 @@ test_that("check_outliers, default Cook's distance threshold uses p and n of the
   expect_equal(cook_threshold(m_lm), stats::qf(0.5, 3, 29), tolerance = 1e-12)
 })
 
+
+test_that("check_outliers, glmmTMB Cook's distance refits use the data given to the model", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+  data(sleepstudy, package = "lme4")
+
+  # missing response values with a data-dependent term
+  d <- sleepstudy
+  d$Reaction[c(5, 50)] <- NA
+  m1 <- glmmTMB::glmmTMB(Reaction ~ scale(Days) + (1 | Subject), data = d)
+  d1 <- d
+  d1$Days_scaled <- as.vector(scale(d1$Days))
+  d1 <- d1[!is.na(d1$Reaction), ]
+  oracle1 <- .test_cooks_refit_loop(m1, d1, function(data_i) {
+    glmmTMB::glmmTMB(Reaction ~ Days_scaled + (1 | Subject), data = data_i)
+  })
+
+  # weights defined outside the data, with an index subset
+  set.seed(1)
+  w <- runif(180, 0.5, 2)
+  m2 <- glmmTMB::glmmTMB(
+    Reaction ~ Days + (1 | Subject),
+    data = sleepstudy,
+    weights = w,
+    subset = 1:150
+  )
+  d2 <- sleepstudy
+  d2$w <- w
+  d2 <- d2[1:150, ]
+  oracle2 <- .test_cooks_refit_loop(m2, d2, function(data_i) {
+    glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = data_i, weights = w)
+  })
+
+  # poly() and an offset defined outside the data, with missing responses
+  o <- log(mtcars$disp)
+  d3 <- mtcars
+  d3$carb[c(2, 9)] <- NA
+  m3 <- glmmTMB::glmmTMB(carb ~ poly(wt, 2) + offset(o), family = poisson, data = d3)
+  d3_oracle <- d3
+  poly_wt <- stats::poly(d3_oracle$wt, 2)
+  d3_oracle$wt1 <- poly_wt[, 1]
+  d3_oracle$wt2 <- poly_wt[, 2]
+  d3_oracle$o <- o
+  d3_oracle <- d3_oracle[!is.na(d3_oracle$carb), ]
+  oracle3 <- .test_cooks_refit_loop(m3, d3_oracle, function(data_i) {
+    glmmTMB::glmmTMB(carb ~ wt1 + wt2 + offset(o), family = poisson, data = data_i)
+  })
+
+  models <- list(m1, m2, m3)
+  oracles <- list(oracle1, oracle2, oracle3)
+  for (i in seq_along(models)) {
+    out <- as.data.frame(check_outliers(models[[i]], method = "cook"))
+    expect_identical(nrow(out), as.integer(stats::nobs(models[[i]])))
+    expect_true(all(is.finite(out$Distance_Cook)))
+    expect_lte(max(abs(out$Distance_Cook - oracles[[i]])), 1e-4)
+  }
+})
+
+
+test_that("check_outliers, glmmTMB Cook's distance for a model fitted without data", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(2)
+  x <- rnorm(30)
+  y <- x + rnorm(30)
+  # glmmTMB recommends the `data` argument
+  m <- suppressWarnings(glmmTMB::glmmTMB(y ~ x))
+  out <- as.data.frame(check_outliers(m, method = "cook"))
+  expect_identical(nrow(out), 30L)
+  expect_true(all(is.finite(out$Distance_Cook)))
+})
+

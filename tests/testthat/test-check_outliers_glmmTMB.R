@@ -148,8 +148,8 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
   )
 
   for (case in cases) {
-    local_mocked_bindings(.update_model = function(x, data, start, weights) {
-      fit <- update_model(x, data = data, start = start, weights = weights)
+    local_mocked_bindings(.update_model = function(x, data, start, weights, subset = NULL) {
+      fit <- update_model(x, data = data, start = start, weights = weights, subset = subset)
       removed <- which(weights == 0)
       if (removed %in% case$rows) {
         fit <- failures[[case$failure]](fit)
@@ -196,7 +196,7 @@ test_that("check_outliers, glmmTMB failed refits for all or many rows", {
   m <- glmmTMB::glmmTMB(mpg ~ wt + hp, data = mtcars)
   update_model <- .update_model
 
-  local_mocked_bindings(.update_model = function(x, data, start, weights) {
+  local_mocked_bindings(.update_model = function(x, data, start, weights, subset = NULL) {
     stop("forced refit error", call. = FALSE)
   })
   expect_message(
@@ -207,11 +207,11 @@ test_that("check_outliers, glmmTMB failed refits for all or many rows", {
   expect_true(all(is.na(as.data.frame(out)$Distance_Cook)))
   expect_false(any(out))
 
-  local_mocked_bindings(.update_model = function(x, data, start, weights) {
+  local_mocked_bindings(.update_model = function(x, data, start, weights, subset = NULL) {
     if (which(weights == 0) <= 12) {
       stop("forced refit error", call. = FALSE)
     }
-    update_model(x, data = data, start = start, weights = weights)
+    update_model(x, data = data, start = start, weights = weights, subset = subset)
   })
   alert <- tryCatch(
     check_outliers(m, method = "cook"),
