@@ -135,7 +135,9 @@ common than the basic Mahalanobis distance, but still used. Cook's distance
 estimates the variations in regression coefficients after removing each
 observation, one by one (Cook, 1977). Since Cook's distance is in the metric
 of an F distribution with p and n-p degrees of freedom, the median point of
-the quantile distribution can be used as a cut-off (Bollen, 1985). A common
+the quantile distribution can be used as a cut-off (Bollen, 1985). This is
+the default threshold, with p the number of fixed effects of the
+conditional model and n the number of observations used to fit it. A common
 approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
 outliers are detected). This only works for frequentist models. For Bayesian
@@ -316,7 +318,7 @@ Default thresholds are currently specified as follows:
   eti = 1 - 0.001,
   hdi = 1 - 0.001,
   bci = 1 - 0.001,
-  cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+  cook = stats::qf(0.5, p, n - p),
   pareto = 0.7,
   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
   mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
@@ -327,6 +329,9 @@ Default thresholds are currently specified as follows:
   lof = 0.001
 )
 }\if{html}{\out{</div>}}
+
+For \code{cook}, \code{p} is the number of fixed effects of the model and \code{n} the
+number of observations used to fit it.
 }
 
 \section{Meta-analysis models}{

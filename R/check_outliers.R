@@ -93,7 +93,9 @@
 #'  estimates the variations in regression coefficients after removing each
 #'  observation, one by one (Cook, 1977). Since Cook's distance is in the metric
 #'  of an F distribution with p and n-p degrees of freedom, the median point of
-#'  the quantile distribution can be used as a cut-off (Bollen, 1985). A common
+#'  the quantile distribution can be used as a cut-off (Bollen, 1985). This is
+#'  the default threshold, with p the number of fixed effects of the
+#'  conditional model and n the number of observations used to fit it. A common
 #'  approximation or heuristic is to use 4 divided by the numbers of
 #'  observations, which usually corresponds to a lower threshold (i.e., more
 #'  outliers are detected). This only works for frequentist models. For Bayesian
@@ -272,7 +274,7 @@
 #'   eti = 1 - 0.001,
 #'   hdi = 1 - 0.001,
 #'   bci = 1 - 0.001,
-#'   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+#'   cook = stats::qf(0.5, p, n - p),
 #'   pareto = 0.7,
 #'   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
 #'   mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
@@ -283,6 +285,9 @@
 #'   lof = 0.001
 #' )
 #' ```
+#'
+#' For `cook`, `p` is the number of fixed effects of the model and `n` the
+#' number of observations used to fit it.
 #'
 #' @section Meta-analysis models:
 #' For meta-analysis models (e.g. objects of class `rma` from the *metafor*
@@ -479,6 +484,13 @@ check_outliers.default <- function(
   # Get model information
   m_info <- insight::model_info(x)
 
+  # Cook's distance threshold from the model, found before the data is checked
+  # so that a model with too few observations gives this error first
+  cook_threshold <- NULL
+  if ("cook" %in% method && !m_info$is_bayesian && !inherits(x, "bife")) {
+    cook_threshold <- .check_outliers_cook_threshold(x)
+  }
+
   # Get data
   my_data <- insight::get_data(x, verbose = FALSE)
 
@@ -530,6 +542,9 @@ check_outliers.default <- function(
         "threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
       )
     )
+  }
+  if (!is.null(cook_threshold) && !"cook" %in% names(threshold)) {
+    thresholds$cook <- cook_threshold
   }
 
   if (!missing(ID) && verbose) {
@@ -1938,6 +1953,36 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     optics_xi = 0.05,
     lof = 0.001
   )
+}
+
+
+# Default Cook's distance threshold of a model: the median of the F
+# distribution with p and n - p degrees of freedom (Bollen, 1985). p is the
+# number of estimated fixed effects of the conditional model (aliased or mapped
+# terms are not in the variance-covariance matrix), and n is the number of
+# observations used to fit the model. Returns NULL if p or n cannot be found, so
+# that the threshold from the data columns is used.
+.check_outliers_cook_threshold <- function(x) {
+  n_params <- .safe(ncol(suppressWarnings(as.matrix(
+    insight::get_varcov(x, component = "conditional")
+  ))))
+  if (is.null(n_params)) {
+    n_params <- .safe(insight::n_parameters(x, effects = "fixed", component = "conditional"))
+  }
+  n_obs <- .safe(stats::nobs(x))
+  if (is.null(n_params) || is.null(n_obs)) {
+    return(NULL)
+  }
+  if (n_obs - n_params < 1) {
+    insight::format_error(paste0(
+      "Cook's distance needs more observations than fixed effects, but the model has n = ",
+      n_obs,
+      " observations and p = ",
+      n_params,
+      " fixed effects."
+    ))
+  }
+  stats::qf(0.5, n_params, n_obs - n_params)
 }
 
 
