@@ -92,6 +92,19 @@
 #'  outliers are detected). This only works for frequentist models. For Bayesian
 #'  models, see `pareto`.
 #'
+#'    For models from package **glmmTMB**, Cook's distance is computed for the
+#'    fixed effects of the conditional model by refitting the model once per
+#'    row, leaving out that row (by giving it a weight of zero, so that terms
+#'    like `scale()` or `poly()` are computed on the full data), and comparing
+#'    the estimates with those of the full model. Thus, computation time grows
+#'    with the number of observations. Each refit starts at the full model's
+#'    estimates of the fixed effects and variance parameters, while the random
+#'    effects are re-estimated from scratch. Rows where the refit fails, does
+#'    not converge, has a non-positive-definite Hessian or returns different
+#'    fixed-effect terms get a missing distance and are not counted as outliers
+#'    by this method. `check_model()` skips this computation for
+#'    **glmmTMB** models.
+#'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
 #' assessed using the estimates for the shape parameter k of the generalized
@@ -496,7 +509,8 @@ check_outliers.default <- function(
   if ("cook" %in% method && !m_info$is_bayesian && !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
-      threshold = thresholds$cook
+      threshold = thresholds$cook,
+      verbose = verbose
     )$data_cook
 
     my_df <- datawizard::data_merge(list(my_df, data_cook), join = "full", by = "Row")
@@ -602,7 +616,15 @@ check_outliers.default <- function(
   thresholds <- thresholds[names(thresholds) %in% method]
 
   # Composite outlier score
-  my_df$Outlier <- rowMeans(my_df[grepl("Outlier_", names(my_df), fixed = TRUE)])
+  votes <- my_df[grepl("Outlier_", names(my_df), fixed = TRUE)]
+  if (inherits(x, "glmmTMB") && "Outlier_Cook" %in% names(votes)) {
+    # rows where the refit failed have no Cook's distance, so they don't vote
+    votes$Outlier_Cook[is.na(my_df$Distance_Cook)] <- NA
+    my_df$Outlier <- rowMeans(votes, na.rm = TRUE)
+    my_df$Outlier[is.nan(my_df$Outlier)] <- 0
+  } else {
+    my_df$Outlier <- rowMeans(votes)
+  }
   my_df <- my_df[c(names(my_df)[names(my_df) != "Outlier"], "Outlier")]
 
   # Out
@@ -616,7 +638,7 @@ check_outliers.default <- function(
   attr(outlier, "text_size") <- 3
   attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(
     x,
-    threshold = unlist(thresholds)
+    threshold = thresholds$cook
   )) # nolint
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data
@@ -1997,19 +2019,150 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_cook <- function(x, threshold = NULL, ID.names = NULL) {
+.check_outliers_cook <- function(x, threshold = NULL, ID.names = NULL, verbose = TRUE) {
   # Compute
-  d <- unname(stats::cooks.distance(x))
+  if (inherits(x, "glmmTMB")) {
+    # glmmTMB has no hat values, so we compute case-deletion Cook's distance
+    d <- .cooks_distance_refit(x)
+    failed <- which(is.na(d))
+    if (length(failed) == length(d) && verbose) {
+      insight::format_alert(paste(
+        "Cook's distance could not be computed for any row, because the model",
+        "refits failed, did not converge, had a non-positive-definite Hessian, or",
+        "returned different fixed-effect terms, or because the variance-covariance",
+        "matrix of the model could not be inverted, or the model weights could not",
+        "be matched to the data rows. No row is flagged as outlier by this method."
+      ))
+    } else if (length(failed) && verbose) {
+      if (length(failed) > 10) {
+        failed_rows <- paste(
+          toString(failed[1:10]),
+          "and",
+          length(failed) - 10,
+          "more"
+        )
+      } else {
+        failed_rows <- datawizard::text_concatenate(failed)
+      }
+      insight::format_alert(paste0(
+        "Cook's distance could not be computed for ",
+        if (length(failed) == 1) "row " else "rows ",
+        failed_rows,
+        ", because the model refit without ",
+        if (length(failed) == 1) "this row" else "these rows",
+        " failed, did not converge, had a non-positive-definite Hessian, or",
+        " returned different fixed-effect terms."
+      ))
+    }
+  } else {
+    d <- unname(stats::cooks.distance(x))
+  }
   out <- data.frame(Row = seq_along(d))
   out$Distance_Cook <- d
 
   # Filter
-  out$Outlier_Cook <- as.numeric(out$Distance_Cook > threshold)
+  if (inherits(x, "glmmTMB")) {
+    out$Outlier_Cook <- as.numeric(!is.na(d) & d > threshold)
+  } else {
+    out$Outlier_Cook <- as.numeric(d > threshold)
+  }
 
   list(
     data_cook = out,
     threshold_cook = threshold
   )
+}
+
+
+# Case-deletion Cook's distance for the conditional fixed effects, computed
+# by refitting the model without each row (generalizing Cook, 1977):
+# D_i = (b - b_(i))' V(b)^-1 (b - b_(i)) / p
+# A row is left out by giving it a weight of zero, so that data-dependent terms
+# like scale() or poly(), and weights or offsets defined outside the data, are
+# the same as in the full model. Each refit starts at the full model's
+# estimates of the fixed effects and variance parameters. Rows where the refit
+# fails, does not converge, has a non-positive-definite Hessian, or returns
+# different fixed-effect terms get NA. All rows get NA if the model weights do
+# not match the data rows or the variance-covariance matrix cannot be inverted.
+# Fixed effects that are dropped (rank deficiency) or mapped are left out.
+.cooks_distance_refit <- function(x) {
+  model_data <- insight::get_data(x, source = "environment", verbose = FALSE)
+  n_obs <- nrow(model_data)
+
+  # only use fixed effects that are estimated (not dropped or mapped), which
+  # are those in the variance-covariance matrix
+  vcov_cond <- as.matrix(insight::get_varcov(x, component = "conditional"))
+  vcov_inv <- .safe(solve(vcov_cond))
+  if (is.null(vcov_inv)) {
+    return(rep(NA_real_, n_obs))
+  }
+  fixed <- insight::get_parameters(x, component = "conditional", effects = "fixed")
+  b <- stats::setNames(fixed$Estimate, fixed$Parameter)[colnames(vcov_cond)]
+  if (anyNA(b)) {
+    return(rep(NA_real_, n_obs))
+  }
+  n_params <- length(b)
+
+  prior_weights <- insight::get_weights(x, remove_na = TRUE)
+  if (is.null(prior_weights)) {
+    prior_weights <- rep(1, n_obs)
+  }
+  if (length(prior_weights) != n_obs) {
+    return(rep(NA_real_, n_obs))
+  }
+
+  # starting values, without the random effects
+  start <- x$obj$env$parList(x$fit$par)
+  start <- start[!names(start) %in% c("b", "bzi", "bdisp") & lengths(start) > 0]
+
+  vapply(
+    seq_len(n_obs),
+    function(i) {
+      refit <- .refit_without_rows(x, model_data, i, start, prior_weights)
+      if (!.refit_converged(refit)) {
+        return(NA_real_)
+      }
+      fixed_i <- insight::get_parameters(
+        refit,
+        component = "conditional",
+        effects = "fixed"
+      )
+      b_i <- stats::setNames(fixed_i$Estimate, fixed_i$Parameter)[names(b)]
+      if (anyNA(b_i)) {
+        return(NA_real_)
+      }
+      delta <- b - b_i
+      as.vector(t(delta) %*% vcov_inv %*% delta) / n_params
+    },
+    numeric(1)
+  )
+}
+
+
+.refit_without_rows <- function(x, model_data, rows, start, weights) {
+  weights[rows] <- 0
+  tryCatch(
+    suppressWarnings(suppressMessages(
+      .update_model(x, data = model_data, start = start, weights = weights)
+    )),
+    error = function(e) NULL
+  )
+}
+
+
+.update_model <- function(x, data, start, weights) {
+  # evaluate in the environment of the model formula, so that variables
+  # defined outside the data (like an offset vector) are found
+  model_call <- stats::update(x, evaluate = FALSE)
+  model_call$data <- data
+  model_call$start <- start
+  model_call$weights <- weights
+  eval(model_call, envir = environment(stats::formula(x)))
+}
+
+
+.refit_converged <- function(refit) {
+  !is.null(refit) && isTRUE(refit$fit$convergence == 0) && isTRUE(refit$sdr$pdHess)
 }
 
 
@@ -2325,7 +2478,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # Non-supported model classes ---------------------------------------
 
 #' @export
-check_outliers.glmmTMB <- function(x, ...) {
+check_outliers.lmrob <- function(x, ...) {
   insight::format_alert(paste0(
     "`check_outliers()` does not yet support models of class `",
     class(x)[1],
@@ -2335,16 +2488,13 @@ check_outliers.glmmTMB <- function(x, ...) {
 }
 
 #' @export
-check_outliers.lmrob <- check_outliers.glmmTMB
+check_outliers.glmrob <- check_outliers.lmrob
 
 #' @export
-check_outliers.glmrob <- check_outliers.glmmTMB
+check_outliers.rq <- check_outliers.lmrob
 
 #' @export
-check_outliers.rq <- check_outliers.glmmTMB
+check_outliers.rqs <- check_outliers.lmrob
 
 #' @export
-check_outliers.rqs <- check_outliers.glmmTMB
-
-#' @export
-check_outliers.rqss <- check_outliers.glmmTMB
+check_outliers.rqss <- check_outliers.lmrob

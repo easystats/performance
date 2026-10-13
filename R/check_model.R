@@ -77,10 +77,21 @@
 #' @details For Bayesian models from packages **rstanarm** or **brms**,
 #' models will be "converted" to their frequentist counterpart, using
 #' [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
-#' A more advanced model-check for Bayesian models will be implemented at a
-#' later stage.
+#' If this conversion fails for a **brms** model, `check_model()` returns only
+#' the checks that work on the Bayesian model itself: the posterior predictive
+#' check (`"pp_check"`) and the check for multicollinearity (`"vif"`). A message
+#' then lists the panels of the requested checks that were skipped (for
+#' example, `NORM` for `"normality"`) and the reason why the conversion failed.
+#' If none of the requested checks can be computed, `check_model()` gives an
+#' error. Multivariate **brms**
+#' models (models with more than one response) are not supported. A more
+#' advanced model-check for Bayesian models will be implemented at a later
+#' stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
+#'
+#' If you encounter problems with creating the plots, please see section
+#' *Troubleshooting*.
 #'
 #' @section Posterior Predictive Checks:
 #' Posterior predictive checks can be used to look for systematic discrepancies
@@ -215,6 +226,16 @@
 #' - *Update relevant software:* Finally, ensure your R version, and the IDE
 #'   you use, are up to date. Running the most recent versions of R and, e.g.,
 #'   RStudio or Positron can resolve any remaining issues.
+#' - *Plot single panels:* If none of the solutions above work, generate
+#'   individual plots for each check using the `panel` argument:
+#'   `plot(check_model(model, panel = FALSE))`
+#' - *Save plot as file:* Instead of rendering plots interactively,
+#'   you can save them directly to a file, for example:
+#'   ```r
+#'   pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
+#'   check_model(model)
+#'   dev.off()
+#'   ```
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -341,7 +362,7 @@ check_model.default <- function(
         "\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `",
         class(model)[1],
         "` are not yet supported."
-      ) # nolint
+      )
     )
   }
 
@@ -354,13 +375,70 @@ check_model.default <- function(
     ))
   }
 
+  .add_check_model_attributes(
+    assumptions_data,
+    model = model,
+    minfo = minfo,
+    panel = panel,
+    check = check,
+    detrend = detrend,
+    bandwidth = bandwidth,
+    type = type,
+    type_missing = missing(type),
+    show_dots = show_dots,
+    show_ci = show_ci,
+    maximum_dots = maximum_dots,
+    size_dot = size_dot,
+    size_line = size_line,
+    size_title = size_title,
+    size_axis_title = size_axis_title,
+    base_size = base_size,
+    alpha = alpha,
+    alpha_dot = alpha_dot,
+    ppc_range = ppc_range,
+    colors = colors,
+    theme = theme,
+    verbose = verbose,
+    plot_type = list(...)$plot_type
+  )
+}
+
+
+# add plot settings as attributes, used by see::plot.see_check_model() ------
+
+.add_check_model_attributes <- function(
+  assumptions_data,
+  model,
+  minfo,
+  panel,
+  check,
+  detrend,
+  bandwidth,
+  type,
+  type_missing,
+  show_dots,
+  show_ci,
+  maximum_dots,
+  size_dot,
+  size_line,
+  size_title,
+  size_axis_title,
+  base_size,
+  alpha,
+  alpha_dot,
+  ppc_range,
+  colors,
+  theme,
+  verbose,
+  plot_type = NULL
+) {
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli ||
-    minfo$is_count ||
-    minfo$is_ordinal ||
-    minfo$is_categorical ||
-    minfo$is_multinomial) # nolint
-  if (missing(type) && suggest_dots) {
+  suggest_dots <- (isTRUE(minfo$is_bernoulli) ||
+    isTRUE(minfo$is_count) ||
+    isTRUE(minfo$is_ordinal) ||
+    isTRUE(minfo$is_categorical) ||
+    isTRUE(minfo$is_multinomial)) # nolint
+  if (type_missing && suggest_dots) {
     type <- "discrete_interval"
   }
 
@@ -378,13 +456,10 @@ check_model.default <- function(
   }
 
   # if we have only categorical predictors, we don't show CI by default
-  parameter_types <- .safe(parameters::parameters_type(model))
-  if (
-    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
-  ) {
-    show_ci = FALSE
-  } else {
-    show_ci = TRUE
+  if (is.null(show_ci)) {
+    parameter_types <- .safe(parameters::parameters_type(model))
+    show_ci <- is.null(parameter_types) ||
+      !all(parameter_types$Type %in% c("intercept", "factor"))
   }
 
   attr(assumptions_data, "panel") <- panel
@@ -402,7 +477,7 @@ check_model.default <- function(
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
   attr(assumptions_data, "model_info") <- minfo
-  attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
+  attr(assumptions_data, "overdisp_type") <- plot_type
   attr(assumptions_data, "bandwidth") <- bandwidth
   attr(assumptions_data, "type") <- type
   attr(assumptions_data, "ppc_range") <- ppc_range
@@ -466,8 +541,60 @@ check_model.stanreg <- function(
     model <- x
   }
 
+  # multivariate brms models, see https://github.com/easystats/performance/issues/908
+  if (inherits(model, "brmsfit") && insight::is_multivariate(model)) {
+    insight::format_error(
+      "Multivariate models are not supported by `check_model()`. This model has more than one response."
+    )
+  }
+
+  freq_model <- tryCatch(
+    bayestestR::bayesian_as_frequentist(model),
+    error = function(e) {
+      # let errors propagate when debugging, see `.safe()`
+      if (isTRUE(getOption("easystats_errors", FALSE))) {
+        stop(e)
+      }
+      e
+    }
+  )
+  conversion_error <- NULL
+  if (inherits(freq_model, "error")) {
+    conversion_error <- conditionMessage(freq_model)
+    freq_model <- NULL
+  }
+
+  # if the conversion fails, return the checks that work on the brms model
+  if (is.null(freq_model) && inherits(model, "brmsfit")) {
+    return(.check_model_bayesian_fallback(
+      model,
+      conversion_error = conversion_error,
+      panel = panel,
+      check = check,
+      detrend = detrend,
+      bandwidth = bandwidth,
+      type = type,
+      type_missing = missing(type),
+      show_dots = show_dots,
+      show_ci = show_ci,
+      maximum_dots = maximum_dots,
+      size_dot = size_dot,
+      size_line = size_line,
+      size_title = size_title,
+      size_axis_title = size_axis_title,
+      base_size = base_size,
+      alpha = alpha,
+      alpha_dot = alpha_dot,
+      ppc_range = ppc_range,
+      colors = colors,
+      theme = theme,
+      verbose = verbose,
+      ...
+    ))
+  }
+
   check_model(
-    model = .safe(bayestestR::bayesian_as_frequentist(model)),
+    model = freq_model,
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -494,6 +621,156 @@ check_model.stanreg <- function(
 
 #' @export
 check_model.brmsfit <- check_model.stanreg
+
+
+# checks for Bayesian models that cannot be converted to frequentist models,
+# using only checks that work on the Bayesian model itself
+
+.check_model_bayesian_fallback <- function(
+  model,
+  conversion_error,
+  panel,
+  check,
+  detrend,
+  bandwidth,
+  type,
+  type_missing,
+  show_dots,
+  show_ci,
+  maximum_dots,
+  size_dot,
+  size_line,
+  size_title,
+  size_axis_title,
+  base_size,
+  alpha,
+  alpha_dot,
+  ppc_range,
+  colors,
+  theme,
+  verbose,
+  ...
+) {
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  minfo <- insight::model_info(model, verbose = FALSE)
+
+  dat <- list()
+
+  # multicollinearity --------------
+  if (any(c("all", "vif") %in% check)) {
+    dat$VIF <- .safe(suppressWarnings(.model_diagnostic_vif(model, verbose = verbose)))
+  }
+
+  # posterior predictive checks --------------
+  if (any(c("all", "pp_check") %in% check)) {
+    dat$PP_CHECK <- .safe(suppressWarnings(check_predictions(
+      model,
+      verbose = verbose,
+      ...
+    )))
+  }
+
+  dat <- insight::compact_list(dat)
+  class(dat) <- c("check_model", "see_check_model")
+
+  # reason why the conversion failed
+  if (is.null(conversion_error)) {
+    reason <- NULL
+  } else {
+    reason <- paste(
+      "Reason for the failed conversion:",
+      gsub("(\n|\\s{2,})", " ", conversion_error)
+    )
+  }
+
+  # no check could be computed
+  if (!length(dat)) {
+    insight::format_error(
+      paste(
+        "The conversion to a frequentist model failed, and none of the",
+        "requested checks could be computed for the Bayesian model."
+      ),
+      reason
+    )
+  }
+
+  # tell user which panels of the requested checks need a frequentist model
+  skipped <- .skipped_frequentist_checks(model, minfo, check)
+  msg <- paste(
+    "The conversion to a frequentist model failed, so `check_model()` only",
+    "shows checks that work for Bayesian models."
+  )
+  if (length(skipped)) {
+    msg <- paste0(msg, " Skipped checks: ", toString(skipped), ".")
+  }
+  insight::format_alert(msg, reason)
+
+  .add_check_model_attributes(
+    dat,
+    model = model,
+    minfo = minfo,
+    panel = panel,
+    check = check,
+    detrend = detrend,
+    bandwidth = bandwidth,
+    type = type,
+    type_missing = type_missing,
+    show_dots = show_dots,
+    show_ci = show_ci,
+    maximum_dots = maximum_dots,
+    size_dot = size_dot,
+    size_line = size_line,
+    size_title = size_title,
+    size_axis_title = size_axis_title,
+    base_size = base_size,
+    alpha = alpha,
+    alpha_dot = alpha_dot,
+    ppc_range = ppc_range,
+    colors = colors,
+    theme = theme,
+    verbose = verbose,
+    plot_type = list(...)$plot_type
+  )
+}
+
+
+# names of the panels, other than VIF and PP_CHECK, that
+# `.check_assumptions_linear()` and `.check_assumptions_glm()` would return
+# for the requested checks
+
+.skipped_frequentist_checks <- function(model, minfo, check) {
+  panels <- list(
+    QQ = "qq",
+    REQQ = "reqq",
+    NORM = "normality",
+    NCV = c("ncv", "linearity"),
+    HOMOGENEITY = "homogeneity",
+    OUTLIERS = "outliers",
+    INFLUENTIAL = "outliers",
+    BINNED_RESID = "binned_residuals",
+    OVERDISPERSION = "overdispersion"
+  )
+  if (isTRUE(minfo$is_linear)) {
+    panels$BINNED_RESID <- panels$OVERDISPERSION <- NULL
+  } else {
+    panels$NORM <- panels$NCV <- NULL
+    if (!isTRUE(minfo$is_binomial)) {
+      panels$BINNED_RESID <- NULL
+    }
+    if (!isTRUE(minfo$is_count)) {
+      panels$OVERDISPERSION <- NULL
+    }
+  }
+  if (!insight::is_mixed_model(model)) {
+    panels$REQQ <- NULL
+  }
+  requested <- vapply(panels, function(i) any(c("all", i) %in% check), logical(1))
+  names(panels)[requested]
+}
 
 
 #' @export
@@ -672,7 +949,18 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
+    if (inherits(model, "glmmTMB")) {
+      if (verbose) {
+        insight::format_alert(paste(
+          "The check for influential observations is skipped for models of class",
+          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
+          "Use `check_outliers()` to compute it."
+        ))
+      }
+    } else {
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    }
     if (is.null(dat$OUTLIERS)) {
       threshold <- NULL
     } else {
@@ -735,7 +1023,18 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
+    if (inherits(model, "glmmTMB")) {
+      if (verbose) {
+        insight::format_alert(paste(
+          "The check for influential observations is skipped for models of class",
+          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
+          "Use `check_outliers()` to compute it."
+        ))
+      }
+    } else {
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    }
     if (is.null(dat$OUTLIERS)) {
       threshold <- NULL
     } else {

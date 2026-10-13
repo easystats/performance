@@ -9,7 +9,70 @@
   reference model, below the reference range) and validates the return values
   of the clustering function.
 
+* `check_outliers()` now supports models from package *glmmTMB*. Cook's
+  distance is computed by refitting the model without each observation, and
+  all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
+  well (#95).
+
+* `model_performance()` now supports models fitted to multiple imputed data
+  sets with package *lavaan.mi*. The fit indices are pooled across imputations
+  by `lavaan::fitMeasures()`, and pooling arguments such as `pool.method` can
+  be passed through `...` (#888).
+
+* `check_overdispersion()` now warns for models with a `quasipoisson` or
+  `quasibinomial` family. These models already estimate a dispersion
+  parameter, so their standard errors account for overdispersion. When over- or
+  underdispersion is detected, the printed conclusion also says so (#734).
+
 ## Bug fixes
+
+* `check_model()` now uses the value of `show_ci` that the user sets. Before,
+  it ignored that value. It always hid the confidence bands for models with
+  only categorical predictors and always showed them for other models
+  (#642, #490).
+
+* `check_collinearity()` now returns interaction terms for *brms* models.
+  Before, a model such as `y ~ a * b` gave no `a:b` row, and the VIFs of the
+  other terms belonged to the wrong coefficients. Models with more than one
+  intercept, such as ordinal models, also gave VIFs for the wrong
+  coefficients.
+
+* `compare_performance()` no longer fails when only some of the models have
+  LOOIC, for example a *brms* model and a `glm` (#738). It now computes
+  stacking weights for the models that have LOOIC and gives `NA` for the
+  others. A missing weight now prints as an empty cell, not as `(>.999)`.
+
+* `check_model()` no longer fails for *brms* models that cannot be converted
+  to a frequentist model. It now returns only the posterior predictive check
+  and multicollinearity panels, and a message lists the panels that were
+  skipped (#461). Multivariate *brms* models now give an informative error
+  (#908).
+
+* `check_collinearity()` now labels terms correctly for *brms* models that use
+  the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
+  of the previous term and the last term was missing (#417).
+
+* `r2_nakagawa()` and `icc()` now include the random-slope variance for *lme4*
+  models with uncorrelated random slopes, such as `(x || group)`. The fix is in
+  `insight::get_variance()`. For these models, a shift of a predictor changes
+  the values, and the documentation of both functions now says so (#428).
+
+* `model_performance()` for *lavaan* models now passes further arguments in
+  `...` to `lavaan::fitMeasures()` by name. Before, any extra argument other
+  than `estimator` caused an error, even an argument that `fitMeasures()`
+  accepts, such as `fm_args` (`fm.args` in *lavaan* before 0.7).
+
+* `model_performance()` for *lavaan* models no longer errors when
+  `lavaan::fitMeasures()` does not return an index, for example the
+  loglikelihood, AIC, and BIC of models with ordinal indicators. These
+  indices are now `NA`.
+
+* `check_overdispersion()` now computes the Pearson chi-squared statistic from
+  the model's own Pearson residuals whenever it does not use simulated
+  residuals. Results change, and are now correct, for binomial models with
+  more than one trial per observation (a `cbind()` response, or proportions
+  with `weights`) and for models with prior weights. Before, the statistic
+  used unweighted Poisson-style residuals and could be far off.
 
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
@@ -24,6 +87,23 @@
 
 * Preserve method–threshold alignment in `print()` method for `check_outliers()`
   for multi-method input.
+
+* `r2_tjur()`, `r2_somers()`, `r2_efron()` and `r2_mckelvey()` now warn and
+  return `NULL` for binomial models that are not Bernoulli models, like `r2()`.
+  Examples are a proportion response with weights and a `cbind()` response.
+  Before, these functions returned inaccurate values or failed with an unclear
+  error (#165).
+
+* The influential observations plot of `check_model()` and `check_outliers()`
+  for linear mixed models from package *lme4* now shows standardized residuals
+  instead of raw residuals. Before this fix, points fell outside the Cook's
+  distance lines but were not flagged as outliers (#857).
+
+* The Cook's distance lines in the influential observations plot of
+  `check_model()` and `check_outliers()` now use the threshold of
+  `check_outliers()`, including a user-supplied `threshold`. Before this fix,
+  linear models always used a threshold from the model's F statistic, so the
+  lines did not match the flagged outliers (#916).
 
 # performance 0.18.2
 

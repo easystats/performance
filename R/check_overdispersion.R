@@ -41,6 +41,17 @@
 #' For negative binomial (mixed) models or models with zero-inflation component,
 #' the overdispersion test is based simulated residuals (see [`simulate_residuals()`]).
 #'
+#' @section Overdispersion in Quasi-Poisson and Quasi-Binomial Models:
+#' Models with a `quasipoisson` or `quasibinomial` family already estimate a
+#' dispersion parameter, and their standard errors account for it. For these
+#' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
+#' The returned statistic is the unscaled Pearson chi-squared test, which
+#' compares the residuals with the variance of a Poisson or binomial model. For
+#' a `glm` model without aliased coefficients, the dispersion ratio then equals
+#' its estimated dispersion, up to the fitting tolerance.
+#' Simulated residuals are not used, because they are not available for quasi
+#' families.
+#'
 #' @section Overdispersion in Mixed Models:
 #' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
 #' is based on the code in the
@@ -175,12 +186,24 @@ print.check_overdisp <- function(x, digits = 3, ...) {
     ))
   }
 
+  # quasi families already account for the dispersion
+  quasi_family <- attr(x, "quasi_family", exact = TRUE)
+  if (is.null(quasi_family)) {
+    quasi_note <- ""
+  } else {
+    quasi_note <- paste0(
+      " The `",
+      quasi_family,
+      "` model already estimates the dispersion, so its standard errors account for it."
+    )
+  }
+
   if (pval > 0.05) {
     message("No overdispersion detected.")
   } else if (x$dispersion_ratio > 1) {
-    message("Overdispersion detected.")
+    message("Overdispersion detected.", quasi_note)
   } else {
-    message("Underdispersion detected.")
+    message("Underdispersion detected.", quasi_note)
   }
 
   invisible(orig_x)
@@ -215,13 +238,39 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
   }
 
-  yhat <- stats::fitted(x)
+  # quasi families already estimate a dispersion parameter
+  quasi_family <- NULL
+  if (isTRUE(info$family %in% c("quasipoisson", "quasibinomial"))) {
+    quasi_family <- info$family
+    if (verbose) {
+      reference_family <- ifelse(info$family == "quasipoisson", "Poisson", "binomial")
+      insight::format_warning(
+        paste0(
+          "The model uses the `",
+          quasi_family,
+          "` family, which already estimates a dispersion parameter. Its standard errors account for the dispersion."
+        ),
+        paste0(
+          "The test compares the residuals with the variance of a ",
+          reference_family,
+          " model. Simulated residuals are not available for quasi families, so the test uses Pearson residuals."
+        )
+      )
+    }
+  }
 
   n <- stats::nobs(x)
   k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
 
-  zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
-  chisq <- sum(zi^2)
+  # use the model's own Pearson residuals - computing them by hand from
+  # `get_response()` is wrong for a two-column `cbind()` response
+  zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
+  if (is.null(zi)) {
+    yhat <- stats::fitted(x)
+    zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
+  }
+  # residuals of models with `na.action = na.exclude` are padded with NA
+  chisq <- sum(zi^2, na.rm = TRUE)
   ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
 
@@ -234,6 +283,7 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
   attr(out, "object_name") <- obj_name
+  attr(out, "quasi_family") <- quasi_family
 
   out
 }
@@ -243,7 +293,7 @@ check_overdispersion.fixest <- check_overdispersion.glm
 
 #' @export
 check_overdispersion.fixest_multi <- function(x, verbose = TRUE, ...) {
-  lapply(x, check_overdispersion.fixest)
+  lapply(x, check_overdispersion.fixest, verbose = verbose, ...)
 }
 
 #' @export
