@@ -542,6 +542,35 @@ check_collinearity.zerocount <- function(
     if (all(keep_idx) && isTRUE(verbose)) {
       insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
+  } else if (.is_vglm_categorical(x)) {
+    # VGAM models can have more than one intercept and more than one slope per
+    # model matrix column. The "assign" attribute of the model matrix is a list
+    # that maps each term to its columns of the variance-covariance matrix.
+    assign_list <- attr(.safe(insight::get_modelmatrix(x)), "assign")
+    coef_terms <- rep(NA_character_, ncol(v))
+    if (is.list(assign_list)) {
+      coef_terms[unlist(assign_list)] <- rep(names(assign_list), lengths(assign_list))
+    }
+    keep_idx <- !is.na(coef_terms) & coef_terms != "(Intercept)"
+    vglm_terms <- labels(stats::terms(insight::find_formula(x, verbose = FALSE)[[
+      component
+    ]]))
+    term_assign <- match(coef_terms[keep_idx], vglm_terms)
+    # a coefficient without a term would give VIFs for the wrong terms
+    if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_terms)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (all(keep_idx) && isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
   } else if (inherits(x, "brmsfit")) {
     # brms models can have more than one intercept, for example ordinal
     # models, so drop all intercepts and match coefficients to terms by name
@@ -710,9 +739,9 @@ check_collinearity.zerocount <- function(
   # check if CIs are requested
   conf_ints <- .vif_ci(x, result, ci)
 
-  # for multinomial models, the adjusted VIF uses the number of slopes of
-  # each term across all outcome levels
-  if (.is_multinom_model(x)) {
+  # for multinomial and VGAM models, the adjusted VIF uses the number of slopes
+  # of each term across all outcome levels
+  if (.is_multinom_model(x) || .is_vglm_categorical(x)) {
     se_factor <- result^(1 / (2 * n_coef))
   } else {
     se_factor <- .adjusted_vif(x, result, model_terms)
@@ -972,6 +1001,12 @@ check_collinearity.zerocount <- function(
 # which inherits from brmultinom)
 .is_multinom_model <- function(x) {
   inherits(x, c("multinom", "mblogit", "brmultinom"))
+}
+
+# VGAM models with the multinomial or cumulative family
+.is_vglm_categorical <- function(x) {
+  inherits(x, "vglm") &&
+    isTRUE(.safe(x@family@vfamily[1]) %in% c("multinomial", "cumulative"))
 }
 
 # coefficient names of multinomial models are prefixed with the outcome level,

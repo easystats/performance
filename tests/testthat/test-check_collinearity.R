@@ -780,6 +780,65 @@ test_that("check_collinearity, brglm2::bracl", {
   expect_equal(out2$SE_factor, out2$VIF^(1 / (2 * m_coef2)), tolerance = 1e-8)
 })
 
+test_that("check_collinearity, VGAM::vglm multinomial", {
+  skip_if_not_installed("VGAM")
+  skip_if_not_installed("nnet")
+  d <- .multinom_data()
+  m <- VGAM::vglm(y ~ x1 + x3 + x2 + f, family = VGAM::multinomial, data = d)
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("x1", "x3", "x2", "f"))
+  expected <- .gvif_by_map(stats::vcov(m), .slope_map(c("1", "2"), suffix = TRUE))
+  expect_equal(out$VIF, unname(expected), tolerance = 1e-8)
+  m_coef <- c(2, 2, 2, 4)
+  expect_equal(out$SE_factor, out$VIF^(1 / (2 * m_coef)), tolerance = 1e-8)
+
+  # agrees with nnet::multinom on the same data
+  m_nnet <- nnet::multinom(y ~ x1 + x3 + x2 + f, data = d, trace = FALSE)
+  expect_equal(out$VIF, check_collinearity(m_nnet)$VIF, tolerance = 1e-3)
+
+  # two outcome levels
+  d2 <- .multinom_data(levels = c("a", "b"))
+  m2 <- VGAM::vglm(y ~ x1 + x3 + x2 + f, family = VGAM::multinomial, data = d2)
+  out2 <- check_collinearity(m2)
+  expect_identical(out2$Term, c("x1", "x3", "x2", "f"))
+  expected2 <- .gvif_by_map(stats::vcov(m2), .slope_map(NULL))
+  expect_equal(out2$VIF, unname(expected2), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, VGAM::vglm cumulative", {
+  skip_if_not_installed("VGAM")
+  d <- .multinom_data()
+  # ordinal outcome from a latent variable, so that the non-parallel
+  # cumulative model fits without warnings
+  d$o <- cut(
+    0.5 * d$x1 - 0.3 * d$x3 + 0.2 * (d$f == "q") + stats::rlogis(nrow(d)),
+    c(-Inf, -0.5, 0.5, Inf),
+    labels = c("a", "b", "c"),
+    ordered_result = TRUE
+  )
+  m1 <- VGAM::vglm(
+    o ~ x1 + x3 + x2 + f,
+    family = VGAM::cumulative(parallel = FALSE),
+    data = d
+  )
+  out1 <- check_collinearity(m1)
+  expect_identical(out1$Term, c("x1", "x3", "x2", "f"))
+  expected1 <- .gvif_by_map(stats::vcov(m1), .slope_map(c("1", "2"), suffix = TRUE))
+  expect_equal(out1$VIF, unname(expected1), tolerance = 1e-8)
+
+  m2 <- VGAM::vglm(
+    o ~ x1 + x3 + x2 + f,
+    family = VGAM::cumulative(parallel = TRUE),
+    data = d
+  )
+  out2 <- check_collinearity(m2)
+  expect_identical(out2$Term, c("x1", "x3", "x2", "f"))
+  expected2 <- .gvif_by_map(stats::vcov(m2), .slope_map(NULL))
+  expect_equal(out2$VIF, unname(expected2), tolerance = 1e-8)
+  m_coef2 <- c(1, 1, 1, 2)
+  expect_equal(out2$SE_factor, out2$VIF^(1 / (2 * m_coef2)), tolerance = 1e-8)
+})
+
 test_that("check_collinearity, exactly collinear multinomial model", {
   skip_if_not_installed("nnet")
   d <- .multinom_data()
