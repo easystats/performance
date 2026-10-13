@@ -30,6 +30,15 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now gives correct VIFs for multinomial models from
+  package *brglm2* (`brmultinom()`, and `bracl()` for adjacent-category
+  models). It also gives correct VIFs for `VGAM::vglm()` models with the
+  multinomial or cumulative family. Before, `brmultinom()` models got VIFs for
+  the wrong coefficients, `bracl()` models got no result, and `vglm()` models
+  gave an error. For a singular correlation matrix of the coefficients, for
+  example from exactly collinear predictors, `check_collinearity()` now gives a
+  warning and returns `NULL`. Before, it returned meaningless VIFs.
+
 * If you combine `"cook"` with a method that flags no observation, such as
   `"zscore_robust"`, `check_outliers()` no longer fails. Cook's distance now
   also works for binomial models with only factor predictors. For *glmmTMB*
