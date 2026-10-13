@@ -49,9 +49,10 @@
 #' per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
 #' `<n>` is the number of slopes of the term across all outcome levels.
 #'
-#' If the correlation matrix of the coefficients is singular, for example for
-#' exactly collinear predictors in a model that keeps all coefficients, such
-#' as `nnet::multinom()`, `check_collinearity()` gives a warning and returns
+#' If the correlation matrix of the coefficients is singular because of
+#' collinearity between model terms, for example for exactly collinear
+#' predictors in a model that keeps all coefficients, such as
+#' `nnet::multinom()`, `check_collinearity()` gives a warning and returns
 #' `NULL`.
 #'
 #' @section Multicollinearity:
@@ -1013,21 +1014,21 @@ check_collinearity.zerocount <- function(
 # are made uncorrelated with each other. Correlation between the columns of
 # one term, for example of raw polynomials, does not change the VIFs, so
 # only collinearity between terms counts. The cutoff is the one solve() uses.
+# Without a term for each column, or when the columns of one term cannot be
+# made uncorrelated, this returns FALSE.
 .is_singular_between_terms <- function(R, term_assign) {
-  if (anyNA(R)) {
+  if (anyNA(R) || length(term_assign) != ncol(R)) {
     return(FALSE)
   }
   w <- diag(ncol(R))
-  if (length(term_assign) == ncol(R)) {
-    for (term in unique(stats::na.omit(term_assign))) {
-      idx <- which(term_assign == term)
-      if (length(idx) > 1) {
-        chol_r <- .safe(chol(R[idx, idx, drop = FALSE]))
-        if (is.null(chol_r)) {
-          return(TRUE)
-        }
-        w[idx, idx] <- backsolve(chol_r, diag(length(idx)))
+  for (term in unique(stats::na.omit(term_assign))) {
+    idx <- which(term_assign == term)
+    if (length(idx) > 1) {
+      chol_r <- .safe(chol(R[idx, idx, drop = FALSE]))
+      if (is.null(chol_r)) {
+        return(FALSE)
       }
+      w[idx, idx] <- backsolve(chol_r, diag(length(idx)))
     }
   }
   rc <- .safe(rcond(crossprod(w, R %*% w)))

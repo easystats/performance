@@ -910,6 +910,23 @@ test_that("check_collinearity, strong correlation inside one term is not singula
   expect_no_warning(out2 <- check_collinearity(m2))
   expect_equal(out2$VIF, unname(.gvif_by_map(stats::vcov(m2), map)), tolerance = 1e-6)
 
+  # raw polynomials whose correlation matrix is numerically singular, while
+  # the correlation between terms is low
+  d3 <- data.frame(z = seq(1, 100, length.out = 300), x2 = rnorm(300))
+  d3$y <- 0.01 * d3$z + d3$x2 + rnorm(300)
+  m4 <- lm(y ~ poly(z, 12, raw = TRUE) + x2, data = d3)
+  v4 <- stats::vcov(m4)[-1, -1]
+  expect_lt(rcond(stats::cov2cor(v4)), .Machine$double.eps)
+  map4 <- c(stats::setNames(rep("poly", 12), colnames(v4)[1:12]), x2 = "x2")
+  expect_no_warning(out4 <- check_collinearity(m4))
+  expect_equal(out4$VIF, unname(.gvif_by_map(v4, map4)), tolerance = 1e-4)
+  # columns of one term that cannot be made uncorrelated
+  d4 <- data.frame(z = 1:100, x2 = rnorm(100))
+  d4$y <- 0.01 * d4$z + d4$x2 + rnorm(100)
+  m5 <- lm(y ~ poly(z, 12, raw = TRUE) + x2, data = d4)
+  expect_no_warning(out5 <- check_collinearity(m5))
+  expect_identical(out5$Term, c("poly(z, 12, raw = TRUE)", "x2"))
+
   # very high, but not singular, collinearity between separate terms
   d2 <- data.frame(x = runif(300, 0, 10), z = rnorm(300))
   d2$y <- d2$x + rnorm(300)
