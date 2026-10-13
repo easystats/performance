@@ -920,12 +920,19 @@ test_that("check_collinearity, strong correlation inside one term is not singula
   map4 <- c(stats::setNames(rep("poly", 12), colnames(v4)[1:12]), x2 = "x2")
   expect_no_warning(out4 <- check_collinearity(m4))
   expect_equal(out4$VIF, unname(.gvif_by_map(v4, map4)), tolerance = 1e-4)
-  # columns of one term that cannot be made uncorrelated
-  d4 <- data.frame(z = 1:100, x2 = rnorm(100))
-  d4$y <- 0.01 * d4$z + d4$x2 + rnorm(100)
-  m5 <- lm(y ~ poly(z, 12, raw = TRUE) + x2, data = d4)
-  expect_no_warning(out5 <- check_collinearity(m5))
-  expect_identical(out5$Term, c("poly(z, 12, raw = TRUE)", "x2"))
+
+  # the check for singularity between terms, on exact matrices
+  r <- matrix(c(1, 0.5, 0.5, 0.5, 1, 1, 0.5, 1, 1), 3, 3)
+  # columns 2 and 3 are one term that cannot be made uncorrelated
+  expect_false(.is_singular_between_terms(r, c(1, 2, 2)))
+  # without a term for each column
+  expect_false(.is_singular_between_terms(r, c(1, 2)))
+  # the same columns as two terms are singular
+  expect_true(.is_singular_between_terms(r, c(1, 2, 3)))
+  # a third term equal to the first one
+  r2 <- matrix(c(1, 0.5, 1, 0.5, 1, 0.5, 1, 0.5, 1), 3, 3)
+  expect_true(.is_singular_between_terms(r2, 1:3))
+  expect_false(.is_singular_between_terms(r2[1:2, 1:2], 1:2))
 
   # very high, but not singular, collinearity between separate terms
   d2 <- data.frame(x = runif(300, 0, 10), z = rnorm(300))
