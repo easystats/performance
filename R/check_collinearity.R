@@ -481,8 +481,8 @@ check_collinearity.zerocount <- function(
 
   term_assign <- .term_assignments(x, component, verbose = verbose)
 
-  # any assignment found?
-  if (is.null(term_assign) || all(is.na(term_assign))) {
+  # any assignment found? multinomial models build their own assignment below
+  if (!.is_multinom_model(x) && (is.null(term_assign) || all(is.na(term_assign)))) {
     if (verbose) {
       insight::format_alert(
         sprintf(
@@ -515,14 +515,17 @@ check_collinearity.zerocount <- function(
       },
       error = function(e) NULL
     )
-  } else if (inherits(x, c("multinom", "mblogit"))) {
+  } else if (.is_multinom_model(x)) {
     # multinomial models have one intercept and one set of slopes for each
     # outcome level except the reference level, so drop all intercepts and
     # match coefficients to terms by name. All slopes of a term, across the
     # outcome levels, are one block of the generalized VIF.
-    coef_names <- .multinom_coef_names(x, colnames(v))
-    keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
     mm <- .safe(insight::get_modelmatrix(x))
+    if (is.null(mm)) {
+      mm <- .safe(stats::model.matrix(x))
+    }
+    coef_names <- .multinom_coef_names(x, colnames(v), colnames(mm))
+    keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
     term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], colnames(mm))]
     # a coefficient without a term would give VIFs for the wrong terms
     if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_names)) {
@@ -709,7 +712,7 @@ check_collinearity.zerocount <- function(
 
   # for multinomial models, the adjusted VIF uses the number of slopes of
   # each term across all outcome levels
-  if (inherits(x, c("multinom", "mblogit"))) {
+  if (.is_multinom_model(x)) {
     se_factor <- result^(1 / (2 * n_coef))
   } else {
     se_factor <- .adjusted_vif(x, result, model_terms)
@@ -965,17 +968,37 @@ check_collinearity.zerocount <- function(
   )
 }
 
+# multinomial models from nnet, mclogit and brglm2 (brmultinom, and bracl,
+# which inherits from brmultinom)
+.is_multinom_model <- function(x) {
+  inherits(x, c("multinom", "mblogit", "brmultinom"))
+}
+
 # coefficient names of multinomial models are prefixed with the outcome level,
-# like "b:x1" (nnet::multinom) or "b~x1" (mclogit::mblogit). This returns the
-# names without that prefix, and NA for names that could not be matched.
-# Names are returned unchanged when there is no prefix.
-.multinom_coef_names <- function(x, coef_names) {
+# like "b:x1" (nnet::multinom, brglm2) or "b~x1" (mclogit::mblogit). This
+# returns the names without that prefix, and NA for names that could not be
+# matched. Names are returned unchanged when there is no prefix.
+.multinom_coef_names <- function(x, coef_names, mm_names = NULL) {
   if (inherits(x, "mblogit")) {
     coef_mat <- x$coefmat
     sep <- "~"
   } else {
     coef_mat <- stats::coef(x)
     sep <- ":"
+  }
+  # brglm2::bracl returns a vector of coefficients, with the prefix only for
+  # coefficients that differ between outcome levels, so match the names
+  # against all prefixed and plain model matrix columns
+  if (inherits(x, "bracl") && !is.matrix(coef_mat)) {
+    prefixed <- outer(x$lev, mm_names, paste, sep = sep)
+    lookup <- c(
+      stats::setNames(rep(mm_names, each = length(x$lev)), as.vector(prefixed)),
+      stats::setNames(mm_names, mm_names)
+    )
+    if (!length(mm_names) || anyDuplicated(names(lookup))) {
+      return(rep(NA_character_, length(coef_names)))
+    }
+    return(unname(lookup[coef_names]))
   }
   # nnet::multinom models with two outcome levels have no prefix, because
   # coef() returns a vector

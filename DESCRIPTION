@@ -93,6 +93,7 @@ Suggests:
     bigutilsr,
     blavaan,
     boot,
+    brglm2,
     brms,
     car,
     carData,
