@@ -70,8 +70,9 @@ per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
 \verb{<n>} is the number of slopes of the term across all outcome levels.
 
 If the correlation matrix of the coefficients is singular, for example for
-exactly collinear predictors, \code{check_collinearity()} gives a warning and
-returns \code{NULL}.
+exactly collinear predictors in a model that keeps all coefficients, such
+as \code{nnet::multinom()}, \code{check_collinearity()} gives a warning and returns
+\code{NULL}.
 }
 \note{
 The code to compute the confidence intervals for the VIF and tolerance

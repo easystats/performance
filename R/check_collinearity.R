@@ -50,8 +50,9 @@
 #' `<n>` is the number of slopes of the term across all outcome levels.
 #'
 #' If the correlation matrix of the coefficients is singular, for example for
-#' exactly collinear predictors, `check_collinearity()` gives a warning and
-#' returns `NULL`.
+#' exactly collinear predictors in a model that keeps all coefficients, such
+#' as `nnet::multinom()`, `check_collinearity()` gives a warning and returns
+#' `NULL`.
 #'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
@@ -523,7 +524,7 @@ check_collinearity.zerocount <- function(
     )
   } else if (.is_multinom_model(x)) {
     # multinomial models have one intercept and one set of slopes for each
-    # outcome level except the reference level, so drop all intercepts and
+    # outcome level except one, so drop all intercepts and
     # match coefficients to terms by name. All slopes of a term, across the
     # outcome levels, are one block of the generalized VIF.
     mm <- .safe(insight::get_modelmatrix(x))
