@@ -169,11 +169,13 @@ is re-scaled to range from 0 to 1.
   coefficients after removing each observation, one by one (Cook, 1977).
   Since Cook's distance is in the metric of an F distribution with p and
   n-p degrees of freedom, the median point of the quantile distribution
-  can be used as a cut-off (Bollen, 1985). A common approximation or
-  heuristic is to use 4 divided by the numbers of observations, which
-  usually corresponds to a lower threshold (i.e., more outliers are
-  detected). This only works for frequentist models. For Bayesian
-  models, see `pareto`.
+  can be used as a cut-off (Bollen, 1985). This is the default
+  threshold, with p the number of fixed effects of the conditional model
+  and n the number of observations used to fit it. A common
+  approximation or heuristic is to use 4 divided by the numbers of
+  observations, which usually corresponds to a lower threshold (i.e.,
+  more outliers are detected). This only works for frequentist models.
+  For Bayesian models, see `pareto`.
 
   For models from package **glmmTMB**, Cook's distance is computed for
   the fixed effects of the conditional model by refitting the model once
@@ -360,7 +362,7 @@ Default thresholds are currently specified as follows:
       eti = 1 - 0.001,
       hdi = 1 - 0.001,
       bci = 1 - 0.001,
-      cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+      cook = stats::qf(0.5, p, n - p),
       pareto = 0.7,
       mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
       mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
@@ -370,6 +372,9 @@ Default thresholds are currently specified as follows:
       optics_xi = 0.05,
       lof = 0.001
     )
+
+For `cook`, `p` is the number of fixed effects of the conditional model
+and `n` the number of observations used to fit it.
 
 ## Meta-analysis models
 

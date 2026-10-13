@@ -369,7 +369,7 @@ supports the pipe operators (`|>` or `%>%`), it does not support
 `outliers`
 
     > 2 outliers detected: cases 31, 34.
-    > - Based on the following method and threshold: cook (0.806).
+    > - Based on the following method and threshold: cook (0.9).
     > - For variable: (Whole model).
 
 \
