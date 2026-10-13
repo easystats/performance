@@ -2,6 +2,12 @@
 
 ## Changes
 
+* `check_outliers()` now computes the default threshold for Cook's distance as
+  `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the number of
+  fixed effects of the conditional model, and `n` is the number of
+  observations in the fit. Before, `p` was the number of numeric variables in
+  the data. If `n - p` is less than 1, `method = "cook"` gives an error.
+
 * `check_outliers()` gets a `group` argument for models from packages
   *glmmTMB* and *lme4*. It gives Cook's distance for each level of a grouping
   variable. The model is refit without each level in turn. With `G` the
@@ -23,6 +29,14 @@
   underdispersion is detected, the printed conclusion also says so (#734).
 
 ## Bug fixes
+
+* If you combine `"cook"` with a method that flags no observation, such as
+  `"zscore_robust"`, `check_outliers()` no longer fails. Cook's distance now
+  also works for binomial models with only factor predictors. For *glmmTMB*
+  models, the refits for Cook's distance now use the data given to the model.
+  Thus, models with missing values, a `subset`, or weights and offsets outside
+  the data get correct values. If a refit fails with the full model's
+  estimates as start values, `check_outliers()` tries it again without them.
 
 * `check_collinearity()` now gives correct VIFs for multinomial models from
   packages *nnet* (`multinom()`) and *mclogit* (`mblogit()`). Before, only the
