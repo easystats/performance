@@ -554,3 +554,146 @@ test_that("check_collinearity, brms with 0 + Intercept syntax", {
   R <- stats::cov2cor(v[-1, -1])
   expect_equal(out$VIF, unname(diag(solve(R))), tolerance = 1e-6)
 })
+
+
+# multinomial models ------------------------------------------------------
+
+.multinom_data <- function(n = 300, levels = c("a", "b", "c")) {
+  set.seed(123)
+  d <- data.frame(x1 = rnorm(n), x3 = rnorm(n))
+  d$x2 <- d$x1 + rnorm(n, sd = 0.3)
+  d$f <- factor(sample(c("p", "q", "r"), n, replace = TRUE))
+  eta <- sapply(seq_along(levels)[-1], function(k) {
+    0.5 * k * d$x1 - 0.3 * d$x3 + 0.2 * (d$f == "q")
+  })
+  p <- cbind(1, exp(eta))
+  p <- p / rowSums(p)
+  d$y <- factor(
+    apply(p, 1, function(i) sample(levels, 1, prob = i)),
+    levels = levels
+  )
+  d
+}
+
+# generalized VIF of each term, from the variance-covariance matrix without
+# intercepts; `terms` maps each coefficient name (without the outcome-level
+# prefix) to its model term
+.gvif_by_term <- function(v, outcome_levels, sep, terms) {
+  coef_names <- sub(
+    paste0("^(", paste(outcome_levels, collapse = "|"), ")", sep),
+    "",
+    colnames(v)
+  )
+  keep <- coef_names != "(Intercept)"
+  cor_mat <- stats::cov2cor(v[keep, keep])
+  coef_terms <- terms[coef_names[keep]]
+  vapply(
+    unique(terms),
+    function(i) {
+      idx <- which(coef_terms == i)
+      det(cor_mat[idx, idx, drop = FALSE]) *
+        det(cor_mat[-idx, -idx, drop = FALSE]) /
+        det(cor_mat)
+    },
+    numeric(1)
+  )
+}
+
+.multinom_terms <- c(
+  x1 = "x1",
+  x3 = "x3",
+  x2 = "x2",
+  fq = "f",
+  fr = "f",
+  `x1:x3` = "x1:x3",
+  `x1:fq` = "x1:f",
+  `x1:fr` = "x1:f"
+)
+
+test_that("check_collinearity, nnet::multinom with three outcome levels", {
+  skip_if_not_installed("nnet")
+  d <- .multinom_data()
+  m <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
+  expect_no_message(
+    check_collinearity(m),
+    message = "Model without intercept"
+  )
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("x1", "x3", "x2", "f", "x1:x3", "x1:f"))
+  expected <- .gvif_by_term(stats::vcov(m), c("b", "c"), ":", .multinom_terms)
+  expect_equal(out$VIF, unname(expected), tolerance = 1e-6)
+  # adjusted VIF uses the number of slope coefficients of each term across
+  # all outcome equations
+  m_coef <- c(x1 = 2, x3 = 2, x2 = 2, f = 4, `x1:x3` = 2, `x1:f` = 4)
+  expect_equal(out$SE_factor, unname(out$VIF^(1 / (2 * m_coef))), tolerance = 1e-6)
+
+  # same VIFs for another reference level of the outcome
+  d$y <- stats::relevel(d$y, ref = "c")
+  m2 <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
+  out2 <- check_collinearity(m2)
+  expect_identical(out2$Term, out$Term)
+  expect_equal(out2$VIF, out$VIF, tolerance = 1e-4)
+})
+
+test_that("check_collinearity, mclogit::mblogit with three outcome levels", {
+  skip_if_not_installed("nnet")
+  skip_if_not_installed("mclogit")
+  d <- .multinom_data()
+  m <- suppressWarnings(
+    mclogit::mblogit(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
+  )
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("x1", "x3", "x2", "f", "x1:x3", "x1:f"))
+  expected <- .gvif_by_term(stats::vcov(m), c("b", "c"), "~", .multinom_terms)
+  expect_equal(out$VIF, unname(expected), tolerance = 1e-6)
+  m_coef <- c(x1 = 2, x3 = 2, x2 = 2, f = 4, `x1:x3` = 2, `x1:f` = 4)
+  expect_equal(out$SE_factor, unname(out$VIF^(1 / (2 * m_coef))), tolerance = 1e-6)
+
+  # agrees with nnet::multinom on the same data
+  m2 <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
+  out2 <- check_collinearity(m2)
+  expect_equal(out$VIF, out2$VIF, tolerance = 1e-3)
+})
+
+test_that("check_collinearity, nnet::multinom with two outcome levels", {
+  skip_if_not_installed("nnet")
+  d <- .multinom_data(levels = c("a", "b"))
+  m1 <- nnet::multinom(y ~ x1 + x2 + x3, data = d, trace = FALSE)
+  m2 <- stats::glm(y ~ x1 + x2 + x3, data = d, family = stats::binomial())
+  out1 <- check_collinearity(m1)
+  out2 <- check_collinearity(m2)
+  expect_identical(out1$Term, out2$Term)
+  expect_equal(out1$VIF, out2$VIF, tolerance = 1e-3)
+})
+
+test_that("check_collinearity, multinomial models with unusual names", {
+  skip_if_not_installed("nnet")
+  skip_if_not_installed("mclogit")
+  d <- .multinom_data(levels = c("a", "b c", "d:e"))
+  d$intercept_shift <- d$x3
+  terms <- c(x1 = "x1", x2 = "x2", intercept_shift = "intercept_shift")
+  m1 <- nnet::multinom(y ~ x1 + x2 + intercept_shift, data = d, trace = FALSE)
+  out1 <- check_collinearity(m1)
+  expect_identical(out1$Term, c("x1", "x2", "intercept_shift"))
+  expected <- .gvif_by_term(stats::vcov(m1), c("b c", "d:e"), ":", terms)
+  expect_equal(out1$VIF, unname(expected), tolerance = 1e-6)
+  m2 <- suppressWarnings(
+    mclogit::mblogit(y ~ x1 + x2 + intercept_shift, data = d, trace = FALSE)
+  )
+  out2 <- check_collinearity(m2)
+  expect_identical(out2$Term, c("x1", "x2", "intercept_shift"))
+  expected <- .gvif_by_term(stats::vcov(m2), c("b c", "d:e"), "~", terms)
+  expect_equal(out2$VIF, unname(expected), tolerance = 1e-6)
+})
+
+test_that("check_collinearity, multinomial models with ambiguous names", {
+  skip_if_not_installed("nnet")
+  # "b" with "x1:x3" and "b:x1" with "x3" give the same coefficient name
+  d <- .multinom_data(levels = c("a", "b", "b:x1"))
+  m <- nnet::multinom(y ~ x1 * x3, data = d, trace = FALSE)
+  expect_message(
+    check_collinearity(m),
+    "Could not extract model terms"
+  )
+  expect_null(suppressMessages(check_collinearity(m)))
+})
