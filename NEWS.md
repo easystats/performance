@@ -12,7 +12,17 @@
   by `lavaan::fitMeasures()`, and pooling arguments such as `pool.method` can
   be passed through `...` (#888).
 
+* `check_overdispersion()` now warns for models with a `quasipoisson` or
+  `quasibinomial` family. These models already estimate a dispersion
+  parameter, so their standard errors account for overdispersion. When over- or
+  underdispersion is detected, the printed conclusion also says so (#734).
+
 ## Bug fixes
+
+* `check_model()` now uses the value of `show_ci` that the user sets. Before,
+  it ignored that value. It always hid the confidence bands for models with
+  only categorical predictors and always showed them for other models
+  (#642, #490).
 
 * `check_collinearity()` now returns interaction terms for *brms* models.
   Before, a model such as `y ~ a * b` gave no `a:b` row, and the VIFs of the
@@ -50,6 +60,13 @@
   loglikelihood, AIC, and BIC of models with ordinal indicators. These
   indices are now `NA`.
 
+* `check_overdispersion()` now computes the Pearson chi-squared statistic from
+  the model's own Pearson residuals whenever it does not use simulated
+  residuals. Results change, and are now correct, for binomial models with
+  more than one trial per observation (a `cbind()` response, or proportions
+  with `weights`) and for models with prior weights. Before, the statistic
+  used unweighted Poisson-style residuals and could be far off.
+
 * `check_model()` now correctly returns the random-effects normality panel for
   mixed models that specify random slopes using split terms such as
   `(1 | group) + (0 + slope | group)` (including `||` expansions, #845).
@@ -69,6 +86,17 @@
   Examples are a proportion response with weights and a `cbind()` response.
   Before, these functions returned inaccurate values or failed with an unclear
   error (#165).
+
+* The influential observations plot of `check_model()` and `check_outliers()`
+  for linear mixed models from package *lme4* now shows standardized residuals
+  instead of raw residuals. Before this fix, points fell outside the Cook's
+  distance lines but were not flagged as outliers (#857).
+
+* The Cook's distance lines in the influential observations plot of
+  `check_model()` and `check_outliers()` now use the threshold of
+  `check_outliers()`, including a user-supplied `threshold`. Before this fix,
+  linear models always used a threshold from the model's F statistic, so the
+  lines did not match the flagged outliers (#916).
 
 # performance 0.18.2
 

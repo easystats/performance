@@ -535,6 +535,7 @@ test_that("check_collinearity, rank deficient.", {
 test_that("check_collinearity, brms with 0 + Intercept syntax", {
   skip_on_cran()
   skip_if_not_installed("brms")
+  skip_if_not_installed("BH")
   m <- suppressMessages(suppressWarnings(brms::brm(
     mpg ~ 0 + Intercept + cyl + disp + hp,
     data = mtcars,
