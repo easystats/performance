@@ -524,9 +524,14 @@ check_outliers.default <- function(
     verbose = FALSE
   )
 
-  # check if any data left
+  # check if any data left. Cook's distance and Pareto k need no data, so
+  # binomial models with only factor predictors can use them. Other models
+  # without numeric variables have a response that is not numeric.
   if (is.null(my_data) || ncol(my_data) == 0) {
-    insight::format_error("No numeric variables found. No data to check for outliers.")
+    if (!all(method %in% c("cook", "pareto")) || !m_info$is_binomial) {
+      insight::format_error("No numeric variables found. No data to check for outliers.")
+    }
+    my_data <- data.frame()
   }
 
   # Thresholds
@@ -557,7 +562,8 @@ check_outliers.default <- function(
 
   # Others
   if (all(method %in% c("cook", "pareto"))) {
-    my_df <- data.frame(Row = seq_len(nrow(as.data.frame(my_data))))
+    # rows come from the Cook's distance or Pareto results
+    my_df <- NULL
     outlier_count <- list()
     outlier_var <- list()
   } else {
@@ -576,7 +582,11 @@ check_outliers.default <- function(
       verbose = verbose
     )$data_cook
 
-    my_df <- datawizard::data_merge(list(my_df, data_cook), join = "full", by = "Row")
+    if (is.null(my_df)) {
+      my_df <- data_cook
+    } else {
+      my_df <- datawizard::data_merge(list(my_df, data_cook), join = "full", by = "Row")
+    }
 
     count.table <- datawizard::data_filter(
       data_cook,
@@ -617,7 +627,11 @@ check_outliers.default <- function(
       threshold = thresholds$pareto
     )$data_pareto
 
-    my_df <- datawizard::data_merge(list(my_df, data_pareto), join = "full", by = "Row")
+    if (is.null(my_df)) {
+      my_df <- data_pareto
+    } else {
+      my_df <- datawizard::data_merge(list(my_df, data_pareto), join = "full", by = "Row")
+    }
 
     count.table <- datawizard::data_filter(
       data_pareto,
@@ -648,6 +662,9 @@ check_outliers.default <- function(
     }
   } else {
     method <- method[method != "pareto"]
+  }
+  if (is.null(my_df)) {
+    my_df <- data.frame(Row = seq_len(nrow(my_data)))
   }
 
   outlier_count$all <- datawizard::convert_na_to(

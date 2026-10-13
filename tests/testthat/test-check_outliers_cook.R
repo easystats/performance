@@ -1,3 +1,37 @@
+# test-local Cook's distance for glmmTMB models: refit the model to `data`
+# without each row, with no start values, then
+# (b - b_(i))' V(b)^-1 (b - b_(i)) / p, with b and V(b) the conditional fixed
+# effects of `model`. `refit` fits the model to a data frame. `data` holds
+# precomputed columns in place of terms like scale() or poly(), and weights or
+# offsets as columns.
+.test_cooks_refit_loop <- function(model, data, refit) {
+  b <- unname(glmmTMB::fixef(model)$cond)
+  v_inv <- solve(as.matrix(stats::vcov(model)$cond))
+  vapply(
+    seq_len(nrow(data)),
+    function(i) {
+      fit_i <- suppressWarnings(refit(data[-i, ]))
+      delta <- b - unname(glmmTMB::fixef(fit_i)$cond)
+      sum(delta * (v_inv %*% delta)) / length(b)
+    },
+    numeric(1)
+  )
+}
+
+# muffle the warnings of lme4 about hat values of GLMMs, from
+# cooks.distance() and rstandard()
+.muffle_lme4_hat_warnings <- function(expr) {
+  withCallingHandlers(
+    expr,
+    warning = function(w) {
+      if (grepl("hat matrix may not make sense|NaNs produced", conditionMessage(w))) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
+}
+
+
 test_that("check_outliers, Cook's distance with data methods that flag no row", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
@@ -23,10 +57,57 @@ test_that("check_outliers, Cook's distance with data methods that flag no row", 
 })
 
 
+test_that("check_outliers, Cook's distance for binomial models with only factor predictors", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+  data(cbpp, package = "lme4")
+  m_glm <- glm(cbind(incidence, size - incidence) ~ period, family = binomial, data = cbpp)
+  m_glmer <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+  m_glmmtmb <- glmmTMB::glmmTMB(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+
+  for (m in list(m_glm, m_glmer)) {
+    out <- .muffle_lme4_hat_warnings(as.data.frame(check_outliers(m, method = "cook")))
+    expect_length(out$Distance_Cook, 56)
+    expect_equal(
+      out$Distance_Cook,
+      .muffle_lme4_hat_warnings(unname(stats::cooks.distance(m))),
+      tolerance = 1e-8
+    )
+  }
+
+  skip_on_cran()
+  out <- as.data.frame(check_outliers(m_glmmtmb, method = "cook"))
+  expect_length(out$Distance_Cook, 56)
+  oracle <- .test_cooks_refit_loop(m_glmmtmb, cbpp, function(data_i) {
+    glmmTMB::glmmTMB(
+      cbind(incidence, size - incidence) ~ period + (1 | herd),
+      family = binomial,
+      data = data_i
+    )
+  })
+  expect_lte(max(abs(out$Distance_Cook - oracle)), 1e-4)
+
+  # the data methods still need numeric variables
+  expect_error(
+    check_outliers(m_glm, method = c("cook", "zscore")),
+    regex = "No numeric variables found"
+  )
+})
+
+
 test_that("check_outliers, default Cook's distance threshold uses p and n of the model", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
   data(sleepstudy, package = "lme4")
+  data(cbpp, package = "lme4")
   d <- mtcars
   d$wt2 <- 2 * d$wt
 
@@ -34,6 +115,7 @@ test_that("check_outliers, default Cook's distance threshold uses p and n of the
   m_poly <- lm(mpg ~ poly(wt, 3), data = mtcars)
   m_lm <- lm(mpg ~ wt + hp, data = mtcars)
   m_aliased <- lm(mpg ~ wt + wt2, data = d)
+  m_glm <- glm(cbind(incidence, size - incidence) ~ period, family = binomial, data = cbpp)
   m_lmer <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
   m_glmmtmb <- glmmTMB::glmmTMB(Reaction ~ poly(Days, 2) + (1 | Subject), data = sleepstudy)
 
@@ -43,7 +125,7 @@ test_that("check_outliers, default Cook's distance threshold uses p and n of the
     attr(check_outliers(m, method = method), "threshold")$cook
   }
 
-  for (m in list(m_factor, m_poly, m_lm, m_aliased)) {
+  for (m in list(m_factor, m_poly, m_lm, m_aliased, m_glm)) {
     expect_equal(cook_threshold(m), expected(m, sum(!is.na(stats::coef(m)))), tolerance = 1e-12)
   }
   expect_equal(cook_threshold(m_lmer), expected(m_lmer, length(lme4::fixef(m_lmer))), tolerance = 1e-12)
