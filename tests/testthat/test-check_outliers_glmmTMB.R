@@ -148,14 +148,22 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
   )
 
   for (case in cases) {
-    local_mocked_bindings(.update_model = function(x, data, start, weights, subset = NULL) {
-      fit <- update_model(x, data = data, start = start, weights = weights, subset = subset)
-      removed <- which(weights == 0)
-      if (removed %in% case$rows) {
-        fit <- failures[[case$failure]](fit)
+    local_mocked_bindings(
+      .update_model = function(x, data, start, weights, subset = NULL) {
+        fit <- update_model(
+          x,
+          data = data,
+          start = start,
+          weights = weights,
+          subset = subset
+        )
+        removed <- which(weights == 0)
+        if (removed %in% case$rows) {
+          fit <- failures[[case$failure]](fit)
+        }
+        fit
       }
-      fit
-    })
+    )
     alerts <- character()
     out <- withCallingHandlers(
       check_outliers(m, method = c("cook", "zscore_robust")),

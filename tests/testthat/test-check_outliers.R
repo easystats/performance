@@ -424,7 +424,10 @@ test_that("check_outliers on numeric data only", {
   mtcars$mpg <- as.factor(mtcars$mpg)
   model <- suppressWarnings(glm(vs ~ wt + mpg, data = mtcars, family = "binomial"))
   # one fixed effect per observation, so Cook's distance is not defined
-  expect_error(check_outliers(model), regex = "n\\s+=\\s+32\\s+observations\\s+and\\s+p\\s+=\\s+32\\s+fixed")
+  expect_error(
+    check_outliers(model),
+    regex = "n\\s+=\\s+32\\s+observations\\s+and\\s+p\\s+=\\s+32\\s+fixed"
+  )
 })
 
 

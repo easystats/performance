@@ -1985,7 +1985,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     insight::get_varcov(x, component = "conditional")
   ))))
   if (is.null(n_params)) {
-    n_params <- .safe(insight::n_parameters(x, effects = "fixed", component = "conditional"))
+    n_params <- .safe(insight::n_parameters(
+      x,
+      effects = "fixed",
+      component = "conditional"
+    ))
   }
   n_obs <- .safe(stats::nobs(x))
   if (is.null(n_params) || is.null(n_obs)) {
@@ -2382,10 +2386,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # model. Each refit starts at the full model's estimates of the fixed effects
 # and variance parameters. A refit that fails, does not converge, or has a
 # non-positive-definite Hessian with these start values is tried once more
-# without them. Rows where the refit still fails, or returns different
-# fixed-effect terms get NA. All rows get NA if the model weights do not match the data rows or the
-# variance-covariance matrix cannot be inverted. Fixed effects that are
-# dropped (rank deficiency) or mapped are left out.
+# without them. Rows where the refit still fails, or where it returns
+# different fixed-effect terms, get NA. All rows get NA if the model weights do
+# not match the data rows or the variance-covariance matrix cannot be inverted.
+# Fixed effects that are dropped (rank deficiency) or mapped are left out.
 .cooks_distance_refit <- function(x) {
   call_data <- .model_call_data(x)
   if (is.null(call_data$problem)) {
@@ -2648,7 +2652,13 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   weights[rows] <- 0
   tryCatch(
     suppressWarnings(suppressMessages(
-      .update_model(x, data = model_data, start = start, weights = weights, subset = subset)
+      .update_model(
+        x,
+        data = model_data,
+        start = start,
+        weights = weights,
+        subset = subset
+      )
     )),
     error = function(e) NULL
   )

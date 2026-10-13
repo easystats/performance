@@ -61,7 +61,11 @@ test_that("check_outliers, Cook's distance for binomial models with only factor 
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
   data(cbpp, package = "lme4")
-  m_glm <- glm(cbind(incidence, size - incidence) ~ period, family = binomial, data = cbpp)
+  m_glm <- glm(
+    cbind(incidence, size - incidence) ~ period,
+    family = binomial,
+    data = cbpp
+  )
   m_glmer <- lme4::glmer(
     cbind(incidence, size - incidence) ~ period + (1 | herd),
     family = binomial,
@@ -115,9 +119,16 @@ test_that("check_outliers, default Cook's distance threshold uses p and n of the
   m_poly <- lm(mpg ~ poly(wt, 3), data = mtcars)
   m_lm <- lm(mpg ~ wt + hp, data = mtcars)
   m_aliased <- lm(mpg ~ wt + wt2, data = d)
-  m_glm <- glm(cbind(incidence, size - incidence) ~ period, family = binomial, data = cbpp)
+  m_glm <- glm(
+    cbind(incidence, size - incidence) ~ period,
+    family = binomial,
+    data = cbpp
+  )
   m_lmer <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
-  m_glmmtmb <- glmmTMB::glmmTMB(Reaction ~ poly(Days, 2) + (1 | Subject), data = sleepstudy)
+  m_glmmtmb <- glmmTMB::glmmTMB(
+    Reaction ~ poly(Days, 2) + (1 | Subject),
+    data = sleepstudy
+  )
 
   # p and n computed independently of performance
   expected <- function(m, p) stats::qf(0.5, p, stats::nobs(m) - p)
@@ -126,9 +137,17 @@ test_that("check_outliers, default Cook's distance threshold uses p and n of the
   }
 
   for (m in list(m_factor, m_poly, m_lm, m_aliased, m_glm)) {
-    expect_equal(cook_threshold(m), expected(m, sum(!is.na(stats::coef(m)))), tolerance = 1e-12)
+    expect_equal(
+      cook_threshold(m),
+      expected(m, sum(!is.na(stats::coef(m)))),
+      tolerance = 1e-12
+    )
   }
-  expect_equal(cook_threshold(m_lmer), expected(m_lmer, length(lme4::fixef(m_lmer))), tolerance = 1e-12)
+  expect_equal(
+    cook_threshold(m_lmer),
+    expected(m_lmer, length(lme4::fixef(m_lmer))),
+    tolerance = 1e-12
+  )
   expect_equal(
     cook_threshold(m_glmmtmb),
     expected(m_glmmtmb, length(glmmTMB::fixef(m_glmmtmb)$cond)),
@@ -241,7 +260,10 @@ test_that("check_outliers, glmmTMB refits rejected with start values are tried w
     },
     logical(1)
   )
-  skip_if_not(any(warm_rejected), "No warm-started refit has a non-positive-definite Hessian.")
+  skip_if_not(
+    any(warm_rejected),
+    "No warm-started refit has a non-positive-definite Hessian."
+  )
 
   out <- as.data.frame(check_outliers(m, method = "cook"))
   expect_length(out$Distance_Cook, 50)
@@ -251,4 +273,3 @@ test_that("check_outliers, glmmTMB refits rejected with start values are tried w
   })
   expect_lte(max(abs(out$Distance_Cook - oracle)), 1e-4)
 })
-
