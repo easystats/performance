@@ -803,6 +803,8 @@ test_that("check_collinearity, VGAM::vglm multinomial", {
   expect_identical(out2$Term, c("x1", "x3", "x2", "f"))
   expected2 <- .gvif_by_map(stats::vcov(m2), .slope_map(NULL))
   expect_equal(out2$VIF, unname(expected2), tolerance = 1e-8)
+  m_coef2 <- c(1, 1, 1, 2)
+  expect_equal(out2$SE_factor, out2$VIF^(1 / (2 * m_coef2)), tolerance = 1e-8)
 })
 
 test_that("check_collinearity, VGAM::vglm cumulative", {
@@ -825,6 +827,8 @@ test_that("check_collinearity, VGAM::vglm cumulative", {
   expect_identical(out1$Term, c("x1", "x3", "x2", "f"))
   expected1 <- .gvif_by_map(stats::vcov(m1), .slope_map(c("1", "2"), suffix = TRUE))
   expect_equal(out1$VIF, unname(expected1), tolerance = 1e-8)
+  m_coef1 <- c(2, 2, 2, 4)
+  expect_equal(out1$SE_factor, out1$VIF^(1 / (2 * m_coef1)), tolerance = 1e-8)
 
   m2 <- VGAM::vglm(
     o ~ x1 + x3 + x2 + f,
@@ -886,4 +890,113 @@ test_that("check_collinearity, exactly collinear multinomial model", {
   # correlated but not exactly collinear predictors give no warning
   m2 <- nnet::multinom(y ~ x1 * x3 + x2 + x1 * f, data = d, trace = FALSE)
   expect_no_warning(check_collinearity(m2))
+})
+
+test_that("check_collinearity, strong correlation inside one term is not singular", {
+  set.seed(123)
+  d <- data.frame(x = runif(300, 500, 510), z = rnorm(300))
+  d$y <- d$x + d$z + rnorm(300)
+  d$cnt <- stats::rpois(300, exp(0.1 * (d$x - 505) + 0.2 * d$z))
+  map <- c(
+    `poly(x, 3, raw = TRUE)1` = "poly(x, 3, raw = TRUE)",
+    `poly(x, 3, raw = TRUE)2` = "poly(x, 3, raw = TRUE)",
+    `poly(x, 3, raw = TRUE)3` = "poly(x, 3, raw = TRUE)",
+    z = "z"
+  )
+  m1 <- lm(y ~ poly(x, 3, raw = TRUE) + z, data = d)
+  expect_no_warning(out1 <- check_collinearity(m1))
+  expect_equal(out1$VIF, unname(.gvif_by_map(stats::vcov(m1), map)), tolerance = 1e-6)
+  m2 <- glm(cnt ~ poly(x, 3, raw = TRUE) + z, data = d, family = poisson())
+  expect_no_warning(out2 <- check_collinearity(m2))
+  expect_equal(out2$VIF, unname(.gvif_by_map(stats::vcov(m2), map)), tolerance = 1e-6)
+
+  # very high, but not singular, collinearity between separate terms
+  d2 <- data.frame(x = runif(300, 0, 10), z = rnorm(300))
+  d2$y <- d2$x + rnorm(300)
+  m3 <- lm(
+    y ~ x + I(x^2) + I(x^3) + I(x^4) + I(x^5) + I(x^6) + I(x^7) + I(x^8) + z,
+    data = d2
+  )
+  expect_no_warning(out3 <- check_collinearity(m3))
+  expect_true(all(out3$VIF >= 1))
+})
+
+test_that("check_collinearity, brglm2 models with transformed terms", {
+  skip_if_not_installed("brglm2")
+  d <- .multinom_data()
+  d$o <- ordered(d$y)
+  slopes <- c(
+    x1 = "x1",
+    `log(abs(x3))` = "log(abs(x3))",
+    `poly(x2, 2)1` = "poly(x2, 2)",
+    `poly(x2, 2)2` = "poly(x2, 2)",
+    fq = "f",
+    fr = "f"
+  )
+  terms <- c("x1", "log(abs(x3))", "poly(x2, 2)", "f")
+  prefixed <- function(prefixes) {
+    out <- rep(slopes, each = length(prefixes))
+    names(out) <- paste(prefixes, rep(names(slopes), each = length(prefixes)), sep = ":")
+    out
+  }
+  f <- o ~ x1 + log(abs(x3)) + poly(x2, 2) + f
+
+  m1 <- brglm2::brmultinom(stats::update(f, y ~ .), data = d)
+  out1 <- check_collinearity(m1)
+  expect_identical(out1$Term, terms)
+  expect_equal(
+    out1$VIF,
+    unname(.gvif_by_map(stats::vcov(m1), prefixed(c("b", "c")))),
+    tolerance = 1e-8
+  )
+
+  m2 <- brglm2::bracl(f, data = d, parallel = FALSE)
+  out2 <- check_collinearity(m2)
+  expect_identical(out2$Term, terms)
+  expect_equal(
+    out2$VIF,
+    unname(.gvif_by_map(stats::vcov(m2), prefixed(c("a", "b")))),
+    tolerance = 1e-8
+  )
+
+  m3 <- brglm2::bracl(f, data = d, parallel = TRUE)
+  out3 <- check_collinearity(m3)
+  expect_identical(out3$Term, terms)
+  expect_equal(out3$VIF, unname(.gvif_by_map(stats::vcov(m3), slopes)), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, brglm2::bracl with a level named like a predictor", {
+  skip_if_not_installed("brglm2")
+  d <- .multinom_data(levels = c("x1", "b", "c"))
+  d$o <- ordered(d$y)
+  # with parallel = FALSE, all slopes have the level prefix
+  m1 <- brglm2::bracl(o ~ x1 * f, data = d, parallel = FALSE)
+  out1 <- check_collinearity(m1)
+  expect_identical(out1$Term, c("x1", "f", "x1:f"))
+  map1 <- c(fq = "f", fr = "f", `x1:fq` = "x1:f", `x1:fr` = "x1:f")
+  map1 <- c(
+    `x1:x1` = "x1",
+    `b:x1` = "x1",
+    stats::setNames(
+      rep(map1, each = 2),
+      paste(c("x1", "b"), rep(names(map1), each = 2), sep = ":")
+    )
+  )
+  expect_equal(out1$VIF, unname(.gvif_by_map(stats::vcov(m1), map1)), tolerance = 1e-8)
+
+  # with parallel = TRUE, level "x1" with "fq" and the plain slope "x1:fq"
+  # give the same name, so the terms cannot be matched
+  m2 <- brglm2::bracl(o ~ x1 * f, data = d, parallel = TRUE)
+  expect_message(
+    out2 <- check_collinearity(m2),
+    "Could not extract model terms"
+  )
+  expect_null(out2)
+})
+
+test_that("check_collinearity, VGAM::vgam is not treated as vglm", {
+  skip_if_not_installed("VGAM")
+  d <- .multinom_data()
+  m <- VGAM::vgam(y ~ VGAM::s(x1) + x3, family = VGAM::multinomial, data = d)
+  expect_false(.is_vglm_categorical(m))
 })

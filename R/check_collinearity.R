@@ -527,9 +527,12 @@ check_collinearity.zerocount <- function(
     # outcome level except one, so drop all intercepts and
     # match coefficients to terms by name. All slopes of a term, across the
     # outcome levels, are one block of the generalized VIF.
-    mm <- .safe(insight::get_modelmatrix(x))
-    if (is.null(mm)) {
-      mm <- .safe(stats::model.matrix(x))
+    # brglm2 models store their model matrix, which also works for
+    # transformed terms like `log(x)` or `poly(x, 2)`
+    if (inherits(x, "brmultinom") && is.matrix(x$x)) {
+      mm <- x$x
+    } else {
+      mm <- .safe(insight::get_modelmatrix(x))
     }
     coef_names <- .multinom_coef_names(x, colnames(v), colnames(mm))
     keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
@@ -693,20 +696,6 @@ check_collinearity.zerocount <- function(
   }
 
   R <- stats::cov2cor(v)
-
-  # a singular correlation matrix, for example from exactly collinear
-  # predictors whose model keeps all coefficients, gives meaningless VIFs
-  rc <- .safe(rcond(R))
-  if (!is.null(rc) && is.finite(rc) && rc < 1e-10) {
-    if (isTRUE(verbose)) {
-      insight::format_warning(
-        "The correlation matrix of the model coefficients is singular, so VIFs cannot be computed.",
-        "Check for predictors that are linear combinations of other predictors."
-      )
-    }
-    return(NULL)
-  }
-
   detR <- det(R)
 
   result <- vector("numeric")
@@ -728,6 +717,22 @@ check_collinearity.zerocount <- function(
     } else {
       na_terms <- c(na_terms, term)
     }
+  }
+
+  # a singular correlation matrix, for example from exactly collinear
+  # predictors whose model keeps all coefficients, gives meaningless VIFs,
+  # some of them below 1
+  if (
+    .is_singular_between_terms(R, term_assign) ||
+      any(is.finite(result) & result < 1 - 1e-6)
+  ) {
+    if (isTRUE(verbose)) {
+      insight::format_warning(
+        "The correlation matrix of the model coefficients is singular, so VIFs cannot be computed.",
+        "Check for predictors that are linear combinations of other predictors."
+      )
+    }
+    return(NULL)
   }
 
   # any terms to remove, due to rank deficiency?
@@ -1004,6 +1009,31 @@ check_collinearity.zerocount <- function(
   )
 }
 
+# TRUE if the correlation matrix is singular after the columns of each term
+# are made uncorrelated with each other. Correlation between the columns of
+# one term, for example of raw polynomials, does not change the VIFs, so
+# only collinearity between terms counts. The cutoff is the one solve() uses.
+.is_singular_between_terms <- function(R, term_assign) {
+  if (anyNA(R)) {
+    return(FALSE)
+  }
+  w <- diag(ncol(R))
+  if (length(term_assign) == ncol(R)) {
+    for (term in unique(stats::na.omit(term_assign))) {
+      idx <- which(term_assign == term)
+      if (length(idx) > 1) {
+        chol_r <- .safe(chol(R[idx, idx, drop = FALSE]))
+        if (is.null(chol_r)) {
+          return(TRUE)
+        }
+        w[idx, idx] <- backsolve(chol_r, diag(length(idx)))
+      }
+    }
+  }
+  rc <- .safe(rcond(crossprod(w, R %*% w)))
+  !is.null(rc) && is.finite(rc) && rc < .Machine$double.eps
+}
+
 # multinomial models from nnet, mclogit and brglm2 (brmultinom, and bracl,
 # which inherits from brmultinom)
 .is_multinom_model <- function(x) {
@@ -1013,6 +1043,7 @@ check_collinearity.zerocount <- function(
 # VGAM models with the multinomial or cumulative family
 .is_vglm_categorical <- function(x) {
   inherits(x, "vglm") &&
+    !inherits(x, "vgam") &&
     isTRUE(.safe(x@family@vfamily[1]) %in% c("multinomial", "cumulative"))
 }
 
@@ -1032,12 +1063,16 @@ check_collinearity.zerocount <- function(
   # coefficients that differ between outcome levels, so match the names
   # against all prefixed and plain model matrix columns
   if (inherits(x, "bracl") && !is.matrix(coef_mat)) {
+    if (!length(mm_names)) {
+      return(rep(NA_character_, length(coef_names)))
+    }
     prefixed <- outer(x$lev, mm_names, paste, sep = sep)
-    lookup <- c(
-      stats::setNames(rep(mm_names, each = length(x$lev)), as.vector(prefixed)),
-      stats::setNames(mm_names, mm_names)
-    )
-    if (!length(mm_names) || anyDuplicated(names(lookup))) {
+    lookup <- stats::setNames(rep(mm_names, each = length(x$lev)), as.vector(prefixed))
+    # in parallel models, the slopes have no prefix
+    if (!isFALSE(x$parallel)) {
+      lookup <- c(lookup, stats::setNames(mm_names, mm_names))
+    }
+    if (anyDuplicated(names(lookup))) {
       return(rep(NA_character_, length(coef_names)))
     }
     return(unname(lookup[coef_names]))
