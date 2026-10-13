@@ -343,3 +343,22 @@ test_that("check_outliers, unsupported quantreg classes return NULL", {
     )
   }
 })
+
+
+test_that("check_outliers, glmmTMB Cook's distance for binomial models with a cbind() response", {
+  skip_on_cran()
+  # the number of trials must not be passed to the refits as prior weights.
+  # `size` is a predictor because the data checks need a numeric predictor.
+  data(cbpp, package = "lme4")
+  m <- glmmTMB::glmmTMB(
+    cbind(incidence, size - incidence) ~ period + size + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+  out <- check_outliers(m, method = "cook")
+  expect_equal(
+    as.data.frame(out)$Distance_Cook,
+    .test_cooks_refit(m, cbpp),
+    tolerance = 1e-6
+  )
+})

@@ -3,7 +3,8 @@
 #' Compute indices of model performance for SEM or CFA models from the
 #' **lavaan** package.
 #'
-#' @param model A **lavaan** model.
+#' @param model A **lavaan** model, or a **lavaan.mi** model fitted to
+#'   multiple imputed data sets.
 #' @param metrics Can be `"all"` or a character vector of metrics to be
 #'   computed (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"Baseline"`,
 #'   `"Baseline_df"`, `"p_Baseline"`, `"GFI"`, `"AGFI"`, `"NFI"`, `"NNFI"`,
@@ -11,10 +12,24 @@
 #'   `"RMR"`, `"SRMR"`, `"RFI"`, `"PNFI"`, `"IFI"`, `"RNI"`, `"Loglikelihood"`,
 #'   `"AIC"`, `"BIC"`, and `"BIC_adjusted"`.
 #' @param verbose Toggle off warnings.
-#' @param ... Arguments passed to or from other methods.
+#' @param ... Arguments passed to or from other methods. For **lavaan** and
+#'   **lavaan.mi** models, they are passed to `lavaan::fitMeasures()` (except
+#'   `estimator`, which is ignored), for example `pool.method = "D2"` for
+#'   **lavaan.mi** models.
 #'
 #' @return A data frame (with one row) and one column per "index" (see
-#'   `metrics`).
+#'   `metrics`). An index that `lavaan::fitMeasures()` does not return is `NA`.
+#'
+#' @section Models fitted to multiple imputed data:
+#' For **lavaan.mi** models (for example, from `lavaan.mi::sem.mi()` or
+#' `lavaan.mi::cfa.mi()`), the indices
+#' come from the `fitMeasures()` method of the **lavaan.mi** package, which
+#' pools the test statistics across imputations (by default with the `"D4"`
+#' method). Pooling arguments, such as `pool.method`, pass through `...`. If no
+#' imputation converged, all indices are `NA`. `compare_performance()` does not
+#' accept **lavaan.mi** models yet, because **insight** does not recognize them
+#' as models. It drops them with a warning, and it errors when no other model
+#' remains.
 #'
 #' @details \subsection{Indices of fit}{
 #'
@@ -101,35 +116,53 @@
 #' @export
 model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...) {
   insight::check_if_installed("lavaan")
-
-  # All possible metrics that this function can return.
-  all_metric_names <- c(
-    "Chi2",
-    "Chi2_df",
-    "p_Chi2",
-    "Baseline",
-    "Baseline_df",
-    "p_Baseline",
-    "GFI",
-    "AGFI",
-    "NFI",
-    "NNFI",
-    "CFI",
-    "RMSEA",
-    "RMSEA_CI_low",
-    "RMSEA_CI_high",
-    "p_RMSEA",
-    "RMR",
-    "SRMR",
-    "RFI",
-    "PNFI",
-    "IFI",
-    "RNI",
-    "Loglikelihood",
-    "AIC",
-    "BIC",
-    "BIC_adjusted"
+  .model_performance_lavaan(
+    model,
+    converged = insight::is_converged(model),
+    metrics = metrics,
+    verbose = verbose,
+    not_converged = "This lavaan model did not converge, no performance indices can be computed. Returning `NA`.",
+    ...
   )
+}
+
+
+#' @rdname model_performance.lavaan
+#' @export
+model_performance.lavaan.mi <- function(model, metrics = "all", verbose = TRUE, ...) {
+  insight::check_if_installed(c("lavaan", "lavaan.mi"))
+  # pooled fit measures need at least one converged imputation
+  converged <- vapply(
+    model@convergence,
+    function(i) isTRUE(i[["converged"]]),
+    logical(1)
+  )
+  .model_performance_lavaan(
+    model,
+    converged = any(converged),
+    metrics = metrics,
+    verbose = verbose,
+    not_converged = paste(
+      "This lavaan.mi model did not converge in any imputation,",
+      "no performance indices can be computed. Returning `NA`."
+    ),
+    ...
+  )
+}
+
+
+# helper ------------------------------------------------------------------
+
+.model_performance_lavaan <- function(
+  model,
+  converged,
+  metrics = "all",
+  verbose = TRUE,
+  not_converged = NULL,
+  ...
+) {
+  # All possible metrics that this function can return.
+  all_metric_names <- unname(.lavaan_fit_map())
 
   # extract valid column names based on metrics
   if (is.character(metrics) && !all(metrics == "all")) {
@@ -144,53 +177,18 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   dots$estimator <- NULL
 
   # create arguments for function call, with valid ellipses-dots
-  fun_args <- insight::compact_list(list(model, dots))
+  fun_args <- c(list(model), dots)
 
-  # Check if converged
-  if (insight::is_converged(model)) {
+  if (converged) {
     if (isTRUE(verbose)) {
-      measures <- as.data.frame(t(as.data.frame(do.call(lavaan::fitmeasures, fun_args))))
+      measures <- do.call(lavaan::fitmeasures, fun_args)
     } else {
-      measures <- as.data.frame(t(as.data.frame(suppressWarnings(do.call(
-        lavaan::fitmeasures,
-        fun_args
-      )))))
+      measures <- suppressWarnings(do.call(lavaan::fitmeasures, fun_args))
     }
-
-    row.names(measures) <- NULL
-
-    out <- data.frame(
-      Chi2 = measures$chisq,
-      Chi2_df = measures$df,
-      p_Chi2 = measures$pvalue,
-      Baseline = measures$baseline.chisq,
-      Baseline_df = measures$baseline.df,
-      p_Baseline = measures$baseline.pvalue,
-      GFI = measures$gfi,
-      AGFI = measures$agfi,
-      NFI = measures$nfi,
-      NNFI = measures$tli,
-      CFI = measures$cfi,
-      RMSEA = measures$rmsea,
-      RMSEA_CI_low = measures$rmsea.ci.lower,
-      RMSEA_CI_high = measures$rmsea.ci.upper,
-      p_RMSEA = measures$rmsea.pvalue,
-      RMR = measures$rmr,
-      SRMR = measures$srmr,
-      RFI = measures$rfi,
-      PNFI = measures$pnfi,
-      IFI = measures$ifi,
-      RNI = measures$rni,
-      Loglikelihood = measures$logl,
-      AIC = measures$aic,
-      BIC = measures$bic,
-      BIC_adjusted = measures$bic2
-    )
+    out <- .lavaan_fit_indices(measures)
   } else {
     if (verbose) {
-      insight::format_warning(
-        "This lavaan model did not converge, no performance indices can be computed. Returning `NA`."
-      )
+      insight::format_warning(not_converged)
     }
     out <- as.data.frame(stats::setNames(
       rep(list(NA), length(out_names)),
@@ -203,6 +201,58 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
 
   class(out) <- c("performance_lavaan", "performance_model", class(out))
   out
+}
+
+
+# entries of lavaan::fitmeasures(), named, and the columns they map to
+.lavaan_fit_map <- function() {
+  c(
+    chisq = "Chi2",
+    df = "Chi2_df",
+    pvalue = "p_Chi2",
+    baseline.chisq = "Baseline",
+    baseline.df = "Baseline_df",
+    baseline.pvalue = "p_Baseline",
+    gfi = "GFI",
+    agfi = "AGFI",
+    nfi = "NFI",
+    tli = "NNFI",
+    cfi = "CFI",
+    rmsea = "RMSEA",
+    rmsea.ci.lower = "RMSEA_CI_low",
+    rmsea.ci.upper = "RMSEA_CI_high",
+    rmsea.pvalue = "p_RMSEA",
+    rmr = "RMR",
+    srmr = "SRMR",
+    rfi = "RFI",
+    pnfi = "PNFI",
+    ifi = "IFI",
+    rni = "RNI",
+    logl = "Loglikelihood",
+    aic = "AIC",
+    bic = "BIC",
+    bic2 = "BIC_adjusted"
+  )
+}
+
+
+# one-row data frame of fit indices, `NA` for entries missing in `measures`
+.lavaan_fit_indices <- function(measures) {
+  fit_map <- .lavaan_fit_map()
+  measures <- unclass(measures)
+  # lavaan >= 0.7 (and lavaan.mi) return "agfi_lisrel" but no "agfi"
+  if (!"agfi" %in% names(measures) && "agfi_lisrel" %in% names(measures)) {
+    measures[["agfi"]] <- measures[["agfi_lisrel"]]
+  }
+  out <- lapply(names(fit_map), function(entry) {
+    if (entry %in% names(measures)) {
+      as.numeric(measures[[entry]])
+    } else {
+      NA_real_
+    }
+  })
+  names(out) <- fit_map
+  as.data.frame(out)
 }
 
 

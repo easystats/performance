@@ -122,6 +122,7 @@ Suggests:
     ISLR,
     ivreg,
     lavaan,
+    lavaan.mi,
     lme4,
     lmtest,
     loo,
