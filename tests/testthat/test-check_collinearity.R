@@ -839,6 +839,38 @@ test_that("check_collinearity, VGAM::vglm cumulative", {
   expect_equal(out2$SE_factor, out2$VIF^(1 / (2 * m_coef2)), tolerance = 1e-8)
 })
 
+test_that("check_collinearity, multinomial models without intercept", {
+  skip_if_not_installed("nnet")
+  skip_if_not_installed("mclogit")
+  d <- .multinom_data()
+  slopes <- c(x1 = "x1", x3 = "x3", x2 = "x2")
+  m1 <- nnet::multinom(y ~ 0 + x1 + x3 + x2, data = d, trace = FALSE)
+  expect_message(
+    out1 <- check_collinearity(m1),
+    "Model without intercept"
+  )
+  map1 <- stats::setNames(
+    rep(slopes, each = 2),
+    paste(c("b", "c"), rep(names(slopes), each = 2), sep = ":")
+  )
+  expect_identical(out1$Term, c("x1", "x3", "x2"))
+  expect_equal(out1$VIF, unname(.gvif_by_map(stats::vcov(m1), map1)), tolerance = 1e-8)
+
+  m2 <- suppressWarnings(
+    mclogit::mblogit(y ~ 0 + x1 + x3 + x2, data = d, trace = FALSE)
+  )
+  expect_message(
+    out2 <- check_collinearity(m2),
+    "Model without intercept"
+  )
+  map2 <- stats::setNames(
+    rep(slopes, each = 2),
+    paste(c("b", "c"), rep(names(slopes), each = 2), sep = "~")
+  )
+  expect_identical(out2$Term, c("x1", "x3", "x2"))
+  expect_equal(out2$VIF, unname(.gvif_by_map(stats::vcov(m2), map2)), tolerance = 1e-8)
+})
+
 test_that("check_collinearity, exactly collinear multinomial model", {
   skip_if_not_installed("nnet")
   d <- .multinom_data()
