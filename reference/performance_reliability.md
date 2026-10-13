@@ -171,14 +171,14 @@ m <- lme4::lmer(
 )
 performance_reliability(m)
 #>         Group           Parameter Reliability
-#> 1       Trial         (Intercept) 0.005869418
-#> 3 Participant         (Intercept) 0.221945419
-#> 4 Participant Illusion_Difference 0.170468123
+#> 1       Trial         (Intercept) 0.005869236
+#> 3 Participant         (Intercept) 0.221960902
+#> 4 Participant Illusion_Difference 0.170476143
 performance_dvour(m)
 #>         Group           Parameter    D_vour
-#> 1 Participant         (Intercept) 0.9673865
-#> 2 Participant Illusion_Difference 0.7655621
-#> 3       Trial         (Intercept) 0.5648742
+#> 1 Participant         (Intercept) 0.9673866
+#> 2 Participant Illusion_Difference 0.7655645
+#> 3       Trial         (Intercept) 0.5648711
 
 m <- glmmTMB::glmmTMB(
   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),

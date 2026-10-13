@@ -23,6 +23,7 @@ check_outliers(
   threshold = NULL,
   ID = NULL,
   verbose = TRUE,
+  group = NULL,
   ...
 )
 
@@ -89,6 +90,13 @@ check_outliers(
 
   Toggle warnings.
 
+- group:
+
+  Optional, name of a grouping variable in the data used to fit a
+  **glmmTMB** or **lme4** model. If given, Cook's distance is computed
+  for each level of this variable rather than for each observation (only
+  for `method = "cook"`). See section 'Model-specific methods'.
+
 - type:
 
   Type of method to test for outliers. Can be one of `"default"`,
@@ -116,7 +124,11 @@ information on the distance measure and whether or not an observation is
 considered as outlier can be recovered with the
 [as.data.frame](https://rdrr.io/r/base/as.data.frame.html) function.
 Note that the function will (silently) return a vector of `FALSE` for
-non-supported data types such as character strings.
+non-supported data types such as character strings. If `group` is given,
+the vector has one element per level of the grouping variable, and the
+data returned by
+[`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) has one
+row per level, with the level in the `Group` column.
 
 ## Details
 
@@ -177,6 +189,20 @@ is re-scaled to range from 0 to 1.
   get a missing distance and are not counted as outliers by this method.
   [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
   skips this computation for **glmmTMB** models.
+
+  For models from packages **glmmTMB** and **lme4**, the `group`
+  argument gives Cook's distance for each level of a grouping variable
+  (e.g., participants or schools) rather than for each observation. The
+  model is refit once per level, leaving out that level, and Cook's
+  distance is `D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p`, where `b`
+  and `b_(g)` are the fixed effects of the full model and of the model
+  without level g, `V(b)` is their variance-covariance matrix in the
+  full model, and `p` is the number of fixed effects. The default
+  threshold is `4 / G`, with `G` the number of levels (Nieuwenhuis et
+  al., 2012). Levels where the refit fails or does not converge get a
+  missing distance and are not counted as outliers. Note that
+  `cooks.distance(stats::influence(model, groups = ))` from **lme4**
+  multiplies the distance by `(G - p) / G`, so its values are smaller.
 
 - **Pareto**: The reliability and approximate convergence of Bayesian
   models can be assessed using the estimates for the shape parameter k
@@ -380,6 +406,11 @@ interval of the pooled effect.
 - Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
   multivariate outliers: Use a robust variant of Mahalanobis distance.
   *Journal of Experimental Social Psychology*, 74, 150-156.
+
+- Nieuwenhuis, R., te Grotenhuis, M., and Pelzer, B. (2012).
+  influence.ME: Tools for detecting influential data in mixed effects
+  models. *The R Journal*, *4*(2), 38-47.
+  [doi:10.32614/RJ-2012-011](https://doi.org/10.32614/RJ-2012-011)
 
 - Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation
   forest. In 2008 Eighth IEEE International Conference on Data Mining

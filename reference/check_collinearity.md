@@ -75,6 +75,16 @@ categorical variables. The *adjusted* VIF is calculated as
 square root of the VIF for numeric predictors, or for categorical
 variables with two levels.
 
+For multinomial models from
+[`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html) and
+[`mclogit::mblogit()`](https://melff.github.io/mclogit/reference/mblogit.html),
+each term has its own set of slopes for each outcome level except the
+reference level. These models get one VIF per term, computed from the
+slopes of that term across all outcome levels, so the VIF does not
+depend on the reference level. The adjusted VIF is then
+`VIF^(1/(2*<n>))`, where `<n>` is the number of slopes of the term
+across all outcome levels.
+
 ## Note
 
 The code to compute the confidence intervals for the VIF and tolerance
