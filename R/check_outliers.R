@@ -581,7 +581,8 @@ check_outliers.default <- function(
 
     outlier_count$cook <- count.table
 
-    if (all(method %in% c("cook", "pareto"))) {
+    # the count table of the data methods is NULL if they flag no row
+    if (all(method %in% c("cook", "pareto")) || is.null(outlier_count$all)) {
       outlier_count$all <- count.table
     } else {
       outlier_count$all <- datawizard::data_merge(
@@ -621,7 +622,7 @@ check_outliers.default <- function(
 
     outlier_count$pareto <- count.table
 
-    if (all(method %in% c("cook", "pareto"))) {
+    if (all(method %in% c("cook", "pareto")) || is.null(outlier_count$all)) {
       outlier_count$all <- count.table
     } else {
       outlier_count$all <- datawizard::data_merge(
