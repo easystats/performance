@@ -225,6 +225,12 @@ check_predictions.stanreg <- function(
     ...
   )
 
+  # Wiener / RT-choice models predict two components; check the RTs
+  is_rt_model <- isTRUE(minfo$is_wiener) || isTRUE(minfo$is_rtchoice)
+  if (is_rt_model && "Component" %in% colnames(out)) {
+    out <- out[out$Component == "rt", , drop = FALSE]
+  }
+
   iter_columns <- startsWith(colnames(out), "iter_")
   if (!any(iter_columns)) {
     insight::format_error(
@@ -247,10 +253,14 @@ check_predictions.stanreg <- function(
 
   response <- insight::get_response(model)
   if (is.data.frame(response)) {
-    response <- eval(
-      str2lang(insight::find_response(model)),
-      envir = insight::get_response(model)
-    )
+    if (is_rt_model) {
+      response <- response[[insight::find_response(model)[1]]]
+    } else {
+      response <- eval(
+        str2lang(insight::find_response(model)),
+        envir = response
+      )
+    }
   }
   out$y <- response
 
