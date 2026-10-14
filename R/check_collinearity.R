@@ -39,13 +39,21 @@
 #' Monette 1992), which is identical to the square root of the VIF for numeric
 #' predictors, or for categorical variables with two levels.
 #'
-#' For multinomial models from `nnet::multinom()` and `mclogit::mblogit()`,
-#' each term has its own set of slopes for each outcome level except the
-#' reference level.
+#' For multinomial models from `nnet::multinom()`, `mclogit::mblogit()`,
+#' `brglm2::brmultinom()` and `brglm2::bracl()`, and for `VGAM::vglm()` models
+#' with the multinomial or cumulative family, each term can have its own set
+#' of slopes for each outcome level except one.
 #' These models get one VIF per term, computed from the slopes of that term
 #' across all outcome levels, so the VIF does not depend on the reference
-#' level. The adjusted VIF is then `VIF^(1/(2*<n>))`, where `<n>` is the number
-#' of slopes of the term across all outcome levels.
+#' level. Parallel models, such as `bracl(parallel = TRUE)`, have one slope
+#' per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
+#' `<n>` is the number of slopes of the term across all outcome levels.
+#'
+#' If the correlation matrix of the coefficients is singular because of
+#' collinearity between model terms, for example for exactly collinear
+#' predictors in a model that keeps all coefficients, such as
+#' `nnet::multinom()`, `check_collinearity()` gives a warning and returns
+#' `NULL`.
 #'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
@@ -481,8 +489,8 @@ check_collinearity.zerocount <- function(
 
   term_assign <- .term_assignments(x, component, verbose = verbose)
 
-  # any assignment found?
-  if (is.null(term_assign) || all(is.na(term_assign))) {
+  # any assignment found? multinomial models build their own assignment below
+  if (!.is_multinom_model(x) && (is.null(term_assign) || all(is.na(term_assign)))) {
     if (verbose) {
       insight::format_alert(
         sprintf(
@@ -515,17 +523,52 @@ check_collinearity.zerocount <- function(
       },
       error = function(e) NULL
     )
-  } else if (inherits(x, c("multinom", "mblogit"))) {
+  } else if (.is_multinom_model(x)) {
     # multinomial models have one intercept and one set of slopes for each
-    # outcome level except the reference level, so drop all intercepts and
+    # outcome level except one, so drop all intercepts and
     # match coefficients to terms by name. All slopes of a term, across the
     # outcome levels, are one block of the generalized VIF.
-    coef_names <- .multinom_coef_names(x, colnames(v))
+    # brglm2 models store their model matrix, which also works for
+    # transformed terms like `log(x)` or `poly(x, 2)`
+    if (inherits(x, "brmultinom") && is.matrix(x$x)) {
+      mm <- x$x
+    } else {
+      mm <- .safe(insight::get_modelmatrix(x))
+    }
+    coef_names <- .multinom_coef_names(x, colnames(v), colnames(mm))
     keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
-    mm <- .safe(insight::get_modelmatrix(x))
     term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], colnames(mm))]
     # a coefficient without a term would give VIFs for the wrong terms
     if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_names)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (all(keep_idx) && isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
+  } else if (.is_vglm_categorical(x)) {
+    # VGAM models can have more than one intercept and more than one slope per
+    # model matrix column. The "assign" attribute of the model matrix is a list
+    # that maps each term to its columns of the variance-covariance matrix.
+    assign_list <- attr(.safe(insight::get_modelmatrix(x)), "assign")
+    coef_terms <- rep(NA_character_, ncol(v))
+    if (is.list(assign_list)) {
+      coef_terms[unlist(assign_list)] <- rep(names(assign_list), lengths(assign_list))
+    }
+    keep_idx <- !is.na(coef_terms) & coef_terms != "(Intercept)"
+    vglm_terms <- labels(stats::terms(insight::find_formula(x, verbose = FALSE)[[
+      component
+    ]]))
+    term_assign <- match(coef_terms[keep_idx], vglm_terms)
+    # a coefficient without a term would give VIFs for the wrong terms
+    if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_terms)) {
       if (verbose) {
         insight::format_alert(
           sprintf(
@@ -677,6 +720,22 @@ check_collinearity.zerocount <- function(
     }
   }
 
+  # a singular correlation matrix, for example from exactly collinear
+  # predictors whose model keeps all coefficients, gives meaningless VIFs,
+  # some of them below 1
+  if (
+    .is_singular_between_terms(R, term_assign) ||
+      any(is.finite(result) & result < 1 - 1e-6)
+  ) {
+    if (isTRUE(verbose)) {
+      insight::format_warning(
+        "The correlation matrix of the model coefficients is singular, so VIFs cannot be computed.",
+        "Check for predictors that are linear combinations of other predictors."
+      )
+    }
+    return(NULL)
+  }
+
   # any terms to remove, due to rank deficiency?
   if (length(na_terms)) {
     model_terms <- model_terms[-na_terms]
@@ -693,9 +752,9 @@ check_collinearity.zerocount <- function(
   # check if CIs are requested
   conf_ints <- .vif_ci(x, result, ci)
 
-  # for multinomial models, the adjusted VIF uses the number of slopes of
-  # each term across all outcome levels
-  if (inherits(x, c("multinom", "mblogit"))) {
+  # for multinomial and VGAM models, the adjusted VIF uses the number of slopes
+  # of each term across all outcome levels
+  if (.is_multinom_model(x) || .is_vglm_categorical(x)) {
     se_factor <- result^(1 / (2 * n_coef))
   } else {
     se_factor <- .adjusted_vif(x, result, model_terms)
@@ -951,17 +1010,73 @@ check_collinearity.zerocount <- function(
   )
 }
 
+# TRUE if the correlation matrix is singular after the columns of each term
+# are made uncorrelated with each other. Correlation between the columns of
+# one term, for example of raw polynomials, does not change the VIFs, so
+# only collinearity between terms counts. The cutoff is the one solve() uses.
+# Without a term for each column, or when the columns of one term cannot be
+# made uncorrelated, this returns FALSE.
+.is_singular_between_terms <- function(R, term_assign) {
+  if (anyNA(R) || length(term_assign) != ncol(R)) {
+    return(FALSE)
+  }
+  w <- diag(ncol(R))
+  for (term in unique(stats::na.omit(term_assign))) {
+    idx <- which(term_assign == term)
+    if (length(idx) > 1) {
+      chol_r <- .safe(chol(R[idx, idx, drop = FALSE]))
+      if (is.null(chol_r)) {
+        return(FALSE)
+      }
+      w[idx, idx] <- backsolve(chol_r, diag(length(idx)))
+    }
+  }
+  rc <- .safe(rcond(crossprod(w, R %*% w)))
+  !is.null(rc) && is.finite(rc) && rc < .Machine$double.eps
+}
+
+# multinomial models from nnet, mclogit and brglm2 (brmultinom, and bracl,
+# which inherits from brmultinom)
+.is_multinom_model <- function(x) {
+  inherits(x, c("multinom", "mblogit", "brmultinom"))
+}
+
+# VGAM models with the multinomial or cumulative family
+.is_vglm_categorical <- function(x) {
+  inherits(x, "vglm") &&
+    !inherits(x, "vgam") &&
+    isTRUE(.safe(x@family@vfamily[1]) %in% c("multinomial", "cumulative"))
+}
+
 # coefficient names of multinomial models are prefixed with the outcome level,
-# like "b:x1" (nnet::multinom) or "b~x1" (mclogit::mblogit). This returns the
-# names without that prefix, and NA for names that could not be matched.
-# Names are returned unchanged when there is no prefix.
-.multinom_coef_names <- function(x, coef_names) {
+# like "b:x1" (nnet::multinom, brglm2) or "b~x1" (mclogit::mblogit). This
+# returns the names without that prefix, and NA for names that could not be
+# matched. Names are returned unchanged when there is no prefix.
+.multinom_coef_names <- function(x, coef_names, mm_names = NULL) {
   if (inherits(x, "mblogit")) {
     coef_mat <- x$coefmat
     sep <- "~"
   } else {
     coef_mat <- stats::coef(x)
     sep <- ":"
+  }
+  # brglm2::bracl returns a vector of coefficients, with the prefix only for
+  # coefficients that differ between outcome levels, so match the names
+  # against all prefixed and plain model matrix columns
+  if (inherits(x, "bracl") && !is.matrix(coef_mat)) {
+    if (!length(mm_names)) {
+      return(rep(NA_character_, length(coef_names)))
+    }
+    prefixed <- outer(x$lev, mm_names, paste, sep = sep)
+    lookup <- stats::setNames(rep(mm_names, each = length(x$lev)), as.vector(prefixed))
+    # in parallel models, the slopes have no prefix
+    if (!isFALSE(x$parallel)) {
+      lookup <- c(lookup, stats::setNames(mm_names, mm_names))
+    }
+    if (anyDuplicated(names(lookup))) {
+      return(rep(NA_character_, length(coef_names)))
+    }
+    return(unname(lookup[coef_names]))
   }
   # nnet::multinom models with two outcome levels have no prefix, because
   # coef() returns a vector

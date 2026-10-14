@@ -59,13 +59,21 @@ variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} 
 Monette 1992), which is identical to the square root of the VIF for numeric
 predictors, or for categorical variables with two levels.
 
-For multinomial models from \code{nnet::multinom()} and \code{mclogit::mblogit()},
-each term has its own set of slopes for each outcome level except the
-reference level.
+For multinomial models from \code{nnet::multinom()}, \code{mclogit::mblogit()},
+\code{brglm2::brmultinom()} and \code{brglm2::bracl()}, and for \code{VGAM::vglm()} models
+with the multinomial or cumulative family, each term can have its own set
+of slopes for each outcome level except one.
 These models get one VIF per term, computed from the slopes of that term
 across all outcome levels, so the VIF does not depend on the reference
-level. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where \verb{<n>} is the number
-of slopes of the term across all outcome levels.
+level. Parallel models, such as \code{bracl(parallel = TRUE)}, have one slope
+per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
+\verb{<n>} is the number of slopes of the term across all outcome levels.
+
+If the correlation matrix of the coefficients is singular because of
+collinearity between model terms, for example for exactly collinear
+predictors in a model that keeps all coefficients, such as
+\code{nnet::multinom()}, \code{check_collinearity()} gives a warning and returns
+\code{NULL}.
 }
 \note{
 The code to compute the confidence intervals for the VIF and tolerance
