@@ -19,7 +19,7 @@ Appendix B)."><meta property="og:image" content="https://easystats.github.io/per
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,13 +137,20 @@ collinearity), and tolerance values (including confidence intervals), where
 variables. The <em>adjusted</em> VIF is calculated as <code>VIF^(1/(2*&lt;nlevels&gt;)</code> (Fox &amp;
 Monette 1992), which is identical to the square root of the VIF for numeric
 predictors, or for categorical variables with two levels.</p>
-<p>For multinomial models from <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom()</a></code> and <code><a href="https://melff.github.io/mclogit/reference/mblogit.html" class="external-link">mclogit::mblogit()</a></code>,
-each term has its own set of slopes for each outcome level except the
-reference level.
+<p>For multinomial models from <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom()</a></code>, <code><a href="https://melff.github.io/mclogit/reference/mblogit.html" class="external-link">mclogit::mblogit()</a></code>,
+<code><a href="https://rdrr.io/pkg/brglm2/man/brmultinom.html" class="external-link">brglm2::brmultinom()</a></code> and <code><a href="https://rdrr.io/pkg/brglm2/man/bracl.html" class="external-link">brglm2::bracl()</a></code>, and for <code><a href="https://rdrr.io/pkg/VGAM/man/vglm.html" class="external-link">VGAM::vglm()</a></code> models
+with the multinomial or cumulative family, each term can have its own set
+of slopes for each outcome level except one.
 These models get one VIF per term, computed from the slopes of that term
 across all outcome levels, so the VIF does not depend on the reference
-level. The adjusted VIF is then <code>VIF^(1/(2*&lt;n&gt;))</code>, where <code>&lt;n&gt;</code> is the number
-of slopes of the term across all outcome levels.</p>
+level. Parallel models, such as <code>bracl(parallel = TRUE)</code>, have one slope
+per model matrix column. The adjusted VIF is then <code>VIF^(1/(2*&lt;n&gt;))</code>, where
+<code>&lt;n&gt;</code> is the number of slopes of the term across all outcome levels.</p>
+<p>If the correlation matrix of the coefficients is singular because of
+collinearity between model terms, for example for exactly collinear
+predictors in a model that keeps all coefficients, such as
+<code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom()</a></code>, <code>check_collinearity()</code> gives a warning and returns
+<code>NULL</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

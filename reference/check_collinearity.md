@@ -76,14 +76,24 @@ square root of the VIF for numeric predictors, or for categorical
 variables with two levels.
 
 For multinomial models from
-[`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html) and
+[`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html),
 [`mclogit::mblogit()`](https://melff.github.io/mclogit/reference/mblogit.html),
-each term has its own set of slopes for each outcome level except the
-reference level. These models get one VIF per term, computed from the
-slopes of that term across all outcome levels, so the VIF does not
-depend on the reference level. The adjusted VIF is then
-`VIF^(1/(2*<n>))`, where `<n>` is the number of slopes of the term
-across all outcome levels.
+[`brglm2::brmultinom()`](https://rdrr.io/pkg/brglm2/man/brmultinom.html)
+and [`brglm2::bracl()`](https://rdrr.io/pkg/brglm2/man/bracl.html), and
+for [`VGAM::vglm()`](https://rdrr.io/pkg/VGAM/man/vglm.html) models with
+the multinomial or cumulative family, each term can have its own set of
+slopes for each outcome level except one. These models get one VIF per
+term, computed from the slopes of that term across all outcome levels,
+so the VIF does not depend on the reference level. Parallel models, such
+as `bracl(parallel = TRUE)`, have one slope per model matrix column. The
+adjusted VIF is then `VIF^(1/(2*<n>))`, where `<n>` is the number of
+slopes of the term across all outcome levels.
+
+If the correlation matrix of the coefficients is singular because of
+collinearity between model terms, for example for exactly collinear
+predictors in a model that keeps all coefficients, such as
+[`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html),
+`check_collinearity()` gives a warning and returns `NULL`.
 
 ## Note
 
