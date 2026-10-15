@@ -336,7 +336,7 @@ test_that("check_predictions, brms-wiener", {
     out <- check_predictions(m)
   })
   # fmt: skip
-  expect_names(
+  expect_named(
     out,
     c(
       "sim_1", "sim_2", "sim_3", "sim_4", "sim_5", "sim_6", "sim_7",
@@ -368,7 +368,15 @@ test_that("check_predictions, RT-choice models keep RT predictions only (mocked)
   observed <- data.frame(rt = c(0.5, 0.6, 0.7, 0.8), resp = c(1, 0, 1, 1))
 
   for (flag in c("is_wiener", "is_rtchoice")) {
-    info <- list(is_wiener = FALSE, is_rtchoice = FALSE)
+    info <- list(
+      is_wiener = FALSE,
+      is_rtchoice = FALSE,
+      is_bernoulli = FALSE,
+      is_count = FALSE,
+      is_ordinal = FALSE,
+      is_categorical = FALSE,
+      is_multinomial = FALSE
+    )
     info[[flag]] <- TRUE
     local_mocked_bindings(
       model_info = function(...) info,
@@ -384,12 +392,12 @@ test_that("check_predictions, RT-choice models keep RT predictions only (mocked)
     model <- structure(list(), class = c("brmsfit", "stanreg"))
     out <- check_predictions(model, iterations = iter)
     expect_s3_class(out, "performance_pp_check")
-    expect_identical(nrow(out), n)
+    expect_equal(nrow(out), n)
     expect_named(out, c(paste0("sim_", seq_len(iter)), "y"))
     expect_equal(
       unname(as.matrix(out[paste0("sim_", seq_len(iter))])),
       unname(rt_draws)
     )
-    expect_identical(out$y, observed$rt)
+    expect_equal(out$y, observed$rt)
   }
 })
