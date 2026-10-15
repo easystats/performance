@@ -463,3 +463,28 @@ test_that("check_model, glmmTMB outlier panel alerts when hat values fail", {
   expect_length(skip_msg, 1)
   expect_match(gsub("\\s+", " ", skip_msg), "could not be computed", fixed = TRUE)
 })
+
+
+test_that("check_model, glmmTMB outlier panel is skipped when the threshold fails", {
+  panel_calls <- 0
+  local_mocked_bindings(
+    .check_outliers_cook_threshold = function(...) {
+      stop("n - p < 1", call. = FALSE)
+    },
+    .model_diagnostic_outlier = function(...) {
+      panel_calls <<- panel_calls + 1
+      NULL
+    }
+  )
+  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site), family = poisson, data = Salamanders)
+  res <- .check_model_messages(m, check = "outliers", verbose = TRUE)
+  expect_null(res$out$INFLUENTIAL)
+  expect_identical(panel_calls, 0)
+  skip_msg <- grep(
+    "influential observations is skipped",
+    res$messages,
+    value = TRUE,
+    fixed = TRUE
+  )
+  expect_length(skip_msg, 1)
+})

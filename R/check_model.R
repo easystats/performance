@@ -1078,8 +1078,13 @@ check_model.DHARMa <- check_model.performance_simres
     }
     return(NULL)
   }
+  # without the threshold of `check_outliers()`, for example when n - p < 1,
+  # the contour lines would not match it
   threshold <- .safe(.check_outliers_cook_threshold(model))
-  out <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  out <- NULL
+  if (!is.null(threshold)) {
+    out <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  }
   if (is.null(out) && verbose) {
     insight::format_alert(paste(
       "The check for influential observations is skipped for this `glmmTMB`",
