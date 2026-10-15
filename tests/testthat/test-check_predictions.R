@@ -314,6 +314,25 @@ test_that("check_predictions, multivariate brms models check one response", {
 })
 
 
+test_that("check_predictions, multivariate brms models with `trials()` responses", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  # responses are `outcome1 | trials(trials1)` and so on
+  model <- insight::download_model("brms_mv_7")
+  skip_if(is.null(model))
+
+  set.seed(123)
+  out <- check_predictions(model, resp = "outcome2", iterations = 5)
+  expect_s3_class(out, "performance_pp_check")
+  expect_named(out, c(paste0("sim_", 1:5), "y"))
+  expect_equal(out$y, insight::get_data(model)$outcome2, ignore_attr = TRUE)
+})
+
+
 test_that("check_predictions, multivariate brms models need one `resp`", {
   skip_if_not_installed("brms")
   skip_if_not_installed("modelbased", minimum_version = "0.12.0")

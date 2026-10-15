@@ -138,8 +138,8 @@ error. For multivariate \strong{brms} models (models with more than one
 response), use the \code{resp} argument to name one response, for example
 \code{check_model(model, resp = "y1")}. Only this response is checked. If \code{resp}
 is missing or does not name one response, \code{check_model()} gives an error
-that lists the names of the responses. A more advanced model-check for Bayesian models will be
-implemented at a later stage.
+that lists the names of the responses. A more advanced model-check for
+Bayesian models will be implemented at a later stage.
 
 See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
 

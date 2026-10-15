@@ -284,7 +284,8 @@ check_predictions.stanreg <- function(
   response <- insight::get_response(model)
   if (is.data.frame(response)) {
     if (!is.null(resp)) {
-      response <- response[[insight::find_response(model)[[resp]]]]
+      # the first response term is the outcome, e.g. "y" for "y | trials(n)"
+      response <- response[[insight::clean_names(resp_string)[1]]]
     } else if (is_rt_model) {
       response <- response[[insight::find_response(model)[1]]]
     } else {

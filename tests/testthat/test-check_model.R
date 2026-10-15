@@ -391,7 +391,7 @@ test_that("`check_model()` falls back to Bayesian checks for one response of a m
   received <- "not called"
   testthat::local_mocked_bindings(
     bayesian_as_frequentist = function(...) {
-      received <<- list(...)$resp
+      received <<- list(...)[["resp"]]
       stop("conversion failed", call. = FALSE)
     },
     .package = "bayestestR"

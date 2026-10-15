@@ -17,9 +17,16 @@
   }
   responses <- names(insight::find_formula(model, verbose = FALSE))
   if (!is.character(resp) || length(resp) != 1 || !resp %in% responses) {
+    if (is.null(resp)) {
+      msg <- "Please use the `resp` argument to name one of them"
+    } else {
+      msg <- "`resp` must be the name of exactly one of them"
+    }
     insight::format_error(
       paste0(
-        "This model has more than one response. Please use the `resp` argument to name one of them, e.g. `",
+        "This model has more than one response. ",
+        msg,
+        ", e.g. `",
         fun,
         "(model, resp = \"",
         responses[1],

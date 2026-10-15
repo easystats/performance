@@ -87,8 +87,8 @@
 #' response), use the `resp` argument to name one response, for example
 #' `check_model(model, resp = "y1")`. Only this response is checked. If `resp`
 #' is missing or does not name one response, `check_model()` gives an error
-#' that lists the names of the responses. A more advanced model-check for Bayesian models will be
-#' implemented at a later stage.
+#' that lists the names of the responses. A more advanced model-check for
+#' Bayesian models will be implemented at a later stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
@@ -632,7 +632,7 @@ check_model.brmsfit <- check_model.stanreg
 
 .check_model_bayesian_fallback <- function(
   model,
-  resp = NULL,
+  resp,
   conversion_error,
   panel,
   check,
