@@ -213,25 +213,26 @@
     cook_levels <- c(0.5, 1)
   }
 
-  model_resid <- as.numeric(insight::get_residuals(model))
-  predicted <- insight::get_predicted(model, ci = NULL)
-
   if (inherits(model, "glmmTMB")) {
-    # get_predicted() for glmmTMB adds CI columns, which the other models lack
-    predicted <- data.frame(Predicted = as.numeric(predicted))
     influence_glmmTMB <- .influence_glmmTMB(model)
     if (is.null(influence_glmmTMB)) {
       return(NULL)
     }
+    # one row per fitted observation, also with `na.action = na.exclude`. A
+    # data frame keeps the column name `Predicted` of the other models.
+    predicted <- data.frame(Predicted = influence_glmmTMB$fitted)
+    model_resid <- influence_glmmTMB$residuals
     n_params <- influence_glmmTMB$n_params
-    hat <- influence_glmmTMB$hat
+    hat_values <- influence_glmmTMB$hat
     cooks_distance <- influence_glmmTMB$cooks_distance
     std_resid <- influence_glmmTMB$std_resid
   } else {
+    model_resid <- as.numeric(insight::get_residuals(model))
+    predicted <- insight::get_predicted(model, ci = NULL)
     n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
 
     infl <- stats::influence(model, do.coef = FALSE)
-    hat <- infl$hat
+    hat_values <- infl$hat
     cooks_distance <- stats::cooks.distance(model, infl)
 
     std_resid <- tryCatch(
@@ -251,7 +252,7 @@
   }
 
   plot_data <- data.frame(
-    Hat = hat,
+    Hat = hat_values,
     Cooks_Distance = cooks_distance,
     Fitted = predicted,
     Residuals = model_resid,
@@ -276,28 +277,55 @@
 # H = A' W A + G, where G is zero for the fixed effects and the inverse
 # random-effects covariance for the random effects (after Lee & Nelder 1996,
 # p. 631, with phi moved into W and their diagonal U generalized to G).
-# With L L' equal to that covariance,
-# these are the hat values of the first n rows of the regression on
-# [W^(1/2) X, W^(1/2) Z L] with the added rows [0, I], which also works when a
-# variance is 0. Cook's distance is the one-step formula that
+# With L L' equal to that covariance and B = [W^(1/2) Z L, W^(1/2) X], they
+# are the diagonal of B (B'B + D)^-1 B', with D the identity for the random
+# effects and zero for the fixed effects, which also works when a variance
+# is 0. The sparse Cholesky factor of B'B + D keeps this fast for many
+# random-effect levels. Cook's distance is the one-step formula that
 # `cooks.distance()` uses for glm, so that `check_model()` needs no refits.
 # Returns NULL for models that `.glmmTMB_influence_unsupported()` names.
 .influence_glmmTMB <- function(model) {
   if (!is.null(.glmmTMB_influence_unsupported(model))) {
     return(NULL)
   }
+  insight::check_if_installed("Matrix")
   X <- as.matrix(glmmTMB::getME(model, "X"))
+  n_obs <- nrow(X)
+
+  # with `na.action = na.exclude`, predictions and residuals have NA rows for
+  # the observations that the model did not use
+  na_action <- attr(stats::model.frame(model), "na.action")
+  fitted_rows <- function(x) {
+    x <- as.vector(x)
+    if (length(x) == n_obs + length(na_action) && length(na_action) > 0) {
+      x <- x[-na_action]
+    }
+    x
+  }
+
+  # fixed effects that `map` fixes are not estimated, and fixed effects that
+  # `map` sets equal are one parameter
+  beta_map <- model$obj$env$map$beta
+  if (!is.null(beta_map)) {
+    estimated <- !is.na(beta_map)
+    beta_level <- droplevels(beta_map[estimated])
+    X <- X[, estimated, drop = FALSE] %*%
+      (outer(as.integer(beta_level), seq_len(nlevels(beta_level)), "==") * 1)
+  }
+
   fam <- stats::family(model)
-  eta <- as.vector(stats::predict(model, type = "link"))
+  eta <- fitted_rows(stats::predict(model, type = "link"))
   mu <- fam$linkinv(eta)
   # for binomial models, the prior weights include the number of trials
-  prior_weights <- as.vector(stats::weights(model))
-  if (is.null(prior_weights)) {
-    prior_weights <- rep(1, length(mu))
+  prior_weights <- fitted_rows(stats::weights(model))
+  if (!length(prior_weights)) {
+    prior_weights <- rep(1, n_obs)
   }
   variance <- .glmmTMB_variance(model, mu)
   w <- prior_weights * fam$mu.eta(eta)^2 / variance
 
+  B <- Matrix::Matrix(X, sparse = TRUE)
+  n_re <- 0
   re_struc <- model$modelInfo$reStruc$condReStruc
   if (length(re_struc)) {
     vc <- glmmTMB::VarCorr(model)$cond
@@ -305,28 +333,34 @@
       s <- matrix(unclass(vc[[i]]), nrow = nrow(vc[[i]]))
       e <- eigen(s, symmetric = TRUE)
       root <- e$vectors %*% diag(sqrt(pmax(e$values, 0)), nrow = nrow(s))
-      kronecker(diag(re_struc[[i]]$blockReps), root)
+      Matrix::kronecker(
+        Matrix::Diagonal(re_struc[[i]]$blockReps),
+        Matrix::Matrix(root, sparse = TRUE)
+      )
     })
-    ZL <- as.matrix(glmmTMB::getME(model, "Z") %*% Matrix::bdiag(roots))
+    ZL <- glmmTMB::getME(model, "Z") %*% Matrix::bdiag(roots)
     n_re <- ncol(ZL)
-    augmented <- rbind(
-      sqrt(w) * cbind(X, ZL),
-      cbind(matrix(0, n_re, ncol(X)), diag(n_re))
-    )
-  } else {
-    augmented <- sqrt(w) * X
+    # random effects first, so that the dense fixed-effect columns come last
+    # in the Cholesky factor
+    B <- cbind(ZL, B)
   }
-  qr_augmented <- qr(augmented)
-  Q <- qr.Q(qr_augmented)[seq_along(w), seq_len(qr_augmented$rank), drop = FALSE]
-  hat <- rowSums(Q^2)
+  B <- Matrix::Diagonal(x = sqrt(w)) %*% B
+  penalized <- Matrix::crossprod(B) +
+    Matrix::Diagonal(x = rep(c(1, 0), c(n_re, ncol(X))))
+  chol_factor <- Matrix::chol(Matrix::forceSymmetric(penalized))
+  hat_values <- as.vector(Matrix::colSums(
+    Matrix::solve(Matrix::t(chol_factor), Matrix::t(B))^2
+  ))
 
   n_params <- ncol(X)
-  pearson <- as.vector(stats::residuals(model, type = "response")) *
-    sqrt(prior_weights / variance)
+  model_resid <- fitted_rows(stats::residuals(model, type = "response"))
+  pearson <- model_resid * sqrt(prior_weights / variance)
   list(
-    hat = hat,
-    cooks_distance = pearson^2 * hat / (n_params * (1 - hat)^2),
-    std_resid = pearson / sqrt(1 - hat),
+    hat = hat_values,
+    cooks_distance = pearson^2 * hat_values / (n_params * (1 - hat_values)^2),
+    std_resid = pearson / sqrt(1 - hat_values),
+    residuals = model_resid,
+    fitted = mu,
     n_params = n_params
   )
 }
@@ -337,20 +371,23 @@
 # hat values can be checked against lme4, glm or glm.nb.
 .glmmTMB_influence_unsupported <- function(model) {
   family_name <- stats::family(model)$family
-  if (ncol(glmmTMB::getME(model, "Xzi")) > 0) {
+  re_terms <- model$modelInfo$reStruc
+  if (ncol(glmmTMB::getME(model, "Xzi")) > 0 || length(re_terms$ziReStruc)) {
     return("zero-inflation")
   }
-  if (ncol(glmmTMB::getME(model, "Xdisp")) > 1) {
+  if (ncol(glmmTMB::getME(model, "Xdisp")) > 1 || length(re_terms$dispReStruc)) {
     return("a dispersion formula")
   }
   if (!family_name %in% c("gaussian", "poisson", "binomial", "Gamma", "nbinom2")) {
     return(paste0("the `", family_name, "` family"))
   }
-  re_struc <- model$modelInfo$reStruc$condReStruc
+  re_struc <- re_terms$condReStruc
   if (length(re_struc)) {
     vc <- glmmTMB::VarCorr(model)$cond
     block_sizes <- vapply(re_struc, function(i) i$blockSize, numeric(1))
-    if (length(vc) != length(re_struc) || any(vapply(vc, nrow, numeric(1)) != block_sizes)) {
+    if (
+      length(vc) != length(re_struc) || any(vapply(vc, nrow, numeric(1)) != block_sizes)
+    ) {
       return("this random-effects structure")
     }
   }

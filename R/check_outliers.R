@@ -720,7 +720,11 @@ check_outliers.default <- function(
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
   if (inherits(x, "glmmTMB")) {
-    attr(outlier, "influential_obs") <- .influential_obs_glmmTMB(x, my_df, thresholds$cook)
+    attr(outlier, "influential_obs") <- .influential_obs_glmmTMB(
+      x,
+      my_df,
+      thresholds$cook
+    )
   } else {
     attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(
       x,
@@ -2672,7 +2676,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     return(NULL)
   }
   plot_data$Cooks_Distance <- outlier_data$Distance_Cook
-  plot_data$Influential <- ifelse(outlier_data$Outlier_Cook %in% 1, "Influential", "OK")
+  flagged <- !is.na(outlier_data$Outlier_Cook) & outlier_data$Outlier_Cook == 1
+  plot_data$Influential <- ifelse(flagged, "Influential", "OK")
   plot_data
 }
 

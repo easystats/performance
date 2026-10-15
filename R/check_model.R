@@ -1063,7 +1063,10 @@ check_model.DHARMa <- check_model.performance_simres
 # so the panel uses hat values and a one-step Cook's distance, with the
 # threshold that `check_outliers()` uses
 .check_model_influential_glmmTMB <- function(model, verbose = TRUE) {
-  unsupported <- .safe(.glmmTMB_influence_unsupported(model), "this model type")
+  unsupported <- .safe(
+    .glmmTMB_influence_unsupported(model),
+    "a structure that cannot be read"
+  )
   if (!is.null(unsupported)) {
     if (verbose) {
       insight::format_alert(paste0(
