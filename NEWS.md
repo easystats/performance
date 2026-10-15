@@ -11,9 +11,10 @@
   from package *glmmTMB* with a gaussian, poisson, binomial, Gamma, or `nbinom2`
   family, and without zero-inflation or a dispersion formula. The plot uses hat
   values and a one-step approximation of Cook's distance, so the model is not
-  refit. For other *glmmTMB* models, the plot is skipped with a message that
-  names the reason. `plot(check_outliers())` for *glmmTMB* models shows the
-  same plot with the Cook's distances from the refits (#95).
+  refit. For other *glmmTMB* models, the plot is skipped, and with
+  `verbose = TRUE` a message names the reason. For the same models,
+  `plot(check_outliers())` shows this plot with the Cook's distances from the
+  refits (#95).
 
 * `check_outliers()` now computes the default threshold for Cook's distance as
   `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the number of

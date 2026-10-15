@@ -272,9 +272,11 @@
 
 # glmmTMB has no influence() or hatvalues() method. The hat values are the
 # diagonal of W^(1/2) A H^-1 A' W^(1/2), with A = [X, Z], W the GLM weight
-# (dmu/deta)^2 / (phi * V(mu)), and H = A' W A + G, where G is zero for the
-# fixed effects and the inverse random-effects covariance for the random
-# effects (Lee & Nelder 1996, p. 631). With L L' equal to that covariance,
+# a * (dmu/deta)^2 / (phi * V(mu)) with a the prior weights, and
+# H = A' W A + G, where G is zero for the fixed effects and the inverse
+# random-effects covariance for the random effects (after Lee & Nelder 1996,
+# p. 631, with phi moved into W and their diagonal U generalized to G).
+# With L L' equal to that covariance,
 # these are the hat values of the first n rows of the regression on
 # [W^(1/2) X, W^(1/2) Z L] with the added rows [0, I], which also works when a
 # variance is 0. Cook's distance is the one-step formula that
@@ -356,7 +358,8 @@
 }
 
 
-# Var(y | random effects) for the families in `.glmmTMB_influence_unsupported()`
+# Var(y | random effects) for a prior weight of 1, for the families in
+# `.glmmTMB_influence_unsupported()`
 .glmmTMB_variance <- function(model, mu) {
   switch(
     stats::family(model)$family,
