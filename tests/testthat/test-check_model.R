@@ -338,7 +338,7 @@ test_that("`check_model()` errors if no check works after brms conversion fails"
   )
 })
 
-test_that("`check_model()` errors for multivariate brms models before conversion", {
+test_that("`check_model()` needs one `resp` for multivariate brms models", {
   skip_if_brms_fixture_unavailable()
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
@@ -351,11 +351,65 @@ test_that("`check_model()` errors for multivariate brms models before conversion
     .package = "bayestestR"
   )
 
-  expect_error(check_model(m), "Multivariate\\s+models\\s+are\\s+not\\s+supported")
+  for (resp in list(NULL, "mpg", c("cyl", "gear"))) {
+    err <- expect_error(
+      check_model(m, resp = resp),
+      "more\\s+than\\s+one\\s+response"
+    )
+    msg <- gsub("\\s+", " ", conditionMessage(err))
+    for (name in c("cyl", "gear", "carb", "resp")) {
+      expect_match(msg, paste0("`", name, "`"), fixed = TRUE)
+    }
+  }
   expect_false(called)
   # the mock is in reach of `bayestestR::`, so `called` can become TRUE
   try(bayestestR::bayesian_as_frequentist(m), silent = TRUE)
   expect_true(called)
+})
+
+test_that("`check_model()` checks one response of a multivariate brms model", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+
+  out <- check_model(m, resp = "gear")
+  expect_s3_class(out, "check_model")
+  expect_true(setequal(
+    names(out),
+    c("VIF", "QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL", "PP_CHECK")
+  ))
+  d <- insight::get_data(m)
+  expect_equal(out$PP_CHECK$y, d$gear, ignore_attr = TRUE)
+  expected_fitted <- stats::fitted(stats::lm(gear ~ wt + hp, data = d))
+  expect_lt(max(abs(out$NCV$x - expected_fitted)), 1e-8)
+})
+
+test_that("`check_model()` falls back to Bayesian checks for one response of a multivariate brms model", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+  received <- "not called"
+  testthat::local_mocked_bindings(
+    bayesian_as_frequentist = function(...) {
+      received <<- list(...)$resp
+      stop("conversion failed", call. = FALSE)
+    },
+    .package = "bayestestR"
+  )
+
+  msgs <- capture_messages({
+    out <- check_model(m, resp = "gear")
+  })
+  expect_identical(received, "gear")
+  expect_named(out, "PP_CHECK")
+  expect_equal(out$PP_CHECK$y, insight::get_data(m)$gear, ignore_attr = TRUE)
+  msgs <- gsub("\\s+", " ", paste(msgs, collapse = " "))
+  skipped <- regmatches(msgs, regexec("Skipped checks: ([^.]*)\\.", msgs))[[1]][2]
+  expect_true(setequal(
+    strsplit(skipped, ", ", fixed = TRUE)[[1]],
+    c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")
+  ))
+  expect_true(attr(out, "model_info")$is_linear)
 })
 
 test_that("`check_model()` keeps all panels for brms models that can be converted", {
