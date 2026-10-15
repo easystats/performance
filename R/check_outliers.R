@@ -719,10 +719,14 @@ check_outliers.default <- function(
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
-  attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(
-    x,
-    threshold = thresholds$cook
-  )) # nolint
+  if (inherits(x, "glmmTMB")) {
+    attr(outlier, "influential_obs") <- .influential_obs_glmmTMB(x, my_df, thresholds$cook)
+  } else {
+    attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(
+      x,
+      threshold = thresholds$cook
+    )) # nolint
+  }
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
@@ -2652,6 +2656,24 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     return(NULL)
   }
   prior_weights
+}
+
+
+# Plot data of `check_outliers()` for glmmTMB models: the hat values of
+# `.model_diagnostic_outlier()` with the refit Cook's distances, so that the
+# plot marks the rows that `check_outliers()` flags. Without the cook method,
+# there are no refit distances and no plot data.
+.influential_obs_glmmTMB <- function(x, outlier_data, threshold) {
+  if (is.null(outlier_data$Distance_Cook)) {
+    return(NULL)
+  }
+  plot_data <- .safe(.model_diagnostic_outlier(x, threshold = threshold))
+  if (is.null(plot_data) || nrow(plot_data) != nrow(outlier_data)) {
+    return(NULL)
+  }
+  plot_data$Cooks_Distance <- outlier_data$Distance_Cook
+  plot_data$Influential <- ifelse(outlier_data$Outlier_Cook %in% 1, "Influential", "OK")
+  plot_data
 }
 
 
