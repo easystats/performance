@@ -202,42 +202,58 @@
 # prepare data for influential obs plot ----------------------------------
 
 .model_diagnostic_outlier <- function(model, threshold = NULL) {
-  s <- summary(model)
-
   # use the threshold from `check_outliers()`, so that the contour lines
   # match the flagged outliers
   if (!is.null(threshold)) {
     cook_levels <- threshold
   } else if (inherits(model, "lm", which = TRUE) == 1) {
+    s <- summary(model)
     cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
   } else {
     cook_levels <- c(0.5, 1)
   }
 
-  n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
-
-  infl <- stats::influence(model, do.coef = FALSE)
   model_resid <- as.numeric(insight::get_residuals(model))
+  predicted <- insight::get_predicted(model, ci = NULL)
 
-  std_resid <- tryCatch(
-    stats::rstandard(model, infl),
-    error = function(e) {
-      # no rstandard() method (e.g., lmerMod): standardize Pearson residuals,
-      # so that the Cook's distance contours match `cooks.distance()`
-      .safe(
-        as.numeric(
-          stats::residuals(model, type = "pearson") /
-            (stats::sigma(model) * sqrt(1 - infl$hat))
-        ),
-        model_resid
-      )
+  if (inherits(model, "glmmTMB")) {
+    # get_predicted() for glmmTMB adds CI columns, which the other models lack
+    predicted <- data.frame(Predicted = as.numeric(predicted))
+    influence_glmmTMB <- .influence_glmmTMB(model)
+    if (is.null(influence_glmmTMB)) {
+      return(NULL)
     }
-  )
+    n_params <- influence_glmmTMB$n_params
+    hat <- influence_glmmTMB$hat
+    cooks_distance <- influence_glmmTMB$cooks_distance
+    std_resid <- influence_glmmTMB$std_resid
+  } else {
+    n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
+
+    infl <- stats::influence(model, do.coef = FALSE)
+    hat <- infl$hat
+    cooks_distance <- stats::cooks.distance(model, infl)
+
+    std_resid <- tryCatch(
+      stats::rstandard(model, infl),
+      error = function(e) {
+        # no rstandard() method (e.g., lmerMod): standardize Pearson residuals,
+        # so that the Cook's distance contours match `cooks.distance()`
+        .safe(
+          as.numeric(
+            stats::residuals(model, type = "pearson") /
+              (stats::sigma(model) * sqrt(1 - infl$hat))
+          ),
+          model_resid
+        )
+      }
+    )
+  }
 
   plot_data <- data.frame(
-    Hat = infl$hat,
-    Cooks_Distance = stats::cooks.distance(model, infl),
-    Fitted = insight::get_predicted(model, ci = NULL),
+    Hat = hat,
+    Cooks_Distance = cooks_distance,
+    Fitted = predicted,
     Residuals = model_resid,
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
@@ -251,6 +267,105 @@
   attr(plot_data, "cook_levels") <- cook_levels
   attr(plot_data, "n_params") <- n_params
   plot_data
+}
+
+
+# glmmTMB has no influence() or hatvalues() method. The hat values are the
+# diagonal of W^(1/2) A H^-1 A' W^(1/2), with A = [X, Z], W the GLM weight
+# (dmu/deta)^2 / (phi * V(mu)), and H = A' W A + G, where G is zero for the
+# fixed effects and the inverse random-effects covariance for the random
+# effects (Lee & Nelder 1996, p. 631). With L L' equal to that covariance,
+# these are the hat values of the first n rows of the regression on
+# [W^(1/2) X, W^(1/2) Z L] with the added rows [0, I], which also works when a
+# variance is 0. Cook's distance is the one-step formula that
+# `cooks.distance()` uses for glm, so that `check_model()` needs no refits.
+# Returns NULL for models that `.glmmTMB_influence_unsupported()` names.
+.influence_glmmTMB <- function(model) {
+  if (!is.null(.glmmTMB_influence_unsupported(model))) {
+    return(NULL)
+  }
+  X <- as.matrix(glmmTMB::getME(model, "X"))
+  fam <- stats::family(model)
+  eta <- as.vector(stats::predict(model, type = "link"))
+  mu <- fam$linkinv(eta)
+  # for binomial models, the prior weights include the number of trials
+  prior_weights <- as.vector(stats::weights(model))
+  if (is.null(prior_weights)) {
+    prior_weights <- rep(1, length(mu))
+  }
+  variance <- .glmmTMB_variance(model, mu)
+  w <- prior_weights * fam$mu.eta(eta)^2 / variance
+
+  re_struc <- model$modelInfo$reStruc$condReStruc
+  if (length(re_struc)) {
+    vc <- glmmTMB::VarCorr(model)$cond
+    roots <- lapply(seq_along(re_struc), function(i) {
+      s <- matrix(unclass(vc[[i]]), nrow = nrow(vc[[i]]))
+      e <- eigen(s, symmetric = TRUE)
+      root <- e$vectors %*% diag(sqrt(pmax(e$values, 0)), nrow = nrow(s))
+      kronecker(diag(re_struc[[i]]$blockReps), root)
+    })
+    ZL <- as.matrix(glmmTMB::getME(model, "Z") %*% Matrix::bdiag(roots))
+    n_re <- ncol(ZL)
+    augmented <- rbind(
+      sqrt(w) * cbind(X, ZL),
+      cbind(matrix(0, n_re, ncol(X)), diag(n_re))
+    )
+  } else {
+    augmented <- sqrt(w) * X
+  }
+  qr_augmented <- qr(augmented)
+  Q <- qr.Q(qr_augmented)[seq_along(w), seq_len(qr_augmented$rank), drop = FALSE]
+  hat <- rowSums(Q^2)
+
+  n_params <- ncol(X)
+  pearson <- as.vector(stats::residuals(model, type = "response")) *
+    sqrt(prior_weights / variance)
+  list(
+    hat = hat,
+    cooks_distance = pearson^2 * hat / (n_params * (1 - hat)^2),
+    std_resid = pearson / sqrt(1 - hat),
+    n_params = n_params
+  )
+}
+
+
+# The reason why `.influence_glmmTMB()` gives no hat values for a glmmTMB
+# model, or NULL if it gives them. The supported families are those whose
+# hat values can be checked against lme4, glm or glm.nb.
+.glmmTMB_influence_unsupported <- function(model) {
+  family_name <- stats::family(model)$family
+  if (ncol(glmmTMB::getME(model, "Xzi")) > 0) {
+    return("zero-inflation")
+  }
+  if (ncol(glmmTMB::getME(model, "Xdisp")) > 1) {
+    return("a dispersion formula")
+  }
+  if (!family_name %in% c("gaussian", "poisson", "binomial", "Gamma", "nbinom2")) {
+    return(paste0("the `", family_name, "` family"))
+  }
+  re_struc <- model$modelInfo$reStruc$condReStruc
+  if (length(re_struc)) {
+    vc <- glmmTMB::VarCorr(model)$cond
+    block_sizes <- vapply(re_struc, function(i) i$blockSize, numeric(1))
+    if (length(vc) != length(re_struc) || any(vapply(vc, nrow, numeric(1)) != block_sizes)) {
+      return("this random-effects structure")
+    }
+  }
+  NULL
+}
+
+
+# Var(y | random effects) for the families in `.glmmTMB_influence_unsupported()`
+.glmmTMB_variance <- function(model, mu) {
+  switch(
+    stats::family(model)$family,
+    gaussian = rep(stats::sigma(model)^2, length(mu)),
+    Gamma = stats::sigma(model)^2 * mu^2,
+    poisson = mu,
+    binomial = mu * (1 - mu),
+    nbinom2 = mu * (1 + mu / stats::sigma(model))
+  )
 }
 
 
