@@ -126,6 +126,9 @@
 #' This plot is used to identify influential observations. If any points in this
 #' plot fall outside of Cook’s distance (the dashed lines) then it is considered
 #' an influential observation. See [`check_outliers()`] for further details.
+#' For models from package *glmmTMB*, this plot uses a one-step approximation
+#' of Cook's distance from the hat values, while [`check_outliers()`] computes
+#' Cook's distance by refitting the model without each observation.
 #'
 #' @section Multicollinearity:
 #' This plot checks for potential collinearity among predictors. In a nutshell,
