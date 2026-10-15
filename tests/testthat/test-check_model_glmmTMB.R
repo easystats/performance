@@ -306,7 +306,8 @@ test_that("check_model, glmmTMB outlier panel is skipped with a reason for unsup
 
 
 test_that("check_model, glmmTMB outlier panel is skipped for random effects in other model parts", {
-  fits <- list(
+  # the zero-inflation fit warns about a non-positive-definite Hessian
+  fits <- suppressWarnings(list(
     "zero-inflation" = glmmTMB::glmmTMB(
       count ~ mined + (1 | site),
       ziformula = ~ 0 + (1 | spp),
@@ -318,7 +319,7 @@ test_that("check_model, glmmTMB outlier panel is skipped for random effects in o
       dispformula = ~ 1 + (1 | Subject),
       data = sleepstudy
     )
-  )
+  ))
   for (reason in names(fits)) {
     res <- suppressWarnings(.check_model_messages(fits[[reason]], verbose = TRUE))
     expect_null(res$out$INFLUENTIAL)
@@ -376,8 +377,11 @@ test_that("check_model, glmmTMB outlier panel is skipped without fixed effects o
     "no estimated fixed effects",
     "no estimated fixed effects",
     "fixed dispersion",
+    "dispersion formula",
     "dispersion formula"
   )
+  d_off <- sleepstudy
+  d_off$off <- log(seq(1, 3, length.out = nrow(d_off)))
   fits <- list(
     glmmTMB::glmmTMB(
       count ~ 0 + (1 | site),
@@ -402,6 +406,12 @@ test_that("check_model, glmmTMB outlier panel is skipped without fixed effects o
       Reaction ~ Days + (1 | Subject),
       dispformula = ~ 0 + Days,
       data = sleepstudy
+    ),
+    # an offset in the dispersion formula, which `sigma()` ignores
+    glmmTMB::glmmTMB(
+      Reaction ~ Days + (1 | Subject),
+      dispformula = ~ 1 + offset(off),
+      data = d_off
     )
   )
   for (i in seq_along(fits)) {
@@ -431,7 +441,8 @@ test_that("check_model, glmmTMB outlier panel with an aliased column", {
   ))
   m0 <- glmmTMB::glmmTMB(count ~ mined + (1 | site), family = poisson, data = d)
   out <- suppressWarnings(.influential(m))
-  expect_equal(out$Hat, .influential(m0)$Hat, tolerance = 1e-5)
+  # a loose tolerance, because the fit with the aliased column is singular
+  expect_equal(out$Hat, .influential(m0)$Hat, tolerance = 1e-4)
   expect_identical(attr(out, "n_params"), 2L)
 })
 

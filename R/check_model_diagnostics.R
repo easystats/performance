@@ -418,6 +418,10 @@
   if (has_dispersion && anyNA(model$obj$env$map[["betadisp"]])) {
     return("a fixed dispersion")
   }
+  # `sigma()` ignores an offset in the dispersion formula
+  if (any(model$obj$env$data$dispoffset != 0)) {
+    return("a dispersion formula")
+  }
   NULL
 }
 
