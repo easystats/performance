@@ -949,24 +949,17 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
     if (inherits(model, "glmmTMB")) {
-      if (verbose) {
-        insight::format_alert(paste(
-          "The check for influential observations is skipped for models of class",
-          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
-          "Use `check_outliers()` to compute it."
-        ))
-      }
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
-    } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
-    }
-    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -1023,24 +1016,17 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
     if (inherits(model, "glmmTMB")) {
-      if (verbose) {
-        insight::format_alert(paste(
-          "The check for influential observations is skipped for models of class",
-          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
-          "Use `check_outliers()` to compute it."
-        ))
-      }
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
-    } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
-    }
-    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -1065,6 +1051,29 @@ check_model.DHARMa <- check_model.performance_simres
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
+}
+
+
+# data for the influential observations panel of glmmTMB models ----------
+
+# Cook's distance from `check_outliers()` needs one refit per row for glmmTMB,
+# so the panel uses hat values and a one-step Cook's distance, with the
+# threshold that `check_outliers()` uses
+.check_model_influential_glmmTMB <- function(model, verbose = TRUE) {
+  unsupported <- .safe(.glmmTMB_influence_unsupported(model), "this model type")
+  if (!is.null(unsupported)) {
+    if (verbose) {
+      insight::format_alert(paste0(
+        "The check for influential observations is skipped for this `glmmTMB` ",
+        "model, because hat values are not available for models with ",
+        unsupported,
+        "."
+      ))
+    }
+    return(NULL)
+  }
+  threshold <- .safe(.check_outliers_cook_threshold(model))
+  .safe(.model_diagnostic_outlier(model, threshold = threshold))
 }
 
 

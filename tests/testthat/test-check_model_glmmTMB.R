@@ -235,7 +235,8 @@ test_that("check_model, glmmTMB outlier panel is skipped with a reason for unsup
     expect_null(out$INFLUENTIAL)
     skip_msg <- grep("influential observations is skipped", msgs, value = TRUE, fixed = TRUE)
     expect_length(skip_msg, 1)
-    expect_match(skip_msg, reason, fixed = TRUE)
+    # the alert wraps its lines
+    expect_match(gsub("\\s+", " ", skip_msg), reason, fixed = TRUE)
 
     msgs <- .alert_messages(out <- check_model(fits[[reason]]))
     expect_null(out$INFLUENTIAL)
