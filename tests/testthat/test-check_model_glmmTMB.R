@@ -369,3 +369,79 @@ test_that("check_model, glmmTMB outlier panel with na.exclude", {
   expect_equal(out$Hat, stats::hatvalues(g), tolerance = 1e-4, ignore_attr = TRUE)
   expect_equal(out$Residuals, stats::residuals(g), tolerance = 1e-4, ignore_attr = TRUE)
 })
+
+
+test_that("check_model, glmmTMB outlier panel is skipped without fixed effects or dispersion", {
+  reasons <- c(
+    "no estimated fixed effects",
+    "no estimated fixed effects",
+    "fixed dispersion"
+  )
+  fits <- list(
+    glmmTMB::glmmTMB(
+      count ~ 0 + (1 | site),
+      family = poisson,
+      data = Salamanders
+    ),
+    # all fixed effects fixed by map, and no random effect
+    glmmTMB::glmmTMB(
+      count ~ mined,
+      family = poisson,
+      data = Salamanders,
+      start = list(beta = c(0, 1)),
+      map = list(beta = factor(c(NA, NA)))
+    ),
+    glmmTMB::glmmTMB(
+      Reaction ~ Days + (1 | Subject),
+      dispformula = ~0,
+      data = sleepstudy
+    )
+  )
+  for (i in seq_along(fits)) {
+    res <- suppressWarnings(.check_model_messages(fits[[i]], verbose = TRUE))
+    expect_null(res$out$INFLUENTIAL)
+    skip_msg <- grep(
+      "influential observations is skipped",
+      res$messages,
+      value = TRUE,
+      fixed = TRUE
+    )
+    expect_length(skip_msg, 1)
+    expect_match(gsub("\\s+", " ", skip_msg), reasons[i], fixed = TRUE)
+  }
+})
+
+
+test_that("check_model, glmmTMB outlier panel with an aliased column", {
+  d <- Salamanders
+  d$mined2 <- d$mined
+  # without the rank check, X keeps the aliased column
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + mined2 + (1 | site),
+    family = poisson,
+    data = d,
+    control = glmmTMB::glmmTMBControl(rank_check = "skip")
+  ))
+  m0 <- glmmTMB::glmmTMB(count ~ mined + (1 | site), family = poisson, data = d)
+  out <- suppressWarnings(.influential(m))
+  expect_equal(out$Hat, .influential(m0)$Hat, tolerance = 1e-5)
+  expect_identical(attr(out, "n_params"), 2L)
+})
+
+
+test_that("check_model, glmmTMB outlier panel alerts when hat values fail", {
+  local_mocked_bindings(.model_diagnostic_outlier = function(...) {
+    stop("failed", call. = FALSE)
+  })
+  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site), family = poisson, data = Salamanders)
+  res <- .check_model_messages(m, check = "outliers", verbose = TRUE)
+  expect_null(res$out$INFLUENTIAL)
+  skip_msg <- grep(
+    "influential observations is skipped",
+    res$messages,
+    value = TRUE,
+    fixed = TRUE
+  )
+  expect_length(skip_msg, 1)
+  expect_match(gsub("\\s+", " ", skip_msg), "could not be computed", fixed = TRUE)
+})

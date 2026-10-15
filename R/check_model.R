@@ -1079,7 +1079,14 @@ check_model.DHARMa <- check_model.performance_simres
     return(NULL)
   }
   threshold <- .safe(.check_outliers_cook_threshold(model))
-  .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  out <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  if (is.null(out) && verbose) {
+    insight::format_alert(paste(
+      "The check for influential observations is skipped for this `glmmTMB`",
+      "model, because its hat values could not be computed."
+    ))
+  }
+  out
 }
 
 

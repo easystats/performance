@@ -280,7 +280,7 @@
 # With L L' equal to that covariance and B = [W^(1/2) Z L, W^(1/2) X], they
 # are the diagonal of B (B'B + D)^-1 B', with D the identity for the random
 # effects and zero for the fixed effects, which also works when a variance
-# is 0. The sparse Cholesky factor of B'B + D keeps this fast for many
+# is 0. A sparse Cholesky factor of B'B + D keeps this fast for many
 # random-effect levels. Cook's distance is the one-step formula that
 # `cooks.distance()` uses for glm, so that `check_model()` needs no refits.
 # Returns NULL for models that `.glmmTMB_influence_unsupported()` names.
@@ -289,8 +289,7 @@
     return(NULL)
   }
   insight::check_if_installed("Matrix")
-  X <- as.matrix(glmmTMB::getME(model, "X"))
-  n_obs <- nrow(X)
+  n_obs <- nrow(glmmTMB::getME(model, "X"))
 
   # with `na.action = na.exclude`, predictions and residuals have NA rows for
   # the observations that the model did not use
@@ -303,15 +302,7 @@
     x
   }
 
-  # fixed effects that `map` fixes are not estimated, and fixed effects that
-  # `map` sets equal are one parameter
-  beta_map <- model$obj$env$map$beta
-  if (!is.null(beta_map)) {
-    estimated <- !is.na(beta_map)
-    beta_level <- droplevels(beta_map[estimated])
-    X <- X[, estimated, drop = FALSE] %*%
-      (outer(as.integer(beta_level), seq_len(nlevels(beta_level)), "==") * 1)
-  }
+  X <- .glmmTMB_estimated_X(model)
 
   fam <- stats::family(model)
   eta <- fitted_rows(stats::predict(model, type = "link"))
@@ -340,17 +331,24 @@
     })
     ZL <- glmmTMB::getME(model, "Z") %*% Matrix::bdiag(roots)
     n_re <- ncol(ZL)
-    # random effects first, so that the dense fixed-effect columns come last
-    # in the Cholesky factor
     B <- cbind(ZL, B)
   }
   B <- Matrix::Diagonal(x = sqrt(w)) %*% B
   penalized <- Matrix::crossprod(B) +
     Matrix::Diagonal(x = rep(c(1, 0), c(n_re, ncol(X))))
-  chol_factor <- Matrix::chol(Matrix::forceSymmetric(penalized))
-  hat_values <- as.vector(Matrix::colSums(
-    Matrix::solve(Matrix::t(chol_factor), Matrix::t(B))^2
-  ))
+  # a fill-reducing permutation keeps the factor sparse, also for crossed
+  # random effects
+  chol_factor <- Matrix::Cholesky(
+    Matrix::forceSymmetric(penalized),
+    perm = TRUE,
+    LDL = FALSE
+  )
+  solved <- Matrix::solve(
+    chol_factor,
+    Matrix::solve(chol_factor, Matrix::t(B), system = "P"),
+    system = "L"
+  )
+  hat_values <- as.vector(Matrix::colSums(solved^2))
 
   n_params <- ncol(X)
   model_resid <- fitted_rows(stats::residuals(model, type = "response"))
@@ -375,11 +373,16 @@
   if (ncol(glmmTMB::getME(model, "Xzi")) > 0 || length(re_terms$ziReStruc)) {
     return("zero-inflation")
   }
-  if (ncol(glmmTMB::getME(model, "Xdisp")) > 1 || length(re_terms$dispReStruc)) {
-    return("a dispersion formula")
+  dispersion <- .glmmTMB_dispersion_unsupported(model, family_name)
+  if (!is.null(dispersion)) {
+    return(dispersion)
   }
   if (!family_name %in% c("gaussian", "poisson", "binomial", "Gamma", "nbinom2")) {
     return(paste0("the `", family_name, "` family"))
+  }
+  # Cook's distance divides by the number of estimated fixed effects
+  if (ncol(.glmmTMB_estimated_X(model)) == 0) {
+    return("no estimated fixed effects")
   }
   re_struc <- re_terms$condReStruc
   if (length(re_struc)) {
@@ -392,6 +395,48 @@
     }
   }
   NULL
+}
+
+
+# Families with a dispersion parameter need an estimated dispersion from
+# `dispformula = ~1`. For poisson and binomial models, the dispersion model
+# has no columns.
+.glmmTMB_dispersion_unsupported <- function(model, family_name) {
+  n_disp <- ncol(glmmTMB::getME(model, "Xdisp"))
+  has_dispersion <- family_name %in% c("gaussian", "Gamma", "nbinom2")
+  if (
+    n_disp > 1 ||
+      (has_dispersion && n_disp != 1) ||
+      length(model$modelInfo$reStruc$dispReStruc)
+  ) {
+    return("a dispersion formula")
+  }
+  # `dispformula = ~0` and `map` fix the dispersion through `betadisp`
+  if (has_dispersion && anyNA(model$obj$env$map[["betadisp"]])) {
+    return("a fixed dispersion")
+  }
+  NULL
+}
+
+
+# The conditional fixed-effect model matrix with one column per estimated
+# fixed effect. Fixed effects that `map` fixes are dropped, and fixed effects
+# that `map` sets equal are one column. With `rank_check = "skip"`, aliased
+# columns are dropped. `[[` avoids a partial match of `betadisp` or `betazi`.
+.glmmTMB_estimated_X <- function(model) {
+  X <- as.matrix(glmmTMB::getME(model, "X"))
+  beta_map <- model$obj$env$map[["beta"]]
+  if (!is.null(beta_map)) {
+    estimated <- !is.na(beta_map)
+    beta_level <- droplevels(beta_map[estimated])
+    X <- X[, estimated, drop = FALSE] %*%
+      (outer(as.integer(beta_level), seq_len(nlevels(beta_level)), "==") * 1)
+  }
+  if (ncol(X) > 0) {
+    qr_X <- qr(X)
+    X <- X[, qr_X$pivot[seq_len(qr_X$rank)], drop = FALSE]
+  }
+  X
 }
 
 
