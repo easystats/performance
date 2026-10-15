@@ -386,7 +386,10 @@ test_that("check_predictions, RT-choice models keep RT predictions only (mocked)
     expect_s3_class(out, "performance_pp_check")
     expect_identical(nrow(out), n)
     expect_named(out, c(paste0("sim_", seq_len(iter)), "y"))
-    expect_equal(out$sim_1, as.numeric(rt_draws[, 1]))
+    expect_equal(
+      unname(as.matrix(out[paste0("sim_", seq_len(iter))])),
+      unname(rt_draws)
+    )
     expect_identical(out$y, observed$rt)
   }
 })
