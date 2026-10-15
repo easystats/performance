@@ -7,6 +7,11 @@
 
 ## Changes
 
+* `check_model()` and `check_predictions()` now work for multivariate models
+  from package *brms*. Use the `resp` argument to name the response to check.
+  Without `resp`, both functions give an error that lists the names of the
+  responses (#908).
+
 * `check_outliers()` now computes the default threshold for Cook's distance as
   `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the number of
   fixed effects of the conditional model, and `n` is the number of

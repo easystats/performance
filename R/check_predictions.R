@@ -60,6 +60,12 @@
 #'   similar to the observed outcome than the model in the left panel (a). Thus,
 #'   model (b) is likely to be preferred over model (a).
 #'
+#'   For multivariate **brms** models (models with more than one response), use
+#'   the `resp` argument to name one response, for example
+#'   `check_predictions(model, resp = "y1")`. If `resp` is missing or does
+#'   not name one response, `check_predictions()` gives an error that lists the
+#'   names of the responses.
+#'
 #' @note Every model object that has a `simulate()`-method should work with
 #' `check_predictions()`. On R 3.6.0 and higher, if **bayesplot** (or a
 #' package that imports **bayesplot** such as **rstanarm** or **brms**)
