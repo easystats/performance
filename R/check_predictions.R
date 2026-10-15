@@ -182,6 +182,7 @@ check_predictions.stanreg <- function(
   type = "density",
   verbose = TRUE,
   object = NULL,
+  resp = NULL,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -192,8 +193,15 @@ check_predictions.stanreg <- function(
     model <- object
   }
 
+  # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
+  resp <- .check_multivariate_resp(model, resp, "check_predictions")
+
   # retrieve model information
-  minfo <- insight::model_info(model, verbose = FALSE)
+  if (is.null(resp)) {
+    minfo <- insight::model_info(model, verbose = FALSE)
+  } else {
+    minfo <- insight::model_info(model, response = resp, verbose = FALSE)
+  }
 
   # try to find sensible default for "type" argument
   suggest_dots <- (minfo$is_bernoulli ||
@@ -216,14 +224,26 @@ check_predictions.stanreg <- function(
     "to create posterior predictive checks for Bayesian models"
   )
 
-  out <- modelbased::estimate_prediction(
-    model,
-    iterations = iterations,
-    keep_iterations = TRUE,
-    re_formula = re_formula,
-    verbose = verbose,
-    ...
-  )
+  if (is.null(resp)) {
+    out <- modelbased::estimate_prediction(
+      model,
+      iterations = iterations,
+      keep_iterations = TRUE,
+      re_formula = re_formula,
+      verbose = verbose,
+      ...
+    )
+  } else {
+    out <- modelbased::estimate_prediction(
+      model,
+      iterations = iterations,
+      keep_iterations = TRUE,
+      re_formula = re_formula,
+      verbose = verbose,
+      resp = resp,
+      ...
+    )
+  }
 
   # Wiener / RT-choice models predict two components; check the RTs
   is_rt_model <- isTRUE(minfo$is_wiener) || isTRUE(minfo$is_rtchoice)
@@ -241,7 +261,11 @@ check_predictions.stanreg <- function(
   out <- as.data.frame(out[iter_columns])
   colnames(out) <- sub("^iter_", "sim_", colnames(out))
 
-  resp_string <- insight::find_terms(model)$response
+  if (is.null(resp)) {
+    resp_string <- insight::find_terms(model)$response
+  } else {
+    resp_string <- insight::find_terms(model)[[resp]]$response
+  }
 
   if (
     !is.null(resp_string) &&
@@ -253,7 +277,9 @@ check_predictions.stanreg <- function(
 
   response <- insight::get_response(model)
   if (is.data.frame(response)) {
-    if (is_rt_model) {
+    if (!is.null(resp)) {
+      response <- response[[insight::find_response(model)[[resp]]]]
+    } else if (is_rt_model) {
       response <- response[[insight::find_response(model)[1]]]
     } else {
       response <- eval(
