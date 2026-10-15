@@ -317,3 +317,36 @@ withr::with_environment(
     })
   }
 )
+
+test_that("check_predictions, brms-wiener", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("rstan")
+  skip_if_not_installed("RWiener")
+
+  m <- insight::download_model("brms_wiener_1")
+  skip_if(is.null(m))
+
+  old_opt <- getOption("wiener_backend")
+  options(wiener_backend = "rtdists")
+  on.exit(options(wiener_backend = old_opt))
+  expect_no_error({
+    out <- check_predictions(m)
+  })
+  # fmt: skip
+  expect_names(
+    out,
+    c(
+      "sim_1", "sim_2", "sim_3", "sim_4", "sim_5", "sim_6", "sim_7",
+      "sim_8", "sim_9", "sim_10", "sim_11", "sim_12", "sim_13", "sim_14",
+      "sim_15", "sim_16", "sim_17", "sim_18", "sim_19", "sim_20", "sim_21",
+      "sim_22", "sim_23", "sim_24", "sim_25", "sim_26", "sim_27", "sim_28",
+      "sim_29", "sim_30", "sim_31", "sim_32", "sim_33", "sim_34", "sim_35",
+      "sim_36", "sim_37", "sim_38", "sim_39", "sim_40", "sim_41", "sim_42",
+      "sim_43", "sim_44", "sim_45", "sim_46", "sim_47", "sim_48", "sim_49",
+      "sim_50", "y"
+    )
+  )
+})
