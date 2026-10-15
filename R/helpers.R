@@ -8,6 +8,34 @@
 }
 
 
+# for multivariate brms models, `resp` must name exactly one response. For
+# other models, `resp` is ignored and `NULL` is returned.
+# see https://github.com/easystats/performance/issues/908
+.check_multivariate_resp <- function(model, resp, fun) {
+  if (!inherits(model, "brmsfit") || !insight::is_multivariate(model)) {
+    return(NULL)
+  }
+  responses <- names(insight::find_formula(model, verbose = FALSE))
+  if (!is.character(resp) || length(resp) != 1 || !resp %in% responses) {
+    insight::format_error(
+      paste0(
+        "This model has more than one response. Please use the `resp` argument to name one of them, e.g. `",
+        fun,
+        "(model, resp = \"",
+        responses[1],
+        "\")`."
+      ),
+      paste0(
+        "Possible values for `resp` are ",
+        datawizard::text_concatenate(responses, enclose = "`"),
+        "."
+      )
+    )
+  }
+  resp
+}
+
+
 .get_BIC <- function(x, estimator = "ML") {
   # check ML estimator
   if (missing(estimator) && inherits(x, "lmerMod")) {
