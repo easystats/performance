@@ -1083,7 +1083,7 @@ check_model.DHARMa <- check_model.performance_simres
   if (is.null(out) && verbose) {
     insight::format_alert(paste(
       "The check for influential observations is skipped for this `glmmTMB`",
-      "model, because its hat values could not be computed."
+      "model, because its hat values and Cook's distances could not be computed."
     ))
   }
   out

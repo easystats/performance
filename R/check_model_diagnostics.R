@@ -336,8 +336,9 @@
   B <- Matrix::Diagonal(x = sqrt(w)) %*% B
   penalized <- Matrix::crossprod(B) +
     Matrix::Diagonal(x = rep(c(1, 0), c(n_re, ncol(X))))
-  # a fill-reducing permutation keeps the factor sparse, also for crossed
-  # random effects
+  # a fill-reducing permutation limits the fill-in of the factor, for example
+  # when the random-effect terms are not ordered by their number of levels.
+  # Heavily crossed random effects can still give a dense factor.
   chol_factor <- Matrix::Cholesky(
     Matrix::forceSymmetric(penalized),
     perm = TRUE,
@@ -402,11 +403,13 @@
 # `dispformula = ~1`. For poisson and binomial models, the dispersion model
 # has no columns.
 .glmmTMB_dispersion_unsupported <- function(model, family_name) {
-  n_disp <- ncol(glmmTMB::getME(model, "Xdisp"))
+  x_disp <- glmmTMB::getME(model, "Xdisp")
+  n_disp <- ncol(x_disp)
   has_dispersion <- family_name %in% c("gaussian", "Gamma", "nbinom2")
   if (
     n_disp > 1 ||
       (has_dispersion && n_disp != 1) ||
+      (n_disp == 1 && !all(x_disp[, 1] == 1)) ||
       length(model$modelInfo$reStruc$dispReStruc)
   ) {
     return("a dispersion formula")

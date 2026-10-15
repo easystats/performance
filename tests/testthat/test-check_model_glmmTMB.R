@@ -375,7 +375,8 @@ test_that("check_model, glmmTMB outlier panel is skipped without fixed effects o
   reasons <- c(
     "no estimated fixed effects",
     "no estimated fixed effects",
-    "fixed dispersion"
+    "fixed dispersion",
+    "dispersion formula"
   )
   fits <- list(
     glmmTMB::glmmTMB(
@@ -394,6 +395,12 @@ test_that("check_model, glmmTMB outlier panel is skipped without fixed effects o
     glmmTMB::glmmTMB(
       Reaction ~ Days + (1 | Subject),
       dispformula = ~0,
+      data = sleepstudy
+    ),
+    # one dispersion column that is not an intercept
+    glmmTMB::glmmTMB(
+      Reaction ~ Days + (1 | Subject),
+      dispformula = ~ 0 + Days,
       data = sleepstudy
     )
   )
