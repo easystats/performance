@@ -350,3 +350,43 @@ test_that("check_predictions, brms-wiener", {
     )
   )
 })
+
+
+test_that("check_predictions, RT-choice models keep RT predictions only (mocked)", {
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+
+  n <- 4
+  iter <- 3
+  rt_draws <- matrix(seq_len(n * iter), nrow = n)
+  choice_draws <- matrix(-seq_len(n * iter), nrow = n)
+  colnames(rt_draws) <- colnames(choice_draws) <- paste0("iter_", seq_len(iter))
+  preds <- rbind(
+    data.frame(Component = "rt", rt_draws),
+    data.frame(Component = "response", choice_draws)
+  )
+  colnames(preds) <- c("Component", paste0("iter_", seq_len(iter)))
+  observed <- data.frame(rt = c(0.5, 0.6, 0.7, 0.8), resp = c(1, 0, 1, 1))
+
+  for (flag in c("is_wiener", "is_rtchoice")) {
+    info <- list(is_wiener = FALSE, is_rtchoice = FALSE)
+    info[[flag]] <- TRUE
+    local_mocked_bindings(
+      model_info = function(...) info,
+      find_terms = function(...) list(response = "rt"),
+      find_response = function(...) c("rt", "resp"),
+      get_response = function(...) observed,
+      .package = "insight"
+    )
+    local_mocked_bindings(
+      estimate_prediction = function(...) preds,
+      .package = "modelbased"
+    )
+    model <- structure(list(), class = c("brmsfit", "stanreg"))
+    out <- check_predictions(model, iterations = iter)
+    expect_s3_class(out, "performance_pp_check")
+    expect_identical(nrow(out), n)
+    expect_named(out, c(paste0("sim_", seq_len(iter)), "y"))
+    expect_equal(out$sim_1, as.numeric(rt_draws[, 1]))
+    expect_identical(out$y, observed$rt)
+  }
+})
