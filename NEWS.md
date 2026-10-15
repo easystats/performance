@@ -1,5 +1,10 @@
 # performance (devel)
 
+## Bug fixes
+
+* Fixed issue in `check_predictions()` for *brms* models with `dec()` response
+  (Wiener and RT-choice families); the RT part of the model is now checked.
+
 ## Changes
 
 * `check_outliers()` now computes the default threshold for Cook's distance as
