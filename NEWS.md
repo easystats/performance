@@ -7,14 +7,13 @@
   the number of coefficients from the number of observations. That was wrong
   for models with aliased coefficients and for *fixest* models with fixed
   effects. For `quasipoisson` and `quasibinomial` `glm` models with aliased
-  coefficients, the dispersion ratio now matches `summary(model)$dispersion`,
-  as it already did for other `glm` models.
+  coefficients, the dispersion ratio now matches `summary(model)$dispersion` up
+  to the fitting tolerance, as it already did for other `glm` models.
 
 * `check_overdispersion()` now gives correct results for models from package
   *glmx* with a negative binomial or binomial family. *glmx* has no method for
   Pearson residuals, so its stored deviance contributions were used before.
-  Other *glmx*
-  families give an error.
+  Other *glmx* families give an error.
 
 * If a model has no Pearson residuals, `check_overdispersion()` now gives an
   error. Before, it used the formula for Poisson models, which is wrong for

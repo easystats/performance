@@ -320,8 +320,8 @@ check_overdispersion.glmx <- check_overdispersion.glm
 # the stored `$residuals`, which are the deviance contributions of each
 # observation. Compute the Pearson residuals from the family at the estimated
 # extra parameter instead. `x$weights` holds the prior weights times the number
-# of trials for a binomial `cbind()` response, and is `NULL` when all of these
-# weights are 1.
+# of trials for a binomial `cbind()` response. glmx stores `NULL` when these
+# weights are a numeric (not integer) vector of ones, so use 1 then.
 .pearson_residuals_glmx <- function(x) {
   fam <- x$family$glm
   is_negbin <- startsWith(fam$family, "Negative Binomial")

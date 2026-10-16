@@ -637,7 +637,7 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
   )
   expect_equal(out$residual_df, stats::nobs(m_nb) - m_nb$df)
 
-  # glmx stores no weights when all weights are 1
+  # glmx stores no weights when they are given as a numeric vector of ones
   d$one <- 1
   m_nb1 <- glmx::glmx(
     y ~ x,
