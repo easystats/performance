@@ -842,12 +842,29 @@ check_collinearity.zerocount <- function(
     # VIFs a hair below 1 come from rounding, so R2 is at least 0
     r2 <- max(0, 1 - 1 / result[i])
     f_value <- (r2 / k[i]) / ((1 - r2) / df2[i])
-    lambda_lo <- .ncp_limit(f_value, k[i], df2[i], 1 - alpha)
-    lambda_up <- .ncp_limit(f_value, k[i], df2[i], alpha)
-    ci_lo[i] <- lambda_lo / (n + lambda_lo)
-    ci_up[i] <- lambda_up / (n + lambda_up)
+    # integrate() can fail for extreme F values with df2 = 1, so the limit is
+    # then NA rather than an error
+    lambda_lo <- tryCatch(
+      .ncp_limit(f_value, k[i], df2[i], 1 - alpha),
+      error = function(e) NA_real_
+    )
+    lambda_up <- tryCatch(
+      .ncp_limit(f_value, k[i], df2[i], alpha),
+      error = function(e) NA_real_
+    )
+    ci_lo[i] <- .ncp_to_r2(lambda_lo, n)
+    ci_up[i] <- .ncp_to_r2(lambda_up, n)
   }
   list(CI_low = ci_lo, CI_high = ci_up)
+}
+
+
+# an infinite noncentrality (infinite VIF) maps to R2 = 1, not NaN
+.ncp_to_r2 <- function(lambda, n) {
+  if (isTRUE(is.infinite(lambda))) {
+    return(1)
+  }
+  lambda / (n + lambda)
 }
 
 

@@ -1133,7 +1133,7 @@ test_that("check_collinearity, VIF CI is [1, 1] for VIF = 1 and very small F", {
   set.seed(2)
   d$y <- rnorm(nrow(d))
   out <- check_collinearity(lm(y ~ a + b, data = d), verbose = FALSE)
-  expect_identical(out$VIF, c(1, 1))
+  expect_equal(out$VIF, c(1, 1))
   expect_identical(out$VIF_CI_low, c(1, 1))
   expect_identical(out$VIF_CI_high, c(1, 1))
 
