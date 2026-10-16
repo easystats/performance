@@ -73,11 +73,11 @@ The confidence interval of a VIF is an interval for the population R2 of the
 auxiliary regression of that term on the other terms. The R2 limits map to
 the VIF by \code{1 / (1 - R2)}. The interval inverts the noncentral F
 distribution of the F statistic of that regression, as \code{MBESS::ci.R2()} does
-for fixed predictors (Kelley 2007). The interval assumes a linear model with fixed predictors. For other
-models, and for terms with more than one coefficient, it is an
-approximation. Its degrees of freedom depend on the number of coefficients
-of the other terms, so two terms with the same VIF can get different
-intervals. For a VIF very close to 1, both limits can be 1.
+for fixed predictors (Kelley 2007). The interval assumes a linear model with
+fixed predictors. For other models, and for terms with more than one
+coefficient, it is an approximation. Its degrees of freedom depend on the
+number of coefficients of the other terms, so two terms with the same VIF can
+get different intervals. For a VIF very close to 1, both limits can be 1.
 
 If the correlation matrix of the coefficients is singular because of
 collinearity between model terms, for example for exactly collinear
