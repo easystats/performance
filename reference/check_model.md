@@ -181,9 +181,13 @@ predictive check (`"pp_check"`) and the check for multicollinearity
 (`"vif"`). A message then lists the panels of the requested checks that
 were skipped (for example, `NORM` for `"normality"`) and the reason why
 the conversion failed. If none of the requested checks can be computed,
-`check_model()` gives an error. Multivariate **brms** models (models
-with more than one response) are not supported. A more advanced
-model-check for Bayesian models will be implemented at a later stage.
+`check_model()` gives an error. For multivariate **brms** models (models
+with more than one response), use the `response` argument to name one
+response, for example `check_model(model, response = "y1")`. Only this
+response is checked. If `response` is missing or does not name one
+response, `check_model()` gives an error that lists the names of the
+responses. A more advanced model-check for Bayesian models will be
+implemented at a later stage.
 
 See also the related
 [vignette](https://easystats.github.io/performance/articles/check_model.html).

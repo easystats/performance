@@ -238,10 +238,12 @@ check (<code>"pp_check"</code>) and the check for multicollinearity (<code>"vif"
 then lists the panels of the requested checks that were skipped (for
 example, <code>NORM</code> for <code>"normality"</code>) and the reason why the conversion failed.
 If none of the requested checks can be computed, <code>check_model()</code> gives an
-error. Multivariate <strong>brms</strong>
-models (models with more than one response) are not supported. A more
-advanced model-check for Bayesian models will be implemented at a later
-stage.</p>
+error. For multivariate <strong>brms</strong> models (models with more than one
+response), use the <code>response</code> argument to name one response, for example
+<code>check_model(model, response = "y1")</code>. Only this response is checked. If
+<code>response</code> is missing or does not name one response, <code>check_model()</code> gives
+an error that lists the names of the responses. A more advanced model-check for
+Bayesian models will be implemented at a later stage.</p>
 <p>See also the related <a href="https://easystats.github.io/performance/articles/check_model.html">vignette</a>.</p>
 <p>If you encounter problems with creating the plots, please see section
 <em>Troubleshooting</em>.</p>

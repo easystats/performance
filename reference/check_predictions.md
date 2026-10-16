@@ -114,6 +114,12 @@ The model shown in the right panel (b) can simulate new data that are
 more similar to the observed outcome than the model in the left panel
 (a). Thus, model (b) is likely to be preferred over model (a).
 
+For multivariate **brms** models (models with more than one response),
+use the `response` argument to name one response, for example
+`check_predictions(model, response = "y1")`. If `response` is missing or
+does not name one response, `check_predictions()` gives an error that
+lists the names of the responses.
+
 ## Note
 
 Every model object that has a

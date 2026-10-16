@@ -186,6 +186,11 @@ comparison is Figure 6 from <em>Gabry et al. 2019, Figure 6</em>.</p>
 The model shown in the right panel (b) can simulate new data that are more
 similar to the observed outcome than the model in the left panel (a). Thus,
 model (b) is likely to be preferred over model (a).</p>
+<p>For multivariate <strong>brms</strong> models (models with more than one response), use
+the <code>response</code> argument to name one response, for example
+<code>check_predictions(model, response = "y1")</code>. If <code>response</code> is missing or
+does not name one response, <code>check_predictions()</code> gives an error that
+lists the names of the responses.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
