@@ -285,7 +285,8 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     zi <- tryCatch(
       insight::get_residuals(x, type = "pearson", verbose = FALSE),
       error = function(e) {
-        # as in `.safe()`, let the error through for debugging
+        # with `options(easystats_errors = TRUE)`, raise the error again, so
+        # that its message and call come through as with `.safe()`
         if (isTRUE(getOption("easystats_errors", FALSE))) {
           stop(e)
         }
