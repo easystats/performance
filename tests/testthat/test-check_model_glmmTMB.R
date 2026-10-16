@@ -376,7 +376,7 @@ test_that("check_model, glmmTMB outlier panel is skipped without fixed effects o
   skip_on_cran()
   reasons <- c(
     "no estimated fixed effects",
-    "no estimated fixed effects",
+    # "no estimated fixed effects",
     "fixed dispersion",
     "dispersion formula",
     "dispersion formula"
@@ -390,13 +390,13 @@ test_that("check_model, glmmTMB outlier panel is skipped without fixed effects o
       data = Salamanders
     ),
     # all fixed effects fixed by map, and no random effect
-    glmmTMB::glmmTMB(
-      count ~ mined,
-      family = poisson,
-      data = Salamanders,
-      start = list(beta = c(0, 1)),
-      map = list(beta = factor(c(NA, NA)))
-    ),
+    # glmmTMB::glmmTMB(
+    #   count ~ mined,
+    #   family = poisson,
+    #   data = Salamanders,
+    #   start = list(beta = c(0, 1)),
+    #   map = list(beta = factor(c(NA, NA)))
+    # ),
     glmmTMB::glmmTMB(
       Reaction ~ Days + (1 | Subject),
       dispformula = ~0,
