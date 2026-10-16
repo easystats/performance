@@ -200,7 +200,12 @@ check_predictions.stanreg <- function(
   }
 
   # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
-  resp <- .check_multivariate_resp(model, response, "check_predictions")
+  resp <- .check_multivariate_resp(
+    model,
+    response,
+    "check_predictions",
+    dot_names = names(match.call(expand.dots = FALSE)$...)
+  )
 
   # retrieve model information
   if (is.null(resp)) {

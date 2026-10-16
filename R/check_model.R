@@ -548,7 +548,12 @@ check_model.stanreg <- function(
   }
 
   # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
-  resp <- .check_multivariate_resp(model, response, "check_model")
+  resp <- .check_multivariate_resp(
+    model,
+    response,
+    "check_model",
+    dot_names = names(match.call(expand.dots = FALSE)$...)
+  )
 
   freq_model <- tryCatch(
     if (is.null(resp)) {

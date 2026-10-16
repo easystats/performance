@@ -364,6 +364,12 @@ test_that("check_predictions, multivariate brms models need one `response`", {
     }
     expect_no_match(msg, "`resp`", fixed = TRUE)
   }
+  # `resp` next to `response` would otherwise reach brms twice
+  expect_error(
+    check_predictions(model, response = "gear", resp = "carb"),
+    "Please use only the `response` argument",
+    fixed = TRUE
+  )
   expect_false(called)
   # the mock is in reach of `modelbased::`, so `called` can become TRUE
   try(modelbased::estimate_prediction(model), silent = TRUE)

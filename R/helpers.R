@@ -9,11 +9,18 @@
 
 
 # for multivariate brms models, `response` must name exactly one response. For
-# other models, `response` is ignored and `NULL` is returned.
+# other models, `response` is ignored and `NULL` is returned. `dot_names` are
+# the names of the `...` arguments of the calling method.
 # see https://github.com/easystats/performance/issues/908
-.check_multivariate_resp <- function(model, response, fun) {
+.check_multivariate_resp <- function(model, response, fun, dot_names = NULL) {
   if (!inherits(model, "brmsfit") || !insight::is_multivariate(model)) {
     return(NULL)
+  }
+  # `resp` partially matches `response`, so it is only in `...` if both are given
+  if ("resp" %in% dot_names) {
+    insight::format_error(
+      "Please use only the `response` argument to name the response, not `resp` as well."
+    )
   }
   responses <- names(insight::find_formula(model, verbose = FALSE))
   if (

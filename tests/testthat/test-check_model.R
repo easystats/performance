@@ -364,6 +364,12 @@ test_that("`check_model()` needs one `response` for multivariate brms models", {
     }
     expect_no_match(msg, "`resp`", fixed = TRUE)
   }
+  # `resp` next to `response` would otherwise be dropped silently
+  expect_error(
+    check_model(m, response = "gear", resp = "carb"),
+    "Please use only the `response` argument",
+    fixed = TRUE
+  )
   expect_false(called)
   # the mock is in reach of `bayestestR::`, so `called` can become TRUE
   try(bayestestR::bayesian_as_frequentist(m), silent = TRUE)
