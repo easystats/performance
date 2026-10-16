@@ -1129,20 +1129,33 @@ check_collinearity.zerocount <- function(
   } else {
     beta <- x$coefficients
   }
-  # clm keeps aliased slopes as NA, polr and clmm drop them
-  slope_names <- names(beta)[!is.na(beta)]
+  # clm keeps aliased slopes as NA, polr and clmm drop them. Coefficient names
+  # can keep backticks, which the column names of the variance-covariance
+  # matrix do not have
+  slope_names <- gsub("`", "", names(beta)[!is.na(beta)], fixed = TRUE)
 
-  mm <- .safe(insight::get_modelmatrix(x))
-  if (is.null(mm) || is.null(attr(mm, "assign"))) {
-    # insight cannot build the model matrix of clm2 and clmm2 models, and
-    # returns a list without an "assign" attribute for clm models
-    f <- insight::find_formula(x, verbose = FALSE)[[component]]
-    mm <- .safe(stats::model.matrix(
-      stats::delete.response(stats::terms(f)),
-      data = insight::get_data(x, verbose = FALSE)
-    ))
+  # build the model matrix from the rows of the fit and with its contrasts,
+  # which can differ from the contrasts in options(). insight cannot build the
+  # model matrix of clm2 and clmm2 models, and returns a list without an
+  # "assign" attribute for clm models
+  f <- insight::find_formula(x, verbose = FALSE)[[component]]
+  mm <- .safe(stats::model.matrix(
+    stats::delete.response(stats::terms(f)),
+    data = insight::get_data(x, verbose = FALSE),
+    contrasts.arg = x$contrasts
+  ))
+  if (is.null(mm)) {
+    mm <- .safe(insight::get_modelmatrix(x))
   }
-  mm_names <- setdiff(colnames(mm), "(Intercept)")
+  if (!is.matrix(mm) || is.null(attr(mm, "assign"))) {
+    return(list(names = slope_names, assign = NULL, aliased = character(0)))
+  }
+  colnames(mm) <- gsub("`", "", colnames(mm), fixed = TRUE)
+
+  # a factor level that no row of the fit has gives a column of zeros, which
+  # the fit drops, but it is not an aliased predictor
+  used <- colSums(abs(mm), na.rm = TRUE) > 0
+  mm_names <- setdiff(colnames(mm)[used], "(Intercept)")
 
   list(
     names = slope_names,

@@ -1349,6 +1349,7 @@ test_that("check_collinearity, polr and svyolr match car::vif", {
 test_that("check_collinearity, polr, clm2 and clmm2 match clm and clmm", {
   skip_if_not_installed("MASS")
   skip_if_not_installed("ordinal")
+  skip_if_not_installed("withr")
   withr::local_package("ordinal")
   d <- .ordinal_vif_data()
   for (fo in list(o ~ x1 + f + x2 + x3, o ~ x3 + f + x1 + x2)) {
@@ -1377,6 +1378,7 @@ test_that("check_collinearity, ordinal models with thresholds keep VIFs on their
   skip_if_not_installed("MASS")
   skip_if_not_installed("survey")
   skip_if_not_installed("ordinal")
+  skip_if_not_installed("withr")
   withr::local_package("ordinal")
   d <- .ordinal_vif_data()
   des <- survey::svydesign(ids = ~1, data = d, weights = rep(1, nrow(d)))
@@ -1433,5 +1435,53 @@ test_that("check_collinearity, polr and clm with an aliased predictor", {
     expect_match(warns, "x4", fixed = TRUE)
     expect_identical(out$Term, c("x1", "x2", "x3"))
     expect_equal(out$VIF, ref, tolerance = tolerances[[i]], ignore_attr = TRUE)
+  }
+})
+
+test_that("check_collinearity, ordinal models with backticks, unused levels, or other contrasts", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("ordinal")
+  skip_if_not_installed("car")
+  skip_if_not_installed("withr")
+  withr::local_package("ordinal")
+  d <- .ordinal_vif_data()
+
+  # term names with backticks
+  d$`x 1` <- d$x1
+  m <- MASS::polr(o ~ `x 1` + x2 + x3, data = d, Hess = TRUE)
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("x 1", "x2", "x3"))
+  expect_equal(out$VIF, car::vif(m), tolerance = 1e-6, ignore_attr = TRUE)
+
+  # a factor level that only rows outside the fit have is not aliased
+  d$f4 <- factor(ifelse(d$x2 > 1.5, "s", as.character(d$f)))
+  d_fit <- d[d$x2 <= 1.5, ]
+  d_fit$f4 <- droplevels(d_fit$f4)
+  ref <- check_collinearity(ordinal::clm(o ~ x1 + f4 + x2 + x3, data = d_fit))
+  expect_silent(
+    out <- check_collinearity(ordinal::clm(
+      o ~ x1 + f4 + x2 + x3,
+      data = d,
+      subset = x2 <= 1.5
+    ))
+  )
+  expect_identical(out$Term, ref$Term)
+  expect_equal(out$VIF, ref$VIF, tolerance = 1e-4)
+
+  # the generalized VIF of a factor does not depend on its contrasts
+  ref <- check_collinearity(ordinal::clm(o ~ x1 + f + x2 + x3, data = d))
+  sum_contrasts <- list(f = "contr.sum")
+  models <- list(
+    ordinal::clm(o ~ x1 + f + x2 + x3, data = d, contrasts = sum_contrasts),
+    ordinal::clm2(o ~ x1 + f + x2 + x3, data = d, contrasts = sum_contrasts, Hess = TRUE),
+    withr::with_options(
+      list(contrasts = c("contr.sum", "contr.poly")),
+      MASS::polr(o ~ x1 + f + x2 + x3, data = d, Hess = TRUE)
+    )
+  )
+  for (m in models) {
+    out <- check_collinearity(m)
+    expect_identical(out$Term, ref$Term)
+    expect_equal(out$VIF, ref$VIF, tolerance = 1e-4)
   }
 })
