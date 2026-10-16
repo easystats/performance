@@ -2,6 +2,12 @@
 
 ## Bug fixes
 
+* `check_collinearity()` uses a new method for the confidence intervals of
+  VIF and tolerance. The method inverts the noncentral F distribution of the
+  auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed
+  predictors (Kelley 2007). The old interval had an infinite upper limit for
+  VIFs close to 1, and no upper limit for a VIF of exactly 1 (#597).
+
 * Fixed issue in `check_predictions()` for *brms* models with `dec()` response
   (Wiener and RT-choice families); the RT part of the model is now checked.
 
