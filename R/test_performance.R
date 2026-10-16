@@ -433,6 +433,67 @@ test_performance.ListNonNestedRegressions <- function(
 }
 
 
+#' @export
+test_performance.ListLavaan <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
+  insight::check_if_installed("lavaan")
+
+  # lavTestLRT() compares models in order of their df, so we do the same
+  dfs <- vapply(
+    objects,
+    function(x) as.numeric(lavaan::fitMeasures(x, "df")),
+    numeric(1)
+  )
+  model_class <- class(objects)
+  objects <- objects[order(dfs)]
+  class(objects) <- model_class
+
+  out <- .test_performance_init(objects, include_formula = include_formula, ...)
+
+  # BF test - insight cannot read the model info of lavaan fits, so
+  # bayesfactor_models() warns that the data may differ even when they are the
+  # same. lavTestLRT() below warns when the observed variables differ.
+  tryCatch(
+    {
+      rez <- suppressWarnings(test_bf(objects, reference = "sequential"))
+      if (!is.null(rez)) {
+        rez$Model <- NULL
+        out <- cbind(out, rez)
+      }
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
+
+  # LRT
+  tryCatch(
+    {
+      rez <- do.call(
+        test_likelihoodratio_ListLavaan,
+        c(unname(as.list(objects)), list(objects = objects))
+      )
+      rez$Name <- rez$Model
+      rez$Model <- NULL
+      rez$Type <- NULL
+      out <- merge(out, rez, sort = FALSE)
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
+
+  attr(out, "is_nested") <- TRUE
+  attr(out, "reference") <- "increasing"
+  class(out) <- c("test_performance", class(out))
+  out
+}
+
+
 # TESTS IMPLEMENTED IN OTHER PACKAGES
 
 # # Non-nested
