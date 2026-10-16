@@ -1160,6 +1160,44 @@ test_that("check_collinearity, VIF CI for a term with more than one coefficient"
   expect_true(all(out$VIF_CI_low <= out$VIF_CI_high))
 })
 
+test_that("check_collinearity, VIF CI covers the population VIF at the nominal rate", {
+  skip_on_cran()
+  # The other predictors are fixed. In each replicate, the first predictor is
+  # drawn as x_other %*% b + N(0, 1), so the noncentrality of its auxiliary
+  # regression is lambda = b' X'X b with centered X, and the population VIF is
+  # 1 + lambda / n (Kelley 2007, Equations 73 and 75).
+  .coverage <- function(n, vif, k, n_rep = 1000) {
+    set.seed(123)
+    x_other <- matrix(rnorm(n * k), n, k, dimnames = list(NULL, paste0("z", seq_len(k))))
+    x_centered <- scale(x_other, scale = FALSE)
+    s <- sqrt((vif - 1) * n / sum((x_centered %*% rep(1, k))^2))
+    b <- rep(s, k)
+    covered <- vapply(
+      seq_len(n_rep),
+      function(i) {
+        d <- data.frame(x_other)
+        d$x1 <- drop(x_other %*% b) + rnorm(n)
+        d$y <- rnorm(n)
+        m <- lm(stats::reformulate(c("x1", colnames(x_other)), "y"), data = d)
+        out <- check_collinearity(m, verbose = FALSE)
+        out$VIF_CI_low[1] <= vif && vif <= out$VIF_CI_high[1]
+      },
+      logical(1)
+    )
+    mean(covered)
+  }
+  cells <- data.frame(
+    n = c(30, 30, 300, 300, 30),
+    vif = c(1.02, 2, 1.02, 2, 2),
+    k = c(1, 1, 1, 1, 3)
+  )
+  for (i in seq_len(nrow(cells))) {
+    rate <- .coverage(cells$n[i], cells$vif[i], cells$k[i])
+    expect_gte(rate, 0.93)
+    expect_lte(rate, 0.97)
+  }
+})
+
 test_that("check_collinearity, VIF CI is NA without a CI level", {
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
   ci_cols <- c("VIF_CI_low", "VIF_CI_high", "Tolerance_CI_low", "Tolerance_CI_high")
