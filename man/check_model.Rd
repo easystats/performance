@@ -88,9 +88,11 @@ and thus automatically shows or hides dots.}
 For models with only categorical predictors, confidence intervals are not shown
 by default, because in this case, these are usually on very large scales.}
 
-\item{show_smooth}{Logical, if \code{FALSE}, no trend line is drawn in the
-Linearity, Homogeneity of Variance and Influential Observations panels. The
-plot needs a version of \strong{see} that supports this setting.}
+\item{show_smooth}{Logical, if \code{FALSE}, the Linearity and Homogeneity of
+Variance panels draw neither the LOESS smoother nor the cell means, and the
+Influential Observations panel draws no LOESS smoother. Reference lines,
+Cook's distance contours and the binned residuals panel do not change. This
+needs \strong{see} newer than 0.14.2. Older versions ignore the setting.}
 
 \item{maximum_dots}{Limits the number of data points for models with many
 observations, to reduce the time for rendering the plot. Defaults to a
