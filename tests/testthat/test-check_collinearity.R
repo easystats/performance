@@ -1031,18 +1031,23 @@ test_that("check_collinearity, VGAM::vgam is not treated as vglm", {
 
 # Confidence intervals for VIF -------------------------------------------------
 
-# lm fits for the interval tests: k = 1 at n = 32, k = 3 at n = 32, and k = 3
-# at n = 300 with VIFs near 1 and above 10
+# lm fits for the interval tests: k = 1 at n = 32, k = 3 at n = 32, k = 3 at
+# n = 300 with VIFs near 1 and above 10, and k = 1 at n = 100 with VIFs near 1
 .vif_ci_fits <- function() {
   set.seed(1)
   n <- 300
   d <- data.frame(a = rnorm(n), b = rnorm(n), c = rnorm(n))
   d$d <- d$a + 0.3 * rnorm(n)
   d$y <- rnorm(n)
+  set.seed(123)
+  n <- 100
+  d4 <- data.frame(x1 = rnorm(n), x2 = rnorm(n))
+  d4$y <- 0.5 * d4$x1 + 0.5 * d4$x2 + rnorm(n)
   list(
     m1 = lm(mpg ~ wt + hp, data = mtcars),
     m2 = lm(mpg ~ wt + cyl + gear + disp, data = mtcars),
-    m3 = lm(y ~ a + b + c + d, data = d)
+    m3 = lm(y ~ a + b + c + d, data = d),
+    m4 = lm(y ~ x1 + x2, data = d4)
   )
 }
 
@@ -1070,6 +1075,10 @@ test_that("check_collinearity, VIF CI matches MBESS::ci.R2 for fixed predictors"
     m3 = list(
       low = c(9.031201915, 1, 1, 9.024001139),
       high = c(12.449670149, 1.017152284, 1.027871649, 12.439712065)
+    ),
+    m4 = list(
+      low = c(1, 1),
+      high = c(1.058597355, 1.058597355)
     )
   )
   for (nm in names(fits)) {
