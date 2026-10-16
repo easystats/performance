@@ -2,6 +2,20 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now gives the correct VIFs for ordinal models from
+  `MASS::polr()`, `survey::svyolr()`, `ordinal::clm2()`, `ordinal::clmm2()`, and
+  `rstanarm::stan_polr()`. These models have one threshold for each outcome
+  level except one, and no single intercept. Before, `check_collinearity()`
+  dropped only the first column of the variance-covariance matrix as the
+  intercept. The VIFs then included the thresholds. For `MASS::polr()`,
+  `survey::svyolr()`, and `rstanarm::stan_polr()`, they also left out the first
+  slope. Thus the VIFs were wrong.
+
+* Some models drop an aliased predictor, which is a linear combination of other
+  predictors. For such `ordinal::clm()` and `MASS::polr()` models,
+  `check_collinearity()` now warns that the model matrix is rank deficient. It
+  also labels each VIF with its own term.
+
 * `check_collinearity()` uses a new method for the confidence intervals of
   VIF and tolerance. The method inverts the noncentral F distribution of the
   auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed

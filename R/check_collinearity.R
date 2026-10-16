@@ -1134,7 +1134,8 @@ check_collinearity.zerocount <- function(
 
   mm <- .safe(insight::get_modelmatrix(x))
   if (is.null(mm) || is.null(attr(mm, "assign"))) {
-    # insight cannot build the model matrix of clm2 and clmm2 models
+    # insight cannot build the model matrix of clm2 and clmm2 models, and
+    # returns a list without an "assign" attribute for clm models
     f <- insight::find_formula(x, verbose = FALSE)[[component]]
     mm <- .safe(stats::model.matrix(
       stats::delete.response(stats::terms(f)),

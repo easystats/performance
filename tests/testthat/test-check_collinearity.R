@@ -1352,7 +1352,8 @@ test_that("check_collinearity, polr, clm2 and clmm2 match clm and clmm", {
   withr::local_package("ordinal")
   d <- .ordinal_vif_data()
   for (fo in list(o ~ x1 + f + x2 + x3, o ~ x3 + f + x1 + x2)) {
-    # put the formula itself into each call, which insight evaluates again
+    # put the formula itself into each call, because clm2() evaluates its
+    # formula argument again and cannot find a local variable
     ref <- check_collinearity(eval(bquote(ordinal::clm(.(fo), data = d))))
     for (m in list(
       eval(bquote(MASS::polr(.(fo), data = d, Hess = TRUE))),
