@@ -689,3 +689,23 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
     "only available for\\s+negative\\s+binomial\\s+and\\s+binomial\\s+families"
   )
 })
+
+
+test_that("check_overdispersion, glm errors without Pearson residuals", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+
+  local_mocked_bindings(get_residuals = function(...) NULL, .package = "insight")
+  expect_error(
+    check_overdispersion(m_pois),
+    "Pearson residuals are not available for models of class `glm`"
+  )
+
+  local_mocked_bindings(
+    get_residuals = function(...) stop("no residuals"),
+    .package = "insight"
+  )
+  expect_error(
+    check_overdispersion(m_pois),
+    "Pearson residuals are not available for models of class `glm`"
+  )
+})

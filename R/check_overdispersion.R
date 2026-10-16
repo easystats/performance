@@ -270,15 +270,19 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
   }
 
   # use the model's own Pearson residuals - computing them by hand from
-  # `get_response()` is wrong for a two-column `cbind()` response
+  # `get_response()` is wrong for a two-column `cbind()` response and ignores
+  # prior weights, so stop if the model has none
   if (inherits(x, "glmx")) {
     zi <- .pearson_residuals_glmx(x)
   } else {
     zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
   }
   if (is.null(zi)) {
-    yhat <- stats::fitted(x)
-    zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
+    insight::format_error(paste0(
+      "Pearson residuals are not available for models of class `",
+      class(x)[1],
+      "`, so `check_overdispersion()` cannot compute the overdispersion test."
+    ))
   }
   # residuals of models with `na.action = na.exclude` are padded with NA
   chisq <- sum(zi^2, na.rm = TRUE)
