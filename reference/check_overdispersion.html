@@ -9,7 +9,7 @@ models for overdispersion (and underdispersion)."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.2.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,8 +152,10 @@ dispersion parameter, and their standard errors account for it. For these
 models, <code>check_overdispersion()</code> gives a warning (unless <code>verbose = FALSE</code>).
 The returned statistic is the unscaled Pearson chi-squared test, which
 compares the residuals with the variance of a Poisson or binomial model. For
-a <code>glm</code> model without aliased coefficients, the dispersion ratio then equals
-its estimated dispersion, up to the fitting tolerance.
+a model fitted with <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>, the dispersion ratio then equals
+<code>summary(model)$dispersion</code>, also when coefficients are aliased. For a
+<code>feglm()</code> model (package <strong>fixest</strong>), it equals the estimated dispersion of
+the model. Both hold up to the fitting tolerance.
 Simulated residuals are not used, because they are not available for quasi
 families.</p>
     </div>
