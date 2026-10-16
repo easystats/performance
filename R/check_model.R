@@ -128,6 +128,9 @@
 #' This plot is used to identify influential observations. If any points in this
 #' plot fall outside of Cook’s distance (the dashed lines) then it is considered
 #' an influential observation. See [`check_outliers()`] for further details.
+#' For models from package *glmmTMB*, this plot uses a one-step approximation
+#' of Cook's distance from the hat values, while [`check_outliers()`] computes
+#' Cook's distance by refitting the model without each observation.
 #'
 #' @section Multicollinearity:
 #' This plot checks for potential collinearity among predictors. In a nutshell,
@@ -960,24 +963,17 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
     if (inherits(model, "glmmTMB")) {
-      if (verbose) {
-        insight::format_alert(paste(
-          "The check for influential observations is skipped for models of class",
-          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
-          "Use `check_outliers()` to compute it."
-        ))
-      }
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
-    } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
-    }
-    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -1034,24 +1030,17 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
     if (inherits(model, "glmmTMB")) {
-      if (verbose) {
-        insight::format_alert(paste(
-          "The check for influential observations is skipped for models of class",
-          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
-          "Use `check_outliers()` to compute it."
-        ))
-      }
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
-    } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
-    }
-    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -1076,6 +1065,44 @@ check_model.DHARMa <- check_model.performance_simres
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
+}
+
+
+# data for the influential observations panel of glmmTMB models ----------
+
+# Cook's distance from `check_outliers()` needs one refit per row for glmmTMB,
+# so the panel uses hat values and a one-step Cook's distance, with the
+# threshold that `check_outliers()` uses
+.check_model_influential_glmmTMB <- function(model, verbose = TRUE) {
+  unsupported <- .safe(
+    .glmmTMB_influence_unsupported(model),
+    "a structure that cannot be read"
+  )
+  if (!is.null(unsupported)) {
+    if (verbose) {
+      insight::format_alert(paste0(
+        "The check for influential observations is skipped for this `glmmTMB` ",
+        "model, because hat values are not available for models with ",
+        unsupported,
+        "."
+      ))
+    }
+    return(NULL)
+  }
+  # without the threshold of `check_outliers()`, for example when n - p < 1,
+  # the contour lines would not match it
+  threshold <- .safe(.check_outliers_cook_threshold(model))
+  out <- NULL
+  if (!is.null(threshold)) {
+    out <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  }
+  if (is.null(out) && verbose) {
+    insight::format_alert(paste(
+      "The check for influential observations is skipped for this `glmmTMB`",
+      "model, because its hat values and Cook's distances could not be computed."
+    ))
+  }
+  out
 }
 
 
