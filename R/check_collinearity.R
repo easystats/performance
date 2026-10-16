@@ -7,8 +7,8 @@
 #' 1992). `multicollinearity()` is an alias for `check_collinearity()`.
 #' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
 #' considered as a collinearity check for smooth terms in GAMs. Confidence
-#' intervals for VIF and tolerance are based on Marcoulides et al. (2019,
-#' Appendix B).
+#' intervals for VIF and tolerance invert the noncentral F distribution of the
+#' auxiliary regression of each term on the other terms (Kelley 2007).
 #'
 #' @param x A model object (that should at least respond to `vcov()`, and if
 #' possible, also to `model.matrix()` - however, it also should work without
@@ -48,6 +48,16 @@
 #' level. Parallel models, such as `bracl(parallel = TRUE)`, have one slope
 #' per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
 #' `<n>` is the number of slopes of the term across all outcome levels.
+#'
+#' The confidence interval of a VIF is an interval for the population R2 of the
+#' auxiliary regression of that term on the other terms. The R2 limits map to
+#' the VIF by `1 / (1 - R2)`. The interval inverts the noncentral F
+#' distribution of the F statistic of that regression, as `MBESS::ci.R2()` does
+#' for fixed predictors (Kelley 2007). The interval assumes a linear model with
+#' fixed predictors. For other models, and for terms with more than one
+#' coefficient, it is an approximation. Its degrees of freedom depend on the
+#' number of coefficients of the other terms, so two terms with the same VIF can
+#' get different intervals. For a VIF very close to 1, both limits can be 1.
 #'
 #' If the correlation matrix of the coefficients is singular because of
 #' collinearity between model terms, for example for exactly collinear
@@ -128,13 +138,13 @@
 #'   introduction to statistical learning: with applications in R. New York:
 #'   Springer.
 #'
+#' - Kelley, K. (2007). Confidence Intervals for Standardized Effect Sizes:
+#'   Theory, Application, and Implementation. Journal of Statistical Software,
+#'   20(8), 1–24. \doi{10.18637/jss.v020.i08}
+#'
 #' - Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with
 #'   causal graphs. British Journal of Mathematical and Statistical Psychology,
 #'   00, 1–14.
-#'
-#' - Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-#'   Inflation Factors in Regression Models Using Latent Variable Modeling
-#'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
 #'
 #' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 #'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
@@ -148,10 +158,7 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @note The code to compute the confidence intervals for the VIF and tolerance
-#' values was adapted from the Appendix B from the Marcoulides et al. paper.
-#' Thus, credits go to these authors the original algorithm. There is also
-#' a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @examples
@@ -750,7 +757,7 @@ check_collinearity.zerocount <- function(
   }
 
   # check if CIs are requested
-  conf_ints <- .vif_ci(x, result, ci)
+  conf_ints <- .vif_ci(x, result, ci, n_coef)
 
   # for multinomial and VGAM models, the adjusted VIF uses the number of slopes
   # of each term across all outcome levels
@@ -799,26 +806,105 @@ check_collinearity.zerocount <- function(
 }
 
 
-.vif_ci <- function(x, result, ci) {
-  # CIs, see Appendix B 10.1177/0013164418817803
-  r <- 1 - (1 / result)
-  n <- insight::n_obs(x)
-  p <- insight::n_parameters(x)
+.vif_ci <- function(x, result, ci, n_coef) {
+  # CIs for the population R2 of each term's auxiliary regression, which is
+  # 1 - 1 / VIF. The F statistic of the auxiliary regression follows a
+  # noncentral F distribution with k and n - k - 1 df, where k is the number
+  # of the other coefficients, and noncentrality lambda = n * R2 / (1 - R2).
+  # The limits for lambda are inverted from that distribution and mapped to
+  # R2 = lambda / (n + lambda), see Kelley (2007, Equations 68, 73, 75, 76).
+  # This is the interval of MBESS::ci.R2() for fixed predictors.
+  ci_lo <- ci_up <- rep(NA_real_, length(result))
+  n <- .safe(insight::n_obs(x))
 
-  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
-    ci_lvl <- (1 + ci) / 2
+  if (
+    is.null(ci) ||
+      length(ci) != 1 ||
+      !is.numeric(ci) ||
+      is.na(ci) ||
+      ci <= 0 ||
+      ci >= 1 ||
+      !is.numeric(n) ||
+      length(n) != 1 ||
+      is.na(n)
+  ) {
+    return(list(CI_low = ci_lo, CI_high = ci_up))
+  }
 
-    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-    se_log <- se / (r * (1 - r))
-    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-    ci_lo <- stats::plogis(ci_log_lo)
-    ci_up <- stats::plogis(ci_log_up)
-  } else {
-    ci_lo <- ci_up <- NA
+  alpha <- (1 - ci) / 2
+  k <- sum(n_coef) - n_coef
+  df2 <- n - k - 1
+
+  for (i in seq_along(result)) {
+    if (is.na(result[i]) || k[i] < 1 || df2[i] < 1) {
+      next
+    }
+    # VIFs a hair below 1 come from rounding, so R2 is at least 0
+    r2 <- max(0, 1 - 1 / result[i])
+    f_value <- (r2 / k[i]) / ((1 - r2) / df2[i])
+    # integrate() can fail for extreme F values with df2 = 1, so the limit is
+    # then NA rather than an error
+    lambda_lo <- tryCatch(
+      .ncp_limit(f_value, k[i], df2[i], 1 - alpha),
+      error = function(e) NA_real_
+    )
+    lambda_up <- tryCatch(
+      .ncp_limit(f_value, k[i], df2[i], alpha),
+      error = function(e) NA_real_
+    )
+    ci_lo[i] <- .ncp_to_r2(lambda_lo, n)
+    ci_up[i] <- .ncp_to_r2(lambda_up, n)
   }
   list(CI_low = ci_lo, CI_high = ci_up)
+}
+
+
+# an infinite noncentrality (infinite VIF) maps to R2 = 1, not NaN
+.ncp_to_r2 <- function(lambda, n) {
+  if (isTRUE(is.infinite(lambda))) {
+    return(1)
+  }
+  lambda / (n + lambda)
+}
+
+
+# noncentrality lambda at which P(F <= f_value | lambda) = prob. The
+# probability decreases in lambda, so the limit is 0 when it is already below
+# prob at lambda = 0, which happens for very small F
+.ncp_limit <- function(f_value, df1, df2, prob) {
+  if (!is.finite(f_value)) {
+    return(Inf)
+  }
+  fun <- function(lambda) .pf_ncp(f_value, df1, df2, lambda) - prob
+  if (fun(0) <= 0) {
+    return(0)
+  }
+  upper <- max(10, 2 * f_value * df1)
+  while (fun(upper) > 0) {
+    upper <- upper * 2
+  }
+  stats::uniroot(fun, c(0, upper), tol = 1e-10 * upper, maxiter = 1000)$root
+}
+
+
+# distribution function of the noncentral F distribution. stats::pf() loses
+# precision for a noncentrality above about 1e6, so above 1e5 the numerator
+# chi-square uses the cube-root normal approximation of Abdel-Aty (1954), and
+# the denominator chi-square is integrated out
+.pf_ncp <- function(q, df1, df2, ncp) {
+  if (ncp <= 1e5) {
+    return(stats::pf(q, df1, df2, ncp = ncp))
+  }
+  h <- 2 * (df1 + 2 * ncp) / (9 * (df1 + ncp)^2)
+  p_num <- function(z) {
+    stats::pnorm(((z / (df1 + ncp))^(1 / 3) - (1 - h)) / sqrt(h))
+  }
+  stats::integrate(
+    function(y) p_num(q * df1 * y / df2) * stats::dchisq(y, df2),
+    lower = stats::qchisq(1e-12, df2),
+    upper = stats::qchisq(1e-12, df2, lower.tail = FALSE),
+    rel.tol = 1e-10
+  )$value
 }
 
 

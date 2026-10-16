@@ -49,8 +49,8 @@ calculating the (generalized) variance inflation factor (VIF, Fox & Monette
 1992). \code{multicollinearity()} is an alias for \code{check_collinearity()}.
 \code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
 considered as a collinearity check for smooth terms in GAMs. Confidence
-intervals for VIF and tolerance are based on Marcoulides et al. (2019,
-Appendix B).
+intervals for VIF and tolerance invert the noncentral F distribution of the
+auxiliary regression of each term on the other terms (Kelley 2007).
 }
 \details{
 \code{check_collinearity()} calculates the generalized variance inflation factor
@@ -69,6 +69,16 @@ level. Parallel models, such as \code{bracl(parallel = TRUE)}, have one slope
 per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
 \verb{<n>} is the number of slopes of the term across all outcome levels.
 
+The confidence interval of a VIF is an interval for the population R2 of the
+auxiliary regression of that term on the other terms. The R2 limits map to
+the VIF by \code{1 / (1 - R2)}. The interval inverts the noncentral F
+distribution of the F statistic of that regression, as \code{MBESS::ci.R2()} does
+for fixed predictors (Kelley 2007). The interval assumes a linear model with
+fixed predictors. For other models, and for terms with more than one
+coefficient, it is an approximation. Its degrees of freedom depend on the
+number of coefficients of the other terms, so two terms with the same VIF can
+get different intervals. For a VIF very close to 1, both limits can be 1.
+
 If the correlation matrix of the coefficients is singular because of
 collinearity between model terms, for example for exactly collinear
 predictors in a model that keeps all coefficients, such as
@@ -76,10 +86,7 @@ predictors in a model that keeps all coefficients, such as
 \code{NULL}.
 }
 \note{
-The code to compute the confidence intervals for the VIF and tolerance
-values was adapted from the Appendix B from the Marcoulides et al. paper.
-Thus, credits go to these authors the original algorithm. There is also
-a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
 implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \section{Multicollinearity}{
@@ -172,12 +179,12 @@ Clusters. Open Journal of Statistics, 03(06), 24-44.
 \item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013). An
 introduction to statistical learning: with applications in R. New York:
 Springer.
+\item Kelley, K. (2007). Confidence Intervals for Standardized Effect Sizes:
+Theory, Application, and Implementation. Journal of Statistical Software,
+20(8), 1–24. \doi{10.18637/jss.v020.i08}
 \item Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with
 causal graphs. British Journal of Mathematical and Statistical Psychology,
 00, 1–14.
-\item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-Inflation Factors in Regression Models Using Latent Variable Modeling
-Methods. Educational and Psychological Measurement, 79(5), 874–882.
 \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 \item Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
