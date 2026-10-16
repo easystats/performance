@@ -1052,16 +1052,18 @@ test_that("check_collinearity, VGAM::vgam is not treated as vglm", {
 }
 
 test_that("check_collinearity, VIF CI matches MBESS::ci.R2 for fixed predictors", {
-  # Reference values from MBESS 5.0.1, computed for each term of each fit in
+  # Reference values from MBESS 5.0.1, computed for each fit `m` in
   # `.vif_ci_fits()` with
   #   vif <- check_collinearity(m)$VIF
-  #   r <- MBESS::ci.R2(
-  #     R2 = 1 - 1 / vif, N = insight::n_obs(m), K = length(vif) - 1,
-  #     conf.level = 0.95, Random.Predictors = FALSE
-  #   )
-  #   1 / (1 - c(r$Lower.Conf.Limit.R2, r$Upper.Conf.Limit.R2))
+  #   sapply(vif, function(v) {
+  #     r <- MBESS::ci.R2(
+  #       R2 = 1 - 1 / v, N = insight::n_obs(m), K = length(vif) - 1,
+  #       conf.level = 0.95, Random.Predictors = FALSE
+  #     )
+  #     1 / (1 - c(r$Lower.Conf.Limit.R2, r$Upper.Conf.Limit.R2))
+  #   })
   # The interval inverts the noncentral F distribution of the auxiliary
-  # regression's F statistic (Kelley 2007, Equations 68, 73 and 76).
+  # regression's F statistic (Kelley 2007, Equations 68, 73, 75 and 76).
   fits <- .vif_ci_fits()
   mbess <- list(
     m1 = list(
