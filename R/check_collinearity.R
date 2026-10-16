@@ -750,7 +750,7 @@ check_collinearity.zerocount <- function(
   }
 
   # check if CIs are requested
-  conf_ints <- .vif_ci(x, result, ci)
+  conf_ints <- .vif_ci(x, result, ci, n_coef)
 
   # for multinomial and VGAM models, the adjusted VIF uses the number of slopes
   # of each term across all outcome levels
@@ -799,26 +799,88 @@ check_collinearity.zerocount <- function(
 }
 
 
-.vif_ci <- function(x, result, ci) {
-  # CIs, see Appendix B 10.1177/0013164418817803
-  r <- 1 - (1 / result)
-  n <- insight::n_obs(x)
-  p <- insight::n_parameters(x)
+.vif_ci <- function(x, result, ci, n_coef) {
+  # CIs for the population R2 of each term's auxiliary regression, which is
+  # 1 - 1 / VIF. The F statistic of the auxiliary regression follows a
+  # noncentral F distribution with k and n - k - 1 df, where k is the number
+  # of the other coefficients, and noncentrality lambda = n * R2 / (1 - R2).
+  # The limits for lambda are inverted from that distribution and mapped to
+  # R2 = lambda / (n + lambda), see Kelley (2007, Equations 68, 73, 75, 76).
+  # This is the interval of MBESS::ci.R2() for fixed predictors.
+  ci_lo <- ci_up <- rep(NA_real_, length(result))
+  n <- .safe(insight::n_obs(x))
 
-  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
-    ci_lvl <- (1 + ci) / 2
+  if (
+    is.null(ci) ||
+      length(ci) != 1 ||
+      !is.numeric(ci) ||
+      is.na(ci) ||
+      ci <= 0 ||
+      ci >= 1 ||
+      !is.numeric(n) ||
+      length(n) != 1 ||
+      is.na(n)
+  ) {
+    return(list(CI_low = ci_lo, CI_high = ci_up))
+  }
 
-    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-    se_log <- se / (r * (1 - r))
-    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-    ci_lo <- stats::plogis(ci_log_lo)
-    ci_up <- stats::plogis(ci_log_up)
-  } else {
-    ci_lo <- ci_up <- NA
+  alpha <- (1 - ci) / 2
+  k <- sum(n_coef) - n_coef
+  df2 <- n - k - 1
+
+  for (i in seq_along(result)) {
+    if (is.na(result[i]) || k[i] < 1 || df2[i] < 1) {
+      next
+    }
+    # VIFs a hair below 1 come from rounding, so R2 is at least 0
+    r2 <- max(0, 1 - 1 / result[i])
+    f_value <- (r2 / k[i]) / ((1 - r2) / df2[i])
+    lambda_lo <- .ncp_limit(f_value, k[i], df2[i], 1 - alpha)
+    lambda_up <- .ncp_limit(f_value, k[i], df2[i], alpha)
+    ci_lo[i] <- lambda_lo / (n + lambda_lo)
+    ci_up[i] <- lambda_up / (n + lambda_up)
   }
   list(CI_low = ci_lo, CI_high = ci_up)
+}
+
+
+# noncentrality lambda at which P(F <= f_value | lambda) = prob. The
+# probability decreases in lambda, so the limit is 0 when it is already below
+# prob at lambda = 0, which happens for very small F
+.ncp_limit <- function(f_value, df1, df2, prob) {
+  if (!is.finite(f_value)) {
+    return(Inf)
+  }
+  fun <- function(lambda) .pf_ncp(f_value, df1, df2, lambda) - prob
+  if (fun(0) <= 0) {
+    return(0)
+  }
+  upper <- max(10, 2 * f_value * df1)
+  while (fun(upper) > 0) {
+    upper <- upper * 2
+  }
+  stats::uniroot(fun, c(0, upper), tol = 1e-10 * upper, maxiter = 1000)$root
+}
+
+
+# distribution function of the noncentral F distribution. stats::pf() loses
+# precision for a noncentrality above about 1e6, so above 1e5 the numerator
+# chi-square uses the cube-root normal approximation of Abdel-Aty (1954), and
+# the denominator chi-square is integrated out
+.pf_ncp <- function(q, df1, df2, ncp) {
+  if (ncp <= 1e5) {
+    return(stats::pf(q, df1, df2, ncp = ncp))
+  }
+  h <- 2 * (df1 + 2 * ncp) / (9 * (df1 + ncp)^2)
+  p_num <- function(z) {
+    stats::pnorm(((z / (df1 + ncp))^(1 / 3) - (1 - h)) / sqrt(h))
+  }
+  stats::integrate(
+    function(y) p_num(q * df1 * y / df2) * stats::dchisq(y, df2),
+    lower = stats::qchisq(1e-12, df2),
+    upper = stats::qchisq(1e-12, df2, lower.tail = FALSE),
+    rel.tol = 1e-10
+  )$value
 }
 
 

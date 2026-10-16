@@ -11,14 +11,14 @@ test_that("check_collinearity, correct order in print", {
       "Low Correlation",
       "",
       " Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI",
-      " gear 1.53 [1.19,  2.51]     1.24      0.65     [0.40, 0.84]",
+      " gear 1.53 [1.04,  2.06]     1.24      0.65     [0.48, 0.96]",
       "",
       "Moderate Correlation",
       "",
       " Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI",
-      "   wt 5.05 [3.21,  8.41]     2.25      0.20     [0.12, 0.31]",
-      "  cyl 5.41 [3.42,  9.04]     2.33      0.18     [0.11, 0.29]",
-      " disp 9.97 [6.08, 16.85]     3.16      0.10     [0.06, 0.16]"
+      "   wt 5.05 [2.57,  7.07]     2.25      0.20     [0.14, 0.39]",
+      "  cyl 5.41 [2.74,  7.58]     2.33      0.18     [0.13, 0.36]",
+      " disp 9.97 [4.90, 13.93]     3.16      0.10     [0.07, 0.20]"
     )
   )
 })
@@ -182,7 +182,7 @@ test_that("check_collinearity", {
     suppressWarnings(
       check_collinearity(m2, component = "conditional", verbose = FALSE)$VIF_CI_low
     ),
-    c(1.03392, 1.14674, 1.10105),
+    c(1.04727, 1.15082, 1.10641),
     tolerance = 1e-3
   )
   expect_equal(
@@ -194,7 +194,7 @@ test_that("check_collinearity", {
     suppressWarnings(
       check_collinearity(m2, component = "all", verbose = FALSE)$VIF_CI_low
     ),
-    c(1.03392, 1.14674, 1.10105, 1.17565, 1, 1.17565),
+    c(1.04727, 1.15082, 1.10641, 1.1879, 1, 1.17896),
     tolerance = 1e-3
   )
   expect_equal(
@@ -212,7 +212,7 @@ test_that("check_collinearity", {
         verbose = FALSE
       )$Tolerance_CI_high
     ),
-    c(0.85059, 1, 0.85059),
+    c(0.84182, 1, 0.84821),
     tolerance = 1e-3
   )
 
@@ -256,12 +256,16 @@ test_that("check_collinearity | afex", {
   }))
 
   expect_message(ccoM <- check_collinearity(aM)) # nolint
-  expect_warning(expect_message(ccoW <- check_collinearity(aW))) # nolint
+  expect_message(ccoW <- check_collinearity(aW)) # nolint
   expect_message(ccoB <- check_collinearity(aB), regexp = NA) # nolint
 
   expect_identical(nrow(ccoM), 15L)
   expect_identical(nrow(ccoW), 3L)
   expect_identical(nrow(ccoB), 3L)
+  # within-subject terms are orthogonal, so the VIF is 1 up to rounding and
+  # the interval is [1, 1]
+  expect_equal(ccoW$VIF_CI_low, c(1, 1, 1))
+  expect_equal(ccoW$VIF_CI_high, c(1, 1, 1))
 
   suppressWarnings(suppressMessages({
     aM <- afex::aov_car(
@@ -284,7 +288,7 @@ test_that("check_collinearity | afex", {
   }))
 
   expect_message(ccoM <- check_collinearity(aM)) # nolint
-  expect_warning(expect_message(ccoW <- check_collinearity(aW))) # nolint
+  expect_message(ccoW <- check_collinearity(aW)) # nolint
   expect_message(ccoB <- check_collinearity(aB), regexp = NA) # nolint
 
   expect_identical(nrow(ccoM), 15L)
@@ -1023,4 +1027,144 @@ test_that("check_collinearity, VGAM::vgam is not treated as vglm", {
   d <- .multinom_data()
   m <- VGAM::vgam(y ~ VGAM::s(x1) + x3, family = VGAM::multinomial, data = d)
   expect_false(.is_vglm_categorical(m))
+})
+
+# Confidence intervals for VIF -------------------------------------------------
+
+# lm fits for the interval tests: k = 1 at n = 32, k = 3 at n = 32, and k = 3
+# at n = 300 with VIFs near 1 and above 10
+.vif_ci_fits <- function() {
+  set.seed(1)
+  n <- 300
+  d <- data.frame(a = rnorm(n), b = rnorm(n), c = rnorm(n))
+  d$d <- d$a + 0.3 * rnorm(n)
+  d$y <- rnorm(n)
+  list(
+    m1 = lm(mpg ~ wt + hp, data = mtcars),
+    m2 = lm(mpg ~ wt + cyl + gear + disp, data = mtcars),
+    m3 = lm(y ~ a + b + c + d, data = d)
+  )
+}
+
+test_that("check_collinearity, VIF CI matches MBESS::ci.R2 for fixed predictors", {
+  # Reference values from MBESS 5.0.1, computed for each term of each fit in
+  # `.vif_ci_fits()` with
+  #   vif <- check_collinearity(m)$VIF
+  #   r <- MBESS::ci.R2(
+  #     R2 = 1 - 1 / vif, N = insight::n_obs(m), K = length(vif) - 1,
+  #     conf.level = 0.95, Random.Predictors = FALSE
+  #   )
+  #   1 / (1 - c(r$Lower.Conf.Limit.R2, r$Upper.Conf.Limit.R2))
+  # The interval inverts the noncentral F distribution of the auxiliary
+  # regression's F statistic (Kelley 2007, Equations 68, 73 and 76).
+  fits <- .vif_ci_fits()
+  mbess <- list(
+    m1 = list(
+      low = c(1.189741123, 1.189741123),
+      high = c(2.561565375, 2.561565375)
+    ),
+    m2 = list(
+      low = c(2.568411510, 2.740063225, 1.038860764, 4.896194597),
+      high = c(7.065834021, 7.578944965, 2.062516798, 13.932600910)
+    ),
+    m3 = list(
+      low = c(9.031201915, 1, 1, 9.024001139),
+      high = c(12.449670149, 1.017152284, 1.027871649, 12.439712065)
+    )
+  )
+  for (nm in names(fits)) {
+    out <- check_collinearity(fits[[nm]], verbose = FALSE)
+    expect_equal(out$VIF_CI_low, mbess[[nm]]$low, tolerance = 1e-5)
+    expect_equal(out$VIF_CI_high, mbess[[nm]]$high, tolerance = 1e-5)
+  }
+})
+
+test_that("check_collinearity, VIF CI limits solve the noncentral F equations", {
+  # for a limit VIF_b, the noncentrality is n * (VIF_b - 1), and the limits
+  # solve P(F <= F_obs | lambda) = 0.975 (lower) and 0.025 (upper)
+  fits <- .vif_ci_fits()
+  for (m in fits) {
+    out <- check_collinearity(m, verbose = FALSE)
+    n <- insight::n_obs(m)
+    k <- nrow(out) - 1
+    r2 <- 1 - 1 / out$VIF
+    f_obs <- (r2 / k) / ((1 - r2) / (n - k - 1))
+    for (i in seq_len(nrow(out))) {
+      lambda_low <- n * (out$VIF_CI_low[i] - 1)
+      lambda_high <- n * (out$VIF_CI_high[i] - 1)
+      if (lambda_low > 0) {
+        expect_equal(
+          stats::pf(f_obs[i], k, n - k - 1, ncp = lambda_low),
+          0.975,
+          tolerance = 1e-6
+        )
+      }
+      expect_gt(lambda_high, 0)
+      expect_equal(
+        stats::pf(f_obs[i], k, n - k - 1, ncp = lambda_high),
+        0.025,
+        tolerance = 1e-6
+      )
+    }
+  }
+})
+
+test_that("check_collinearity, VIF CI is finite near VIF = 1", {
+  # https://github.com/easystats/performance/issues/597
+  set.seed(123)
+  n <- 100
+  x1 <- rnorm(n)
+  x2 <- rnorm(n)
+  y <- 0.5 * x1 + 0.5 * x2 + rnorm(n)
+  out <- check_collinearity(lm(y ~ x1 + x2), verbose = FALSE)
+  expect_true(all(is.finite(out$VIF_CI_high)))
+  expect_true(all(out$VIF_CI_high < 1.1))
+
+  set.seed(1)
+  d <- data.frame(y = rnorm(300), a = rnorm(300), b = rnorm(300))
+  out <- check_collinearity(lm(y ~ a + b, data = d), verbose = FALSE)
+  expect_true(all(is.finite(out$VIF_CI_high)))
+  expect_true(all(out$VIF_CI_high < 1.1))
+})
+
+test_that("check_collinearity, VIF CI is [1, 1] for VIF = 1 and very small F", {
+  # orthogonal predictors in a balanced design give VIF = 1 exactly
+  d <- expand.grid(a = c(-1, 1), b = c(-1, 1), rep = 1:5)
+  set.seed(2)
+  d$y <- rnorm(nrow(d))
+  out <- check_collinearity(lm(y ~ a + b, data = d), verbose = FALSE)
+  expect_identical(out$VIF, c(1, 1))
+  expect_identical(out$VIF_CI_low, c(1, 1))
+  expect_identical(out$VIF_CI_high, c(1, 1))
+
+  # the observed F is below the 0.025 quantile of the central F distribution,
+  # so both limits for the population R2 are 0
+  set.seed(1)
+  n <- 100
+  d <- data.frame(x1 = rnorm(n), x2 = rnorm(n))
+  d$y <- rnorm(n)
+  out <- check_collinearity(lm(y ~ x1 + x2, data = d), verbose = FALSE)
+  r2 <- 1 - 1 / out$VIF
+  expect_true(all(r2 / ((1 - r2) / (n - 2)) < stats::qf(0.025, 1, n - 2)))
+  expect_identical(out$VIF_CI_low, c(1, 1))
+  expect_identical(out$VIF_CI_high, c(1, 1))
+  expect_identical(out$Tolerance_CI_low, c(1, 1))
+  expect_identical(out$Tolerance_CI_high, c(1, 1))
+})
+
+test_that("check_collinearity, VIF CI for a term with more than one coefficient", {
+  m <- lm(mpg ~ wt + factor(cyl), data = mtcars)
+  out <- check_collinearity(m, verbose = FALSE)
+  expect_true(all(is.finite(out$VIF_CI_low)))
+  expect_true(all(is.finite(out$VIF_CI_high)))
+  expect_true(all(out$VIF_CI_low <= out$VIF_CI_high))
+})
+
+test_that("check_collinearity, VIF CI is NA without a CI level", {
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+  ci_cols <- c("VIF_CI_low", "VIF_CI_high", "Tolerance_CI_low", "Tolerance_CI_high")
+  for (ci in list(NULL, NA)) {
+    out <- check_collinearity(m, ci = ci, verbose = FALSE)
+    expect_true(all(is.na(unlist(out[ci_cols]))))
+  }
 })
