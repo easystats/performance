@@ -289,10 +289,13 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
         if (isTRUE(getOption("easystats_errors", FALSE))) {
           stop(e)
         }
-        residual_error <<- conditionMessage(e)
-        NULL
+        e
       }
     )
+    if (inherits(zi, "error")) {
+      residual_error <- conditionMessage(zi)
+      zi <- NULL
+    }
   }
   if (is.null(zi)) {
     insight::format_error(
