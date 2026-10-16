@@ -6,9 +6,9 @@
   model (`df.residual()`) for `glm` and *fixest* models. Before, it subtracted
   the number of coefficients from the number of observations. That was wrong
   for models with aliased coefficients and for *fixest* models with fixed
-  effects. For `quasipoisson` and `quasibinomial` `glm` models with aliased
-  coefficients, the dispersion ratio now matches `summary(model)$dispersion` up
-  to the fitting tolerance, as it already did for other `glm` models.
+  effects. Now, the dispersion ratio of `quasipoisson` and `quasibinomial`
+  `glm` models with aliased coefficients matches `summary(model)$dispersion`
+  up to the fitting tolerance. It already did so for other `glm` models.
 
 * `check_overdispersion()` now gives correct results for models from package
   *glmx* with a negative binomial or binomial family. *glmx* has no method for
