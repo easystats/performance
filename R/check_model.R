@@ -83,10 +83,12 @@
 #' then lists the panels of the requested checks that were skipped (for
 #' example, `NORM` for `"normality"`) and the reason why the conversion failed.
 #' If none of the requested checks can be computed, `check_model()` gives an
-#' error. Multivariate **brms**
-#' models (models with more than one response) are not supported. A more
-#' advanced model-check for Bayesian models will be implemented at a later
-#' stage.
+#' error. For multivariate **brms** models (models with more than one
+#' response), use the `response` argument to name one response, for example
+#' `check_model(model, response = "y1")`. Only this response is checked. If
+#' `response` is missing or does not name one response, `check_model()` gives
+#' an error that lists the names of the responses. A more advanced model-check for
+#' Bayesian models will be implemented at a later stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
@@ -534,6 +536,7 @@ check_model.stanreg <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  response = NULL,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -544,15 +547,20 @@ check_model.stanreg <- function(
     model <- x
   }
 
-  # multivariate brms models, see https://github.com/easystats/performance/issues/908
-  if (inherits(model, "brmsfit") && insight::is_multivariate(model)) {
-    insight::format_error(
-      "Multivariate models are not supported by `check_model()`. This model has more than one response."
-    )
-  }
+  # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
+  resp <- .check_multivariate_resp(
+    model,
+    response,
+    "check_model",
+    dot_names = names(match.call(expand.dots = FALSE)$...)
+  )
 
   freq_model <- tryCatch(
-    bayestestR::bayesian_as_frequentist(model),
+    if (is.null(resp)) {
+      bayestestR::bayesian_as_frequentist(model)
+    } else {
+      bayestestR::bayesian_as_frequentist(model, resp = resp)
+    },
     error = function(e) {
       # let errors propagate when debugging, see `.safe()`
       if (isTRUE(getOption("easystats_errors", FALSE))) {
@@ -571,6 +579,7 @@ check_model.stanreg <- function(
   if (is.null(freq_model) && inherits(model, "brmsfit")) {
     return(.check_model_bayesian_fallback(
       model,
+      resp = resp,
       conversion_error = conversion_error,
       panel = panel,
       check = check,
@@ -631,6 +640,7 @@ check_model.brmsfit <- check_model.stanreg
 
 .check_model_bayesian_fallback <- function(
   model,
+  resp,
   conversion_error,
   panel,
   check,
@@ -659,7 +669,12 @@ check_model.brmsfit <- check_model.stanreg
     insight::formula_ok(model)
   }
 
-  minfo <- insight::model_info(model, verbose = FALSE)
+  # for multivariate models, use the model information of response `resp`
+  if (is.null(resp)) {
+    minfo <- insight::model_info(model, verbose = FALSE)
+  } else {
+    minfo <- insight::model_info(model, response = resp, verbose = FALSE)
+  }
 
   dat <- list()
 
@@ -673,6 +688,7 @@ check_model.brmsfit <- check_model.stanreg
     dat$PP_CHECK <- .safe(suppressWarnings(check_predictions(
       model,
       verbose = verbose,
+      response = resp,
       ...
     )))
   }

@@ -7,6 +7,11 @@
 
 ## Changes
 
+* `check_model()` and `check_predictions()` now work for multivariate models
+  from package *brms*. Use the `response` argument to name the response to
+  check. Without `response`, both functions give an error that lists the names
+  of the responses (#908).
+
 * `check_model()` now shows the plot of influential observations for models
   from package *glmmTMB* with a gaussian, poisson, binomial, Gamma, or `nbinom2`
   family, and without zero-inflation or a dispersion formula. The plot uses hat
@@ -89,8 +94,7 @@
 * `check_model()` no longer fails for *brms* models that cannot be converted
   to a frequentist model. It now returns only the posterior predictive check
   and multicollinearity panels, and a message lists the panels that were
-  skipped (#461). Multivariate *brms* models now give an informative error
-  (#908).
+  skipped (#461).
 
 * `check_collinearity()` now labels terms correctly for *brms* models that use
   the `0 + Intercept` formula syntax. Before, each VIF was shown under the name
