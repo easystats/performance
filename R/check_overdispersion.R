@@ -327,7 +327,8 @@ check_overdispersion.glmx <- check_overdispersion.glm
   is_negbin <- startsWith(fam$family, "Negative Binomial")
   if (!is_negbin && fam$family != "binomial") {
     insight::format_error(paste0(
-      "Overdispersion checks for `glmx` models are only available for negative binomial and binomial families, not for the `",
+      "Overdispersion checks for `glmx` models are only available for ",
+      "negative binomial and binomial families, not for the `",
       fam$family,
       "` family."
     ))

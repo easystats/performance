@@ -590,7 +590,8 @@ test_that("check_overdispersion, fixest_multi from split matches each sample", {
   d <- data.frame(
     x = rnorm(150),
     f = rep(1:10, 15),
-    g = rep(c("a", "b"), c(100, 50))
+    g = rep(c("a", "b"), c(100, 50)),
+    stringsAsFactors = FALSE
   )
   d$y <- rpois(150, exp(1 + 0.3 * d$x))
 
@@ -635,7 +636,7 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
     sum(stats::residuals(m_ref, type = "pearson")^2),
     tolerance = 1e-3
   )
-  expect_equal(out$residual_df, stats::nobs(m_nb) - m_nb$df)
+  expect_identical(out$residual_df, as.integer(stats::nobs(m_nb) - m_nb$df))
 
   # glmx stores no weights when they are given as a numeric vector of ones
   d$one <- 1
@@ -659,7 +660,7 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
   d <- data.frame(x = stats::rnorm(150))
   d$s <- stats::rbinom(150, 10, stats::plogis(0.3 + d$x))
   d$f <- 10 - d$s
-  d$pw <- rep(1:3, length.out = 150)
+  d$pw <- rep_len(1:3, 150)
   fam <- function(shape) stats::binomial(link = glmx::gosset(shape))
   for (weighted in c(FALSE, TRUE)) {
     if (weighted) {
@@ -718,7 +719,7 @@ test_that("check_overdispersion, glm errors without Pearson residuals", {
   )
 
   local_mocked_bindings(
-    get_residuals = function(...) stop("no residuals"),
+    get_residuals = function(...) stop("no residuals", call. = FALSE),
     .package = "insight"
   )
   expect_error(
