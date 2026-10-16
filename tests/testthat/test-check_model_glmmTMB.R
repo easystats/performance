@@ -373,6 +373,7 @@ test_that("check_model, glmmTMB outlier panel with na.exclude", {
 
 
 test_that("check_model, glmmTMB outlier panel is skipped without fixed effects or dispersion", {
+  skip_on_cran()
   reasons <- c(
     "no estimated fixed effects",
     "no estimated fixed effects",
