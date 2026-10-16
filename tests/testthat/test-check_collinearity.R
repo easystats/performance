@@ -910,18 +910,29 @@ test_that("check_collinearity, strong correlation inside one term is not singula
   expect_no_warning(out2 <- check_collinearity(m2))
   expect_equal(out2$VIF, unname(.gvif_by_map(stats::vcov(m2), map)), tolerance = 1e-6)
 
-  # raw polynomials whose correlation matrix is numerically singular, while
-  # the correlation between terms is low
+  # raw polynomials with a badly conditioned correlation matrix, while the
+  # correlation between terms is low. The degree keeps the condition number
+  # (about 1e8) far from 1 / .Machine$double.eps, so the result does not
+  # depend on the BLAS
   d3 <- data.frame(z = seq(1, 100, length.out = 300), x2 = rnorm(300))
   d3$y <- 0.01 * d3$z + d3$x2 + rnorm(300)
-  m4 <- lm(y ~ poly(z, 12, raw = TRUE) + x2, data = d3)
+  m4 <- lm(y ~ poly(z, 6, raw = TRUE) + x2, data = d3)
   v4 <- stats::vcov(m4)[-1, -1]
-  expect_lt(rcond(stats::cov2cor(v4)), .Machine$double.eps)
-  map4 <- c(stats::setNames(rep("poly", 12), colnames(v4)[1:12]), x2 = "x2")
+  expect_lt(rcond(stats::cov2cor(v4)), 1e-8)
+  map4 <- c(stats::setNames(rep("poly", 6), colnames(v4)[1:6]), x2 = "x2")
   expect_no_warning(out4 <- check_collinearity(m4))
-  expect_equal(out4$VIF, unname(.gvif_by_map(v4, map4)), tolerance = 1e-4)
+  expect_equal(out4$VIF, unname(.gvif_by_map(v4, map4)), tolerance = 1e-6)
 
   # the check for singularity between terms, on exact matrices
+  # columns 1 and 2 are one term whose correlation matrix is numerically
+  # singular (rcond below .Machine$double.eps), and its whitening is exact
+  a <- 1 - 2^-53
+  r0 <- diag(3)
+  r0[1, 2] <- r0[2, 1] <- a
+  expect_lt(rcond(r0), .Machine$double.eps)
+  expect_false(.is_singular_between_terms(r0, c(1, 1, 2)))
+  # the same columns as separate terms are singular
+  expect_true(.is_singular_between_terms(r0, 1:3))
   r <- matrix(c(1, 0.5, 0.5, 0.5, 1, 1, 0.5, 1, 1), 3, 3)
   # columns 2 and 3 are one term that cannot be made uncorrelated
   expect_false(.is_singular_between_terms(r, c(1, 2, 2)))
