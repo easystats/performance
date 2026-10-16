@@ -191,6 +191,9 @@ horizontal line and show no apparent deviation.
 This plot is used to identify influential observations. If any points in this
 plot fall outside of Cook’s distance (the dashed lines) then it is considered
 an influential observation. See \code{\link[=check_outliers]{check_outliers()}} for further details.
+For models from package \emph{glmmTMB}, this plot uses a one-step approximation
+of Cook's distance from the hat values, while \code{\link[=check_outliers]{check_outliers()}} computes
+Cook's distance by refitting the model without each observation.
 }
 
 \section{Multicollinearity}{

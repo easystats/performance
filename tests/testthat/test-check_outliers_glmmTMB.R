@@ -370,3 +370,27 @@ test_that("check_outliers, glmmTMB Cook's distance for binomial models with a cb
     tolerance = 1e-6
   )
 })
+
+
+test_that("check_outliers, glmmTMB plot data shows the refit Cook's distances", {
+  skip_on_cran()
+  data(sleepstudy, package = "lme4")
+  d <- sleepstudy
+  d$Reaction[1] <- 1000
+  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = d)
+  out <- check_outliers(m)
+  out_data <- attributes(out)$data
+  expect_gt(sum(out_data$Outlier_Cook == 1, na.rm = TRUE), 0)
+
+  influential <- attributes(out)$influential_obs
+  expect_identical(influential$Cooks_Distance, out_data$Distance_Cook)
+  expect_identical(influential$Influential == "Influential", out_data$Outlier_Cook == 1)
+  expect_equal(
+    influential$Hat,
+    check_model(m, check = "outliers")$INFLUENTIAL$Hat,
+    tolerance = 1e-10
+  )
+
+  out_zscore <- check_outliers(m, method = "zscore_robust")
+  expect_null(attributes(out_zscore)$influential_obs)
+})

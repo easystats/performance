@@ -202,42 +202,59 @@
 # prepare data for influential obs plot ----------------------------------
 
 .model_diagnostic_outlier <- function(model, threshold = NULL) {
-  s <- summary(model)
-
   # use the threshold from `check_outliers()`, so that the contour lines
   # match the flagged outliers
   if (!is.null(threshold)) {
     cook_levels <- threshold
   } else if (inherits(model, "lm", which = TRUE) == 1) {
+    s <- summary(model)
     cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
   } else {
     cook_levels <- c(0.5, 1)
   }
 
-  n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
-
-  infl <- stats::influence(model, do.coef = FALSE)
-  model_resid <- as.numeric(insight::get_residuals(model))
-
-  std_resid <- tryCatch(
-    stats::rstandard(model, infl),
-    error = function(e) {
-      # no rstandard() method (e.g., lmerMod): standardize Pearson residuals,
-      # so that the Cook's distance contours match `cooks.distance()`
-      .safe(
-        as.numeric(
-          stats::residuals(model, type = "pearson") /
-            (stats::sigma(model) * sqrt(1 - infl$hat))
-        ),
-        model_resid
-      )
+  if (inherits(model, "glmmTMB")) {
+    influence_glmmTMB <- .influence_glmmTMB(model)
+    if (is.null(influence_glmmTMB)) {
+      return(NULL)
     }
-  )
+    # one row per fitted observation, also with `na.action = na.exclude`. A
+    # data frame keeps the column name `Predicted` of the other models.
+    predicted <- data.frame(Predicted = influence_glmmTMB$fitted)
+    model_resid <- influence_glmmTMB$residuals
+    n_params <- influence_glmmTMB$n_params
+    hat_values <- influence_glmmTMB$hat
+    cooks_distance <- influence_glmmTMB$cooks_distance
+    std_resid <- influence_glmmTMB$std_resid
+  } else {
+    model_resid <- as.numeric(insight::get_residuals(model))
+    predicted <- insight::get_predicted(model, ci = NULL)
+    n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
+
+    infl <- stats::influence(model, do.coef = FALSE)
+    hat_values <- infl$hat
+    cooks_distance <- stats::cooks.distance(model, infl)
+
+    std_resid <- tryCatch(
+      stats::rstandard(model, infl),
+      error = function(e) {
+        # no rstandard() method (e.g., lmerMod): standardize Pearson residuals,
+        # so that the Cook's distance contours match `cooks.distance()`
+        .safe(
+          as.numeric(
+            stats::residuals(model, type = "pearson") /
+              (stats::sigma(model) * sqrt(1 - infl$hat))
+          ),
+          model_resid
+        )
+      }
+    )
+  }
 
   plot_data <- data.frame(
-    Hat = infl$hat,
-    Cooks_Distance = stats::cooks.distance(model, infl),
-    Fitted = insight::get_predicted(model, ci = NULL),
+    Hat = hat_values,
+    Cooks_Distance = cooks_distance,
+    Fitted = predicted,
     Residuals = model_resid,
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
@@ -251,6 +268,196 @@
   attr(plot_data, "cook_levels") <- cook_levels
   attr(plot_data, "n_params") <- n_params
   plot_data
+}
+
+
+# glmmTMB has no influence() or hatvalues() method. The hat values are the
+# diagonal of W^(1/2) A H^-1 A' W^(1/2), with A = [X, Z], W the GLM weight
+# a * (dmu/deta)^2 / (phi * V(mu)) with a the prior weights, and
+# H = A' W A + G, where G is zero for the fixed effects and the inverse
+# random-effects covariance for the random effects (after Lee & Nelder 1996,
+# p. 631, with phi moved into W and their diagonal U generalized to G).
+# With L L' equal to that covariance and B = [W^(1/2) Z L, W^(1/2) X], they
+# are the diagonal of B (B'B + D)^-1 B', with D the identity for the random
+# effects and zero for the fixed effects, which also works when a variance
+# is 0. A sparse Cholesky factor of B'B + D keeps this fast for many
+# random-effect levels. Cook's distance is the one-step formula that
+# `cooks.distance()` uses for glm, so that `check_model()` needs no refits.
+# Returns NULL for models that `.glmmTMB_influence_unsupported()` names.
+.influence_glmmTMB <- function(model) {
+  if (!is.null(.glmmTMB_influence_unsupported(model))) {
+    return(NULL)
+  }
+  insight::check_if_installed("Matrix")
+  n_obs <- nrow(glmmTMB::getME(model, "X"))
+
+  # with `na.action = na.exclude`, predictions and residuals have NA rows for
+  # the observations that the model did not use
+  na_action <- attr(stats::model.frame(model), "na.action")
+  fitted_rows <- function(x) {
+    x <- as.vector(x)
+    if (length(x) == n_obs + length(na_action) && length(na_action) > 0) {
+      x <- x[-na_action]
+    }
+    x
+  }
+
+  X <- .glmmTMB_estimated_X(model)
+
+  fam <- stats::family(model)
+  eta <- fitted_rows(stats::predict(model, type = "link"))
+  mu <- fam$linkinv(eta)
+  # for binomial models, the prior weights include the number of trials
+  prior_weights <- fitted_rows(stats::weights(model))
+  if (!length(prior_weights)) {
+    prior_weights <- rep(1, n_obs)
+  }
+  variance <- .glmmTMB_variance(model, mu)
+  w <- prior_weights * fam$mu.eta(eta)^2 / variance
+
+  B <- Matrix::Matrix(X, sparse = TRUE)
+  n_re <- 0
+  re_struc <- model$modelInfo$reStruc$condReStruc
+  if (length(re_struc)) {
+    vc <- glmmTMB::VarCorr(model)$cond
+    roots <- lapply(seq_along(re_struc), function(i) {
+      s <- matrix(unclass(vc[[i]]), nrow = nrow(vc[[i]]))
+      e <- eigen(s, symmetric = TRUE)
+      root <- e$vectors %*% diag(sqrt(pmax(e$values, 0)), nrow = nrow(s))
+      Matrix::kronecker(
+        Matrix::Diagonal(re_struc[[i]]$blockReps),
+        Matrix::Matrix(root, sparse = TRUE)
+      )
+    })
+    ZL <- glmmTMB::getME(model, "Z") %*% Matrix::bdiag(roots)
+    n_re <- ncol(ZL)
+    B <- cbind(ZL, B)
+  }
+  B <- Matrix::Diagonal(x = sqrt(w)) %*% B
+  penalized <- Matrix::crossprod(B) +
+    Matrix::Diagonal(x = rep(c(1, 0), c(n_re, ncol(X))))
+  # a fill-reducing permutation limits the fill-in of the factor, for example
+  # when the random-effect terms are not ordered by their number of levels.
+  # Heavily crossed random effects can still give a dense factor.
+  chol_factor <- Matrix::Cholesky(
+    Matrix::forceSymmetric(penalized),
+    perm = TRUE,
+    LDL = FALSE
+  )
+  solved <- Matrix::solve(
+    chol_factor,
+    Matrix::solve(chol_factor, Matrix::t(B), system = "P"),
+    system = "L"
+  )
+  hat_values <- as.vector(Matrix::colSums(solved^2))
+
+  n_params <- ncol(X)
+  model_resid <- fitted_rows(stats::residuals(model, type = "response"))
+  pearson <- model_resid * sqrt(prior_weights / variance)
+  list(
+    hat = hat_values,
+    cooks_distance = pearson^2 * hat_values / (n_params * (1 - hat_values)^2),
+    std_resid = pearson / sqrt(1 - hat_values),
+    residuals = model_resid,
+    fitted = mu,
+    n_params = n_params
+  )
+}
+
+
+# The reason why `.influence_glmmTMB()` gives no hat values for a glmmTMB
+# model, or NULL if it gives them. The supported families are those whose
+# hat values can be checked against lme4, glm or glm.nb.
+.glmmTMB_influence_unsupported <- function(model) {
+  family_name <- stats::family(model)$family
+  re_terms <- model$modelInfo$reStruc
+  if (ncol(glmmTMB::getME(model, "Xzi")) > 0 || length(re_terms$ziReStruc)) {
+    return("zero-inflation")
+  }
+  dispersion <- .glmmTMB_dispersion_unsupported(model, family_name)
+  if (!is.null(dispersion)) {
+    return(dispersion)
+  }
+  if (!family_name %in% c("gaussian", "poisson", "binomial", "Gamma", "nbinom2")) {
+    return(paste0("the `", family_name, "` family"))
+  }
+  # Cook's distance divides by the number of estimated fixed effects
+  if (ncol(.glmmTMB_estimated_X(model)) == 0) {
+    return("no estimated fixed effects")
+  }
+  re_struc <- re_terms$condReStruc
+  if (length(re_struc)) {
+    vc <- glmmTMB::VarCorr(model)$cond
+    block_sizes <- vapply(re_struc, function(i) i$blockSize, numeric(1))
+    if (
+      length(vc) != length(re_struc) || any(vapply(vc, nrow, numeric(1)) != block_sizes)
+    ) {
+      return("this random-effects structure")
+    }
+  }
+  NULL
+}
+
+
+# Families with a dispersion parameter need an estimated dispersion from
+# `dispformula = ~1`. For poisson and binomial models, the dispersion model
+# has no columns.
+.glmmTMB_dispersion_unsupported <- function(model, family_name) {
+  x_disp <- glmmTMB::getME(model, "Xdisp")
+  n_disp <- ncol(x_disp)
+  has_dispersion <- family_name %in% c("gaussian", "Gamma", "nbinom2")
+  if (
+    n_disp > 1 ||
+      (has_dispersion && n_disp != 1) ||
+      (n_disp == 1 && !all(x_disp[, 1] == 1)) ||
+      length(model$modelInfo$reStruc$dispReStruc)
+  ) {
+    return("a dispersion formula")
+  }
+  # `dispformula = ~0` and `map` fix the dispersion through `betadisp`
+  if (has_dispersion && anyNA(model$obj$env$map[["betadisp"]])) {
+    return("a fixed dispersion")
+  }
+  # `sigma()` ignores an offset in the dispersion formula
+  if (any(model$obj$env$data$dispoffset != 0)) {
+    return("a dispersion formula")
+  }
+  NULL
+}
+
+
+# The conditional fixed-effect model matrix with one column per estimated
+# fixed effect. Fixed effects that `map` fixes are dropped, and fixed effects
+# that `map` sets equal are one column. With `rank_check = "skip"`, aliased
+# columns are dropped. `[[` avoids a partial match of `betadisp` or `betazi`.
+.glmmTMB_estimated_X <- function(model) {
+  X <- as.matrix(glmmTMB::getME(model, "X"))
+  beta_map <- model$obj$env$map[["beta"]]
+  if (!is.null(beta_map)) {
+    estimated <- !is.na(beta_map)
+    beta_level <- droplevels(beta_map[estimated])
+    X <- X[, estimated, drop = FALSE] %*%
+      (outer(as.integer(beta_level), seq_len(nlevels(beta_level)), "==") * 1)
+  }
+  if (ncol(X) > 0) {
+    qr_X <- qr(X)
+    X <- X[, qr_X$pivot[seq_len(qr_X$rank)], drop = FALSE]
+  }
+  X
+}
+
+
+# Var(y | random effects) for a prior weight of 1, for the families in
+# `.glmmTMB_influence_unsupported()`
+.glmmTMB_variance <- function(model, mu) {
+  switch(
+    stats::family(model)$family,
+    gaussian = rep(stats::sigma(model)^2, length(mu)),
+    Gamma = stats::sigma(model)^2 * mu^2,
+    poisson = mu,
+    binomial = mu * (1 - mu),
+    nbinom2 = mu * (1 + mu / stats::sigma(model))
+  )
 }
 
 
