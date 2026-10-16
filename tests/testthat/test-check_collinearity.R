@@ -1209,6 +1209,48 @@ test_that("check_collinearity, VIF CI covers the population VIF at the nominal r
   }
 })
 
+test_that(".pf_ncp approximation for a large noncentrality", {
+  # above a noncentrality of 1e5, .pf_ncp() uses the cube-root normal
+  # approximation. Up to about 1e6 stats::pf() is still accurate, so both
+  # must agree there
+  for (ncp in c(2e5, 5e5)) {
+    for (df1 in c(1, 5)) {
+      for (df2 in c(28, 296)) {
+        q <- (ncp + df1) / df1 * c(0.99, 1, 1.01)
+        expect_equal(
+          vapply(q, .pf_ncp, numeric(1), df1 = df1, df2 = df2, ncp = ncp),
+          stats::pf(q, df1, df2, ncp = ncp),
+          tolerance = 1e-6
+        )
+      }
+    }
+  }
+
+  # VIF 1000 at n = 300 and k = 3 needs a noncentrality of about 2.5e5 and
+  # 3.5e5 for its limits. Reference values from MBESS 5.0.1:
+  #   r <- MBESS::ci.R2(
+  #     R2 = 1 - 1 / 1000, N = 300, K = 3,
+  #     conf.level = 0.95, Random.Predictors = FALSE
+  #   )
+  #   1 / (1 - c(r$Lower.Conf.Limit.R2, r$Upper.Conf.Limit.R2))
+  set.seed(1)
+  d <- data.frame(
+    y = rnorm(300),
+    a = rnorm(300),
+    b = rnorm(300),
+    c = rnorm(300),
+    e = rnorm(300)
+  )
+  m <- lm(y ~ a + b + c + e, data = d)
+  out <- .vif_ci(m, rep(1000, 4), ci = 0.95, n_coef = rep(1, 4))
+  expect_gt(300 * (1 / (1 - out$CI_low[1]) - 1), 1e5)
+  expect_equal(
+    1 / (1 - c(out$CI_low[1], out$CI_high[1])),
+    c(834.1221966, 1151.8537036),
+    tolerance = 1e-5
+  )
+})
+
 test_that(".vif_ci handles infinite VIFs and failed integration", {
   # an infinite VIF gives R2 limits of 1 (VIF limits Inf), not NaN
   m <- lm(mpg ~ wt + hp, data = mtcars)
