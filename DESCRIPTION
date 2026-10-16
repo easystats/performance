@@ -77,7 +77,7 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 4.0)
 Imports:
-    bayestestR (>= 0.19.0),
+    bayestestR (>= 0.19.0.2),
     insight (>= 1.5.4),
     datawizard (>= 1.4.0),
     stats,
@@ -114,6 +114,7 @@ Suggests:
     gamm4,
     ggdag,
     glmmTMB (>= 1.1.12),
+    glmx,
     GPArotation,
     graphics,
     Hmisc,
@@ -166,6 +167,7 @@ Suggests:
     VGAM,
     withr (>= 3.0.0)
 Remotes:
+    easystats/bayestestR,
     easystats/insight
 Encoding: UTF-8
 Language: en-US
