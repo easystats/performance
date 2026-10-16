@@ -1287,3 +1287,150 @@ test_that("check_collinearity, VIF CI is NA without a CI level", {
     expect_true(all(is.na(unlist(out[ci_cols]))))
   }
 })
+
+# ordinal models whose variance-covariance matrix holds thresholds, not one
+# intercept. x3 is x1 plus noise, x2 is independent of both.
+.ordinal_vif_data <- function() {
+  set.seed(1234)
+  n <- 500
+  d <- data.frame(
+    x1 = stats::rnorm(n),
+    x2 = stats::rnorm(n),
+    f = factor(sample(c("p", "q", "r"), n, replace = TRUE)),
+    g = factor(rep(1:25, length.out = n))
+  )
+  d$x3 <- d$x1 + stats::rnorm(n, sd = 0.5)
+  d$x4 <- 2 * d$x1
+  # a group effect, so that clmm and clmm2 can estimate the random intercept
+  group_effect <- stats::rnorm(25, sd = 0.5)[d$g]
+  d$o <- cut(
+    d$x1 + d$x2 + group_effect + stats::rnorm(n),
+    breaks = 4,
+    ordered_result = TRUE,
+    labels = c("a", "b", "c", "d")
+  )
+  d
+}
+
+# VIF of single-coefficient terms from the slope block of the
+# variance-covariance matrix, as in car::vif.default()
+.slope_block_vif <- function(v, slopes) {
+  diag(solve(stats::cov2cor(v[slopes, slopes])))
+}
+
+.expect_vif_structure <- function(out) {
+  vif <- stats::setNames(out$VIF, out$Term)
+  expect_identical(out$Term, c("x1", "x2", "x3"))
+  expect_lt(vif[["x2"]], vif[["x1"]] / 2)
+  expect_lt(vif[["x2"]], vif[["x3"]] / 2)
+  expect_true(all(is.finite(out$VIF_CI_low)))
+  expect_true(all(is.finite(out$VIF_CI_high)))
+  expect_true(all(out$VIF_CI_low <= out$VIF & out$VIF <= out$VIF_CI_high))
+}
+
+test_that("check_collinearity, polr and svyolr match car::vif", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("survey")
+  skip_if_not_installed("car")
+  d <- .ordinal_vif_data()
+  des <- survey::svydesign(ids = ~1, data = d, weights = rep(1, nrow(d)))
+  models <- list(
+    logistic = MASS::polr(o ~ x1 + f + x2 + x3, data = d, Hess = TRUE),
+    probit = MASS::polr(o ~ x1 + f + x2 + x3, data = d, Hess = TRUE, method = "probit"),
+    svyolr = survey::svyolr(o ~ x1 + f + x2 + x3, design = des)
+  )
+  for (m in models) {
+    out <- check_collinearity(m)
+    expect_identical(out$Term, c("x1", "f", "x2", "x3"))
+    expect_equal(out$VIF, car::vif(m)[, "GVIF"], tolerance = 1e-6, ignore_attr = TRUE)
+  }
+})
+
+test_that("check_collinearity, polr, clm2 and clmm2 match clm and clmm", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("ordinal")
+  withr::local_package("ordinal")
+  d <- .ordinal_vif_data()
+  for (fo in list(o ~ x1 + f + x2 + x3, o ~ x3 + f + x1 + x2)) {
+    # put the formula itself into each call, which insight evaluates again
+    ref <- check_collinearity(eval(bquote(ordinal::clm(.(fo), data = d))))
+    for (m in list(
+      eval(bquote(MASS::polr(.(fo), data = d, Hess = TRUE))),
+      eval(bquote(ordinal::clm2(.(fo), data = d, Hess = TRUE)))
+    )) {
+      out <- check_collinearity(m)
+      expect_identical(out$Term, ref$Term)
+      expect_equal(out$VIF, ref$VIF, tolerance = 1e-4)
+    }
+  }
+  ref <- check_collinearity(ordinal::clmm(o ~ x1 + f + x2 + x3 + (1 | g), data = d))
+  out <- check_collinearity(
+    ordinal::clmm2(o ~ x1 + f + x2 + x3, random = g, data = d, Hess = TRUE)
+  )
+  expect_identical(out$Term, c("x1", "f", "x2", "x3"))
+  expect_identical(out$Term, ref$Term)
+  expect_equal(out$VIF, ref$VIF, tolerance = 1e-4)
+})
+
+test_that("check_collinearity, ordinal models with thresholds keep VIFs on their terms", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("survey")
+  skip_if_not_installed("ordinal")
+  withr::local_package("ordinal")
+  d <- .ordinal_vif_data()
+  des <- survey::svydesign(ids = ~1, data = d, weights = rep(1, nrow(d)))
+  models <- list(
+    MASS::polr(o ~ x1 + x2 + x3, data = d, Hess = TRUE),
+    survey::svyolr(o ~ x1 + x2 + x3, design = des),
+    ordinal::clm2(o ~ x1 + x2 + x3, data = d, Hess = TRUE),
+    ordinal::clmm2(o ~ x1 + x2 + x3, random = g, data = d, Hess = TRUE)
+  )
+  for (m in models) {
+    .expect_vif_structure(check_collinearity(m))
+  }
+})
+
+test_that("check_collinearity, stan_polr", {
+  skip_on_cran()
+  skip_if_not_installed("rstanarm")
+  d <- .ordinal_vif_data()
+  m <- suppressWarnings(rstanarm::stan_polr(
+    o ~ x1 + x2 + x3,
+    data = d,
+    prior = rstanarm::R2(0.3),
+    chains = 1,
+    iter = 1000,
+    refresh = 0,
+    seed = 1234
+  ))
+  out <- check_collinearity(m)
+  slopes <- c("x1", "x2", "x3")
+  expect_equal(
+    out$VIF,
+    .slope_block_vif(insight::get_varcov(m), slopes),
+    tolerance = 1e-6,
+    ignore_attr = TRUE
+  )
+  .expect_vif_structure(out)
+})
+
+test_that("check_collinearity, polr and clm with an aliased predictor", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("ordinal")
+  skip_if_not_installed("car")
+  d <- .ordinal_vif_data()
+  ref <- car::vif(MASS::polr(o ~ x1 + x2 + x3, data = d, Hess = TRUE))
+  models <- list(
+    polr = suppressWarnings(MASS::polr(o ~ x1 + x4 + x2 + x3, data = d, Hess = TRUE)),
+    clm = ordinal::clm(o ~ x1 + x4 + x2 + x3, data = d)
+  )
+  tolerances <- c(polr = 1e-6, clm = 1e-4)
+  for (i in names(models)) {
+    warns <- capture_warnings(out <- check_collinearity(models[[i]]))
+    expect_length(warns, 1)
+    expect_match(warns, "rank deficient", fixed = TRUE)
+    expect_match(warns, "x4", fixed = TRUE)
+    expect_identical(out$Term, c("x1", "x2", "x3"))
+    expect_equal(out$VIF, ref, tolerance = tolerances[[i]], ignore_attr = TRUE)
+  }
+})
