@@ -175,9 +175,12 @@ test_that("`check_model()` stores `show_smooth`", {
   data(mtcars)
   models <- list(
     lm = lm(mpg ~ wt, data = mtcars),
-    glm = glm(am ~ wt, family = binomial, data = mtcars),
-    simres = simulate_residuals(lm(mpg ~ wt, data = mtcars))
+    glm = glm(am ~ wt, family = binomial, data = mtcars)
   )
+  # simulate_residuals() needs DHARMa
+  if (requireNamespace("DHARMa", quietly = TRUE)) {
+    models$simres <- simulate_residuals(lm(mpg ~ wt, data = mtcars))
+  }
   for (m in models) {
     expect_true(attr(check_model(m), "show_smooth"))
     expect_false(attr(check_model(m, show_smooth = FALSE), "show_smooth"))
@@ -356,9 +359,11 @@ test_that("`check_model()` falls back to Bayesian checks if brms conversion fail
   expect_identical(attr(out, "check"), "all")
   expect_identical(attr(out, "model_class"), "brmsfit")
   expect_false(is.null(attr(out, "model_info")))
+  expect_true(attr(out, "show_smooth"))
 
-  out <- suppressMessages(check_model(m, check = "vif"))
+  out <- suppressMessages(check_model(m, check = "vif", show_smooth = FALSE))
   expect_named(out, "VIF")
+  expect_false(attr(out, "show_smooth"))
 })
 
 test_that("`check_model()` fallback for brms models can be plotted", {

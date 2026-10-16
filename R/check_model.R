@@ -277,7 +277,6 @@ check_model.default <- function(
   residual_type = NULL,
   show_dots = NULL,
   show_ci = NULL,
-  show_smooth = TRUE,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -291,6 +290,7 @@ check_model.default <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -541,7 +541,6 @@ check_model.stanreg <- function(
   residual_type = NULL,
   show_dots = NULL,
   show_ci = NULL,
-  show_smooth = TRUE,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -556,6 +555,7 @@ check_model.stanreg <- function(
   verbose = FALSE,
   x = NULL,
   response = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -828,7 +828,6 @@ check_model.model_fit <- function(
   residual_type = NULL,
   show_dots = NULL,
   show_ci = NULL,
-  show_smooth = TRUE,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -842,6 +841,7 @@ check_model.model_fit <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -890,7 +890,6 @@ check_model.performance_simres <- function(
   residual_type = NULL,
   show_dots = NULL,
   show_ci = NULL,
-  show_smooth = TRUE,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -904,6 +903,7 @@ check_model.performance_simres <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
