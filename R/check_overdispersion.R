@@ -271,7 +271,11 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
 
   # use the model's own Pearson residuals - computing them by hand from
   # `get_response()` is wrong for a two-column `cbind()` response
-  zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
+  if (inherits(x, "glmx")) {
+    zi <- .pearson_residuals_glmx(x)
+  } else {
+    zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
+  }
   if (is.null(zi)) {
     yhat <- stats::fitted(x)
     zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
@@ -305,6 +309,29 @@ check_overdispersion.fixest_multi <- function(x, verbose = TRUE, ...) {
 
 #' @export
 check_overdispersion.glmx <- check_overdispersion.glm
+
+
+# glmx has no `residuals()` method, so `residuals(type = "pearson")` returns
+# the working residuals. Compute the Pearson residuals from the family at the
+# estimated extra parameter instead. `x$weights` holds the prior weights times
+# the number of trials for a binomial `cbind()` response.
+.pearson_residuals_glmx <- function(x) {
+  fam <- x$family$glm
+  is_negbin <- startsWith(fam$family, "Negative Binomial")
+  if (!is_negbin && fam$family != "binomial") {
+    insight::format_error(paste0(
+      "Overdispersion checks for `glmx` models are only available for negative binomial and binomial families, not for the `",
+      fam$family,
+      "` family."
+    ))
+  }
+  y <- x$y
+  if (!is.null(dim(y))) {
+    y <- y[, 1] / rowSums(y)
+  }
+  mu <- stats::fitted(x)
+  (y - mu) * sqrt(x$weights) / sqrt(fam$variance(mu))
+}
 
 
 # mfx models ------------------------------

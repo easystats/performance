@@ -114,6 +114,7 @@ Suggests:
     gamm4,
     ggdag,
     glmmTMB (>= 1.1.12),
+    glmx,
     GPArotation,
     graphics,
     Hmisc,

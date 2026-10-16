@@ -611,3 +611,81 @@ test_that("check_overdispersion, fixest_multi from split matches each sample", {
     )
   }
 })
+
+
+test_that("check_overdispersion, glmx uses Pearson residuals of the fitted family", {
+  skip_if_not_installed("glmx")
+  skip_if_not_installed("MASS")
+
+  # negative binomial, data from the glmx help page
+  set.seed(1)
+  d <- data.frame(x = stats::runif(200, -1, 1))
+  d$y <- stats::rnbinom(200, mu = exp(0 + 3 * d$x), size = 1)
+  m_nb <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0
+  )
+  m_ref <- MASS::glm.nb(y ~ x, data = d)
+  out <- check_overdispersion(m_nb)
+  expect_equal(
+    out$chisq_statistic,
+    sum(stats::residuals(m_ref, type = "pearson")^2),
+    tolerance = 1e-3
+  )
+  expect_equal(out$residual_df, stats::nobs(m_nb) - m_nb$df)
+
+  # binomial with a cbind() response, unweighted and weighted
+  set.seed(4)
+  d <- data.frame(x = stats::rnorm(150))
+  d$s <- stats::rbinom(150, 10, stats::plogis(0.3 + d$x))
+  d$f <- 10 - d$s
+  d$pw <- rep(1:3, length.out = 150)
+  fam <- function(shape) stats::binomial(link = glmx::gosset(shape))
+  for (weighted in c(FALSE, TRUE)) {
+    if (weighted) {
+      m_binom <- glmx::glmx(
+        cbind(s, f) ~ x,
+        data = d,
+        family = fam,
+        xlink = "log",
+        xstart = 0,
+        weights = pw
+      )
+      m_ref <- glm(cbind(s, f) ~ x, data = d, family = m_binom$family$glm, weights = pw)
+    } else {
+      m_binom <- glmx::glmx(
+        cbind(s, f) ~ x,
+        data = d,
+        family = fam,
+        xlink = "log",
+        xstart = 0
+      )
+      m_ref <- glm(cbind(s, f) ~ x, data = d, family = m_binom$family$glm)
+    }
+    out <- check_overdispersion(m_binom)
+    expect_equal(
+      out$chisq_statistic,
+      sum(stats::residuals(m_ref, type = "pearson")^2),
+      tolerance = 1e-8
+    )
+  }
+
+  # other families have no Pearson residuals here
+  set.seed(1)
+  d <- data.frame(x = stats::runif(200, -1, 1))
+  d$y <- stats::rpois(200, exp(1 + d$x))
+  m_pois <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = function(p) stats::poisson(link = stats::power(p)),
+    xlink = "identity",
+    xstart = 0.5
+  )
+  expect_error(
+    check_overdispersion(m_pois),
+    "only available for\\s+negative\\s+binomial\\s+and\\s+binomial\\s+families"
+  )
+})
