@@ -17,6 +17,7 @@ check_model(model = NULL, ...)
   residual_type = NULL,
   show_dots = NULL,
   show_ci = NULL,
+  show_smooth = TRUE,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -86,6 +87,10 @@ and thus automatically shows or hides dots.}
 \item{show_ci}{Logical, if \code{TRUE}, confidence intervals in plots are shown.
 For models with only categorical predictors, confidence intervals are not shown
 by default, because in this case, these are usually on very large scales.}
+
+\item{show_smooth}{Logical, if \code{FALSE}, no trend line is drawn in the
+Linearity, Homogeneity of Variance and Influential Observations panels. The
+plot needs a version of \strong{see} that supports this setting.}
 
 \item{maximum_dots}{Limits the number of data points for models with many
 observations, to reduce the time for rendering the plot. Defaults to a
