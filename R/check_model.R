@@ -50,6 +50,10 @@
 #' @param show_ci Logical, if `TRUE`, confidence intervals in plots are shown.
 #' For models with only categorical predictors, confidence intervals are not shown
 #' by default, because in this case, these are usually on very large scales.
+#' @param show_smooth Logical, if `FALSE`, the Linearity and Homogeneity of
+#' Variance panels draw neither the LOESS smoother nor the cell means, and the
+#' Influential Observations panel draws no LOESS smoother. This needs **see**
+#' newer than 0.14.2. Older versions ignore the setting.
 #' @param maximum_dots Limits the number of data points for models with many
 #' observations, to reduce the time for rendering the plot. Defaults to a
 #' maximum of 2000 data points to render
@@ -286,6 +290,7 @@ check_model.default <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -295,6 +300,8 @@ check_model.default <- function(
     )
     model <- x
   }
+
+  .check_show_smooth(show_smooth)
 
   # check model formula
   if (verbose) {
@@ -392,6 +399,7 @@ check_model.default <- function(
     type_missing = missing(type),
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     size_dot = size_dot,
     size_line = size_line,
@@ -423,6 +431,7 @@ check_model.default <- function(
   type_missing,
   show_dots,
   show_ci,
+  show_smooth,
   maximum_dots,
   size_dot,
   size_line,
@@ -478,6 +487,7 @@ check_model.default <- function(
   attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
   attr(assumptions_data, "show_ci") <- isTRUE(show_ci)
+  attr(assumptions_data, "show_smooth") <- isTRUE(show_smooth)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
@@ -489,6 +499,14 @@ check_model.default <- function(
   attr(assumptions_data, "maximum_dots") <- maximum_dots
   attr(assumptions_data, "model_class") <- class(model)[1]
   assumptions_data
+}
+
+
+# same check and message as in see::plot.see_check_model()
+.check_show_smooth <- function(show_smooth) {
+  if (!isTRUE(show_smooth) && !isFALSE(show_smooth)) {
+    insight::format_error("`show_smooth` must be either `TRUE` or `FALSE`.")
+  }
 }
 
 
@@ -537,6 +555,7 @@ check_model.stanreg <- function(
   verbose = FALSE,
   x = NULL,
   response = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -546,6 +565,8 @@ check_model.stanreg <- function(
     )
     model <- x
   }
+
+  .check_show_smooth(show_smooth)
 
   # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
   resp <- .check_multivariate_resp(
@@ -589,6 +610,7 @@ check_model.stanreg <- function(
       type_missing = missing(type),
       show_dots = show_dots,
       show_ci = show_ci,
+      show_smooth = show_smooth,
       maximum_dots = maximum_dots,
       size_dot = size_dot,
       size_line = size_line,
@@ -620,6 +642,7 @@ check_model.stanreg <- function(
     detrend = detrend,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
@@ -650,6 +673,7 @@ check_model.brmsfit <- check_model.stanreg
   type_missing,
   show_dots,
   show_ci,
+  show_smooth,
   maximum_dots,
   size_dot,
   size_line,
@@ -740,6 +764,7 @@ check_model.brmsfit <- check_model.stanreg
     type_missing = type_missing,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     size_dot = size_dot,
     size_line = size_line,
@@ -816,6 +841,7 @@ check_model.model_fit <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -841,6 +867,7 @@ check_model.model_fit <- function(
     detrend = detrend,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
@@ -876,6 +903,7 @@ check_model.performance_simres <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -901,6 +929,7 @@ check_model.performance_simres <- function(
     detrend = detrend,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,

@@ -30,6 +30,7 @@ check_model(model = NULL, ...)
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 )
 }
@@ -112,6 +113,11 @@ for dots, and third color for outliers or extreme values.}
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 
 \item{x}{Deprecated, please use \code{model} instead.}
+
+\item{show_smooth}{Logical, if \code{FALSE}, the Linearity and Homogeneity of
+Variance panels draw neither the LOESS smoother nor the cell means, and the
+Influential Observations panel draws no LOESS smoother. This needs \strong{see}
+newer than 0.14.2. Older versions ignore the setting.}
 }
 \value{
 The data frame that is used for plotting.

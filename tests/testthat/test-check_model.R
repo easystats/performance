@@ -171,6 +171,46 @@ test_that("`check_model()` respects user-supplied `show_ci`", {
   expect_false(attr(check_model(m_numeric, show_ci = FALSE), "show_ci"))
 })
 
+test_that("`check_model()` stores `show_smooth`", {
+  data(mtcars)
+  models <- list(
+    lm = lm(mpg ~ wt, data = mtcars),
+    glm = glm(am ~ wt, family = binomial, data = mtcars)
+  )
+  # simulate_residuals() needs DHARMa
+  if (requireNamespace("DHARMa", quietly = TRUE)) {
+    models$simres <- simulate_residuals(lm(mpg ~ wt, data = mtcars))
+  }
+  for (m in models) {
+    expect_true(attr(check_model(m), "show_smooth"))
+    expect_false(attr(check_model(m, show_smooth = FALSE), "show_smooth"))
+  }
+})
+
+test_that("every `check_model()` method has a `show_smooth` argument", {
+  methods <- ls(asNamespace("performance"), pattern = "^check_model\\.")
+  expect_gt(length(methods), 0)
+  for (fun in methods) {
+    expect_true(
+      "show_smooth" %in%
+        names(formals(get(fun, envir = asNamespace("performance")))),
+      info = fun
+    )
+  }
+})
+
+test_that("`check_model()` checks `show_smooth`", {
+  data(mtcars)
+  m <- lm(mpg ~ wt, data = mtcars)
+  for (value in list(NA, 1, "no", c(TRUE, FALSE))) {
+    expect_error(
+      check_model(m, show_smooth = value),
+      "`show_smooth` must be either `TRUE` or `FALSE`.",
+      fixed = TRUE
+    )
+  }
+})
+
 test_that("`check_model()` warnings for tweedie", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
@@ -319,9 +359,11 @@ test_that("`check_model()` falls back to Bayesian checks if brms conversion fail
   expect_identical(attr(out, "check"), "all")
   expect_identical(attr(out, "model_class"), "brmsfit")
   expect_false(is.null(attr(out, "model_info")))
+  expect_true(attr(out, "show_smooth"))
 
-  out <- suppressMessages(check_model(m, check = "vif"))
+  out <- suppressMessages(check_model(m, check = "vif", show_smooth = FALSE))
   expect_named(out, "VIF")
+  expect_false(attr(out, "show_smooth"))
 })
 
 test_that("`check_model()` fallback for brms models can be plotted", {
