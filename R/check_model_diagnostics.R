@@ -368,8 +368,10 @@
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
-    d$StdRes <- insight::get_residuals(model, type = "pearson") /
-      sqrt(.quasipoisson_dispersion(model, faminfo))
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    if (!is.null(d$StdRes)) {
+      d$StdRes <- d$StdRes / sqrt(.quasipoisson_dispersion(model, faminfo))
+    }
   }
 
   # data for negative binomial models

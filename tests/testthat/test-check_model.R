@@ -256,6 +256,14 @@ test_that("`check_model()` overdispersion data use the quasipoisson dispersion",
   expect_equal(out$V, unname(stats::fitted(m_sat)), tolerance = 1e-8)
   expect_s3_class(check_model(m_sat, check = "overdispersion"), "check_model")
 
+  # missing Pearson residuals leave out `StdRes` instead of failing
+  local({
+    local_mocked_bindings(get_residuals = function(...) NULL, .package = "insight")
+    out <- .model_diagnostic_overdispersion(m_quasi)
+    expect_null(out$StdRes)
+    expect_equal(out$V, phi * unname(stats::fitted(m_quasi)), tolerance = 1e-8)
+  })
+
   # the Poisson model keeps the Poisson variance
   m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
   out <- .model_diagnostic_overdispersion(m_pois)

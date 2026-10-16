@@ -285,6 +285,10 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     zi <- tryCatch(
       insight::get_residuals(x, type = "pearson", verbose = FALSE),
       error = function(e) {
+        # as in `.safe()`, let the error through for debugging
+        if (isTRUE(getOption("easystats_errors", FALSE))) {
+          stop(e)
+        }
         residual_error <<- conditionMessage(e)
         NULL
       }
@@ -349,6 +353,11 @@ check_overdispersion.glmx <- check_overdispersion.glm
     ))
   }
   y <- x$y
+  if (is.null(y)) {
+    insight::format_error(
+      "The `glmx` model has no stored response. Refit it with `y = TRUE`."
+    )
+  }
   w <- x$weights
   if (is.null(w)) {
     w <- 1

@@ -649,6 +649,17 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
     weights = one
   )
   expect_null(m_nb1$weights)
+
+  # without a stored response, there are no Pearson residuals
+  m_noy <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0,
+    y = FALSE
+  )
+  expect_error(check_overdispersion(m_noy), "no stored response")
   expect_equal(
     check_overdispersion(m_nb1)$chisq_statistic,
     out$chisq_statistic,
@@ -742,6 +753,10 @@ test_that("check_overdispersion, glm errors without Pearson residuals", {
     "Pearson residuals are not available for models of class `glm`"
   )
   expect_error(check_overdispersion(m_pois), "The error was: no residuals")
+
+  # with `easystats_errors`, the original error comes through
+  withr::local_options(easystats_errors = TRUE)
+  expect_error(check_overdispersion(m_pois), "^no residuals$")
 })
 
 
