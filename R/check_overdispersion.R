@@ -47,8 +47,10 @@
 #' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
 #' The returned statistic is the unscaled Pearson chi-squared test, which
 #' compares the residuals with the variance of a Poisson or binomial model. For
-#' a `glm` model without aliased coefficients, the dispersion ratio then equals
-#' its estimated dispersion, up to the fitting tolerance.
+#' a model fitted with `stats::glm()`, the dispersion ratio then equals
+#' `summary(model)$dispersion`, also when coefficients are aliased. For a
+#' `feglm()` model (package **fixest**), it equals the estimated dispersion of
+#' the model. Both hold up to the fitting tolerance.
 #' Simulated residuals are not used, because they are not available for quasi
 #' families.
 #'
@@ -259,25 +261,62 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     }
   }
 
-  n <- stats::nobs(x)
-  k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+  # `df.residual()` leaves out aliased coefficients and subtracts the fixed
+  # effects of fixest models. glmx has no method, and for svyglm it returns a
+  # design-based value (the design df plus 1 minus the coefficients), not one
+  # based on the observations, so count the parameters for these instead
+  rdf <- NULL
+  if (!inherits(x, "svyglm")) {
+    rdf <- .safe(stats::df.residual(x))
+  }
+  if (is.null(rdf)) {
+    n <- stats::nobs(x)
+    k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+    rdf <- n - k
+  }
 
   # use the model's own Pearson residuals - computing them by hand from
-  # `get_response()` is wrong for a two-column `cbind()` response
-  zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
+  # `get_response()` is wrong for a two-column `cbind()` response and ignores
+  # prior weights, so stop if the model has none
+  residual_error <- NULL
+  if (inherits(x, "glmx")) {
+    zi <- .pearson_residuals_glmx(x)
+  } else {
+    zi <- tryCatch(
+      insight::get_residuals(x, type = "pearson", verbose = FALSE),
+      error = function(e) {
+        # with `options(easystats_errors = TRUE)`, raise the error again, so
+        # that its message and call come through as with `.safe()`
+        if (isTRUE(getOption("easystats_errors", FALSE))) {
+          stop(e)
+        }
+        e
+      }
+    )
+    if (inherits(zi, "error")) {
+      residual_error <- conditionMessage(zi)
+      zi <- NULL
+    }
+  }
   if (is.null(zi)) {
-    yhat <- stats::fitted(x)
-    zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
+    insight::format_error(
+      paste0(
+        "Pearson residuals are not available for models of class `",
+        class(x)[1],
+        "`, so `check_overdispersion()` cannot compute the overdispersion test."
+      ),
+      if (!is.null(residual_error)) paste0("The error was: ", residual_error)
+    )
   }
   # residuals of models with `na.action = na.exclude` are padded with NA
   chisq <- sum(zi^2, na.rm = TRUE)
-  ratio <- chisq / (n - k)
-  p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
+  ratio <- chisq / rdf
+  p.value <- stats::pchisq(chisq, df = rdf, lower.tail = FALSE)
 
   out <- list(
     chisq_statistic = chisq,
     dispersion_ratio = ratio,
-    residual_df = n - k,
+    residual_df = rdf,
     p_value = p.value
   )
 
@@ -298,6 +337,53 @@ check_overdispersion.fixest_multi <- function(x, verbose = TRUE, ...) {
 
 #' @export
 check_overdispersion.glmx <- check_overdispersion.glm
+
+
+# glmx has no `residuals()` method, so `residuals(type = "pearson")` returns
+# the stored `$residuals`, which are the deviance contributions of each
+# observation. Compute the Pearson residuals from the family at the estimated
+# extra parameter instead. `x$weights` holds the prior weights times the number
+# of trials for a binomial `cbind()` response. glmx stores `NULL` when these
+# weights are a numeric (not integer) vector of ones, so use 1 then.
+.pearson_residuals_glmx <- function(x) {
+  fam <- x$family$glm
+  is_negbin <- startsWith(fam$family, "Negative Binomial")
+  if (!is_negbin && fam$family != "binomial") {
+    insight::format_error(paste0(
+      "Overdispersion checks for `glmx` models are only available for ",
+      "negative binomial and binomial families, not for the `",
+      fam$family,
+      "` family."
+    ))
+  }
+  y <- x$y
+  if (is.null(y)) {
+    insight::format_error(
+      "The `glmx` model has no stored response. Refit it with `y = TRUE`."
+    )
+  }
+  w <- x$weights
+  if (is.null(w)) {
+    w <- 1
+  }
+  if (!is_negbin) {
+    # a factor, 0/1 or logical response, or one trial per row of a `cbind()`
+    # response
+    is_bernoulli <- if (is.null(dim(y))) {
+      is.factor(y) || all(y %in% c(0, 1))
+    } else {
+      all(rowSums(y) == 1)
+    }
+    if (is_bernoulli) {
+      insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+    }
+  }
+  if (!is.null(dim(y))) {
+    y <- y[, 1] / rowSums(y)
+  }
+  mu <- stats::fitted(x)
+  (y - mu) * sqrt(w) / sqrt(fam$variance(mu))
+}
 
 
 # mfx models ------------------------------

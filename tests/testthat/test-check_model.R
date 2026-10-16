@@ -235,6 +235,47 @@ test_that("`check_model()` no warnings for quasipoisson", {
 })
 
 
+test_that("`check_model()` overdispersion data use the quasipoisson dispersion", {
+  m_quasi <- glm(DriversKilled ~ PetrolPrice, family = quasipoisson, data = Seatbelts)
+  phi <- summary(m_quasi)$dispersion
+  out <- .model_diagnostic_overdispersion(m_quasi)
+  expect_equal(out$V, phi * unname(stats::fitted(m_quasi)), tolerance = 1e-8)
+  expect_equal(
+    out$StdRes,
+    unname(stats::residuals(m_quasi, type = "pearson")) / sqrt(phi),
+    tolerance = 1e-8
+  )
+
+  # a saturated quasipoisson model has no dispersion estimate, so phi is 1
+  m_sat <- glm(
+    y ~ factor(x),
+    family = quasipoisson,
+    data = data.frame(y = c(2, 5, 9), x = 1:3)
+  )
+  out <- .model_diagnostic_overdispersion(m_sat)
+  expect_equal(out$V, unname(stats::fitted(m_sat)), tolerance = 1e-8)
+  expect_s3_class(check_model(m_sat, check = "overdispersion"), "check_model")
+
+  # missing Pearson residuals leave out `StdRes` instead of failing
+  local({
+    local_mocked_bindings(get_residuals = function(...) NULL, .package = "insight")
+    out <- .model_diagnostic_overdispersion(m_quasi)
+    expect_null(out$StdRes)
+    expect_equal(out$V, phi * unname(stats::fitted(m_quasi)), tolerance = 1e-8)
+  })
+
+  # the Poisson model keeps the Poisson variance
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+  out <- .model_diagnostic_overdispersion(m_pois)
+  expect_equal(out$V, unname(stats::fitted(m_pois)), tolerance = 1e-8)
+  expect_equal(
+    out$StdRes,
+    unname(stats::residuals(m_pois, type = "pearson")),
+    tolerance = 1e-8
+  )
+})
+
+
 test_that("`check_model()` with transformed response when named as function", {
   data(mtcars)
   # rename variable, so it equals to a valid R function
@@ -312,7 +353,11 @@ test_that("`check_model()` alerts about skipped checks if brms conversion fails"
     # panels that do not apply to a non-mixed gaussian model are not listed
     expect_no_match(alert, "REQQ|BINNED_RESID|OVERDISPERSION")
     # the alert includes the error from the failed conversion
-    expect_match(alert, "Reason for the failed conversion: conversion failed", fixed = TRUE)
+    expect_match(
+      alert,
+      "Reason for the failed conversion: conversion failed",
+      fixed = TRUE
+    )
   }
 })
 

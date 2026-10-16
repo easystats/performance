@@ -522,3 +522,269 @@ test_that("check_overdispersion, glm poisson with prior weights", {
     tolerance = 1e-6
   )
 })
+
+
+test_that("check_overdispersion, glm uses df.residual() with aliased coefficients", {
+  d_pois <- as.data.frame(Seatbelts)
+  d_pois$PetrolPrice2 <- 2 * d_pois$PetrolPrice
+  d_binom <- esoph
+  d_binom$alc <- as.numeric(d_binom$alcgp)
+  d_binom$alc2 <- 2 * d_binom$alc
+
+  fits <- list(
+    poisson = glm(DriversKilled ~ PetrolPrice + PetrolPrice2, poisson, d_pois),
+    quasipoisson = glm(DriversKilled ~ PetrolPrice + PetrolPrice2, quasipoisson, d_pois),
+    binomial = glm(cbind(ncases, ncontrols) ~ alc + alc2, binomial, d_binom),
+    quasibinomial = glm(cbind(ncases, ncontrols) ~ alc + alc2, quasibinomial, d_binom)
+  )
+
+  for (fam in names(fits)) {
+    fit <- fits[[fam]]
+    # the aliased coefficient makes the parameter count differ from df.residual()
+    expect_true(anyNA(stats::coef(fit)))
+    out <- check_overdispersion(fit, residual_type = "normal", verbose = FALSE)
+    rdf <- stats::df.residual(fit)
+    expect_identical(out$residual_df, rdf)
+    expect_equal(out$dispersion_ratio, out$chisq_statistic / rdf, tolerance = 1e-10)
+    expect_equal(
+      out$p_value,
+      stats::pchisq(out$chisq_statistic, rdf, lower.tail = FALSE),
+      tolerance = 1e-10
+    )
+    if (startsWith(fam, "quasi")) {
+      expect_equal(out$dispersion_ratio, summary(fit)$dispersion, tolerance = 1e-6)
+    }
+  }
+})
+
+
+test_that("check_overdispersion, fixest uses df.residual() with fixed effects", {
+  skip_if_not_installed("fixest")
+  set.seed(2)
+  d <- data.frame(x = rnorm(150), f = rep(1:10, 15))
+  d$y <- rpois(150, exp(1 + 0.3 * d$x + d$f / 10))
+
+  m_pois <- fixest::fepois(y ~ x | f, data = d)
+  out <- check_overdispersion(m_pois)
+  rdf <- stats::df.residual(m_pois)
+  # the fixed effects make the parameter count differ from df.residual()
+  expect_lt(rdf, stats::nobs(m_pois) - 1)
+  expect_identical(out$residual_df, rdf)
+  expect_equal(out$dispersion_ratio, out$chisq_statistic / rdf, tolerance = 1e-10)
+  expect_equal(
+    out$p_value,
+    stats::pchisq(out$chisq_statistic, rdf, lower.tail = FALSE),
+    tolerance = 1e-10
+  )
+
+  m_quasi <- fixest::feglm(y ~ x | f, data = d, family = "quasipoisson")
+  out <- check_overdispersion(m_quasi, verbose = FALSE)
+  expect_identical(out$residual_df, stats::df.residual(m_quasi))
+  expect_equal(out$dispersion_ratio, m_quasi$dispersion, tolerance = 1e-4)
+})
+
+
+test_that("check_overdispersion, fixest_multi from split matches each sample", {
+  skip_if_not_installed("fixest")
+  set.seed(2)
+  d <- data.frame(
+    x = rnorm(150),
+    f = rep(1:10, 15),
+    g = rep(c("a", "b"), c(100, 50)),
+    stringsAsFactors = FALSE
+  )
+  d$y <- rpois(150, exp(1 + 0.3 * d$x))
+
+  m_multi <- fixest::fepois(y ~ x | f, data = d, split = ~g)
+  expect_no_warning({
+    out <- check_overdispersion(m_multi)
+  })
+  expect_length(out, 2)
+
+  stats_names <- c("chisq_statistic", "dispersion_ratio", "residual_df", "p_value")
+  for (i in seq_along(out)) {
+    grp <- c("a", "b")[i]
+    m_single <- fixest::fepois(y ~ x | f, data = d[d$g == grp, ])
+    expect_equal(
+      unclass(out[[i]])[stats_names],
+      unclass(check_overdispersion(m_single))[stats_names],
+      tolerance = 1e-10
+    )
+  }
+})
+
+
+test_that("check_overdispersion, glmx uses Pearson residuals of the fitted family", {
+  skip_if_not_installed("glmx")
+  skip_if_not_installed("MASS")
+
+  # negative binomial, data from the glmx help page
+  set.seed(1)
+  d <- data.frame(x = stats::runif(200, -1, 1))
+  d$y <- stats::rnbinom(200, mu = exp(0 + 3 * d$x), size = 1)
+  m_nb <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0
+  )
+  m_ref <- MASS::glm.nb(y ~ x, data = d)
+  out <- check_overdispersion(m_nb)
+  expect_equal(
+    out$chisq_statistic,
+    sum(stats::residuals(m_ref, type = "pearson")^2),
+    tolerance = 1e-3
+  )
+  expect_identical(out$residual_df, as.integer(stats::nobs(m_nb) - m_nb$df))
+
+  # glmx stores no weights when they are given as a numeric vector of ones
+  d$one <- 1
+  m_nb1 <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0,
+    weights = one
+  )
+  expect_null(m_nb1$weights)
+
+  # without a stored response, there are no Pearson residuals
+  m_noy <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0,
+    y = FALSE
+  )
+  expect_error(check_overdispersion(m_noy), "no stored response")
+  expect_equal(
+    check_overdispersion(m_nb1)$chisq_statistic,
+    out$chisq_statistic,
+    tolerance = 1e-8
+  )
+
+  # binomial with a cbind() response, unweighted and weighted
+  set.seed(4)
+  d <- data.frame(x = stats::rnorm(150))
+  d$s <- stats::rbinom(150, 10, stats::plogis(0.3 + d$x))
+  d$f <- 10 - d$s
+  d$pw <- rep_len(1:3, 150)
+  fam <- function(shape) stats::binomial(link = glmx::gosset(shape))
+  for (weighted in c(FALSE, TRUE)) {
+    if (weighted) {
+      m_binom <- glmx::glmx(
+        cbind(s, f) ~ x,
+        data = d,
+        family = fam,
+        xlink = "log",
+        xstart = 0,
+        weights = pw
+      )
+      m_ref <- glm(cbind(s, f) ~ x, data = d, family = m_binom$family$glm, weights = pw)
+    } else {
+      m_binom <- glmx::glmx(
+        cbind(s, f) ~ x,
+        data = d,
+        family = fam,
+        xlink = "log",
+        xstart = 0
+      )
+      m_ref <- glm(cbind(s, f) ~ x, data = d, family = m_binom$family$glm)
+    }
+    out <- check_overdispersion(m_binom)
+    expect_equal(
+      out$chisq_statistic,
+      sum(stats::residuals(m_ref, type = "pearson")^2),
+      tolerance = 1e-8
+    )
+    expect_identical(out$residual_df, as.integer(stats::nobs(m_binom) - m_binom$df))
+  }
+
+  # Bernoulli models are rejected, as for glm
+  d$b <- as.integer(d$s > 5)
+  m_bern <- glmx::glmx(b ~ x, data = d, family = fam, xlink = "log", xstart = 0)
+  expect_error(
+    check_overdispersion(m_bern),
+    "cannot be used for Bernoulli models"
+  )
+  d$b_factor <- factor(ifelse(d$s > 5, "yes", "no"))
+  m_bern <- glmx::glmx(b_factor ~ x, data = d, family = fam, xlink = "log", xstart = 0)
+  expect_error(
+    check_overdispersion(m_bern),
+    "cannot be used for Bernoulli models"
+  )
+
+  # other glmx families are not supported
+  set.seed(1)
+  d <- data.frame(x = stats::runif(200, -1, 1))
+  d$y <- stats::rpois(200, exp(1 + d$x))
+  m_pois <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = function(p) stats::poisson(link = stats::power(p)),
+    xlink = "identity",
+    xstart = 0.5
+  )
+  expect_error(
+    check_overdispersion(m_pois),
+    "only available for\\s+negative\\s+binomial\\s+and\\s+binomial\\s+families"
+  )
+})
+
+
+test_that("check_overdispersion, glm errors without Pearson residuals", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+
+  local_mocked_bindings(get_residuals = function(...) NULL, .package = "insight")
+  expect_error(
+    check_overdispersion(m_pois),
+    "Pearson residuals are not available for models of class `glm`"
+  )
+
+  local_mocked_bindings(
+    get_residuals = function(...) stop("no residuals", call. = FALSE),
+    .package = "insight"
+  )
+  expect_error(
+    check_overdispersion(m_pois),
+    "Pearson residuals are not available for models of class `glm`"
+  )
+  expect_error(check_overdispersion(m_pois), "The error was: no residuals")
+
+  # with `easystats_errors`, the original error comes through
+  withr::local_options(easystats_errors = TRUE)
+  expect_error(check_overdispersion(m_pois), "^no residuals$")
+})
+
+
+test_that("check_overdispersion, svyglm keeps the observation-based df", {
+  skip_if_not_installed("survey")
+  data(api, package = "survey")
+  des <- survey::svydesign(
+    id = ~ dnum + snum,
+    weights = ~pw,
+    data = apiclus2,
+    fpc = ~ fpc1 + fpc2
+  )
+  m_svy <- survey::svyglm(
+    I(round(api00 / 10)) ~ ell + meals,
+    design = des,
+    family = poisson
+  )
+  out <- check_overdispersion(m_svy, residual_type = "normal")
+  # df.residual() gives a design-based df (design df + 1 - coefficients), far
+  # below this count
+  expect_lt(stats::df.residual(m_svy), out$residual_df)
+  expect_identical(
+    out$residual_df,
+    as.integer(stats::nobs(m_svy) - length(stats::coef(m_svy)))
+  )
+  expect_equal(
+    out$dispersion_ratio,
+    out$chisq_statistic / out$residual_df,
+    tolerance = 1e-10
+  )
+})

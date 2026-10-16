@@ -576,6 +576,9 @@
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
+    if (!is.null(d$StdRes)) {
+      d$StdRes <- d$StdRes / sqrt(.quasipoisson_dispersion(model, faminfo))
+    }
   }
 
   # data for negative binomial models
@@ -701,8 +704,9 @@
   # handle models without zero-inflation component
   if (!faminfo$is_zero_inflated) {
     if (faminfo$is_poisson) {
-      # Poisson: V = mu
-      expected_var <- d$Predicted
+      # Poisson: V = mu; quasipoisson glm: V = phi * mu (prior weights are
+      # not included)
+      expected_var <- d$Predicted * .quasipoisson_dispersion(model, faminfo)
     } else if (isTRUE(faminfo$family == "nbinom1")) {
       # nbinom1: V = mu(1 + phi)  [phi=0 is Poisson limit; larger phi = more OD]
       expected_var <- d$Predicted * (1 + .get_disp())
@@ -784,6 +788,21 @@
   }
 
   expected_var
+}
+
+
+# the estimated dispersion phi of a quasipoisson glm, and 1 for other models,
+# or when phi cannot be estimated (for example, with no residual degrees of
+# freedom) or is not positive
+.quasipoisson_dispersion <- function(model, faminfo) {
+  phi <- 1
+  if (inherits(model, "glm") && identical(faminfo$family, "quasipoisson")) {
+    sigma2 <- as.numeric(insight::get_sigma(model))^2
+    if (length(sigma2) == 1 && is.finite(sigma2) && sigma2 > 0) {
+      phi <- sigma2
+    }
+  }
+  phi
 }
 
 

@@ -2,6 +2,31 @@
 
 ## Bug fixes
 
+* `check_overdispersion()` now uses the residual degrees of freedom of the
+  model (`df.residual()`) for `glm` and *fixest* models, but not for `svyglm()`
+  models (package *survey*). Before, it subtracted the number of coefficients
+  from the number of observations. That was wrong for models with aliased
+  coefficients and for *fixest* models with fixed effects. Now, the dispersion
+  ratio of `quasipoisson` and `quasibinomial` `glm` models with aliased
+  coefficients matches `summary(model)$dispersion` up to the fitting tolerance.
+  It already did so for other `stats::glm()` models. Other classes that inherit
+  from `glm` now also use their own `df.residual()`. For example, `gam()`
+  models (package *mgcv*) use the effective degrees of freedom.
+
+* `check_overdispersion()` now gives correct results for models from package
+  *glmx* with a negative binomial family, or with a binomial family and more
+  than one trial. *glmx* has no method for Pearson residuals, so its stored
+  deviance contributions were used before. Bernoulli models and other *glmx*
+  families give an error.
+
+* If a model has no Pearson residuals, `check_overdispersion()` now gives an
+  error. Before, it used the formula for Poisson models, which is wrong for
+  other families.
+
+* The overdispersion plot of `check_model()` now uses the estimated dispersion
+  for `quasipoisson` `glm` models. Before, it showed the variance of a Poisson
+  model.
+
 * Fixed issue in `check_predictions()` for *brms* models with `dec()` response
   (Wiener and RT-choice families); the RT part of the model is now checked.
 
