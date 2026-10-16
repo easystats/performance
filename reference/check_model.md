@@ -243,7 +243,11 @@ This plot is used to identify influential observations. If any points in
 this plot fall outside of Cook’s distance (the dashed lines) then it is
 considered an influential observation. See
 [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
-for further details.
+for further details. For models from package *glmmTMB*, this plot uses a
+one-step approximation of Cook's distance from the hat values, while
+[`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+computes Cook's distance by refitting the model without each
+observation.
 
 ## Multicollinearity
 
