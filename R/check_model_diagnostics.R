@@ -582,8 +582,9 @@
 }
 
 
-# the estimated dispersion phi of a quasipoisson glm, and 1 for other models
-# or when phi cannot be estimated (no residual degrees of freedom)
+# the estimated dispersion phi of a quasipoisson glm, and 1 for other models,
+# or when phi cannot be estimated (for example, with no residual degrees of
+# freedom) or is not positive
 .quasipoisson_dispersion <- function(model, faminfo) {
   phi <- 1
   if (inherits(model, "glm") && identical(faminfo$family, "quasipoisson")) {

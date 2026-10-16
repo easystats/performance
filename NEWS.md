@@ -3,8 +3,9 @@
 ## Bug fixes
 
 * `check_overdispersion()` now uses the residual degrees of freedom of the
-  model (`df.residual()`) for `glm` and *fixest* models. Before, it subtracted
-  the number of coefficients from the number of observations. That was wrong
+  model (`df.residual()`) for `glm` and *fixest* models, but not for `svyglm()`
+  models (package *survey*). Before, it subtracted the number of coefficients
+  from the number of observations. That was wrong
   for models with aliased coefficients and for *fixest* models with fixed
   effects. Now, the dispersion ratio of `quasipoisson` and `quasibinomial`
   `glm` models with aliased coefficients matches `summary(model)$dispersion`

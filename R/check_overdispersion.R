@@ -262,9 +262,9 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
   }
 
   # `df.residual()` leaves out aliased coefficients and subtracts the fixed
-  # effects of fixest models. glmx has no method, and for svyglm it returns
-  # the degrees of freedom of the survey design, not of the observations, so
-  # count the parameters for these instead
+  # effects of fixest models. glmx has no method, and for svyglm it returns a
+  # design-based value (the design df plus 1 minus the coefficients), not one
+  # based on the observations, so count the parameters for these instead
   rdf <- NULL
   if (!inherits(x, "svyglm")) {
     rdf <- .safe(stats::df.residual(x))
@@ -354,8 +354,13 @@ check_overdispersion.glmx <- check_overdispersion.glm
     w <- 1
   }
   if (!is_negbin) {
-    # a binary response, or one trial per row of a `cbind()` response
-    is_bernoulli <- if (is.null(dim(y))) all(y %in% c(0, 1)) else all(rowSums(y) == 1)
+    # a factor, 0/1 or logical response, or one trial per row of a `cbind()`
+    # response
+    is_bernoulli <- if (is.null(dim(y))) {
+      is.factor(y) || all(y %in% c(0, 1))
+    } else {
+      all(rowSums(y) == 1)
+    }
     if (is_bernoulli) {
       insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
     }

@@ -699,6 +699,12 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
     check_overdispersion(m_bern),
     "cannot be used for Bernoulli models"
   )
+  d$b_factor <- factor(ifelse(d$s > 5, "yes", "no"))
+  m_bern <- glmx::glmx(b_factor ~ x, data = d, family = fam, xlink = "log", xstart = 0)
+  expect_error(
+    check_overdispersion(m_bern),
+    "cannot be used for Bernoulli models"
+  )
 
   # other glmx families are not supported
   set.seed(1)
@@ -754,7 +760,8 @@ test_that("check_overdispersion, svyglm keeps the observation-based df", {
     family = poisson
   )
   out <- check_overdispersion(m_svy, residual_type = "normal")
-  # df.residual() gives the design degrees of freedom, far below this count
+  # df.residual() gives a design-based df (design df + 1 - coefficients), far
+  # below this count
   expect_lt(stats::df.residual(m_svy), out$residual_df)
   expect_identical(
     out$residual_df,
