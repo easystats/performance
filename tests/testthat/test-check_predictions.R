@@ -300,7 +300,7 @@ test_that("check_predictions, multivariate brms models check one response", {
   d <- insight::get_data(model)
 
   set.seed(123)
-  out <- check_predictions(model, resp = "gear", iterations = 10)
+  out <- check_predictions(model, response = "gear", iterations = 10)
 
   expect_s3_class(out, "performance_pp_check")
   sims <- as.matrix(out[startsWith(colnames(out), "sim_")])
@@ -326,14 +326,16 @@ test_that("check_predictions, multivariate brms models with `trials()` responses
   skip_if(is.null(model))
 
   set.seed(123)
-  out <- check_predictions(model, resp = "outcome2", iterations = 5)
+  out <- check_predictions(model, response = "outcome2", iterations = 5)
   expect_s3_class(out, "performance_pp_check")
   expect_named(out, c(paste0("sim_", 1:5), "y"))
   expect_equal(out$y, insight::get_data(model)$outcome2, ignore_attr = TRUE)
 })
 
 
-test_that("check_predictions, multivariate brms models need one `resp`", {
+test_that("check_predictions, multivariate brms models need one `response`", {
+  # `response` is a formal argument, so `resp = ` would also partial-match it
+  expect_true("response" %in% names(formals(utils::getS3method("check_predictions", "brmsfit"))))
   skip_if_not_installed("brms")
   skip_if_not_installed("modelbased", minimum_version = "0.12.0")
   skip_if_not_installed("curl")
@@ -351,15 +353,16 @@ test_that("check_predictions, multivariate brms models need one `resp`", {
     .package = "modelbased"
   )
 
-  for (resp in list(NULL, "mpg", c("cyl", "gear"))) {
+  for (response in list(NULL, "mpg", c("cyl", "gear"))) {
     err <- expect_error(
-      check_predictions(model, resp = resp),
+      check_predictions(model, response = response),
       "more\\s+than\\s+one\\s+response"
     )
     msg <- gsub("\\s+", " ", conditionMessage(err))
-    for (name in c("cyl", "gear", "carb", "resp")) {
+    for (name in c("cyl", "gear", "carb", "response")) {
       expect_match(msg, paste0("`", name, "`"), fixed = TRUE)
     }
+    expect_no_match(msg, "`resp`", fixed = TRUE)
   }
   expect_false(called)
   # the mock is in reach of `modelbased::`, so `called` can become TRUE

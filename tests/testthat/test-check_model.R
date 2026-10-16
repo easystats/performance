@@ -338,7 +338,9 @@ test_that("`check_model()` errors if no check works after brms conversion fails"
   )
 })
 
-test_that("`check_model()` needs one `resp` for multivariate brms models", {
+test_that("`check_model()` needs one `response` for multivariate brms models", {
+  # `response` is a formal argument, so `resp = ` would also partial-match it
+  expect_true("response" %in% names(formals(utils::getS3method("check_model", "brmsfit"))))
   skip_if_brms_fixture_unavailable()
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
@@ -351,15 +353,16 @@ test_that("`check_model()` needs one `resp` for multivariate brms models", {
     .package = "bayestestR"
   )
 
-  for (resp in list(NULL, "mpg", c("cyl", "gear"))) {
+  for (response in list(NULL, "mpg", c("cyl", "gear"))) {
     err <- expect_error(
-      check_model(m, resp = resp),
+      check_model(m, response = response),
       "more\\s+than\\s+one\\s+response"
     )
     msg <- gsub("\\s+", " ", conditionMessage(err))
-    for (name in c("cyl", "gear", "carb", "resp")) {
+    for (name in c("cyl", "gear", "carb", "response")) {
       expect_match(msg, paste0("`", name, "`"), fixed = TRUE)
     }
+    expect_no_match(msg, "`resp`", fixed = TRUE)
   }
   expect_false(called)
   # the mock is in reach of `bayestestR::`, so `called` can become TRUE
@@ -372,7 +375,7 @@ test_that("`check_model()` checks one response of a multivariate brms model", {
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
 
-  out <- check_model(m, resp = "gear")
+  out <- check_model(m, response = "gear")
   expect_s3_class(out, "check_model")
   expect_true(setequal(
     names(out),
@@ -398,7 +401,7 @@ test_that("`check_model()` falls back to Bayesian checks for one response of a m
   )
 
   msgs <- capture_messages({
-    out <- check_model(m, resp = "gear")
+    out <- check_model(m, response = "gear")
   })
   expect_identical(received, "gear")
   expect_named(out, "PP_CHECK")

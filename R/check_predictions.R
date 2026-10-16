@@ -61,10 +61,10 @@
 #'   model (b) is likely to be preferred over model (a).
 #'
 #'   For multivariate **brms** models (models with more than one response), use
-#'   the `resp` argument to name one response, for example
-#'   `check_predictions(model, resp = "y1")`. If `resp` is missing or does
-#'   not name one response, `check_predictions()` gives an error that lists the
-#'   names of the responses.
+#'   the `response` argument to name one response, for example
+#'   `check_predictions(model, response = "y1")`. If `response` is missing or
+#'   does not name one response, `check_predictions()` gives an error that
+#'   lists the names of the responses.
 #'
 #' @note Every model object that has a `simulate()`-method should work with
 #' `check_predictions()`. On R 3.6.0 and higher, if **bayesplot** (or a
@@ -188,7 +188,7 @@ check_predictions.stanreg <- function(
   type = "density",
   verbose = TRUE,
   object = NULL,
-  resp = NULL,
+  response = NULL,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -200,7 +200,7 @@ check_predictions.stanreg <- function(
   }
 
   # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
-  resp <- .check_multivariate_resp(model, resp, "check_predictions")
+  resp <- .check_multivariate_resp(model, response, "check_predictions")
 
   # retrieve model information
   if (is.null(resp)) {

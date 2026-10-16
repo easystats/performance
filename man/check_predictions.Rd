@@ -90,10 +90,10 @@ similar to the observed outcome than the model in the left panel (a). Thus,
 model (b) is likely to be preferred over model (a).
 
 For multivariate \strong{brms} models (models with more than one response), use
-the \code{resp} argument to name one response, for example
-\code{check_predictions(model, resp = "y1")}. If \code{resp} is missing or does
-not name one response, \code{check_predictions()} gives an error that lists the
-names of the responses.
+the \code{response} argument to name one response, for example
+\code{check_predictions(model, response = "y1")}. If \code{response} is missing or
+does not name one response, \code{check_predictions()} gives an error that
+lists the names of the responses.
 }
 \note{
 Every model object that has a \code{simulate()}-method should work with

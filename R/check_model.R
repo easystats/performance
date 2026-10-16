@@ -84,10 +84,10 @@
 #' example, `NORM` for `"normality"`) and the reason why the conversion failed.
 #' If none of the requested checks can be computed, `check_model()` gives an
 #' error. For multivariate **brms** models (models with more than one
-#' response), use the `resp` argument to name one response, for example
-#' `check_model(model, resp = "y1")`. Only this response is checked. If `resp`
-#' is missing or does not name one response, `check_model()` gives an error
-#' that lists the names of the responses. A more advanced model-check for
+#' response), use the `response` argument to name one response, for example
+#' `check_model(model, response = "y1")`. Only this response is checked. If
+#' `response` is missing or does not name one response, `check_model()` gives
+#' an error that lists the names of the responses. A more advanced model-check for
 #' Bayesian models will be implemented at a later stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
@@ -533,7 +533,7 @@ check_model.stanreg <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
-  resp = NULL,
+  response = NULL,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -545,7 +545,7 @@ check_model.stanreg <- function(
   }
 
   # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
-  resp <- .check_multivariate_resp(model, resp, "check_model")
+  resp <- .check_multivariate_resp(model, response, "check_model")
 
   freq_model <- tryCatch(
     if (is.null(resp)) {
@@ -680,7 +680,7 @@ check_model.brmsfit <- check_model.stanreg
     dat$PP_CHECK <- .safe(suppressWarnings(check_predictions(
       model,
       verbose = verbose,
-      resp = resp,
+      response = resp,
       ...
     )))
   }
