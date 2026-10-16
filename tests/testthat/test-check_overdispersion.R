@@ -582,3 +582,32 @@ test_that("check_overdispersion, fixest uses df.residual() with fixed effects", 
   expect_identical(out$residual_df, stats::df.residual(m_quasi))
   expect_equal(out$dispersion_ratio, m_quasi$dispersion, tolerance = 1e-4)
 })
+
+
+test_that("check_overdispersion, fixest_multi from split matches each sample", {
+  skip_if_not_installed("fixest")
+  set.seed(2)
+  d <- data.frame(
+    x = rnorm(150),
+    f = rep(1:10, 15),
+    g = rep(c("a", "b"), c(100, 50))
+  )
+  d$y <- rpois(150, exp(1 + 0.3 * d$x))
+
+  m_multi <- fixest::fepois(y ~ x | f, data = d, split = ~g)
+  expect_no_warning({
+    out <- check_overdispersion(m_multi)
+  })
+  expect_length(out, 2)
+
+  stats_names <- c("chisq_statistic", "dispersion_ratio", "residual_df", "p_value")
+  for (i in seq_along(out)) {
+    grp <- c("a", "b")[i]
+    m_single <- fixest::fepois(y ~ x | f, data = d[d$g == grp, ])
+    expect_equal(
+      unclass(out[[i]])[stats_names],
+      unclass(check_overdispersion(m_single))[stats_names],
+      tolerance = 1e-10
+    )
+  }
+})
