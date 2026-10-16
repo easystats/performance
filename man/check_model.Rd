@@ -90,9 +90,8 @@ by default, because in this case, these are usually on very large scales.}
 
 \item{show_smooth}{Logical, if \code{FALSE}, the Linearity and Homogeneity of
 Variance panels draw neither the LOESS smoother nor the cell means, and the
-Influential Observations panel draws no LOESS smoother. Reference lines,
-Cook's distance contours and the binned residuals panel do not change. This
-needs \strong{see} newer than 0.14.2. Older versions ignore the setting.}
+Influential Observations panel draws no LOESS smoother. This needs \strong{see}
+newer than 0.14.2. Older versions ignore the setting.}
 
 \item{maximum_dots}{Limits the number of data points for models with many
 observations, to reduce the time for rendering the plot. Defaults to a

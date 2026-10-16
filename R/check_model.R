@@ -52,9 +52,8 @@
 #' by default, because in this case, these are usually on very large scales.
 #' @param show_smooth Logical, if `FALSE`, the Linearity and Homogeneity of
 #' Variance panels draw neither the LOESS smoother nor the cell means, and the
-#' Influential Observations panel draws no LOESS smoother. Reference lines,
-#' Cook's distance contours and the binned residuals panel do not change. This
-#' needs **see** newer than 0.14.2. Older versions ignore the setting.
+#' Influential Observations panel draws no LOESS smoother. This needs **see**
+#' newer than 0.14.2. Older versions ignore the setting.
 #' @param maximum_dots Limits the number of data points for models with many
 #' observations, to reduce the time for rendering the plot. Defaults to a
 #' maximum of 2000 data points to render
@@ -488,7 +487,7 @@ check_model.default <- function(
   attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
   attr(assumptions_data, "show_ci") <- isTRUE(show_ci)
-  attr(assumptions_data, "show_smooth") <- show_smooth
+  attr(assumptions_data, "show_smooth") <- isTRUE(show_smooth)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
