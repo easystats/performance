@@ -36,6 +36,7 @@ check_model(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 )
 ```
@@ -165,6 +166,13 @@ check_model(
 - x:
 
   Deprecated, please use `model` instead.
+
+- show_smooth:
+
+  Logical, if `FALSE`, the Linearity and Homogeneity of Variance panels
+  draw neither the LOESS smoother nor the cell means, and the
+  Influential Observations panel draws no LOESS smoother. This needs
+  **see** newer than 0.14.2. Older versions ignore the setting.
 
 ## Value
 

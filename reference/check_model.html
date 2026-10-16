@@ -98,6 +98,7 @@ get hints about possible problems.</p>
 <span>  theme <span class="op">=</span> <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_lucid.html" class="external-link">theme_lucid</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_smooth <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -221,6 +222,13 @@ for dots, and third color for outliers or extreme values.</p></dd>
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>Deprecated, please use <code>model</code> instead.</p></dd>
+
+
+<dt id="arg-show-smooth">show_smooth<a class="anchor" aria-label="anchor" href="#arg-show-smooth"></a></dt>
+<dd><p>Logical, if <code>FALSE</code>, the Linearity and Homogeneity of
+Variance panels draw neither the LOESS smoother nor the cell means, and the
+Influential Observations panel draws no LOESS smoother. This needs <strong>see</strong>
+newer than 0.14.2. Older versions ignore the setting.</p></dd>
 
 </dl></div>
     <div class="section level2">
