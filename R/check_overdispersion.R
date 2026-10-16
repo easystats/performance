@@ -47,8 +47,9 @@
 #' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
 #' The returned statistic is the unscaled Pearson chi-squared test, which
 #' compares the residuals with the variance of a Poisson or binomial model. For
-#' a `glm` model without aliased coefficients, the dispersion ratio then equals
-#' its estimated dispersion, up to the fitting tolerance.
+#' a `glm` model, the dispersion ratio then equals `summary(model)$dispersion`.
+#' For a `feglm()` model (package **fixest**), it equals the estimated
+#' dispersion of the model, up to the fitting tolerance.
 #' Simulated residuals are not used, because they are not available for quasi
 #' families.
 #'
@@ -259,8 +260,14 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     }
   }
 
-  n <- stats::nobs(x)
-  k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+  # `df.residual()` also counts aliased coefficients and the fixed effects of
+  # fixest models; glmx has no method, so count its parameters instead
+  rdf <- .safe(stats::df.residual(x))
+  if (is.null(rdf)) {
+    n <- stats::nobs(x)
+    k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+    rdf <- n - k
+  }
 
   # use the model's own Pearson residuals - computing them by hand from
   # `get_response()` is wrong for a two-column `cbind()` response
@@ -271,13 +278,13 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
   }
   # residuals of models with `na.action = na.exclude` are padded with NA
   chisq <- sum(zi^2, na.rm = TRUE)
-  ratio <- chisq / (n - k)
-  p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
+  ratio <- chisq / rdf
+  p.value <- stats::pchisq(chisq, df = rdf, lower.tail = FALSE)
 
   out <- list(
     chisq_statistic = chisq,
     dispersion_ratio = ratio,
-    residual_df = n - k,
+    residual_df = rdf,
     p_value = p.value
   )
 

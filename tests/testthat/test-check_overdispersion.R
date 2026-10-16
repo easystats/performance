@@ -522,3 +522,63 @@ test_that("check_overdispersion, glm poisson with prior weights", {
     tolerance = 1e-6
   )
 })
+
+
+test_that("check_overdispersion, glm uses df.residual() with aliased coefficients", {
+  d_pois <- as.data.frame(Seatbelts)
+  d_pois$PetrolPrice2 <- 2 * d_pois$PetrolPrice
+  d_binom <- esoph
+  d_binom$alc <- as.numeric(d_binom$alcgp)
+  d_binom$alc2 <- 2 * d_binom$alc
+
+  fits <- list(
+    poisson = glm(DriversKilled ~ PetrolPrice + PetrolPrice2, poisson, d_pois),
+    quasipoisson = glm(DriversKilled ~ PetrolPrice + PetrolPrice2, quasipoisson, d_pois),
+    binomial = glm(cbind(ncases, ncontrols) ~ alc + alc2, binomial, d_binom),
+    quasibinomial = glm(cbind(ncases, ncontrols) ~ alc + alc2, quasibinomial, d_binom)
+  )
+
+  for (fam in names(fits)) {
+    fit <- fits[[fam]]
+    # the aliased coefficient makes the parameter count differ from df.residual()
+    expect_true(anyNA(stats::coef(fit)))
+    out <- check_overdispersion(fit, residual_type = "normal", verbose = FALSE)
+    rdf <- stats::df.residual(fit)
+    expect_identical(out$residual_df, rdf)
+    expect_equal(out$dispersion_ratio, out$chisq_statistic / rdf, tolerance = 1e-10)
+    expect_equal(
+      out$p_value,
+      stats::pchisq(out$chisq_statistic, rdf, lower.tail = FALSE),
+      tolerance = 1e-10
+    )
+    if (startsWith(fam, "quasi")) {
+      expect_equal(out$dispersion_ratio, summary(fit)$dispersion, tolerance = 1e-6)
+    }
+  }
+})
+
+
+test_that("check_overdispersion, fixest uses df.residual() with fixed effects", {
+  skip_if_not_installed("fixest")
+  set.seed(2)
+  d <- data.frame(x = rnorm(150), f = rep(1:10, 15))
+  d$y <- rpois(150, exp(1 + 0.3 * d$x + d$f / 10))
+
+  m_pois <- fixest::fepois(y ~ x | f, data = d)
+  out <- check_overdispersion(m_pois)
+  rdf <- stats::df.residual(m_pois)
+  # the fixed effects make the parameter count differ from df.residual()
+  expect_lt(rdf, stats::nobs(m_pois) - 1)
+  expect_identical(out$residual_df, rdf)
+  expect_equal(out$dispersion_ratio, out$chisq_statistic / rdf, tolerance = 1e-10)
+  expect_equal(
+    out$p_value,
+    stats::pchisq(out$chisq_statistic, rdf, lower.tail = FALSE),
+    tolerance = 1e-10
+  )
+
+  m_quasi <- fixest::feglm(y ~ x | f, data = d, family = "quasipoisson")
+  out <- check_overdispersion(m_quasi, verbose = FALSE)
+  expect_identical(out$residual_df, stats::df.residual(m_quasi))
+  expect_equal(out$dispersion_ratio, m_quasi$dispersion, tolerance = 1e-4)
+})
