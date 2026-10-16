@@ -88,6 +88,12 @@ comparison is Figure 6 from \emph{Gabry et al. 2019, Figure 6}.
 The model shown in the right panel (b) can simulate new data that are more
 similar to the observed outcome than the model in the left panel (a). Thus,
 model (b) is likely to be preferred over model (a).
+
+For multivariate \strong{brms} models (models with more than one response), use
+the \code{response} argument to name one response, for example
+\code{check_predictions(model, response = "y1")}. If \code{response} is missing or
+does not name one response, \code{check_predictions()} gives an error that
+lists the names of the responses.
 }
 \note{
 Every model object that has a \code{simulate()}-method should work with
