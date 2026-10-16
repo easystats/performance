@@ -171,6 +171,42 @@ test_that("`check_model()` respects user-supplied `show_ci`", {
   expect_false(attr(check_model(m_numeric, show_ci = FALSE), "show_ci"))
 })
 
+test_that("`check_model()` stores `show_smooth`", {
+  data(mtcars)
+  models <- list(
+    lm = lm(mpg ~ wt, data = mtcars),
+    glm = glm(am ~ wt, family = binomial, data = mtcars),
+    simres = simulate_residuals(lm(mpg ~ wt, data = mtcars))
+  )
+  for (m in models) {
+    expect_true(attr(check_model(m), "show_smooth"))
+    expect_false(attr(check_model(m, show_smooth = FALSE), "show_smooth"))
+  }
+})
+
+test_that("every `check_model()` method has a `show_smooth` argument", {
+  methods <- ls(asNamespace("performance"), pattern = "^check_model\\.")
+  expect_gt(length(methods), 0)
+  for (fun in methods) {
+    expect_true(
+      "show_smooth" %in% names(formals(get(fun, envir = asNamespace("performance")))),
+      info = fun
+    )
+  }
+})
+
+test_that("`check_model()` checks `show_smooth`", {
+  data(mtcars)
+  m <- lm(mpg ~ wt, data = mtcars)
+  for (value in list(NA, 1, "no", c(TRUE, FALSE))) {
+    expect_error(
+      check_model(m, show_smooth = value),
+      "`show_smooth` must be either `TRUE` or `FALSE`.",
+      fixed = TRUE
+    )
+  }
+})
+
 test_that("`check_model()` warnings for tweedie", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
