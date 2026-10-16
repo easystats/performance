@@ -689,7 +689,16 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
       sum(stats::residuals(m_ref, type = "pearson")^2),
       tolerance = 1e-8
     )
+    expect_identical(out$residual_df, as.integer(stats::nobs(m_binom) - m_binom$df))
   }
+
+  # Bernoulli models are rejected, as for glm
+  d$b <- as.integer(d$s > 5)
+  m_bern <- glmx::glmx(b ~ x, data = d, family = fam, xlink = "log", xstart = 0)
+  expect_error(
+    check_overdispersion(m_bern),
+    "cannot be used for Bernoulli models"
+  )
 
   # other glmx families are not supported
   set.seed(1)
@@ -725,5 +734,35 @@ test_that("check_overdispersion, glm errors without Pearson residuals", {
   expect_error(
     check_overdispersion(m_pois),
     "Pearson residuals are not available for models of class `glm`"
+  )
+  expect_error(check_overdispersion(m_pois), "The error was: no residuals")
+})
+
+
+test_that("check_overdispersion, svyglm keeps the observation-based df", {
+  skip_if_not_installed("survey")
+  data(api, package = "survey")
+  des <- survey::svydesign(
+    id = ~ dnum + snum,
+    weights = ~pw,
+    data = apiclus2,
+    fpc = ~ fpc1 + fpc2
+  )
+  m_svy <- survey::svyglm(
+    I(round(api00 / 10)) ~ ell + meals,
+    design = des,
+    family = poisson
+  )
+  out <- check_overdispersion(m_svy, residual_type = "normal")
+  # df.residual() gives the design degrees of freedom, far below this count
+  expect_lt(stats::df.residual(m_svy), out$residual_df)
+  expect_identical(
+    out$residual_df,
+    as.integer(stats::nobs(m_svy) - length(stats::coef(m_svy)))
+  )
+  expect_equal(
+    out$dispersion_ratio,
+    out$chisq_statistic / out$residual_df,
+    tolerance = 1e-10
   )
 })

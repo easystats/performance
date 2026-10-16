@@ -8,7 +8,9 @@
   for models with aliased coefficients and for *fixest* models with fixed
   effects. Now, the dispersion ratio of `quasipoisson` and `quasibinomial`
   `glm` models with aliased coefficients matches `summary(model)$dispersion`
-  up to the fitting tolerance. It already did so for other `glm` models.
+  up to the fitting tolerance. It already did so for other `glm` models. For
+  `gam()` models (package *mgcv*), the residual degrees of freedom now use the
+  effective degrees of freedom of the model.
 
 * `check_overdispersion()` now gives correct results for models from package
   *glmx* with a negative binomial or binomial family. *glmx* has no method for

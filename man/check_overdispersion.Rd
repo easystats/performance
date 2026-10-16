@@ -76,10 +76,10 @@ dispersion parameter, and their standard errors account for it. For these
 models, \code{check_overdispersion()} gives a warning (unless \code{verbose = FALSE}).
 The returned statistic is the unscaled Pearson chi-squared test, which
 compares the residuals with the variance of a Poisson or binomial model. For
-a \code{glm} model, the dispersion ratio then equals \code{summary(model)$dispersion},
-also when coefficients are aliased. For a \code{feglm()} model (package
-\strong{fixest}), it equals the estimated dispersion of the model. Both hold up to
-the fitting tolerance.
+a model fitted with \code{stats::glm()}, the dispersion ratio then equals
+\code{summary(model)$dispersion}, also when coefficients are aliased. For a
+\code{feglm()} model (package \strong{fixest}), it equals the estimated dispersion of
+the model. Both hold up to the fitting tolerance.
 Simulated residuals are not used, because they are not available for quasi
 families.
 }

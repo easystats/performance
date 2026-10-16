@@ -246,6 +246,16 @@ test_that("`check_model()` overdispersion data use the quasipoisson dispersion",
     tolerance = 1e-8
   )
 
+  # a saturated quasipoisson model has no dispersion estimate, so phi is 1
+  m_sat <- glm(
+    y ~ factor(x),
+    family = quasipoisson,
+    data = data.frame(y = c(2, 5, 9), x = 1:3)
+  )
+  out <- .model_diagnostic_overdispersion(m_sat)
+  expect_equal(out$V, unname(stats::fitted(m_sat)), tolerance = 1e-8)
+  expect_s3_class(check_model(m_sat, check = "overdispersion"), "check_model")
+
   # the Poisson model keeps the Poisson variance
   m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
   out <- .model_diagnostic_overdispersion(m_pois)

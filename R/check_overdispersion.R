@@ -47,10 +47,10 @@
 #' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
 #' The returned statistic is the unscaled Pearson chi-squared test, which
 #' compares the residuals with the variance of a Poisson or binomial model. For
-#' a `glm` model, the dispersion ratio then equals `summary(model)$dispersion`,
-#' also when coefficients are aliased. For a `feglm()` model (package
-#' **fixest**), it equals the estimated dispersion of the model. Both hold up to
-#' the fitting tolerance.
+#' a model fitted with `stats::glm()`, the dispersion ratio then equals
+#' `summary(model)$dispersion`, also when coefficients are aliased. For a
+#' `feglm()` model (package **fixest**), it equals the estimated dispersion of
+#' the model. Both hold up to the fitting tolerance.
 #' Simulated residuals are not used, because they are not available for quasi
 #' families.
 #'
@@ -261,9 +261,14 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
     }
   }
 
-  # `df.residual()` also counts aliased coefficients and the fixed effects of
-  # fixest models; glmx has no method, so count its parameters instead
-  rdf <- .safe(stats::df.residual(x))
+  # `df.residual()` leaves out aliased coefficients and subtracts the fixed
+  # effects of fixest models. glmx has no method, and for svyglm it returns
+  # the degrees of freedom of the survey design, not of the observations, so
+  # count the parameters for these instead
+  rdf <- NULL
+  if (!inherits(x, "svyglm")) {
+    rdf <- .safe(stats::df.residual(x))
+  }
   if (is.null(rdf)) {
     n <- stats::nobs(x)
     k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
@@ -273,17 +278,27 @@ check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ..
   # use the model's own Pearson residuals - computing them by hand from
   # `get_response()` is wrong for a two-column `cbind()` response and ignores
   # prior weights, so stop if the model has none
+  residual_error <- NULL
   if (inherits(x, "glmx")) {
     zi <- .pearson_residuals_glmx(x)
   } else {
-    zi <- .safe(insight::get_residuals(x, type = "pearson", verbose = FALSE))
+    zi <- tryCatch(
+      insight::get_residuals(x, type = "pearson", verbose = FALSE),
+      error = function(e) {
+        residual_error <<- conditionMessage(e)
+        NULL
+      }
+    )
   }
   if (is.null(zi)) {
-    insight::format_error(paste0(
-      "Pearson residuals are not available for models of class `",
-      class(x)[1],
-      "`, so `check_overdispersion()` cannot compute the overdispersion test."
-    ))
+    insight::format_error(
+      paste0(
+        "Pearson residuals are not available for models of class `",
+        class(x)[1],
+        "`, so `check_overdispersion()` cannot compute the overdispersion test."
+      ),
+      if (!is.null(residual_error)) paste0("The error was: ", residual_error)
+    )
   }
   # residuals of models with `na.action = na.exclude` are padded with NA
   chisq <- sum(zi^2, na.rm = TRUE)
@@ -334,12 +349,19 @@ check_overdispersion.glmx <- check_overdispersion.glm
     ))
   }
   y <- x$y
-  if (!is.null(dim(y))) {
-    y <- y[, 1] / rowSums(y)
-  }
   w <- x$weights
   if (is.null(w)) {
     w <- 1
+  }
+  if (!is_negbin) {
+    # a binary response, or one trial per row of a `cbind()` response
+    is_bernoulli <- if (is.null(dim(y))) all(y %in% c(0, 1)) else all(rowSums(y) == 1)
+    if (is_bernoulli) {
+      insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+    }
+  }
+  if (!is.null(dim(y))) {
+    y <- y[, 1] / rowSums(y)
   }
   mu <- stats::fitted(x)
   (y - mu) * sqrt(w) / sqrt(fam$variance(mu))

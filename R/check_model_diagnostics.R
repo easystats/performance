@@ -495,7 +495,8 @@
   # handle models without zero-inflation component
   if (!faminfo$is_zero_inflated) {
     if (faminfo$is_poisson) {
-      # Poisson: V = mu; quasipoisson glm: V = phi * mu
+      # Poisson: V = mu; quasipoisson glm: V = phi * mu (prior weights are
+      # not included)
       expected_var <- d$Predicted * .quasipoisson_dispersion(model, faminfo)
     } else if (isTRUE(faminfo$family == "nbinom1")) {
       # nbinom1: V = mu(1 + phi)  [phi=0 is Poisson limit; larger phi = more OD]
@@ -582,12 +583,16 @@
 
 
 # the estimated dispersion phi of a quasipoisson glm, and 1 for other models
+# or when phi cannot be estimated (no residual degrees of freedom)
 .quasipoisson_dispersion <- function(model, faminfo) {
+  phi <- 1
   if (inherits(model, "glm") && identical(faminfo$family, "quasipoisson")) {
-    as.numeric(insight::get_sigma(model))^2
-  } else {
-    1
+    sigma2 <- as.numeric(insight::get_sigma(model))^2
+    if (length(sigma2) == 1 && is.finite(sigma2) && sigma2 > 0) {
+      phi <- sigma2
+    }
   }
+  phi
 }
 
 
