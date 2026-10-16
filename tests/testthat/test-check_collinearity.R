@@ -1207,6 +1207,23 @@ test_that("check_collinearity, VIF CI covers the population VIF at the nominal r
   }
 })
 
+test_that(".vif_ci handles infinite VIFs and failed integration", {
+  # an infinite VIF gives R2 limits of 1 (VIF limits Inf), not NaN
+  m <- lm(mpg ~ wt + hp, data = mtcars)
+  out <- .vif_ci(m, c(Inf, 2), ci = 0.95, n_coef = c(1, 1))
+  expect_identical(out$CI_low[1], 1)
+  expect_identical(out$CI_high[1], 1)
+  expect_false(anyNA(out$CI_low[2]))
+
+  # with n - k - 1 = 1 and a huge F, integrate() fails in the root search,
+  # and the limit is NA instead of an error
+  d <- data.frame(y = c(1, 3, 2), a = c(1, 2, 3), b = c(2, 1, 4))
+  m <- lm(y ~ a + b, data = d)
+  expect_error(.ncp_limit(1e12, 1, 1, 0.975), "divergent")
+  out <- .vif_ci(m, c(1e12, 1e12), ci = 0.95, n_coef = c(1, 1))
+  expect_true(all(is.na(out$CI_low)))
+})
+
 test_that("check_collinearity, VIF CI is NA without a CI level", {
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
   ci_cols <- c("VIF_CI_low", "VIF_CI_high", "Tolerance_CI_low", "Tolerance_CI_high")
