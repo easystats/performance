@@ -47,9 +47,10 @@
 #' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
 #' The returned statistic is the unscaled Pearson chi-squared test, which
 #' compares the residuals with the variance of a Poisson or binomial model. For
-#' a `glm` model, the dispersion ratio then equals `summary(model)$dispersion`.
-#' For a `feglm()` model (package **fixest**), it equals the estimated
-#' dispersion of the model, up to the fitting tolerance.
+#' a `glm` model, the dispersion ratio then equals `summary(model)$dispersion`,
+#' also when coefficients are aliased. For a `feglm()` model (package
+#' **fixest**), it equals the estimated dispersion of the model. Both hold up to
+#' the fitting tolerance.
 #' Simulated residuals are not used, because they are not available for quasi
 #' families.
 #'
@@ -316,9 +317,11 @@ check_overdispersion.glmx <- check_overdispersion.glm
 
 
 # glmx has no `residuals()` method, so `residuals(type = "pearson")` returns
-# the working residuals. Compute the Pearson residuals from the family at the
-# estimated extra parameter instead. `x$weights` holds the prior weights times
-# the number of trials for a binomial `cbind()` response.
+# the stored `$residuals`, which are the deviance contributions of each
+# observation. Compute the Pearson residuals from the family at the estimated
+# extra parameter instead. `x$weights` holds the prior weights times the number
+# of trials for a binomial `cbind()` response, and is `NULL` when all of these
+# weights are 1.
 .pearson_residuals_glmx <- function(x) {
   fam <- x$family$glm
   is_negbin <- startsWith(fam$family, "Negative Binomial")
@@ -333,8 +336,12 @@ check_overdispersion.glmx <- check_overdispersion.glm
   if (!is.null(dim(y))) {
     y <- y[, 1] / rowSums(y)
   }
+  w <- x$weights
+  if (is.null(w)) {
+    w <- 1
+  }
   mu <- stats::fitted(x)
-  (y - mu) * sqrt(x$weights) / sqrt(fam$variance(mu))
+  (y - mu) * sqrt(w) / sqrt(fam$variance(mu))
 }
 
 

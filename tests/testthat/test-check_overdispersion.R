@@ -637,6 +637,23 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
   )
   expect_equal(out$residual_df, stats::nobs(m_nb) - m_nb$df)
 
+  # glmx stores no weights when all weights are 1
+  d$one <- 1
+  m_nb1 <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0,
+    weights = one
+  )
+  expect_null(m_nb1$weights)
+  expect_equal(
+    check_overdispersion(m_nb1)$chisq_statistic,
+    out$chisq_statistic,
+    tolerance = 1e-8
+  )
+
   # binomial with a cbind() response, unweighted and weighted
   set.seed(4)
   d <- data.frame(x = stats::rnorm(150))
@@ -673,7 +690,7 @@ test_that("check_overdispersion, glmx uses Pearson residuals of the fitted famil
     )
   }
 
-  # other families have no Pearson residuals here
+  # other glmx families are not supported
   set.seed(1)
   d <- data.frame(x = stats::runif(200, -1, 1))
   d$y <- stats::rpois(200, exp(1 + d$x))
