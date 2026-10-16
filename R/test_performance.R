@@ -280,7 +280,12 @@ format.test_performance <- function(x, digits = 2, ...) {
   # Format cols and names
   out <- insight::format_table(x, digits = digits, exact = FALSE, ...)
 
-  if (isTRUE(attributes(x)$is_nested)) {
+  if (isTRUE(attributes(x)$is_lavaan)) {
+    footer <- paste0(
+      "Models are compared in sequential order of their degrees of freedom.\n",
+      "The likelihood-ratio test assumes that each model is nested in the next.\n"
+    )
+  } else if (isTRUE(attributes(x)$is_nested)) {
     footer <- paste0(
       "Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.\n"
     )
@@ -433,6 +438,84 @@ test_performance.ListNonNestedRegressions <- function(
 }
 
 
+#' @export
+test_performance.ListLavaan <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
+  insight::check_if_installed("lavaan")
+
+  # lavTestLRT() compares models in order of their df, so we do the same
+  dfs <- vapply(
+    objects,
+    function(x) as.numeric(lavaan::fitMeasures(x, "df")),
+    numeric(1)
+  )
+  model_class <- class(objects)
+  objects <- objects[order(dfs)]
+  class(objects) <- model_class
+
+  # .test_performance_checks() skips the same-data check for lavaan models,
+  # so we check the observations and observed variables here
+  .check_lavaan_same_data(objects)
+
+  out <- .test_performance_init(objects, include_formula = include_formula, ...)
+
+  # BF test - insight cannot read the model info of lavaan fits, so
+  # bayesfactor_models() warns that the data may differ even when they are the
+  # same. We only muffle these two warnings, the data were checked above.
+  tryCatch(
+    {
+      rez <- withCallingHandlers(
+        test_bf(objects, reference = "sequential"),
+        warning = function(w) {
+          # messages are wrapped across lines, so we normalize white space
+          msg <- gsub("\\s+", " ", conditionMessage(w))
+          if (
+            grepl("Could not access model information", msg, fixed = TRUE) ||
+              grepl("not all models were fit from same data", msg, fixed = TRUE)
+          ) {
+            invokeRestart("muffleWarning")
+          }
+        }
+      )
+      if (!is.null(rez)) {
+        rez$Model <- NULL
+        out <- cbind(out, rez)
+      }
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
+
+  # LRT
+  tryCatch(
+    {
+      rez <- do.call(
+        test_likelihoodratio_ListLavaan,
+        c(unname(as.list(objects)), list(objects = objects))
+      )
+      rez$Name <- rez$Model
+      rez$Model <- NULL
+      rez$Type <- NULL
+      out <- merge(out, rez, sort = FALSE)
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
+
+  # nesting is not checked for lavaan models, so the footer says what is assumed
+  attr(out, "is_nested") <- FALSE
+  attr(out, "is_lavaan") <- TRUE
+  class(out) <- c("test_performance", class(out))
+  out
+}
+
+
 # TESTS IMPLEMENTED IN OTHER PACKAGES
 
 # # Non-nested
@@ -442,6 +525,23 @@ test_performance.ListNonNestedRegressions <- function(
 # nonnest2::icci(m2, m3)
 
 # Helpers -----------------------------------------------------------------
+
+.check_lavaan_same_data <- function(objects) {
+  n_obs <- vapply(
+    objects,
+    function(x) as.numeric(lavaan::lavInspect(x, "ntotal")),
+    numeric(1)
+  )
+  observed <- lapply(objects, function(x) sort(lavaan::lavNames(x, "ov")))
+  same_observed <- all(vapply(observed, identical, logical(1), observed[[1]]))
+
+  if (length(unique(n_obs)) > 1 || !same_observed) {
+    insight::format_warning(
+      "The models were not fit to the same observations or the same observed variables, so the Bayes factors and the likelihood-ratio test are probably not valid." # nolint
+    )
+  }
+}
+
 
 .test_performance_init <- function(objects, include_formula = FALSE) {
   model_names <- insight::model_name(objects, include_formula = include_formula)

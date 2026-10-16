@@ -47,6 +47,14 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 }
 
 
+#' @export
+test_vuong.ListLavaan <- function(objects, ...) {
+  insight::format_error(
+    "Vuong's test is not available for lavaan models. Try `test_likelihoodratio()` or `test_bf()`."
+  )
+}
+
+
 # -------------------------------------------------------------------------
 # Utils -------------------------------------------------------------------
 # -------------------------------------------------------------------------

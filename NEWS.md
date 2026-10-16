@@ -36,6 +36,12 @@
 * Fixed issue in `check_predictions()` for *brms* models with `dec()` response
   (Wiener and RT-choice families); the RT part of the model is now checked.
 
+* `test_performance()` now works for models from package *lavaan*. Before, it
+  failed with an infinite recursion. It returns the Bayes factor and the
+  likelihood-ratio test from `lavaan::lavTestLRT()`, and compares the models
+  in order of their degrees of freedom. `test_vuong()` and `test_wald()` now give
+  a clear error for *lavaan* models instead of the same recursion (#427).
+
 ## Changes
 
 * `check_model()` and `check_predictions()` now work for multivariate models

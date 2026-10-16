@@ -61,6 +61,14 @@ test_wald.ListNonNestedRegressions <- function(objects, verbose = TRUE, ...) {
   )
 }
 
+
+#' @export
+test_wald.ListLavaan <- function(objects, verbose = TRUE, ...) {
+  insight::format_error(
+    "Wald tests are not available for lavaan models. Try `test_likelihoodratio()`."
+  )
+}
+
 # Helpers --------------------------
 
 .test_wald <- function(objects, test = "F") {
