@@ -6,8 +6,9 @@ Monette 1992). `multicollinearity()` is an alias for
 `check_collinearity()`. `check_concurvity()` is a wrapper around
 [`mgcv::concurvity()`](https://rdrr.io/pkg/mgcv/man/concurvity.html),
 and can be considered as a collinearity check for smooth terms in GAMs.
-Confidence intervals for VIF and tolerance are based on Marcoulides et
-al. (2019, Appendix B).
+Confidence intervals for VIF and tolerance invert the noncentral F
+distribution of the auxiliary regression of each term on the other terms
+(Kelley 2007).
 
 ## Usage
 
@@ -89,6 +90,17 @@ as `bracl(parallel = TRUE)`, have one slope per model matrix column. The
 adjusted VIF is then `VIF^(1/(2*<n>))`, where `<n>` is the number of
 slopes of the term across all outcome levels.
 
+The confidence interval of a VIF is an interval for the population R2 of
+the auxiliary regression of that term on the other terms. The R2 limits
+map to the VIF by `1 / (1 - R2)`. The interval inverts the noncentral F
+distribution of the F statistic of that regression, as `MBESS::ci.R2()`
+does for fixed predictors (Kelley 2007). The interval assumes a linear
+model with fixed predictors. For other models, and for terms with more
+than one coefficient, it is an approximation. Its degrees of freedom
+depend on the number of coefficients of the other terms, so two terms
+with the same VIF can get different intervals. For a VIF very close to
+1, both limits can be 1.
+
 If the correlation matrix of the coefficients is singular because of
 collinearity between model terms, for example for exactly collinear
 predictors in a model that keeps all coefficients, such as
@@ -97,10 +109,7 @@ predictors in a model that keeps all coefficients, such as
 
 ## Note
 
-The code to compute the confidence intervals for the VIF and tolerance
-values was adapted from the Appendix B from the Marcoulides et al.
-paper. Thus, credits go to these authors the original algorithm. There
-is also a
+There is also a
 [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 implemented in the [see-package](https://easystats.github.io/see/).
 
@@ -189,13 +198,14 @@ ranging from 0 (no problem) to 1 (total lack of identifiability).
   An introduction to statistical learning: with applications in R. New
   York: Springer.
 
+- Kelley, K. (2007). Confidence Intervals for Standardized Effect Sizes:
+  Theory, Application, and Implementation. Journal of Statistical
+  Software, 20(8), 1–24.
+  [doi:10.18637/jss.v020.i08](https://doi.org/10.18637/jss.v020.i08)
+
 - Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis
   with causal graphs. British Journal of Mathematical and Statistical
   Psychology, 00, 1–14.
-
-- Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-  Inflation Factors in Regression Models Using Latent Variable Modeling
-  Methods. Educational and Psychological Measurement, 79(5), 874–882.
 
 - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
@@ -235,14 +245,14 @@ check_collinearity(m)
 #> Low Correlation
 #> 
 #>  Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
-#>  gear 1.53 [1.19,  2.51]     1.24      0.65     [0.40, 0.84]
+#>  gear 1.53 [1.04,  2.06]     1.24      0.65     [0.48, 0.96]
 #> 
 #> Moderate Correlation
 #> 
 #>  Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
-#>    wt 5.05 [3.21,  8.41]     2.25      0.20     [0.12, 0.31]
-#>   cyl 5.41 [3.42,  9.04]     2.33      0.18     [0.11, 0.29]
-#>  disp 9.97 [6.08, 16.85]     3.16      0.10     [0.06, 0.16]
+#>    wt 5.05 [2.57,  7.07]     2.25      0.20     [0.14, 0.39]
+#>   cyl 5.41 [2.74,  7.58]     2.33      0.18     [0.13, 0.36]
+#>  disp 9.97 [4.90, 13.93]     3.16      0.10     [0.07, 0.20]
 
 # plot results
 x <- check_collinearity(m)
