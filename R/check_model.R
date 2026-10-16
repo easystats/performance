@@ -609,7 +609,7 @@ check_model.stanreg <- function(
       type_missing = missing(type),
       show_dots = show_dots,
       show_ci = show_ci,
-    show_smooth = show_smooth,
+      show_smooth = show_smooth,
       maximum_dots = maximum_dots,
       size_dot = size_dot,
       size_line = size_line,

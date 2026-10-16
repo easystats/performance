@@ -32,6 +32,11 @@
 
 ## Changes
 
+* `check_model()` gets a `show_smooth` argument. With `show_smooth = FALSE`,
+  the plot draws no trend line in the Linearity, Homogeneity of Variance and
+  Influential Observations panels. This needs a version of *see* that supports
+  the setting.
+
 * `check_model()` and `check_predictions()` now work for multivariate models
   from package *brms*. Use the `response` argument to name the response to
   check. Without `response`, both functions give an error that lists the names

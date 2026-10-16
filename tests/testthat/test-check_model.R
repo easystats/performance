@@ -189,7 +189,8 @@ test_that("every `check_model()` method has a `show_smooth` argument", {
   expect_gt(length(methods), 0)
   for (fun in methods) {
     expect_true(
-      "show_smooth" %in% names(formals(get(fun, envir = asNamespace("performance")))),
+      "show_smooth" %in%
+        names(formals(get(fun, envir = asNamespace("performance")))),
       info = fun
     )
   }
