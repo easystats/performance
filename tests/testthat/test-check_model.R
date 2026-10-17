@@ -559,7 +559,10 @@ test_that("`check_model()` converts multivariate brms models without a partial a
     check_model(m, response = "gear"),
     warning = function(w) {
       warnings <<- c(warnings, conditionMessage(w))
-      invokeRestart("muffleWarning")
+      # other warnings still reach the test output
+      if (grepl("partial argument match", conditionMessage(w), fixed = TRUE)) {
+        invokeRestart("muffleWarning")
+      }
     }
   )
   # the conversion worked, so the frequentist panels are there
