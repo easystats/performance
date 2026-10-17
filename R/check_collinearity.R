@@ -909,8 +909,12 @@ check_collinearity.zerocount <- function(
       d[factors] <- lapply(d[factors], as.factor)
       # add factors from data frame
       factors <- unique(c(factors, colnames(d)[vapply(d, is.factor, logical(1))]))
-      # find position of factors in model terms
+      # find position of factors in model terms. the model frame can also
+      # have factors that are not model terms, such as the response or the
+      # grouping factors of mixed models
       pos <- match(factors, insight::clean_names(model_terms))
+      factors <- factors[!is.na(pos)]
+      pos <- pos[!is.na(pos)]
       # copy df for factors
       dof[pos] <- vapply(d[factors], nlevels, numeric(1)) - 1
       # finally, calculate adjusted vif
