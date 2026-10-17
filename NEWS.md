@@ -58,6 +58,13 @@
 
 ## Changes
 
+* New function `test_clusters()` uses the `matchednull` package to compare a
+  selected cluster count with the counts obtained from matched-null data that
+  keep the observed margins and approximately the observed correlations. It
+  reports one of three outcomes (no detected excess, departure from the
+  reference model, below the reference range) and validates the return values
+  of the clustering function.
+
 * `check_model()` gets a `show_smooth` argument. With `show_smooth = FALSE`,
   the Linearity and Homogeneity of Variance panels draw neither the LOESS
   smoother nor the cell means, and the Influential Observations panel draws no
