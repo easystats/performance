@@ -330,7 +330,7 @@ test_that("`check_model()` with transformed response when named as function", {
 
 skip_if_brms_fixture_unavailable <- function() {
   skip_if_not_installed("brms")
-  skip_if_not_installed("bayestestR")
+  skip_if_not_installed("bayestestR", minimum_version = "0.20.0")
   skip_if_not_installed("modelbased")
   skip_if_not_installed("curl")
   skip_if_not_installed("httr2")
@@ -427,7 +427,9 @@ test_that("`check_model()` errors if no check works after brms conversion fails"
 
 test_that("`check_model()` needs one `response` for multivariate brms models", {
   # `response` is a formal argument, so `resp = ` would also partial-match it
-  expect_true("response" %in% names(formals(utils::getS3method("check_model", "brmsfit"))))
+  expect_true(
+    "response" %in% names(formals(utils::getS3method("check_model", "brmsfit")))
+  )
   skip_if_brms_fixture_unavailable()
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
