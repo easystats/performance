@@ -2,6 +2,12 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now gives the correct adjusted VIF (`SE_factor`) for
+  factor terms in models with a factor response, such as logistic and ordinal
+  models, and in mixed models with grouping factors. Before, these models got
+  the square root of the VIF for every term, also for factors with more than
+  two levels.
+
 * `check_collinearity()` now gives the correct VIFs for ordinal models from
   `MASS::polr()`, `survey::svyolr()`, `ordinal::clm2()`, `ordinal::clmm2()`, and
   `rstanarm::stan_polr()`. These models have one threshold for each outcome
