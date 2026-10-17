@@ -50,6 +50,60 @@
 
 ## Bug fixes
 
+* `check_collinearity()` now gives the correct VIFs for ordinal models from
+  `MASS::polr()`, `survey::svyolr()`, `ordinal::clm2()`, `ordinal::clmm2()`, and
+  `rstanarm::stan_polr()`. These models have one threshold for each outcome
+  level except one, and no single intercept. Before, `check_collinearity()`
+  dropped only the first column of the variance-covariance matrix as the
+  intercept. The VIFs then included the thresholds. For `MASS::polr()`,
+  `survey::svyolr()`, and `rstanarm::stan_polr()`, they also left out the first
+  slope. Thus the VIFs were wrong.
+
+* Some models drop an aliased predictor, which is a linear combination of other
+  predictors. For such `ordinal::clm()` and `MASS::polr()` models,
+  `check_collinearity()` now warns that the model matrix is rank deficient. It
+  also labels each VIF with its own term.
+
+* `check_collinearity()` uses a new method for the confidence intervals of
+  VIF and tolerance. The method inverts the noncentral F distribution of the
+  auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed
+  predictors (Kelley 2007). The old interval had an infinite upper limit for
+  VIFs close to 1, and no upper limit for a VIF of exactly 1 (#597).
+
+* `check_overdispersion()` now uses the residual degrees of freedom of the
+  model (`df.residual()`) for `glm` and *fixest* models, but not for `svyglm()`
+  models (package *survey*). Before, it subtracted the number of coefficients
+  from the number of observations. That was wrong for models with aliased
+  coefficients and for *fixest* models with fixed effects. Now, the dispersion
+  ratio of `quasipoisson` and `quasibinomial` `glm` models with aliased
+  coefficients matches `summary(model)$dispersion` up to the fitting tolerance.
+  It already did so for other `stats::glm()` models. Other classes that inherit
+  from `glm` now also use their own `df.residual()`. For example, `gam()`
+  models (package *mgcv*) use the effective degrees of freedom.
+
+* `check_overdispersion()` now gives correct results for models from package
+  *glmx* with a negative binomial family, or with a binomial family and more
+  than one trial. *glmx* has no method for Pearson residuals, so its stored
+  deviance contributions were used before. Bernoulli models and other *glmx*
+  families give an error.
+
+* If a model has no Pearson residuals, `check_overdispersion()` now gives an
+  error. Before, it used the formula for Poisson models, which is wrong for
+  other families.
+
+* The overdispersion plot of `check_model()` now uses the estimated dispersion
+  for `quasipoisson` `glm` models. Before, it showed the variance of a Poisson
+  model.
+
+* Fixed issue in `check_predictions()` for *brms* models with `dec()` response
+  (Wiener and RT-choice families); the RT part of the model is now checked.
+
+* `test_performance()` now works for models from package *lavaan*. Before, it
+  failed with an infinite recursion. It returns the Bayes factor and the
+  likelihood-ratio test from `lavaan::lavTestLRT()`, and compares the models
+  in order of their degrees of freedom. `test_vuong()` and `test_wald()` now give
+  a clear error for *lavaan* models instead of the same recursion (#427).
+
 * `check_collinearity()` uses a new method for the confidence intervals of
   VIF and tolerance. The method inverts the noncentral F distribution of the
   auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed

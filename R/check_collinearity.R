@@ -509,27 +509,27 @@ check_collinearity.zerocount <- function(
     return(NULL)
   }
 
-  # Filter to true slope parameters (handles multiple intercepts in ordinal models)
-  if (inherits(x, c("clm", "clmm"))) {
-    # names(x$beta) returns only non-singular (surviving) slopes
-    slope_names <- names(x$beta)
-    keep_idx <- colnames(v) %in% slope_names
-
-    # Rebuild term_assign by matching model matrix columns to surviving slopes
-    tryCatch(
-      {
-        mm <- insight::get_modelmatrix(x)
-        assign_attr <- attr(mm, "assign")
-        if (!is.null(assign_attr)) {
-          # Use name-matching to isolate indices for estimated slopes
-          match_idx <- which(colnames(mm) %in% slope_names)
-          if (length(match_idx) > 0) {
-            term_assign <- assign_attr[match_idx]
-          }
-        }
-      },
-      error = function(e) NULL
-    )
+  # ordinal models have one threshold for each outcome level except one, in
+  # place of one intercept. polr, svyolr and stan_polr put the thresholds after
+  # the slopes, clm and clm2 put them first, so keep the slopes by name
+  if (.is_threshold_model(x)) {
+    slopes <- .threshold_slopes(x, component)
+    keep_idx <- colnames(v) %in% slopes$names
+    term_assign <- slopes$assign[match(colnames(v)[keep_idx], slopes$names)]
+    if (!length(term_assign) || anyNA(term_assign)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (length(slopes$aliased) && isTRUE(verbose)) {
+      .warn_rank_deficient(slopes$aliased)
+    }
   } else if (.is_multinom_model(x)) {
     # multinomial models have one intercept and one set of slopes for each
     # outcome level except one, so drop all intercepts and
@@ -637,19 +637,7 @@ check_collinearity.zerocount <- function(
     }
 
     if (isTRUE(verbose)) {
-      if (length(na_cols) > 0) {
-        insight::format_warning(
-          "Model matrix is rank deficient. VIFs may not be sensible.",
-          paste0(
-            "The following coefficients have VIF = Inf / tolerance = 0: ",
-            paste0(na_cols, collapse = ", ")
-          )
-        )
-      } else {
-        insight::format_warning(
-          "Model matrix is rank deficient. VIFs may not be sensible."
-        )
-      }
+      .warn_rank_deficient(na_cols)
     }
   }
 
@@ -1125,6 +1113,71 @@ check_collinearity.zerocount <- function(
 # which inherits from brmultinom)
 .is_multinom_model <- function(x) {
   inherits(x, c("multinom", "mblogit", "brmultinom"))
+}
+
+# ordinal models with thresholds in place of one intercept. clmm2 inherits
+# from clm2, and stan_polr fits from polr
+.is_threshold_model <- function(x) {
+  inherits(x, c("clm", "clmm", "clm2", "polr", "svyolr"))
+}
+
+# names of the estimated slopes of an ordinal model, the term each one belongs
+# to, and the model matrix columns the fit dropped as aliased
+.threshold_slopes <- function(x, component) {
+  if (inherits(x, c("clm", "clmm", "clm2"))) {
+    beta <- x$beta
+  } else {
+    beta <- x$coefficients
+  }
+  # clm keeps aliased slopes as NA, polr and clmm drop them. Coefficient names
+  # can keep backticks, which the column names of the variance-covariance
+  # matrix do not have
+  slope_names <- gsub("`", "", names(beta)[!is.na(beta)], fixed = TRUE)
+
+  # build the model matrix from the rows of the fit and with its contrasts,
+  # which can differ from the contrasts in options(). insight cannot build the
+  # model matrix of clm2 and clmm2 models, and returns a list without an
+  # "assign" attribute for clm models
+  f <- insight::find_formula(x, verbose = FALSE)[[component]]
+  mm <- .safe(stats::model.matrix(
+    stats::delete.response(stats::terms(f)),
+    data = insight::get_data(x, verbose = FALSE),
+    contrasts.arg = x$contrasts
+  ))
+  if (is.null(mm)) {
+    mm <- .safe(insight::get_modelmatrix(x))
+  }
+  if (!is.matrix(mm) || is.null(attr(mm, "assign"))) {
+    return(list(names = slope_names, assign = NULL, aliased = character(0)))
+  }
+  colnames(mm) <- gsub("`", "", colnames(mm), fixed = TRUE)
+
+  # a factor level that no row of the fit has gives a column of zeros, which
+  # the fit drops, but it is not an aliased predictor
+  used <- colSums(abs(mm), na.rm = TRUE) > 0
+  mm_names <- setdiff(colnames(mm)[used], "(Intercept)")
+
+  list(
+    names = slope_names,
+    assign = attr(mm, "assign")[match(slope_names, colnames(mm))],
+    aliased = setdiff(mm_names, slope_names)
+  )
+}
+
+.warn_rank_deficient <- function(na_cols = NULL) {
+  if (length(na_cols) > 0) {
+    insight::format_warning(
+      "Model matrix is rank deficient. VIFs may not be sensible.",
+      paste0(
+        "The following coefficients have VIF = Inf / tolerance = 0: ",
+        paste0(na_cols, collapse = ", ")
+      )
+    )
+  } else {
+    insight::format_warning(
+      "Model matrix is rank deficient. VIFs may not be sensible."
+    )
+  }
 }
 
 # VGAM models with the multinomial or cumulative family
