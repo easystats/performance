@@ -2,6 +2,12 @@
 
 ## Bug fixes
 
+* `check_model()` for multivariate *brms* models now names the response with
+  the `response` argument of `bayestestR::bayesian_as_frequentist()`, which
+  replaced `resp` in *bayestestR* 0.20.0.1. Before, with
+  `options(warnPartialMatchArgs = TRUE)`, the call gave a warning about a
+  partial argument match.
+
 * `check_collinearity()` now gives the correct VIFs for ordinal models from
   `MASS::polr()`, `survey::svyolr()`, `ordinal::clm2()`, `ordinal::clmm2()`, and
   `rstanarm::stan_polr()`. These models have one threshold for each outcome
