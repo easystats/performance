@@ -50,6 +50,10 @@
 #' @param show_ci Logical, if `TRUE`, confidence intervals in plots are shown.
 #' For models with only categorical predictors, confidence intervals are not shown
 #' by default, because in this case, these are usually on very large scales.
+#' @param show_smooth Logical, if `FALSE`, the Linearity and Homogeneity of
+#' Variance panels draw neither the LOESS smoother nor the cell means, and the
+#' Influential Observations panel draws no LOESS smoother. This needs **see**
+#' newer than 0.14.2. Older versions ignore the setting.
 #' @param maximum_dots Limits the number of data points for models with many
 #' observations, to reduce the time for rendering the plot. Defaults to a
 #' maximum of 2000 data points to render
@@ -83,10 +87,12 @@
 #' then lists the panels of the requested checks that were skipped (for
 #' example, `NORM` for `"normality"`) and the reason why the conversion failed.
 #' If none of the requested checks can be computed, `check_model()` gives an
-#' error. Multivariate **brms**
-#' models (models with more than one response) are not supported. A more
-#' advanced model-check for Bayesian models will be implemented at a later
-#' stage.
+#' error. For multivariate **brms** models (models with more than one
+#' response), use the `response` argument to name one response, for example
+#' `check_model(model, response = "y1")`. Only this response is checked. If
+#' `response` is missing or does not name one response, `check_model()` gives
+#' an error that lists the names of the responses. A more advanced model-check for
+#' Bayesian models will be implemented at a later stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
@@ -126,6 +132,9 @@
 #' This plot is used to identify influential observations. If any points in this
 #' plot fall outside of Cook’s distance (the dashed lines) then it is considered
 #' an influential observation. See [`check_outliers()`] for further details.
+#' For models from package *glmmTMB*, this plot uses a one-step approximation
+#' of Cook's distance from the hat values, while [`check_outliers()`] computes
+#' Cook's distance by refitting the model without each observation.
 #'
 #' @section Multicollinearity:
 #' This plot checks for potential collinearity among predictors. In a nutshell,
@@ -281,6 +290,7 @@ check_model.default <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -290,6 +300,8 @@ check_model.default <- function(
     )
     model <- x
   }
+
+  .check_show_smooth(show_smooth)
 
   # check model formula
   if (verbose) {
@@ -387,6 +399,7 @@ check_model.default <- function(
     type_missing = missing(type),
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     size_dot = size_dot,
     size_line = size_line,
@@ -418,6 +431,7 @@ check_model.default <- function(
   type_missing,
   show_dots,
   show_ci,
+  show_smooth,
   maximum_dots,
   size_dot,
   size_line,
@@ -473,6 +487,7 @@ check_model.default <- function(
   attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
   attr(assumptions_data, "show_ci") <- isTRUE(show_ci)
+  attr(assumptions_data, "show_smooth") <- isTRUE(show_smooth)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
@@ -484,6 +499,14 @@ check_model.default <- function(
   attr(assumptions_data, "maximum_dots") <- maximum_dots
   attr(assumptions_data, "model_class") <- class(model)[1]
   assumptions_data
+}
+
+
+# same check and message as in see::plot.see_check_model()
+.check_show_smooth <- function(show_smooth) {
+  if (!isTRUE(show_smooth) && !isFALSE(show_smooth)) {
+    insight::format_error("`show_smooth` must be either `TRUE` or `FALSE`.")
+  }
 }
 
 
@@ -531,6 +554,8 @@ check_model.stanreg <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  response = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -541,15 +566,22 @@ check_model.stanreg <- function(
     model <- x
   }
 
-  # multivariate brms models, see https://github.com/easystats/performance/issues/908
-  if (inherits(model, "brmsfit") && insight::is_multivariate(model)) {
-    insight::format_error(
-      "Multivariate models are not supported by `check_model()`. This model has more than one response."
-    )
-  }
+  .check_show_smooth(show_smooth)
+
+  # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
+  resp <- .check_multivariate_resp(
+    model,
+    response,
+    "check_model",
+    dot_names = names(match.call(expand.dots = FALSE)$...)
+  )
 
   freq_model <- tryCatch(
-    bayestestR::bayesian_as_frequentist(model),
+    if (is.null(resp)) {
+      bayestestR::bayesian_as_frequentist(model)
+    } else {
+      bayestestR::bayesian_as_frequentist(model, resp = resp)
+    },
     error = function(e) {
       # let errors propagate when debugging, see `.safe()`
       if (isTRUE(getOption("easystats_errors", FALSE))) {
@@ -568,6 +600,7 @@ check_model.stanreg <- function(
   if (is.null(freq_model) && inherits(model, "brmsfit")) {
     return(.check_model_bayesian_fallback(
       model,
+      resp = resp,
       conversion_error = conversion_error,
       panel = panel,
       check = check,
@@ -577,6 +610,7 @@ check_model.stanreg <- function(
       type_missing = missing(type),
       show_dots = show_dots,
       show_ci = show_ci,
+      show_smooth = show_smooth,
       maximum_dots = maximum_dots,
       size_dot = size_dot,
       size_line = size_line,
@@ -608,6 +642,7 @@ check_model.stanreg <- function(
     detrend = detrend,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
@@ -628,6 +663,7 @@ check_model.brmsfit <- check_model.stanreg
 
 .check_model_bayesian_fallback <- function(
   model,
+  resp,
   conversion_error,
   panel,
   check,
@@ -637,6 +673,7 @@ check_model.brmsfit <- check_model.stanreg
   type_missing,
   show_dots,
   show_ci,
+  show_smooth,
   maximum_dots,
   size_dot,
   size_line,
@@ -656,7 +693,12 @@ check_model.brmsfit <- check_model.stanreg
     insight::formula_ok(model)
   }
 
-  minfo <- insight::model_info(model, verbose = FALSE)
+  # for multivariate models, use the model information of response `resp`
+  if (is.null(resp)) {
+    minfo <- insight::model_info(model, verbose = FALSE)
+  } else {
+    minfo <- insight::model_info(model, response = resp, verbose = FALSE)
+  }
 
   dat <- list()
 
@@ -670,6 +712,7 @@ check_model.brmsfit <- check_model.stanreg
     dat$PP_CHECK <- .safe(suppressWarnings(check_predictions(
       model,
       verbose = verbose,
+      response = resp,
       ...
     )))
   }
@@ -721,6 +764,7 @@ check_model.brmsfit <- check_model.stanreg
     type_missing = type_missing,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     size_dot = size_dot,
     size_line = size_line,
@@ -797,6 +841,7 @@ check_model.model_fit <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -822,6 +867,7 @@ check_model.model_fit <- function(
     detrend = detrend,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
@@ -857,6 +903,7 @@ check_model.performance_simres <- function(
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 ) {
   ## TODO remove deprecation warning later
@@ -882,6 +929,7 @@ check_model.performance_simres <- function(
     detrend = detrend,
     show_dots = show_dots,
     show_ci = show_ci,
+    show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
@@ -949,24 +997,17 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
     if (inherits(model, "glmmTMB")) {
-      if (verbose) {
-        insight::format_alert(paste(
-          "The check for influential observations is skipped for models of class",
-          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
-          "Use `check_outliers()` to compute it."
-        ))
-      }
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
-    } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
-    }
-    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -1023,24 +1064,17 @@ check_model.DHARMa <- check_model.performance_simres
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    # glmmTMB needs one refit per row for Cook's distance, which is too slow here
     if (inherits(model, "glmmTMB")) {
-      if (verbose) {
-        insight::format_alert(paste(
-          "The check for influential observations is skipped for models of class",
-          "`glmmTMB`, because Cook's distance needs one model refit per observation.",
-          "Use `check_outliers()` to compute it."
-        ))
-      }
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
       dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
-    } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
-    }
-    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -1065,6 +1099,44 @@ check_model.DHARMa <- check_model.performance_simres
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
+}
+
+
+# data for the influential observations panel of glmmTMB models ----------
+
+# Cook's distance from `check_outliers()` needs one refit per row for glmmTMB,
+# so the panel uses hat values and a one-step Cook's distance, with the
+# threshold that `check_outliers()` uses
+.check_model_influential_glmmTMB <- function(model, verbose = TRUE) {
+  unsupported <- .safe(
+    .glmmTMB_influence_unsupported(model),
+    "a structure that cannot be read"
+  )
+  if (!is.null(unsupported)) {
+    if (verbose) {
+      insight::format_alert(paste0(
+        "The check for influential observations is skipped for this `glmmTMB` ",
+        "model, because hat values are not available for models with ",
+        unsupported,
+        "."
+      ))
+    }
+    return(NULL)
+  }
+  # without the threshold of `check_outliers()`, for example when n - p < 1,
+  # the contour lines would not match it
+  threshold <- .safe(.check_outliers_cook_threshold(model))
+  out <- NULL
+  if (!is.null(threshold)) {
+    out <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  }
+  if (is.null(out) && verbose) {
+    insight::format_alert(paste(
+      "The check for influential observations is skipped for this `glmmTMB`",
+      "model, because its hat values and Cook's distances could not be computed."
+    ))
+  }
+  out
 }
 
 

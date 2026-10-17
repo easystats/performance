@@ -287,6 +287,95 @@ test_that("check_predictions, Bayesian models use standard predictive-check data
   expect_identical(attr(out, "type"), "density")
 })
 
+
+test_that("check_predictions, multivariate brms models check one response", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  model <- insight::download_model("brms_mv_1")
+  skip_if(is.null(model))
+  d <- insight::get_data(model)
+
+  set.seed(123)
+  out <- check_predictions(model, response = "gear", iterations = 10)
+
+  expect_s3_class(out, "performance_pp_check")
+  sims <- as.matrix(out[startsWith(colnames(out), "sim_")])
+  expect_identical(ncol(sims), 10L)
+  # means of gear, carb and cyl are 3.69, 2.81 and 6.19
+  expect_lt(abs(mean(sims) - mean(d$gear)), 0.4)
+  expect_equal(out$y, d$gear, ignore_attr = TRUE)
+  expect_identical(attr(out, "response_name"), "gear")
+  expect_identical(attr(out, "type"), "density")
+  expect_true(attr(out, "model_info")$is_linear)
+})
+
+
+test_that("check_predictions, multivariate brms models with `trials()` responses", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  # responses are `outcome1 | trials(trials1)` and so on
+  model <- insight::download_model("brms_mv_7")
+  skip_if(is.null(model))
+
+  set.seed(123)
+  out <- check_predictions(model, response = "outcome2", iterations = 5)
+  expect_s3_class(out, "performance_pp_check")
+  expect_named(out, c(paste0("sim_", 1:5), "y"))
+  expect_equal(out$y, insight::get_data(model)$outcome2, ignore_attr = TRUE)
+})
+
+
+test_that("check_predictions, multivariate brms models need one `response`", {
+  # `response` is a formal argument, so `resp = ` would also partial-match it
+  expect_true("response" %in% names(formals(utils::getS3method("check_predictions", "brmsfit"))))
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  model <- insight::download_model("brms_mv_1")
+  skip_if(is.null(model))
+  called <- FALSE
+  local_mocked_bindings(
+    estimate_prediction = function(...) {
+      called <<- TRUE
+      stop("prediction failed", call. = FALSE)
+    },
+    .package = "modelbased"
+  )
+
+  for (response in list(NULL, "mpg", c("cyl", "gear"))) {
+    err <- expect_error(
+      check_predictions(model, response = response),
+      "more\\s+than\\s+one\\s+response"
+    )
+    msg <- gsub("\\s+", " ", conditionMessage(err))
+    for (name in c("cyl", "gear", "carb", "response")) {
+      expect_match(msg, paste0("`", name, "`"), fixed = TRUE)
+    }
+    expect_no_match(msg, "`resp`", fixed = TRUE)
+  }
+  # `resp` next to `response` would otherwise reach brms twice
+  expect_error(
+    check_predictions(model, response = "gear", resp = "carb"),
+    "Please use only the `response` argument",
+    fixed = TRUE
+  )
+  expect_false(called)
+  # the mock is in reach of `modelbased::`, so `called` can become TRUE
+  try(modelbased::estimate_prediction(model), silent = TRUE)
+  expect_true(called)
+})
+
 skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
@@ -317,3 +406,87 @@ withr::with_environment(
     })
   }
 )
+
+test_that("check_predictions, brms-wiener", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("rstan")
+  skip_if_not_installed("RWiener")
+
+  m <- insight::download_model("brms_wiener_1")
+  skip_if(is.null(m))
+
+  old_opt <- getOption("wiener_backend")
+  options(wiener_backend = "rtdists")
+  on.exit(options(wiener_backend = old_opt))
+  expect_no_error({
+    out <- check_predictions(m)
+  })
+  # fmt: skip
+  expect_named(
+    out,
+    c(
+      "sim_1", "sim_2", "sim_3", "sim_4", "sim_5", "sim_6", "sim_7",
+      "sim_8", "sim_9", "sim_10", "sim_11", "sim_12", "sim_13", "sim_14",
+      "sim_15", "sim_16", "sim_17", "sim_18", "sim_19", "sim_20", "sim_21",
+      "sim_22", "sim_23", "sim_24", "sim_25", "sim_26", "sim_27", "sim_28",
+      "sim_29", "sim_30", "sim_31", "sim_32", "sim_33", "sim_34", "sim_35",
+      "sim_36", "sim_37", "sim_38", "sim_39", "sim_40", "sim_41", "sim_42",
+      "sim_43", "sim_44", "sim_45", "sim_46", "sim_47", "sim_48", "sim_49",
+      "sim_50", "y"
+    )
+  )
+})
+
+
+test_that("check_predictions, RT-choice models keep RT predictions only (mocked)", {
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+
+  n <- 4
+  iter <- 3
+  rt_draws <- matrix(seq_len(n * iter), nrow = n)
+  choice_draws <- matrix(-seq_len(n * iter), nrow = n)
+  colnames(rt_draws) <- colnames(choice_draws) <- paste0("iter_", seq_len(iter))
+  preds <- rbind(
+    data.frame(Component = "rt", rt_draws),
+    data.frame(Component = "response", choice_draws)
+  )
+  colnames(preds) <- c("Component", paste0("iter_", seq_len(iter)))
+  observed <- data.frame(rt = c(0.5, 0.6, 0.7, 0.8), resp = c(1, 0, 1, 1))
+
+  for (flag in c("is_wiener", "is_rtchoice")) {
+    info <- list(
+      is_wiener = FALSE,
+      is_rtchoice = FALSE,
+      is_bernoulli = FALSE,
+      is_count = FALSE,
+      is_ordinal = FALSE,
+      is_categorical = FALSE,
+      is_multinomial = FALSE
+    )
+    info[[flag]] <- TRUE
+    local_mocked_bindings(
+      model_info = function(...) info,
+      find_terms = function(...) list(response = "rt"),
+      find_response = function(...) c("rt", "resp"),
+      get_response = function(...) observed,
+      .package = "insight"
+    )
+    local_mocked_bindings(
+      estimate_prediction = function(...) preds,
+      .package = "modelbased"
+    )
+    model <- structure(list(), class = c("brmsfit", "stanreg"))
+    out <- check_predictions(model, iterations = iter)
+    expect_s3_class(out, "performance_pp_check")
+    expect_equal(nrow(out), n)
+    expect_named(out, c(paste0("sim_", seq_len(iter)), "y"))
+    expect_equal(
+      unname(as.matrix(out[paste0("sim_", seq_len(iter))])),
+      unname(rt_draws)
+    )
+    expect_equal(out$y, observed$rt)
+  }
+})

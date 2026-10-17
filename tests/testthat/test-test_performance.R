@@ -34,6 +34,69 @@ test_that("test_performance - nested", {
   # rez <- test_performance(m1, m2, m3)
 })
 
+test_that("test_performance - lavaan", {
+  skip_if_not_installed("lavaan")
+
+  structure1 <- " visual  =~ x1 + x2 + x3
+                  textual =~ x4 + x5 + x6
+                  speed   =~ x7 + x8 + x9
+                  visual ~~ textual + speed "
+  m1 <- suppressWarnings(lavaan::cfa(structure1, data = lavaan::HolzingerSwineford1939))
+
+  structure2 <- " visual  =~ x1 + x2 + x3
+                  textual =~ x4 + x5 + x6
+                  speed   =~ x7 + x8 + x9
+                  visual ~~ 0 * textual + speed "
+  m2 <- suppressWarnings(lavaan::cfa(structure2, data = lavaan::HolzingerSwineford1939))
+
+  expect_no_warning(test_performance(m1, m2))
+  rez <- test_performance(m1, m2)
+  expect_s3_class(rez, "test_performance")
+  expect_match(
+    attributes(format(rez))$table_footer,
+    "assumes that each model is nested",
+    fixed = TRUE
+  )
+  expect_identical(rez$Name, c("m1", "m2"))
+  expect_true(all(c("BF", "df", "df_diff", "Chi2", "p") %in% colnames(rez)))
+
+  lrt <- test_likelihoodratio(m1, m2)
+  expect_equal(rez$Chi2, lrt$Chi2, tolerance = 1e-3)
+  expect_equal(rez$p, lrt$p, tolerance = 1e-3)
+
+  bic <- c(stats::BIC(m1), stats::BIC(m2))
+  expect_equal(rez$BF[2], exp((bic[1] - bic[2]) / 2), tolerance = 1e-3)
+
+  # models are compared in order of their df, whatever the input order
+  rez2 <- test_performance(m2, m1)
+  expect_identical(rez2$Name, c("m1", "m2"))
+  expect_equal(rez2$Chi2, rez$Chi2, tolerance = 1e-3)
+
+  # models fit to different observations or observed variables
+  m3 <- suppressWarnings(lavaan::cfa(
+    structure1,
+    data = lavaan::HolzingerSwineford1939[1:200, ]
+  ))
+  expect_warning(
+    expect_warning(
+      expect_warning(test_performance(m1, m3), regex = "same observations"),
+      regex = "same degrees of freedom"
+    ),
+    regex = "not nested"
+  )
+  structure4 <- " visual  =~ x1 + x2
+                  textual =~ x4 + x5 + x6
+                  speed   =~ x7 + x8 + x9 "
+  m4 <- suppressWarnings(lavaan::cfa(structure4, data = lavaan::HolzingerSwineford1939))
+  expect_warning(
+    expect_warning(test_performance(m1, m4), regex = "same observations"),
+    regex = "different set of observed variables"
+  )
+
+  expect_error(test_vuong(m1, m2), regex = "lavaan models")
+  expect_error(test_wald(m1, m2), regex = "lavaan models")
+})
+
 test_that("test_performance - single model", {
   m1 <- lm(Sepal.Length ~ 1, data = iris)
   m2 <- lm(Sepal.Length ~ Petal.Width, data = iris)

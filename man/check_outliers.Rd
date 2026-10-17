@@ -16,6 +16,7 @@ check_outliers(x, ...)
   threshold = NULL,
   ID = NULL,
   verbose = TRUE,
+  group = NULL,
   ...
 )
 
@@ -59,6 +60,11 @@ correlation of residuals (by default, 0.05).}
 
 \item{verbose}{Toggle warnings.}
 
+\item{group}{Optional, name of a grouping variable in the data used to fit
+a \strong{glmmTMB} or \strong{lme4} model. If given, Cook's distance is computed for
+each level of this variable rather than for each observation (only for
+\code{method = "cook"}). See section 'Model-specific methods'.}
+
 \item{type}{Type of method to test for outliers. Can be one of \code{"default"},
 \code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
 by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
@@ -75,7 +81,10 @@ method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
 considered as outlier can be recovered with the \link{as.data.frame} function.
 Note that the function will (silently) return a vector of \code{FALSE} for
-non-supported data types such as character strings.
+non-supported data types such as character strings. If \code{group} is given,
+the vector has one element per level of the grouping variable, and the data
+returned by \code{as.data.frame()} has one row per level, with the level in the
+\code{Group} column.
 }
 \description{
 Checks for and locates influential observations (i.e.,
@@ -126,7 +135,9 @@ common than the basic Mahalanobis distance, but still used. Cook's distance
 estimates the variations in regression coefficients after removing each
 observation, one by one (Cook, 1977). Since Cook's distance is in the metric
 of an F distribution with p and n-p degrees of freedom, the median point of
-the quantile distribution can be used as a cut-off (Bollen, 1985). A common
+the quantile distribution can be used as a cut-off (Bollen, 1985). This is
+the default threshold, with p the number of fixed effects of the
+conditional model and n the number of observations used to fit it. A common
 approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
 outliers are detected). This only works for frequentist models. For Bayesian
@@ -144,6 +155,20 @@ not converge, has a non-positive-definite Hessian or returns different
 fixed-effect terms get a missing distance and are not counted as outliers
 by this method. \code{check_model()} skips this computation for
 \strong{glmmTMB} models.
+
+For models from packages \strong{glmmTMB} and \strong{lme4}, the \code{group} argument
+gives Cook's distance for each level of a grouping variable (e.g.,
+participants or schools) rather than for each observation. The model is
+refit once per level, leaving out that level, and Cook's distance is
+\verb{D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p}, where \code{b} and \code{b_(g)} are
+the fixed effects of the full model and of the model without level g,
+\code{V(b)} is their variance-covariance matrix in the full model, and \code{p} is
+the number of fixed effects. The default threshold is \code{4 / G}, with \code{G}
+the number of levels (Nieuwenhuis et al., 2012). Levels where the refit
+fails or does not converge get a missing distance and are not counted as
+outliers. Note that \code{cooks.distance(stats::influence(model, groups = ))}
+from \strong{lme4} multiplies the distance by \code{(G - p) / G}, so its values are
+smaller.
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
@@ -293,7 +318,7 @@ Default thresholds are currently specified as follows:
   eti = 1 - 0.001,
   hdi = 1 - 0.001,
   bci = 1 - 0.001,
-  cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+  cook = stats::qf(0.5, p, n - p),
   pareto = 0.7,
   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
   mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
@@ -304,6 +329,9 @@ Default thresholds are currently specified as follows:
   lof = 0.001
 )
 }\if{html}{\out{</div>}}
+
+For \code{cook}, \code{p} is the number of fixed effects of the conditional model and
+\code{n} the number of observations used to fit it.
 }
 
 \section{Meta-analysis models}{
@@ -390,6 +418,9 @@ regression. \emph{Technometrics}, \emph{19}(1), 15-18.
 \item Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
 multivariate outliers: Use a robust variant of Mahalanobis distance. \emph{Journal
 of Experimental Social Psychology}, 74, 150-156.
+\item Nieuwenhuis, R., te Grotenhuis, M., and Pelzer, B. (2012). influence.ME:
+Tools for detecting influential data in mixed effects models. \emph{The R
+Journal}, \emph{4}(2), 38-47. \doi{10.32614/RJ-2012-011}
 \item Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation forest.
 In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
 IEEE.

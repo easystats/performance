@@ -30,6 +30,7 @@ check_model(model = NULL, ...)
   theme = see::theme_lucid(),
   verbose = FALSE,
   x = NULL,
+  show_smooth = TRUE,
   ...
 )
 }
@@ -112,6 +113,11 @@ for dots, and third color for outliers or extreme values.}
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 
 \item{x}{Deprecated, please use \code{model} instead.}
+
+\item{show_smooth}{Logical, if \code{FALSE}, the Linearity and Homogeneity of
+Variance panels draw neither the LOESS smoother nor the cell means, and the
+Influential Observations panel draws no LOESS smoother. This needs \strong{see}
+newer than 0.14.2. Older versions ignore the setting.}
 }
 \value{
 The data frame that is used for plotting.
@@ -134,10 +140,12 @@ check (\code{"pp_check"}) and the check for multicollinearity (\code{"vif"}). A 
 then lists the panels of the requested checks that were skipped (for
 example, \code{NORM} for \code{"normality"}) and the reason why the conversion failed.
 If none of the requested checks can be computed, \code{check_model()} gives an
-error. Multivariate \strong{brms}
-models (models with more than one response) are not supported. A more
-advanced model-check for Bayesian models will be implemented at a later
-stage.
+error. For multivariate \strong{brms} models (models with more than one
+response), use the \code{response} argument to name one response, for example
+\code{check_model(model, response = "y1")}. Only this response is checked. If
+\code{response} is missing or does not name one response, \code{check_model()} gives
+an error that lists the names of the responses. A more advanced model-check for
+Bayesian models will be implemented at a later stage.
 
 See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
 
@@ -191,6 +199,9 @@ horizontal line and show no apparent deviation.
 This plot is used to identify influential observations. If any points in this
 plot fall outside of Cook’s distance (the dashed lines) then it is considered
 an influential observation. See \code{\link[=check_outliers]{check_outliers()}} for further details.
+For models from package \emph{glmmTMB}, this plot uses a one-step approximation
+of Cook's distance from the hat values, while \code{\link[=check_outliers]{check_outliers()}} computes
+Cook's distance by refitting the model without each observation.
 }
 
 \section{Multicollinearity}{

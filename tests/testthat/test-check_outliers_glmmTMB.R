@@ -148,14 +148,22 @@ test_that("check_outliers, glmmTMB failed refits give NA and do not vote", {
   )
 
   for (case in cases) {
-    local_mocked_bindings(.update_model = function(x, data, start, weights) {
-      fit <- update_model(x, data = data, start = start, weights = weights)
-      removed <- which(weights == 0)
-      if (removed %in% case$rows) {
-        fit <- failures[[case$failure]](fit)
+    local_mocked_bindings(
+      .update_model = function(x, data, start, weights, subset = NULL) {
+        fit <- update_model(
+          x,
+          data = data,
+          start = start,
+          weights = weights,
+          subset = subset
+        )
+        removed <- which(weights == 0)
+        if (removed %in% case$rows) {
+          fit <- failures[[case$failure]](fit)
+        }
+        fit
       }
-      fit
-    })
+    )
     alerts <- character()
     out <- withCallingHandlers(
       check_outliers(m, method = c("cook", "zscore_robust")),
@@ -196,7 +204,7 @@ test_that("check_outliers, glmmTMB failed refits for all or many rows", {
   m <- glmmTMB::glmmTMB(mpg ~ wt + hp, data = mtcars)
   update_model <- .update_model
 
-  local_mocked_bindings(.update_model = function(x, data, start, weights) {
+  local_mocked_bindings(.update_model = function(x, data, start, weights, subset = NULL) {
     stop("forced refit error", call. = FALSE)
   })
   expect_message(
@@ -207,11 +215,11 @@ test_that("check_outliers, glmmTMB failed refits for all or many rows", {
   expect_true(all(is.na(as.data.frame(out)$Distance_Cook)))
   expect_false(any(out))
 
-  local_mocked_bindings(.update_model = function(x, data, start, weights) {
+  local_mocked_bindings(.update_model = function(x, data, start, weights, subset = NULL) {
     if (which(weights == 0) <= 12) {
       stop("forced refit error", call. = FALSE)
     }
-    update_model(x, data = data, start = start, weights = weights)
+    update_model(x, data = data, start = start, weights = weights, subset = subset)
   })
   alert <- tryCatch(
     check_outliers(m, method = "cook"),
@@ -342,4 +350,47 @@ test_that("check_outliers, unsupported quantreg classes return NULL", {
       fixed = TRUE
     )
   }
+})
+
+
+test_that("check_outliers, glmmTMB Cook's distance for binomial models with a cbind() response", {
+  skip_on_cran()
+  # the number of trials must not be passed to the refits as prior weights.
+  # `size` is a predictor because the data checks need a numeric predictor.
+  data(cbpp, package = "lme4")
+  m <- glmmTMB::glmmTMB(
+    cbind(incidence, size - incidence) ~ period + size + (1 | herd),
+    family = binomial,
+    data = cbpp
+  )
+  out <- check_outliers(m, method = "cook")
+  expect_equal(
+    as.data.frame(out)$Distance_Cook,
+    .test_cooks_refit(m, cbpp),
+    tolerance = 1e-6
+  )
+})
+
+
+test_that("check_outliers, glmmTMB plot data shows the refit Cook's distances", {
+  skip_on_cran()
+  data(sleepstudy, package = "lme4")
+  d <- sleepstudy
+  d$Reaction[1] <- 1000
+  m <- glmmTMB::glmmTMB(Reaction ~ Days + (1 | Subject), data = d)
+  out <- check_outliers(m)
+  out_data <- attributes(out)$data
+  expect_gt(sum(out_data$Outlier_Cook == 1, na.rm = TRUE), 0)
+
+  influential <- attributes(out)$influential_obs
+  expect_identical(influential$Cooks_Distance, out_data$Distance_Cook)
+  expect_identical(influential$Influential == "Influential", out_data$Outlier_Cook == 1)
+  expect_equal(
+    influential$Hat,
+    check_model(m, check = "outliers")$INFLUENTIAL$Hat,
+    tolerance = 1e-10
+  )
+
+  out_zscore <- check_outliers(m, method = "zscore_robust")
+  expect_null(attributes(out_zscore)$influential_obs)
 })
