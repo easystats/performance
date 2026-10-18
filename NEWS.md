@@ -4,9 +4,9 @@
 
 * `check_model()` now chooses the default `type` from the underlying model for
   more objects. These are *rstanarm* and *brms* models that can be converted to
-  a frequentist model, and model fits from package *parsnip*. They are also
-  objects from `simulate_residuals()` or package *DHARMa*. Models with a binary,
-  count, ordinal, categorical, or multinomial response thus get the
+  a frequentist model, and `model_fit` objects from package *parsnip*. They are
+  also objects from `simulate_residuals()` or package *DHARMa*. Models with a
+  binary, count, ordinal, categorical, or multinomial response thus get the
   `"discrete_interval"` posterior predictive check. Before, these objects always
   got `"density"`. The same methods ignored `size_title` and now pass it on.
 
