@@ -67,6 +67,8 @@ is the difference between the model's IC value and the smallest IC value
 in the model set (Burnham and Anderson, 2002). For LOOIC, weights are
 computed as "stacking weights" using
 [`loo::stacking_weights()`](https://mc-stan.org/loo/reference/loo_model_weights.html).
+LOOIC weights are `NA` when the models were fit to different numbers of
+observations.
 
 ### Ranking Models
 

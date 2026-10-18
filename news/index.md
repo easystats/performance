@@ -2,6 +2,8 @@
 
 ## performance 0.19.0
 
+CRAN release: 2026-10-18
+
 ### Changes
 
 - [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
