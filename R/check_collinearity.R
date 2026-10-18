@@ -514,7 +514,18 @@ check_collinearity.zerocount <- function(
   # the slopes, clm and clm2 put them first, so keep the slopes by name
   if (.is_threshold_model(x)) {
     slopes <- .threshold_slopes(x, component)
-    keep_idx <- colnames(v) %in% slopes$names
+    if (inherits(x, "clm") && is.logical(x$aliased$alpha)) {
+      # clm puts the location slopes right after the thresholds, and the
+      # scale effects after them. A scale effect can have the same name as a
+      # location slope, so keep the slopes by position
+      n_alpha <- sum(!x$aliased$alpha)
+      keep_idx <- seq_len(ncol(v)) %in% (n_alpha + seq_along(slopes$names))
+      if (isTRUE(verbose)) {
+        .alert_clm_effects(x)
+      }
+    } else {
+      keep_idx <- colnames(v) %in% slopes$names
+    }
     term_assign <- slopes$assign[match(colnames(v)[keep_idx], slopes$names)]
     if (!length(term_assign) || anyNA(term_assign)) {
       if (verbose) {
@@ -1166,6 +1177,24 @@ check_collinearity.zerocount <- function(
     assign = attr(mm, "assign")[match(slope_names, colnames(mm))],
     aliased = setdiff(mm_names, slope_names)
   )
+}
+
+# clm models can have scale and nominal effects, which are not slopes of the
+# linear predictor, so the VIFs leave them out
+.alert_clm_effects <- function(x) {
+  left_out <- NULL
+  for (i in c("scale", "nominal")) {
+    effects <- .safe(labels(stats::terms(x$formulas[[i]])))
+    if (length(effects)) {
+      left_out <- c(left_out, sprintf("%s effects (%s)", i, toString(effects)))
+    }
+  }
+  if (length(left_out)) {
+    insight::format_alert(
+      "VIFs are computed for the location effects only.",
+      sprintf("Left out: %s.", paste(left_out, collapse = " and "))
+    )
+  }
 }
 
 .warn_rank_deficient <- function(na_cols = NULL) {
