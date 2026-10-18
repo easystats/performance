@@ -316,7 +316,12 @@ test_that("compare_performance, no LOOIC weights for models fit to different num
   # brms_1 has 32 observations, brms_4 has 150
   res <- collect_warnings(compare_performance(m_brms, m_brms4))
   expect_identical(res$value$LOOIC_wt, c(NA_real_, NA_real_))
-  expect_equal(res$value$LOOIC, c(157.1964, 188.0575), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    res$value$LOOIC,
+    c(157.1964, 188.0575),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
   expect_length(res$warnings, 1)
   expect_match(res$warnings, "different numbers of observations", fixed = TRUE)
   expect_match(res$warnings, "32", fixed = TRUE)
@@ -374,7 +379,8 @@ test_that("compare_performance, no LOOIC weights when one row count is a multipl
   expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
   expect_warning(
     suppressMessages(compare_performance(m1, m2)),
-    "32 and 64"
+    # format_warning() can wrap the message between the counts
+    "32\\s+and\\s+64"
   )
 
   expect_warning(
