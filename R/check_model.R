@@ -396,7 +396,9 @@ check_model.default <- function(
     detrend = detrend,
     bandwidth = bandwidth,
     type = type,
-    type_missing = missing(type),
+    # methods that call `check_model()` on another model pass `type = NULL`
+    # when the user gave no `type`
+    type_missing = missing(type) || is.null(type),
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
@@ -454,6 +456,9 @@ check_model.default <- function(
     isTRUE(minfo$is_multinomial)) # nolint
   if (type_missing && suggest_dots) {
     type <- "discrete_interval"
+  }
+  if (is.null(type)) {
+    type <- "density"
   }
 
   # set default for show_dots, based on "model size"
@@ -634,6 +639,7 @@ check_model.stanreg <- function(
     model = freq_model,
     size_dot = size_dot,
     size_line = size_line,
+    size_title = size_title,
     panel = panel,
     check = check,
     alpha = alpha,
@@ -647,7 +653,8 @@ check_model.stanreg <- function(
     show_ci = show_ci,
     show_smooth = show_smooth,
     bandwidth = bandwidth,
-    type = type,
+    # NULL lets `check_model.default()` choose the default for the converted model
+    type = if (!missing(type)) type,
     residual_type = residual_type,
     maximum_dots = maximum_dots,
     ppc_range = ppc_range,
@@ -859,6 +866,7 @@ check_model.model_fit <- function(
     model$fit,
     size_dot = size_dot,
     size_line = size_line,
+    size_title = size_title,
     panel = panel,
     check = check,
     alpha = alpha,
@@ -873,7 +881,8 @@ check_model.model_fit <- function(
     show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
-    type = type,
+    # NULL lets `check_model.default()` choose the default for the fitted model
+    type = if (!missing(type)) type,
     residual_type = residual_type,
     ppc_range = ppc_range,
     verbose = verbose,
@@ -921,6 +930,7 @@ check_model.performance_simres <- function(
     model$fittedModel,
     size_dot = size_dot,
     size_line = size_line,
+    size_title = size_title,
     panel = panel,
     check = check,
     alpha = alpha,
@@ -935,7 +945,8 @@ check_model.performance_simres <- function(
     show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
-    type = type,
+    # NULL lets `check_model.default()` choose the default for the fitted model
+    type = if (!missing(type)) type,
     residual_type = "simulated",
     ppc_range = ppc_range,
     verbose = verbose,

@@ -196,11 +196,20 @@ test_that("`check_model()` forwards `type` and `size_title` for simulated residu
   # the default for binary and count responses is used, as for the glm itself
   expect_identical(attr(check_model(simulate_residuals(m)), "type"), "discrete_interval")
   expect_identical(attr(check_model(simulate_residuals(p)), "type"), "discrete_interval")
-  expect_identical(attr(check_model(DHARMa::simulateResiduals(m)), "type"), "discrete_interval")
+  expect_identical(
+    attr(check_model(DHARMa::simulateResiduals(m)), "type"),
+    "discrete_interval"
+  )
 
   # user values are kept
-  expect_identical(attr(check_model(simulate_residuals(m), type = "density"), "type"), "density")
-  expect_identical(attr(check_model(simulate_residuals(m), size_title = 20), "title_size"), 20)
+  expect_identical(
+    attr(check_model(simulate_residuals(m), type = "density"), "type"),
+    "density"
+  )
+  expect_identical(
+    attr(check_model(simulate_residuals(m), size_title = 20), "title_size"),
+    20
+  )
 })
 
 test_that("`check_model()` forwards `type` and `size_title` for `model_fit` objects", {
