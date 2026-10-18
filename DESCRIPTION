@@ -166,9 +166,6 @@ Suggests:
     tweedie,
     VGAM,
     withr (>= 3.0.0)
-Remotes:
-    easystats/bayestestR,
-    easystats/insight
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
