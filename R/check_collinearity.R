@@ -1213,11 +1213,15 @@ check_collinearity.zerocount <- function(
   }
 }
 
-# VGAM models with the multinomial or cumulative family
+# VGAM models with the multinomial, cumulative, sratio, cratio, acat, or
+# poissonff family, whose model matrix has an "assign" list
 .is_vglm_categorical <- function(x) {
   inherits(x, "vglm") &&
     !inherits(x, "vgam") &&
-    isTRUE(.safe(x@family@vfamily[1]) %in% c("multinomial", "cumulative"))
+    isTRUE(
+      .safe(x@family@vfamily[1]) %in%
+        c("multinomial", "cumulative", "sratio", "cratio", "acat", "poissonff")
+    )
 }
 
 # coefficient names of multinomial models are prefixed with the outcome level,
