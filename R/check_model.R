@@ -333,7 +333,7 @@ check_model.default <- function(
   }
 
   # set default for detrend
-  if (missing(detrend)) {
+  if (missing(detrend) || is.null(detrend)) {
     detrend <- residual_type == "normal"
   }
 
@@ -648,7 +648,8 @@ check_model.stanreg <- function(
     theme = theme,
     base_size = base_size,
     size_axis_title = size_axis_title,
-    detrend = detrend,
+    # NULL lets `check_model.default()` choose the default for the converted model
+    detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
@@ -875,7 +876,8 @@ check_model.model_fit <- function(
     colors = colors,
     theme = theme,
     base_size = base_size,
-    detrend = detrend,
+    # NULL lets `check_model.default()` choose the default for the fitted model
+    detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
@@ -939,7 +941,8 @@ check_model.performance_simres <- function(
     colors = colors,
     theme = theme,
     base_size = base_size,
-    detrend = detrend,
+    # NULL lets `check_model.default()` choose the default for the fitted model
+    detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,

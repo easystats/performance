@@ -223,8 +223,9 @@ test_that("`check_model()` forwards `type` and `size_title` for `model_fit` obje
   expect_identical(attr(check_model(obj, size_title = 20), "title_size"), 20)
 })
 
-test_that("`check_model()` forwards `type` and `size_title` for Stan models", {
+test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan models", {
   skip_if_not_installed("rstanarm")
+  skip_if_not_installed("DHARMa")
   skip_if_not_installed("curl")
   skip_if_not_installed("httr2")
   skip_if_offline()
@@ -235,6 +236,38 @@ test_that("`check_model()` forwards `type` and `size_title` for Stan models", {
   expect_identical(attr(check_model(m), "type"), "discrete_interval")
   expect_identical(attr(check_model(m, type = "density"), "type"), "density")
   expect_identical(attr(check_model(m, size_title = 20), "title_size"), 20)
+  # simulated residuals are not detrended by default
+  expect_false(attr(check_model(m), "detrend"))
+  expect_true(attr(check_model(m, detrend = TRUE), "detrend"))
+})
+
+test_that("`check_model()` forwards `detrend` for wrapped models", {
+  skip_if_not_installed("DHARMa")
+  data(mtcars)
+  m <- glm(am ~ wt, data = mtcars, family = binomial)
+  l <- lm(mpg ~ wt, data = mtcars)
+
+  # simulated residuals are not detrended by default
+  expect_false(attr(check_model(simulate_residuals(m)), "detrend"))
+  expect_false(attr(check_model(DHARMa::simulateResiduals(m)), "detrend"))
+  expect_false(attr(check_model(simulate_residuals(l)), "detrend"))
+  expect_false(attr(check_model(l, residual_type = "simulated"), "detrend"))
+
+  # `model_fit` objects get the default of the fitted model
+  expect_false(attr(check_model(m), "detrend"))
+  expect_true(attr(check_model(l), "detrend"))
+  expect_false(attr(
+    check_model(structure(list(fit = m), class = "model_fit")),
+    "detrend"
+  ))
+  expect_true(attr(check_model(structure(list(fit = l), class = "model_fit")), "detrend"))
+
+  # user values are kept
+  expect_true(attr(check_model(simulate_residuals(m), detrend = TRUE), "detrend"))
+  expect_false(attr(
+    check_model(structure(list(fit = l), class = "model_fit"), detrend = FALSE),
+    "detrend"
+  ))
 })
 
 test_that("`check_model()` keeps the defaults for wrapped linear models", {

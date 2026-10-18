@@ -2,14 +2,15 @@
 
 ## Bug fixes
 
-* `check_model()` now chooses the default `type` from the underlying model for
-  more objects. These are *rstanarm* and *brms* models that can be converted to
-  a frequentist model, and `model_fit` objects from package *parsnip*. They are
-  also objects from `simulate_residuals()` or package *DHARMa*. Models with a
-  binary, count, ordinal, categorical, or multinomial response thus get the
-  `"discrete_interval"` posterior predictive check. Before, these objects always
-  got `"density"` by default. The same methods ignored `size_title` and now
-  pass it on.
+* `check_model()` now chooses the defaults for `type` and `detrend` from the
+  underlying model for more objects. These are *rstanarm* and *brms* models that
+  can be converted to a frequentist model, and `model_fit` objects from package
+  *parsnip*. They are also objects from `simulate_residuals()` or package
+  *DHARMa*. Models with a binary, count, ordinal, categorical, or multinomial
+  response thus get the `"discrete_interval"` posterior predictive check.
+  Q-Q plots of simulated residuals are no longer detrended by default. Before,
+  these objects always got `type = "density"` and `detrend = TRUE` by default.
+  The same methods ignored `size_title` and now pass it on.
 
 * `compare_performance()` no longer returns wrong LOOIC weights for models fit
   to different numbers of observations. Before, it recycled the pointwise LOO
