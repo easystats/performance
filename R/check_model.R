@@ -579,6 +579,9 @@ check_model.stanreg <- function(
   freq_model <- tryCatch(
     if (is.null(resp)) {
       bayestestR::bayesian_as_frequentist(model)
+    } else if ("response" %in% names(formals(bayestestR::bayesian_as_frequentist))) {
+      # bayestestR renamed `resp` to `response`, see https://github.com/easystats/bayestestR/pull/790
+      bayestestR::bayesian_as_frequentist(model, response = resp)
     } else {
       bayestestR::bayesian_as_frequentist(model, resp = resp)
     },

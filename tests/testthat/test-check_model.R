@@ -487,9 +487,11 @@ test_that("`check_model()` falls back to Bayesian checks for one response of a m
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
   received <- "not called"
+  received_names <- NULL
   testthat::local_mocked_bindings(
     bayesian_as_frequentist = function(...) {
       received <<- list(...)[["resp"]]
+      received_names <<- names(list(...))
       stop("conversion failed", call. = FALSE)
     },
     .package = "bayestestR"
@@ -498,7 +500,9 @@ test_that("`check_model()` falls back to Bayesian checks for one response of a m
   msgs <- capture_messages({
     out <- check_model(m, response = "gear")
   })
+  # a conversion function without a `response` argument gets `resp`
   expect_identical(received, "gear")
+  expect_false("response" %in% received_names)
   expect_named(out, "PP_CHECK")
   expect_equal(out$PP_CHECK$y, insight::get_data(m)$gear, ignore_attr = TRUE)
   msgs <- gsub("\\s+", " ", paste(msgs, collapse = " "))
@@ -508,6 +512,64 @@ test_that("`check_model()` falls back to Bayesian checks for one response of a m
     c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")
   ))
   expect_true(attr(out, "model_info")$is_linear)
+})
+
+test_that("`check_model()` names the response with the argument of `bayesian_as_frequentist()`", {
+  skip_if_brms_fixture_unavailable()
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+  received <- NULL
+  # `sys.call()` keeps the argument names as written, so a partial match of
+  # `resp = ` to `response` is not hidden as `match.call()` would hide it
+  mocks <- list(
+    response = function(model, data = NULL, REML = TRUE, response = NULL) {
+      received <<- list(names = names(sys.call()), value = response)
+      stop("conversion failed", call. = FALSE)
+    },
+    resp = function(model, data = NULL, REML = TRUE, resp = NULL) {
+      received <<- list(names = names(sys.call()), value = resp)
+      stop("conversion failed", call. = FALSE)
+    }
+  )
+
+  for (arg in names(mocks)) {
+    received <- NULL
+    testthat::with_mocked_bindings(
+      suppressMessages(check_model(m, response = "gear")),
+      bayesian_as_frequentist = mocks[[arg]],
+      .package = "bayestestR"
+    )
+    other <- setdiff(names(mocks), arg)
+    expect_true(arg %in% received$names, label = arg)
+    expect_false(other %in% received$names, label = arg)
+    expect_identical(received$value, "gear", label = arg)
+  }
+})
+
+test_that("`check_model()` converts multivariate brms models without a partial argument match", {
+  skip_if_brms_fixture_unavailable()
+  skip_if_not(
+    "response" %in% names(formals(bayestestR::bayesian_as_frequentist)),
+    "bayestestR::bayesian_as_frequentist() has no `response` argument"
+  )
+  m <- insight::download_model("brms_mv_1")
+  skip_if(is.null(m))
+  withr::local_options(warnPartialMatchArgs = TRUE)
+
+  warnings <- character()
+  out <- withCallingHandlers(
+    check_model(m, response = "gear"),
+    warning = function(w) {
+      warnings <<- c(warnings, conditionMessage(w))
+      # other warnings still reach the test output
+      if (grepl("partial argument match", conditionMessage(w), fixed = TRUE)) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
+  # the conversion worked, so the frequentist panels are there
+  expect_true(all(c("VIF", "NCV", "PP_CHECK") %in% names(out)))
+  expect_false(any(grepl("'resp' to 'response'", warnings, fixed = TRUE)))
 })
 
 test_that("`check_model()` keeps all panels for brms models that can be converted", {
