@@ -509,6 +509,23 @@ check_collinearity.zerocount <- function(
 }
 
 
+# the zero-inflation part has an intercept if its own formula has one, which
+# `insight::has_intercept()` does not check
+.component_has_intercept <- function(x, component) {
+  if (identical(component, "zero_inflated")) {
+    f <- insight::find_formula(x, verbose = FALSE)
+    zi_formula <- f$zero_inflated
+    if (is.null(zi_formula) && inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
+      zi_formula <- f$conditional
+    }
+    if (!is.null(zi_formula)) {
+      return(attr(stats::terms(zi_formula), "intercept") == 1)
+    }
+  }
+  insight::has_intercept(x)
+}
+
+
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
   v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
 
@@ -653,7 +670,7 @@ check_collinearity.zerocount <- function(
     }
   } else {
     keep_idx <- rep(TRUE, ncol(v))
-    if (insight::has_intercept(x)) {
+    if (.component_has_intercept(x, component)) {
       # Standard behavior: drop the first column/row (the singular intercept)
       keep_idx[1] <- FALSE
     } else if (isTRUE(verbose)) {

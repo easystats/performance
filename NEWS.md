@@ -11,8 +11,14 @@
   component of *glmmTMB* models whose zero-inflation formula differs from the
   conditional formula. Before, the zero-inflation terms used the term blocks of
   the conditional formula, so rows were missing or had the VIF of another term.
-  If the zero-inflation component gets no VIFs with `component = "all"` and
+  For *glmmTMB* and *pscl* models, the zero-inflation component now keeps or
+  drops its intercept by its own formula, not by the conditional formula. If
+  the zero-inflation component gets no VIFs with `component = "all"` and
   `verbose = TRUE`, a message now says so.
+
+* If `check_collinearity()` has a message to give for a *pscl* model, for
+  example for a count formula with one term, it no longer fails with "promise
+  already under evaluation".
 
 # performance 0.19.0
 

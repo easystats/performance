@@ -1660,6 +1660,55 @@ test_that("check_collinearity, pscl zero-inflation formula with one term", {
   }
 })
 
+test_that("check_collinearity, zero-inflation and conditional parts with different intercepts", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("pscl")
+  d <- .zi_test_data()
+  assign_no_int <- attr(stats::model.matrix(~ 0 + x2 + x1 + f, data = d), "assign")
+  assign_int <- attr(stats::model.matrix(~ x2 + x1 + f, data = d), "assign")[-1]
+
+  # zero-inflation part without intercept, conditional part with intercept
+  m <- glmmTMB::glmmTMB(y ~ x1, ziformula = ~ 0 + x2 + x1 + f, data = d, family = poisson())
+  expect_message(
+    out <- check_collinearity(m, component = "zero_inflated"),
+    "Model without intercept"
+  )
+  expect_identical(out$Term, c("x2", "x1", "f"))
+  expect_equal(out$VIF, .gvif_direct(vcov(m)$zi, assign_no_int), tolerance = 1e-8)
+
+  m <- pscl::zeroinfl(y ~ x1 + f | 0 + x2 + x1 + f, data = d)
+  out <- check_collinearity(m, component = "zero_inflated", verbose = FALSE)
+  zero_cols <- grep("^zero_", colnames(vcov(m)))
+  expect_identical(out$Term, c("x2", "x1", "f"))
+  expect_equal(
+    out$VIF,
+    .gvif_direct(vcov(m)[zero_cols, zero_cols], assign_no_int),
+    tolerance = 1e-8
+  )
+
+  # zero-inflation part with intercept, conditional part without intercept
+  m <- glmmTMB::glmmTMB(y ~ 0 + x1 + x2, ziformula = ~ x2 + x1 + f, data = d, family = poisson())
+  expect_no_message(out <- check_collinearity(m, component = "zero_inflated"))
+  expect_identical(out$Term, c("x2", "x1", "f"))
+  expect_equal(out$VIF, .gvif_direct(vcov(m)$zi[-1, -1], assign_int), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, pscl models with a message and the default verbose", {
+  skip_if_not_installed("pscl")
+  d <- .zi_test_data()
+  models <- list(
+    pscl::zeroinfl(y ~ x1 | x2 + x1, data = d),
+    pscl::hurdle(y ~ x1 | x2 + x1, data = d)
+  )
+  for (m in models) {
+    expect_message(
+      out <- check_collinearity(m),
+      "Not enough model terms in the conditional part"
+    )
+    expect_identical(out$Term, c("x2", "x1"))
+  }
+})
+
 test_that("check_collinearity, pscl zero-inflation terms differ from the count terms", {
   skip_if_not_installed("pscl")
   d <- .zi_test_data()
