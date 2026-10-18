@@ -302,15 +302,16 @@ test_that("compare_performance, no LOOIC weights for models fit to different num
 
   # collect all warnings, so that the test sees how many there are
   collect_warnings <- function(expr) {
-    warns <- character()
+    found <- new.env()
+    found$warnings <- character()
     value <- withCallingHandlers(
       suppressMessages(expr),
       warning = function(w) {
-        warns <<- c(warns, conditionMessage(w))
+        found$warnings <- c(found$warnings, conditionMessage(w))
         invokeRestart("muffleWarning")
       }
     )
-    list(value = value, warnings = warns)
+    list(value = value, warnings = found$warnings)
   }
 
   # brms_1 has 32 observations, brms_4 has 150
@@ -338,7 +339,7 @@ test_that("compare_performance, no LOOIC weights for models fit to different num
   expect_match(res$warnings, "different numbers of observations", fixed = TRUE)
 
   # no warning with verbose = FALSE
-  expect_silent({
+  expect_no_warning({
     out <- suppressMessages(compare_performance(m_brms, m_brms4, verbose = FALSE))
   })
   expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))

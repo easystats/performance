@@ -4,7 +4,7 @@
 
 * `compare_performance()` no longer returns wrong LOOIC weights for models fit
   to different numbers of observations. Before, it recycled the pointwise LOO
-  values of the smaller model to the length of the larger one. Now the LOOIC
+  values of the smaller model to the length of the larger one. Now all LOOIC
   weights are `NA`, with a warning.
 
 # performance 0.19.0

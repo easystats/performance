@@ -27,7 +27,8 @@
 #'   where `delta_ic` is the difference between the model's IC value and the
 #'   smallest IC value in the model set (Burnham and Anderson, 2002).
 #'   For LOOIC, weights are computed as "stacking weights" using
-#'   [loo::stacking_weights()].
+#'   [loo::stacking_weights()]. LOOIC weights are `NA` when the models were
+#'   fit to different numbers of observations.
 #' }
 #'
 #' \subsection{Ranking Models}{
@@ -166,7 +167,7 @@ compare_performance <- function(
       # and the weights are wrong
       n_loo <- vapply(attri[has_loo], function(x) nrow(x$loo$pointwise), integer(1))
       if (length(unique(n_loo)) > 1) {
-        if (verbose) {
+        if (isTRUE(verbose)) {
           insight::format_warning(paste0(
             "The models with LOOIC were fit to different numbers of observations (",
             datawizard::text_concatenate(sort(unique(n_loo))),
