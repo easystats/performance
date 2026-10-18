@@ -55,9 +55,10 @@ auxiliary regression of each term on the other terms (Kelley 2007).
 \details{
 \code{check_collinearity()} calculates the generalized variance inflation factor
 (Fox & Monette 1992), which also returns valid results for categorical
-variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} (Fox &
-Monette 1992), which is identical to the square root of the VIF for numeric
-predictors, or for categorical variables with two levels.
+variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<n>))} (Fox &
+Monette 1992), where \verb{<n>} is the number of coefficients of the term. It is
+identical to the square root of the VIF for numeric predictors, or for
+categorical variables with two levels in models with an intercept.
 
 For multinomial models from \code{nnet::multinom()}, \code{mclogit::mblogit()},
 \code{brglm2::brmultinom()} and \code{brglm2::bracl()}, and for \code{VGAM::vglm()} models

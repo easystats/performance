@@ -450,7 +450,8 @@ test_that("check_collinearity, adjusted vif uses the number of coefficients of e
   d$b <- rbinom(200, 1, stats::plogis(d$x1))
 
   expect_car_se_factor <- function(mod) {
-    out1 <- suppressMessages(car::vif(mod, type = "terms"))
+    # car warns for the model without intercept
+    out1 <- suppressWarnings(suppressMessages(car::vif(mod, type = "terms")))
     out2 <- check_collinearity(mod, verbose = FALSE)
     expect_identical(out2$Term, rownames(out1))
     expect_equal(out2$VIF, out1[, "GVIF"], tolerance = 1e-8, ignore_attr = TRUE)
