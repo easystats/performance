@@ -7,6 +7,13 @@
   values of the smaller model to the length of the larger one. Now all LOOIC
   weights are `NA`, with a warning.
 
+* `check_collinearity()` now returns correct VIFs for the zero-inflation
+  component of *glmmTMB* models whose zero-inflation formula differs from the
+  conditional formula. Before, the zero-inflation terms used the term blocks of
+  the conditional formula, so rows were missing or had the VIF of another term.
+  If the zero-inflation component gets no VIFs with `component = "all"` and
+  `verbose = TRUE`, a message now says so.
+
 # performance 0.19.0
 
 ## Changes
