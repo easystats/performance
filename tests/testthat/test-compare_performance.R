@@ -287,6 +287,104 @@ test_that("compare_performance, LOOIC weights when not all models have LOOIC", {
 })
 
 
+test_that("compare_performance, no LOOIC weights for models fit to different numbers of observations", {
+  skip_on_cran()
+  skip_if_not_installed("brms")
+  skip_if_not_installed("loo")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  m_brms <- insight::download_model("brms_1")
+  m_brms4 <- insight::download_model("brms_4")
+  skip_if(is.null(m_brms) || is.null(m_brms4))
+  m_brms2 <- m_brms
+
+  # collect all warnings, so that the test sees how many there are
+  collect_warnings <- function(expr) {
+    warns <- character()
+    value <- withCallingHandlers(
+      suppressMessages(expr),
+      warning = function(w) {
+        warns <<- c(warns, conditionMessage(w))
+        invokeRestart("muffleWarning")
+      }
+    )
+    list(value = value, warnings = warns)
+  }
+
+  # brms_1 has 32 observations, brms_4 has 150
+  res <- collect_warnings(compare_performance(m_brms, m_brms4))
+  expect_identical(res$value$LOOIC_wt, c(NA_real_, NA_real_))
+  expect_equal(res$value$LOOIC, c(157.1964, 188.0575), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_length(res$warnings, 1)
+  expect_match(res$warnings, "different numbers of observations", fixed = TRUE)
+  expect_match(res$warnings, "32", fixed = TRUE)
+  expect_match(res$warnings, "150", fixed = TRUE)
+  expect_false(any(grepl("not a multiple of vector length", res$warnings, fixed = TRUE)))
+
+  res <- collect_warnings(compare_performance(m_brms, m_brms4, rank = TRUE))
+  expect_identical(nrow(res$value), 2L)
+
+  # no weights for a subset of the models with LOOIC
+  res <- collect_warnings(compare_performance(m_brms, m_brms2, m_brms4))
+  expect_identical(res$value$LOOIC_wt, rep(NA_real_, 3))
+  expect_length(res$warnings, 1)
+  expect_match(res$warnings, "different numbers of observations", fixed = TRUE)
+
+  # no warning with verbose = FALSE
+  expect_silent({
+    out <- suppressMessages(compare_performance(m_brms, m_brms4, verbose = FALSE))
+  })
+  expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
+
+  # models with the same number of observations keep their weights
+  out <- suppressMessages(compare_performance(m_brms, m_brms2, verbose = FALSE))
+  expect_equal(out$LOOIC_wt, c(0.5, 0.5), tolerance = 1e-6)
+})
+
+
+test_that("compare_performance, no LOOIC weights when one row count is a multiple of the other", {
+  skip_if_not_installed("loo")
+
+  m1 <- lm(mpg ~ wt, data = mtcars)
+  m2 <- lm(mpg ~ wt, data = rbind(mtcars, mtcars))
+  m3 <- lm(mpg ~ wt, data = mtcars[1:20, ])
+
+  # LOO values with one row per observation, except for the model with 20
+  # observations, which has no LOO values (like a glm next to a brms model)
+  local_mocked_bindings(
+    model_performance = function(model, ...) {
+      n <- insight::n_obs(model)
+      out <- data.frame(R2 = 0.5)
+      if (n != 20) {
+        out$LOOIC <- 100 + n
+        attr(out, "loo") <- list(
+          pointwise = matrix(-seq_len(n) / n, ncol = 1, dimnames = list(NULL, "elpd_loo"))
+        )
+      }
+      out
+    }
+  )
+
+  expect_warning(
+    out <- suppressMessages(compare_performance(m1, m2)),
+    "different numbers of observations"
+  )
+  expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
+  expect_warning(
+    suppressMessages(compare_performance(m1, m2)),
+    "32 and 64"
+  )
+
+  expect_warning(
+    out <- suppressMessages(compare_performance(m1, m2, m3)),
+    "different numbers of observations"
+  )
+  expect_identical(out$LOOIC_wt, rep(NA_real_, 3))
+})
+
+
 test_that("compare_performance, RMSE and Sigma still rank in the right direction", {
   data(mtcars)
   l_best <- lm(mpg ~ wt + cyl + hp, data = mtcars)
