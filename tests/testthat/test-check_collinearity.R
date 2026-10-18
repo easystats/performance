@@ -406,6 +406,36 @@ test_that("check_collinearity, validate adjusted vif against car", {
   expect_equal(out1[, 3], out2$SE_factor, tolerance = 1e-3, ignore_attr = TRUE)
 })
 
+test_that("check_collinearity, adjusted vif with factors outside the model terms", {
+  skip_if_not_installed("car")
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("MASS")
+  d_mt <- mtcars
+  d_mt$am <- factor(d_mt$am)
+  d_mt$cyl <- factor(d_mt$cyl)
+  d_mt$gear <- factor(d_mt$gear)
+  d_mt$g <- factor(rep(1:4, 8))
+
+  # factor response
+  mod <- glm(am ~ cyl + wt + hp, data = d_mt, family = binomial)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1[, 1], out2$VIF, tolerance = 1e-6, ignore_attr = TRUE)
+  expect_equal(out1[, 3], out2$SE_factor, tolerance = 1e-6, ignore_attr = TRUE)
+
+  # ordered response
+  mod <- MASS::polr(gear ~ cyl + wt + hp, data = d_mt, Hess = TRUE)
+  out <- check_collinearity(mod)
+  expect_identical(out$Term, c("cyl", "wt", "hp"))
+  expect_equal(out$SE_factor, out$VIF^(1 / (2 * c(2, 1, 1))), tolerance = 1e-8)
+
+  # grouping factor of a mixed model
+  mod <- suppressMessages(lme4::lmer(mpg ~ cyl + wt + hp + (1 | g), data = d_mt))
+  out <- check_collinearity(mod)
+  expect_identical(out$Term, c("cyl", "wt", "hp"))
+  expect_equal(out$SE_factor, out$VIF^(1 / (2 * c(2, 1, 1))), tolerance = 1e-8)
+})
+
 test_that("check_collinearity, ordinal clmm models", {
   skip_if_not_installed("ordinal")
   set.seed(999)
