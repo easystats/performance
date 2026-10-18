@@ -553,9 +553,16 @@ check_collinearity.zerocount <- function(
     } else {
       mm <- .safe(insight::get_modelmatrix(x))
     }
-    coef_names <- .multinom_coef_names(x, colnames(v), colnames(mm))
+    # the column names of the variance-covariance matrix from insight have no
+    # backticks, but coefficient and model matrix names can keep them
+    mm_names <- gsub("`", "", colnames(mm), fixed = TRUE)
+    coef_names <- .multinom_coef_names(
+      x,
+      gsub("`", "", colnames(v), fixed = TRUE),
+      mm_names
+    )
     keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
-    term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], colnames(mm))]
+    term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], mm_names)]
     # a coefficient without a term would give VIFs for the wrong terms
     if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_names)) {
       if (verbose) {
@@ -1259,6 +1266,7 @@ check_collinearity.zerocount <- function(
   if (!is.matrix(coef_mat)) {
     return(coef_names)
   }
+  colnames(coef_mat) <- gsub("`", "", colnames(coef_mat), fixed = TRUE)
   prefixed <- outer(rownames(coef_mat), colnames(coef_mat), paste, sep = sep)
   # level and coefficient names can combine into the same name, for example
   # level "b" with "x1:x3" and level "b:x1" with "x3"

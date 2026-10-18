@@ -1004,15 +1004,16 @@ test_that("check_collinearity, multinomial models with backticked names", {
   d <- .multinom_data()
   d$`my x` <- d$x1
   d$my_x <- d$x1
-  fit <- function(f, data) {
-    list(
-      nnet = nnet::multinom(f, data = data, trace = FALSE),
-      brmultinom = brglm2::brmultinom(f, data = data),
-      bracl = brglm2::bracl(f, data = data)
-    )
-  }
-  fits <- fit(y ~ `my x` + x2 + f + `my x`:f, d)
-  fits_renamed <- fit(y ~ my_x + x2 + f + my_x:f, d)
+  fits <- list(
+    nnet = nnet::multinom(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE),
+    brmultinom = brglm2::brmultinom(y ~ `my x` + x2 + f + `my x`:f, data = d),
+    bracl = brglm2::bracl(y ~ `my x` + x2 + f + `my x`:f, data = d)
+  )
+  fits_renamed <- list(
+    nnet = nnet::multinom(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE),
+    brmultinom = brglm2::brmultinom(y ~ my_x + x2 + f + my_x:f, data = d),
+    bracl = brglm2::bracl(y ~ my_x + x2 + f + my_x:f, data = d)
+  )
   for (i in names(fits)) {
     out <- suppressMessages(check_collinearity(fits[[i]]))
     out_renamed <- suppressMessages(check_collinearity(fits_renamed[[i]]))
