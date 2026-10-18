@@ -1600,7 +1600,7 @@ test_that("check_collinearity, glmmTMB zero-inflation component with one term", 
   expect_equal(out_all, out_cond)
 
   expect_message(
-    check_collinearity(m, component = "all"),
+    check_collinearity(m, component = "all", verbose = TRUE),
     "Not enough model terms in the zero-inflat"
   )
   expect_no_message(check_collinearity(m, component = "all", verbose = FALSE))
