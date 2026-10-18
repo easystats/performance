@@ -1,5 +1,385 @@
 # Changelog
 
+## performance 0.19.0
+
+### Changes
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  gets a `show_smooth` argument. With `show_smooth = FALSE`, the
+  Linearity and Homogeneity of Variance panels draw neither the LOESS
+  smoother nor the cell means, and the Influential Observations panel
+  draws no LOESS smoother. This needs *see* newer than 0.14.2. Older
+  versions ignore the setting.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  and
+  [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  now work for multivariate models from package *brms*. Use the
+  `response` argument to name the response to check. Without `response`,
+  both functions give an error that lists the names of the responses
+  ([\#908](https://github.com/easystats/performance/issues/908)).
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now shows the plot of influential observations for models from package
+  *glmmTMB* with a gaussian, poisson, binomial, Gamma, or `nbinom2`
+  family, and without zero-inflation or a dispersion formula. The plot
+  uses hat values and a one-step approximation of Cook’s distance, so
+  the model is not refit. For other *glmmTMB* models, the plot is
+  skipped, and with `verbose = TRUE` a message names the reason. For the
+  same models, `plot(check_outliers())` shows this plot with the Cook’s
+  distances from the refits
+  ([\#95](https://github.com/easystats/performance/issues/95)).
+
+- [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  now computes the default threshold for Cook’s distance as
+  `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the
+  number of fixed effects of the conditional model, and `n` is the
+  number of observations in the fit. Before, `p` was the number of
+  numeric variables in the data. If `n - p` is less than 1,
+  `method = "cook"` gives an error.
+
+- [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  gets a `group` argument for models from packages *glmmTMB* and *lme4*.
+  It gives Cook’s distance for each level of a grouping variable. The
+  model is refit without each level in turn. With `G` the number of
+  levels, levels above `4 / G` are flagged
+  ([\#95](https://github.com/easystats/performance/issues/95)).
+
+- [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  now supports models from package *glmmTMB*. Cook’s distance is
+  computed by refitting the model without each observation, and all
+  data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
+  well ([\#95](https://github.com/easystats/performance/issues/95)).
+
+- [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+  now supports models fitted to multiple imputed data sets with package
+  *lavaan.mi*. The fit indices are pooled across imputations by
+  [`lavaan::fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html),
+  and pooling arguments such as `pool.method` can be passed through
+  `...` ([\#888](https://github.com/easystats/performance/issues/888)).
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now warns for models with a `quasipoisson` or `quasibinomial` family.
+  These models already estimate a dispersion parameter, so their
+  standard errors account for overdispersion. When over- or
+  underdispersion is detected, the printed conclusion also says so
+  ([\#734](https://github.com/easystats/performance/issues/734)).
+
+### Bug fixes
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now gives the correct adjusted VIF (`SE_factor`) for factor terms in
+  models with a factor response, such as logistic and ordinal models,
+  and in mixed models with grouping factors. Before, these models got
+  the square root of the VIF for every term, also for factors with more
+  than two levels.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now gives the correct VIFs for ordinal models from
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html),
+  [`survey::svyolr()`](https://rdrr.io/pkg/survey/man/svyolr.html),
+  [`ordinal::clm2()`](https://rdrr.io/pkg/ordinal/man/clmOld.html),
+  [`ordinal::clmm2()`](https://rdrr.io/pkg/ordinal/man/clmmOld.html),
+  and
+  [`rstanarm::stan_polr()`](https://mc-stan.org/rstanarm/reference/stan_polr.html).
+  These models have one threshold for each outcome level except one, and
+  no single intercept. Before,
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  dropped only the first column of the variance-covariance matrix as the
+  intercept. The VIFs then included the thresholds. For
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html),
+  [`survey::svyolr()`](https://rdrr.io/pkg/survey/man/svyolr.html), and
+  [`rstanarm::stan_polr()`](https://mc-stan.org/rstanarm/reference/stan_polr.html),
+  they also left out the first slope. Thus the VIFs were wrong.
+
+- Some models drop an aliased predictor, which is a linear combination
+  of other predictors. For such
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) and
+  [`MASS::polr()`](https://rdrr.io/pkg/MASS/man/polr.html) models,
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now warns that the model matrix is rank deficient. It also labels each
+  VIF with its own term.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  uses a new method for the confidence intervals of VIF and tolerance.
+  The method inverts the noncentral F distribution of the auxiliary
+  regression of each term, as `MBESS::ci.R2()` does for fixed predictors
+  (Kelley 2007). The old interval had an infinite upper limit for VIFs
+  close to 1, and no upper limit for a VIF of exactly 1
+  ([\#597](https://github.com/easystats/performance/issues/597)).
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now uses the residual degrees of freedom of the model
+  ([`df.residual()`](https://rdrr.io/r/stats/df.residual.html)) for
+  `glm` and *fixest* models, but not for `svyglm()` models (package
+  *survey*). Before, it subtracted the number of coefficients from the
+  number of observations. That was wrong for models with aliased
+  coefficients and for *fixest* models with fixed effects. Now, the
+  dispersion ratio of `quasipoisson` and `quasibinomial` `glm` models
+  with aliased coefficients matches `summary(model)$dispersion` up to
+  the fitting tolerance. It already did so for other
+  [`stats::glm()`](https://rdrr.io/r/stats/glm.html) models. Other
+  classes that inherit from `glm` now also use their own
+  [`df.residual()`](https://rdrr.io/r/stats/df.residual.html). For
+  example, [`gam()`](https://rdrr.io/pkg/mgcv/man/gam.html) models
+  (package *mgcv*) use the effective degrees of freedom.
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now gives correct results for models from package *glmx* with a
+  negative binomial family, or with a binomial family and more than one
+  trial. *glmx* has no method for Pearson residuals, so its stored
+  deviance contributions were used before. Bernoulli models and other
+  *glmx* families give an error.
+
+- If a model has no Pearson residuals,
+  [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now gives an error. Before, it used the formula for Poisson models,
+  which is wrong for other families.
+
+- The overdispersion plot of
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now uses the estimated dispersion for `quasipoisson` `glm` models.
+  Before, it showed the variance of a Poisson model.
+
+- Fixed issue in
+  [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  for *brms* models with `dec()` response (Wiener and RT-choice
+  families); the RT part of the model is now checked.
+
+- [`test_performance()`](https://easystats.github.io/performance/reference/test_performance.md)
+  now works for models from package *lavaan*. Before, it failed with an
+  infinite recursion. It returns the Bayes factor and the
+  likelihood-ratio test from
+  [`lavaan::lavTestLRT()`](https://rdrr.io/pkg/lavaan/man/lavTestLRT.html),
+  and compares the models in order of their degrees of freedom.
+  [`test_vuong()`](https://easystats.github.io/performance/reference/test_performance.md)
+  and
+  [`test_wald()`](https://easystats.github.io/performance/reference/test_performance.md)
+  now give a clear error for *lavaan* models instead of the same
+  recursion
+  ([\#427](https://github.com/easystats/performance/issues/427)).
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  uses a new method for the confidence intervals of VIF and tolerance.
+  The method inverts the noncentral F distribution of the auxiliary
+  regression of each term, as `MBESS::ci.R2()` does for fixed predictors
+  (Kelley 2007). The old interval had an infinite upper limit for VIFs
+  close to 1, and no upper limit for a VIF of exactly 1
+  ([\#597](https://github.com/easystats/performance/issues/597)).
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now uses the residual degrees of freedom of the model
+  ([`df.residual()`](https://rdrr.io/r/stats/df.residual.html)) for
+  `glm` and *fixest* models, but not for `svyglm()` models (package
+  *survey*). Before, it subtracted the number of coefficients from the
+  number of observations. That was wrong for models with aliased
+  coefficients and for *fixest* models with fixed effects. Now, the
+  dispersion ratio of `quasipoisson` and `quasibinomial` `glm` models
+  with aliased coefficients matches `summary(model)$dispersion` up to
+  the fitting tolerance. It already did so for other
+  [`stats::glm()`](https://rdrr.io/r/stats/glm.html) models. Other
+  classes that inherit from `glm` now also use their own
+  [`df.residual()`](https://rdrr.io/r/stats/df.residual.html). For
+  example, [`gam()`](https://rdrr.io/pkg/mgcv/man/gam.html) models
+  (package *mgcv*) use the effective degrees of freedom.
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now gives correct results for models from package *glmx* with a
+  negative binomial family, or with a binomial family and more than one
+  trial. *glmx* has no method for Pearson residuals, so its stored
+  deviance contributions were used before. Bernoulli models and other
+  *glmx* families give an error.
+
+- If a model has no Pearson residuals,
+  [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now gives an error. Before, it used the formula for Poisson models,
+  which is wrong for other families.
+
+- The overdispersion plot of
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now uses the estimated dispersion for `quasipoisson` `glm` models.
+  Before, it showed the variance of a Poisson model.
+
+- Fixed issue in
+  [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  for *brms* models with `dec()` response (Wiener and RT-choice
+  families); the RT part of the model is now checked.
+
+- [`test_performance()`](https://easystats.github.io/performance/reference/test_performance.md)
+  now works for models from package *lavaan*. Before, it failed with an
+  infinite recursion. It returns the Bayes factor and the
+  likelihood-ratio test from
+  [`lavaan::lavTestLRT()`](https://rdrr.io/pkg/lavaan/man/lavTestLRT.html),
+  and compares the models in order of their degrees of freedom.
+  [`test_vuong()`](https://easystats.github.io/performance/reference/test_performance.md)
+  and
+  [`test_wald()`](https://easystats.github.io/performance/reference/test_performance.md)
+  now give a clear error for *lavaan* models instead of the same
+  recursion
+  ([\#427](https://github.com/easystats/performance/issues/427)).
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now gives correct VIFs for multinomial models from package *brglm2*
+  (`brmultinom()`, and `bracl()` for adjacent-category models). It also
+  gives correct VIFs for
+  [`VGAM::vglm()`](https://rdrr.io/pkg/VGAM/man/vglm.html) models with
+  the multinomial or cumulative family. Before, `brmultinom()` models
+  and parallel `bracl()` models got VIFs for the wrong coefficients.
+  Other `bracl()` models got no result, and `vglm()` models gave an
+  error. Some models keep all coefficients for exactly collinear
+  predictors, for example
+  [`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html). For
+  a singular correlation matrix of the coefficients,
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now gives a warning and returns `NULL`. Before, it returned
+  meaningless VIFs.
+
+- If you combine `"cook"` with a method that flags no observation, such
+  as `"zscore_robust"`,
+  [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  no longer fails. Cook’s distance now also works for binomial models
+  with only factor predictors. For *glmmTMB* models, the refits for
+  Cook’s distance now use the data given to the model. Thus, models with
+  missing values, a `subset`, or weights and offsets outside the data
+  get correct values. If a refit fails with the full model’s estimates
+  as start values,
+  [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  tries it again without them.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now gives correct VIFs for multinomial models from packages *nnet*
+  ([`multinom()`](https://rdrr.io/pkg/mgcv/man/multinom.html)) and
+  *mclogit* (`mblogit()`). Before, only the first intercept was removed
+  and coefficients were matched to terms by position, so the VIFs
+  belonged to the wrong coefficients. Now each term gets one VIF,
+  computed from its slopes across all outcome levels, so it does not
+  depend on the reference level
+  ([\#907](https://github.com/easystats/performance/issues/907)).
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now uses the value of `show_ci` that the user sets. Before, it ignored
+  that value. It always hid the confidence bands for models with only
+  categorical predictors and always showed them for other models
+  ([\#642](https://github.com/easystats/performance/issues/642),
+  [\#490](https://github.com/easystats/performance/issues/490)).
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now returns interaction terms for *brms* models. Before, a model such
+  as `y ~ a * b` gave no `a:b` row, and the VIFs of the other terms
+  belonged to the wrong coefficients. Models with more than one
+  intercept, such as ordinal models, also gave VIFs for the wrong
+  coefficients.
+
+- [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
+  no longer fails when only some of the models have LOOIC, for example a
+  *brms* model and a `glm`
+  ([\#738](https://github.com/easystats/performance/issues/738)). It now
+  computes stacking weights for the models that have LOOIC and gives
+  `NA` for the others. A missing weight now prints as an empty cell, not
+  as `(>.999)`.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  no longer fails for *brms* models that cannot be converted to a
+  frequentist model. It now returns only the posterior predictive check
+  and multicollinearity panels, and a message lists the panels that were
+  skipped
+  ([\#461](https://github.com/easystats/performance/issues/461)).
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now labels terms correctly for *brms* models that use the
+  `0 + Intercept` formula syntax. Before, each VIF was shown under the
+  name of the previous term and the last term was missing
+  ([\#417](https://github.com/easystats/performance/issues/417)).
+
+- [`r2_nakagawa()`](https://easystats.github.io/performance/reference/r2_nakagawa.md)
+  and
+  [`icc()`](https://easystats.github.io/performance/reference/icc.md)
+  now include the random-slope variance for *lme4* models with
+  uncorrelated random slopes, such as `(x || group)`. The fix is in
+  [`insight::get_variance()`](https://easystats.github.io/insight/reference/get_variance.html).
+  For these models, a shift of a predictor changes the values, and the
+  documentation of both functions now says so
+  ([\#428](https://github.com/easystats/performance/issues/428)).
+
+- [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+  for *lavaan* models now passes further arguments in `...` to
+  [`lavaan::fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html)
+  by name. Before, any extra argument other than `estimator` caused an
+  error, even an argument that
+  [`fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html)
+  accepts, such as `fm_args` (`fm.args` in *lavaan* before 0.7).
+
+- [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+  for *lavaan* models no longer errors when
+  [`lavaan::fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html)
+  does not return an index, for example the loglikelihood, AIC, and BIC
+  of models with ordinal indicators. These indices are now `NA`.
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  now computes the Pearson chi-squared statistic from the model’s own
+  Pearson residuals whenever it does not use simulated residuals.
+  Results change, and are now correct, for binomial models with more
+  than one trial per observation (a
+  [`cbind()`](https://rdrr.io/r/base/cbind.html) response, or
+  proportions with `weights`) and for models with prior weights. Before,
+  the statistic used unweighted Poisson-style residuals and could be far
+  off.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now correctly returns the random-effects normality panel for mixed
+  models that specify random slopes using split terms such as
+  `(1 | group) + (0 + slope | group)` (including `||` expansions,
+  [\#845](https://github.com/easystats/performance/issues/845)).
+
+- [`check_singularity()`](https://easystats.github.io/performance/reference/check_singularity.md)
+  for models from package *nlme* no longer errors for nested random
+  effects with more than one grouping level and now applies the
+  tolerance check to the absolute values of the variance-covariance
+  diagonal.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  no longer drops interaction terms when fallback term assignment is
+  used (for example, in some `brmsfit` models,
+  [\#936](https://github.com/easystats/performance/issues/936)).
+
+- Preserve method–threshold alignment in
+  [`print()`](https://rdrr.io/r/base/print.html) method for
+  [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  for multi-method input.
+
+- [`r2_tjur()`](https://easystats.github.io/performance/reference/r2_tjur.md),
+  [`r2_somers()`](https://easystats.github.io/performance/reference/r2_somers.md),
+  [`r2_efron()`](https://easystats.github.io/performance/reference/r2_efron.md)
+  and
+  [`r2_mckelvey()`](https://easystats.github.io/performance/reference/r2_mckelvey.md)
+  now warn and return `NULL` for binomial models that are not Bernoulli
+  models, like
+  [`r2()`](https://easystats.github.io/performance/reference/r2.md).
+  Examples are a proportion response with weights and a
+  [`cbind()`](https://rdrr.io/r/base/cbind.html) response. Before, these
+  functions returned inaccurate values or failed with an unclear error
+  ([\#165](https://github.com/easystats/performance/issues/165)).
+
+- The influential observations plot of
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  and
+  [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  for linear mixed models from package *lme4* now shows standardized
+  residuals instead of raw residuals. Before this fix, points fell
+  outside the Cook’s distance lines but were not flagged as outliers
+  ([\#857](https://github.com/easystats/performance/issues/857)).
+
+- The Cook’s distance lines in the influential observations plot of
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  and
+  [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  now use the threshold of
+  [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md),
+  including a user-supplied `threshold`. Before this fix, linear models
+  always used a threshold from the model’s F statistic, so the lines did
+  not match the flagged outliers
+  ([\#916](https://github.com/easystats/performance/issues/916)).
+
 ## performance 0.18.2
 
 CRAN release: 2026-09-10
