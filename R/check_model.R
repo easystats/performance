@@ -615,7 +615,7 @@ check_model.stanreg <- function(
       detrend = detrend,
       bandwidth = bandwidth,
       type = type,
-      type_missing = missing(type),
+      type_missing = missing(type) || is.null(type),
       show_dots = show_dots,
       show_ci = show_ci,
       show_smooth = show_smooth,

@@ -8,7 +8,8 @@
   also objects from `simulate_residuals()` or package *DHARMa*. Models with a
   binary, count, ordinal, categorical, or multinomial response thus get the
   `"discrete_interval"` posterior predictive check. Before, these objects always
-  got `"density"`. The same methods ignored `size_title` and now pass it on.
+  got `"density"` by default. The same methods ignored `size_title` and now
+  pass it on.
 
 * `compare_performance()` no longer returns wrong LOOIC weights for models fit
   to different numbers of observations. Before, it recycled the pointwise LOO

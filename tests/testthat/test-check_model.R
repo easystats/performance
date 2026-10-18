@@ -238,12 +238,13 @@ test_that("`check_model()` forwards `type` and `size_title` for Stan models", {
 })
 
 test_that("`check_model()` keeps the defaults for wrapped linear models", {
+  skip_if_not_installed("DHARMa")
   data(mtcars)
   l <- lm(mpg ~ wt, data = mtcars)
-  out <- list(model_fit = check_model(structure(list(fit = l), class = "model_fit")))
-  if (requireNamespace("DHARMa", quietly = TRUE)) {
-    out$simres <- check_model(simulate_residuals(l))
-  }
+  out <- list(
+    model_fit = check_model(structure(list(fit = l), class = "model_fit")),
+    simres = check_model(simulate_residuals(l))
+  )
   for (x in out) {
     expect_identical(attr(x, "type"), "density")
     expect_identical(attr(x, "title_size"), 12)
