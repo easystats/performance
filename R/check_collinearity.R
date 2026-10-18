@@ -37,8 +37,7 @@
 #' (Fox & Monette 1992), which also returns valid results for categorical
 #' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<n>))` (Fox &
 #' Monette 1992), where `<n>` is the number of coefficients of the term. It is
-#' identical to the square root of the VIF for numeric predictors, or for
-#' categorical variables with two levels in models with an intercept.
+#' the square root of the VIF for terms with one coefficient.
 #'
 #' For multinomial models from `nnet::multinom()`, `mclogit::mblogit()`,
 #' `brglm2::brmultinom()` and `brglm2::bracl()`, and for `VGAM::vglm()` models
