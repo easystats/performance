@@ -642,6 +642,7 @@ check_collinearity.zerocount <- function(
 
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attr(v, "rank_deficient")) || anyNA(v)) {
+    na_cols <- NULL
     if (!is.null(attr(v, "na_columns_index"))) {
       # If this attribute exists, then NA values were already removed from v
       term_assign <- term_assign[-attr(v, "na_columns_index")]
