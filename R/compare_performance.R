@@ -161,8 +161,9 @@ compare_performance <- function(
     has_loo <- !vapply(attri, function(x) is.null(x$loo), logical(1))
     dfs$LOOIC_wt <- NA_real_
     if (sum(has_loo) > 1) {
-      # stacking weights need the same observations in all models, else
-      # cbind() recycles the shorter columns and the weights are wrong
+      # stacking weights need the same observations in all models. We can only
+      # check that the counts match, else cbind() recycles the shorter columns
+      # and the weights are wrong
       n_loo <- vapply(attri[has_loo], function(x) nrow(x$loo$pointwise), integer(1))
       if (length(unique(n_loo)) > 1) {
         if (verbose) {

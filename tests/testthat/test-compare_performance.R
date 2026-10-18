@@ -331,7 +331,7 @@ test_that("compare_performance, no LOOIC weights for models fit to different num
   res <- collect_warnings(compare_performance(m_brms, m_brms4, rank = TRUE))
   expect_identical(nrow(res$value), 2L)
 
-  # no weights for a subset of the models with LOOIC
+  # no weights, also for the two models with the same number of observations
   res <- collect_warnings(compare_performance(m_brms, m_brms2, m_brms4))
   expect_identical(res$value$LOOIC_wt, rep(NA_real_, 3))
   expect_length(res$warnings, 1)
