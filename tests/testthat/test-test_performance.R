@@ -81,7 +81,10 @@ test_that("test_performance - lavaan", {
     structure1,
     data = lavaan::HolzingerSwineford1939[1:200, ]
   ))
-  expect_warning(test_performance(m1, m3), regex = "same observations")
+  expect_warning(expect_warning(expect_warning(expect_warning(
+    test_performance(m1, m3),
+    regex = "same observations"
+  ))))
   structure4 <- " visual  =~ x1 + x2
                   textual =~ x4 + x5 + x6
                   speed   =~ x7 + x8 + x9 "
