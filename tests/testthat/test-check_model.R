@@ -239,6 +239,11 @@ test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan
   # simulated residuals are not detrended by default
   expect_false(attr(check_model(m), "detrend"))
   expect_true(attr(check_model(m, detrend = TRUE), "detrend"))
+
+  # the same when a `model_fit` object wraps the Stan model
+  out <- check_model(structure(list(fit = m), class = "model_fit"))
+  expect_identical(attr(out, "type"), "discrete_interval")
+  expect_false(attr(out, "detrend"))
 })
 
 test_that("`check_model()` forwards `detrend` for wrapped models", {
@@ -461,6 +466,12 @@ test_that("`check_model()` falls back to Bayesian checks if brms conversion fail
   out <- suppressMessages(check_model(m, check = "vif", show_smooth = FALSE))
   expect_named(out, "VIF")
   expect_false(attr(out, "show_smooth"))
+
+  # the same when a `model_fit` object wraps the brms model
+  out <- suppressMessages(check_model(structure(list(fit = m), class = "model_fit")))
+  expect_named(out, c("VIF", "PP_CHECK"), ignore.order = TRUE)
+  expect_true(attr(out, "detrend"))
+  expect_identical(attr(out, "type"), "density")
 })
 
 test_that("`check_model()` fallback for brms models can be plotted", {

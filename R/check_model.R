@@ -332,7 +332,8 @@ check_model.default <- function(
     residual_type <- "normal"
   }
 
-  # set default for detrend
+  # set default for detrend; methods that call `check_model()` on another
+  # model pass `detrend = NULL` when the user gave no `detrend`
   if (missing(detrend) || is.null(detrend)) {
     detrend <- residual_type == "normal"
   }
@@ -612,7 +613,8 @@ check_model.stanreg <- function(
       conversion_error = conversion_error,
       panel = panel,
       check = check,
-      detrend = detrend,
+      # `detrend` is NULL when a `model_fit` object wraps the model
+      detrend = if (is.null(detrend)) TRUE else detrend,
       bandwidth = bandwidth,
       type = type,
       type_missing = missing(type) || is.null(type),
