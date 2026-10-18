@@ -614,7 +614,7 @@ check_model.stanreg <- function(
       panel = panel,
       check = check,
       # `detrend` is NULL when a `model_fit` object wraps the model
-      detrend = if (is.null(detrend)) TRUE else detrend,
+      detrend = is.null(detrend) || isTRUE(detrend),
       bandwidth = bandwidth,
       type = type,
       type_missing = missing(type) || is.null(type),
