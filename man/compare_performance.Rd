@@ -50,7 +50,8 @@ weights are computed as \code{w = exp(-0.5 * delta_ic) / sum(exp(-0.5 * delta_ic
 where \code{delta_ic} is the difference between the model's IC value and the
 smallest IC value in the model set (Burnham and Anderson, 2002).
 For LOOIC, weights are computed as "stacking weights" using
-\code{\link[loo:stacking_weights]{loo::stacking_weights()}}.
+\code{\link[loo:stacking_weights]{loo::stacking_weights()}}. LOOIC weights are \code{NA} when the models were
+fit to different numbers of observations.
 }
 
 \subsection{Ranking Models}{
