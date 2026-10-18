@@ -253,7 +253,7 @@ test_that("`check_model()` forwards `detrend` for wrapped models", {
   expect_false(attr(check_model(simulate_residuals(l)), "detrend"))
   expect_false(attr(check_model(l, residual_type = "simulated"), "detrend"))
 
-  # `model_fit` objects get the default of the fitted model
+  # the defaults of the bare models, which `model_fit` objects now get too
   expect_false(attr(check_model(m), "detrend"))
   expect_true(attr(check_model(l), "detrend"))
   expect_false(attr(

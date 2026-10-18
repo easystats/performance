@@ -876,14 +876,14 @@ check_model.model_fit <- function(
     colors = colors,
     theme = theme,
     base_size = base_size,
-    # NULL lets `check_model.default()` choose the default for the fitted model
+    # NULL lets the method for the fitted model choose the default
     detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
-    # NULL lets `check_model.default()` choose the default for the fitted model
+    # NULL lets the method for the fitted model choose the default
     type = if (!missing(type)) type,
     residual_type = residual_type,
     ppc_range = ppc_range,
@@ -941,14 +941,14 @@ check_model.performance_simres <- function(
     colors = colors,
     theme = theme,
     base_size = base_size,
-    # NULL lets `check_model.default()` choose the default for the fitted model
+    # NULL lets the method for the fitted model choose the default
     detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
-    # NULL lets `check_model.default()` choose the default for the fitted model
+    # NULL lets the method for the fitted model choose the default
     type = if (!missing(type)) type,
     residual_type = "simulated",
     ppc_range = ppc_range,
