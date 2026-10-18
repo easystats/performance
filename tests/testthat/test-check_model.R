@@ -192,9 +192,10 @@ test_that("`check_model()` forwards `type` and `size_title` for simulated residu
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
   p <- glm(carb ~ wt, data = mtcars, family = poisson)
+  sim_m <- simulate_residuals(m)
 
   # the default for binary and count responses is used, as for the glm itself
-  expect_identical(attr(check_model(simulate_residuals(m)), "type"), "discrete_interval")
+  expect_identical(attr(check_model(sim_m), "type"), "discrete_interval")
   expect_identical(attr(check_model(simulate_residuals(p)), "type"), "discrete_interval")
   expect_identical(
     attr(check_model(DHARMa::simulateResiduals(m)), "type"),
@@ -202,14 +203,8 @@ test_that("`check_model()` forwards `type` and `size_title` for simulated residu
   )
 
   # user values are kept
-  expect_identical(
-    attr(check_model(simulate_residuals(m), type = "density"), "type"),
-    "density"
-  )
-  expect_identical(
-    attr(check_model(simulate_residuals(m), size_title = 20), "title_size"),
-    20
-  )
+  expect_identical(attr(check_model(sim_m, type = "density"), "type"), "density")
+  expect_identical(attr(check_model(sim_m, size_title = 20), "title_size"), 20)
 })
 
 test_that("`check_model()` forwards `type` and `size_title` for `model_fit` objects", {
@@ -233,11 +228,12 @@ test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan
   m <- insight::download_model("stanreg_glm_1")
   skip_if(is.null(m))
 
-  expect_identical(attr(check_model(m), "type"), "discrete_interval")
+  out <- check_model(m)
+  expect_identical(attr(out, "type"), "discrete_interval")
+  # simulated residuals are not detrended by default
+  expect_false(attr(out, "detrend"))
   expect_identical(attr(check_model(m, type = "density"), "type"), "density")
   expect_identical(attr(check_model(m, size_title = 20), "title_size"), 20)
-  # simulated residuals are not detrended by default
-  expect_false(attr(check_model(m), "detrend"))
   expect_true(attr(check_model(m, detrend = TRUE), "detrend"))
 
   # the same when a `model_fit` object wraps the Stan model
@@ -251,9 +247,10 @@ test_that("`check_model()` forwards `detrend` for wrapped models", {
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
   l <- lm(mpg ~ wt, data = mtcars)
+  sim_m <- simulate_residuals(m)
 
   # simulated residuals are not detrended by default
-  expect_false(attr(check_model(simulate_residuals(m)), "detrend"))
+  expect_false(attr(check_model(sim_m), "detrend"))
   expect_false(attr(check_model(DHARMa::simulateResiduals(m)), "detrend"))
   expect_false(attr(check_model(simulate_residuals(l)), "detrend"))
   expect_false(attr(check_model(l, residual_type = "simulated"), "detrend"))
@@ -268,7 +265,7 @@ test_that("`check_model()` forwards `detrend` for wrapped models", {
   expect_true(attr(check_model(structure(list(fit = l), class = "model_fit")), "detrend"))
 
   # user values are kept
-  expect_true(attr(check_model(simulate_residuals(m), detrend = TRUE), "detrend"))
+  expect_true(attr(check_model(sim_m, detrend = TRUE), "detrend"))
   expect_false(attr(
     check_model(structure(list(fit = l), class = "model_fit"), detrend = FALSE),
     "detrend"
