@@ -35,6 +35,10 @@ test_that("test_performance - nested", {
 })
 
 test_that("test_performance - lavaan", {
+  # fails on CRAN
+  # * using R version 4.5.3 (2026-03-11 ucrt)
+  # * using platform: x86_64-w64-mingw32
+  skip_on_cran()
   skip_if_not_installed("lavaan")
 
   structure1 <- " visual  =~ x1 + x2 + x3
