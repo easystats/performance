@@ -560,8 +560,17 @@ check_collinearity.zerocount <- function(
 
   term_assign <- .term_assignments(x, component, verbose = verbose)
 
-  # any assignment found? multinomial models build their own assignment below
-  if (!.is_multinom_model(x) && (is.null(term_assign) || all(is.na(term_assign)))) {
+  # names of the terms, for models whose terms are not the labels of their
+  # formula, see `.named_term_blocks()`
+  term_names <- NULL
+
+  # any assignment found? multinomial models and models with named term blocks
+  # build their own assignment below
+  if (
+    !.is_multinom_model(x) &&
+      !.has_named_term_blocks(x) &&
+      (is.null(term_assign) || all(is.na(term_assign)))
+  ) {
     if (verbose) {
       insight::format_alert(
         sprintf(
@@ -696,6 +705,31 @@ check_collinearity.zerocount <- function(
     if (all(keep_idx) && isTRUE(verbose)) {
       insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
+  } else if (.has_named_term_blocks(x)) {
+    # mgcv, survreg and coxph models: the columns of the variance-covariance
+    # matrix that belong to each term are known by name. Other columns, like
+    # the scale parameters of survreg models, are not used
+    blocks <- .named_term_blocks(x, colnames(v))
+    if (is.null(blocks)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    keep_idx <- !is.na(blocks$assign) & blocks$assign != 0
+    term_assign <- blocks$assign[keep_idx]
+    term_names <- blocks$terms
+    # Cox models have no intercept
+    if (
+      !any(blocks$assign == 0, na.rm = TRUE) && !inherits(x, "coxph") && isTRUE(verbose)
+    ) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
   } else {
     keep_idx <- rep(TRUE, ncol(v))
     if (.component_has_intercept(x, component)) {
@@ -764,6 +798,10 @@ check_collinearity.zerocount <- function(
 
   if ("instruments" %in% names(f)) {
     model_terms <- unique(c(model_terms, labels(stats::terms(f[["instruments"]]))))
+  }
+
+  if (!is.null(term_names)) {
+    model_terms <- term_names
   }
 
   n.terms <- length(model_terms)
@@ -1027,6 +1065,76 @@ check_collinearity.zerocount <- function(
     error = function(e) {
       .find_term_assignment(x, component, verbose = verbose)
     }
+  )
+}
+
+
+# mgcv models, and survreg and coxph models of package survival, name the
+# coefficients of each term, see `.named_term_blocks()`
+.has_named_term_blocks <- function(x) {
+  .is_mgcv_gam(x) || inherits(x, c("survreg", "coxph"))
+}
+
+
+# mgcv models with one linear predictor. Models with a list of formulas, like
+# `family = gaulss()`, have a list of parametric terms
+.is_mgcv_gam <- function(x) {
+  inherits(x, "gam") && inherits(x$pterms, "terms") && is.list(x$smooth)
+}
+
+
+# the term of each column `col_names` of the variance-covariance matrix: 0 for
+# the intercept, NA for columns of no term (like the scale parameters of
+# survreg models), else the position of the term in `terms`. NULL if a
+# coefficient has no term
+.named_term_blocks <- function(x, col_names) {
+  coef_names <- names(stats::coef(x))
+  if (.is_mgcv_gam(x)) {
+    # the parametric terms, then one term for each smooth, with the columns
+    # from `first.para` to `last.para`. A smooth with `by = <factor>` is one
+    # smooth for each factor level
+    parametric_labels <- labels(x$pterms)
+    smooth_labels <- vapply(x$smooth, function(s) s$label, character(1))
+    term_labels <- c(parametric_labels, smooth_labels)
+    coef_assign <- rep(NA_integer_, length(coef_names))
+    coef_assign[seq_along(x$assign)] <- x$assign
+    for (i in seq_along(x$smooth)) {
+      cols <- x$smooth[[i]]$first.para:x$smooth[[i]]$last.para
+      coef_assign[cols] <- length(parametric_labels) + i
+    }
+  } else if (inherits(x, "coxph")) {
+    # a list with the columns of each term, without `strata()` terms. The
+    # columns of `frailty()` terms come after the coefficients
+    term_labels <- names(x$assign)
+    coef_assign <- rep(NA_integer_, length(coef_names))
+    for (i in seq_along(x$assign)) {
+      cols <- x$assign[[i]]
+      coef_assign[cols[cols <= length(coef_names)]] <- i
+    }
+  } else {
+    # survreg: the "assign" attribute of the model matrix skips `strata()` and
+    # `cluster()` terms, which have no columns
+    tt <- stats::terms(x)
+    factors <- attr(tt, "factors")
+    term_labels <- labels(tt)
+    specials <- unlist(attr(tt, "specials"), use.names = FALSE)
+    if (length(specials) && length(term_labels)) {
+      is_special <- colSums(factors[specials, , drop = FALSE]) > 0
+      term_labels <- term_labels[!is_special]
+    }
+    coef_assign <- attr(.safe(stats::model.matrix(x)), "assign")
+  }
+
+  if (
+    length(coef_assign) != length(coef_names) ||
+      anyNA(coef_assign) ||
+      any(coef_assign > length(term_labels))
+  ) {
+    return(NULL)
+  }
+  list(
+    assign = coef_assign[match(col_names, coef_names)],
+    terms = term_labels
   )
 }
 
