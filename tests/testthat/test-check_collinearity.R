@@ -130,6 +130,23 @@ test_that("check_collinearity, fallback returns NULL if matrix rebuild fails", {
 })
 
 
+test_that("check_collinearity, rank-deficient flag without NA columns", {
+  m <- lm(mpg ~ wt + hp + disp, data = mtcars)
+  v <- stats::vcov(m)
+  expected <- check_collinearity(m)$VIF
+  # the flag is set, but the matrix has no NA and no index of NA columns
+  testthat::local_mocked_bindings(
+    get_varcov = function(...) structure(v, rank_deficient = TRUE),
+    .package = "insight"
+  )
+  expect_warning(
+    out <- check_collinearity(m, verbose = TRUE),
+    "Model matrix is rank deficient"
+  )
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
+})
+
+
 test_that("check_collinearity", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
@@ -607,6 +624,90 @@ test_that("check_collinearity, ordinal clm models with offset", {
   expect_equal(out$VIF, c(1.11, 1.11), tolerance = 0.05)
 })
 
+# generalized VIF of each block of columns of `v`, from the correlation matrix
+# of all columns in `blocks`
+.gvif_blocks <- function(v, blocks) {
+  cols <- unlist(blocks)
+  cor_mat <- stats::cov2cor(v[cols, cols])
+  pos <- split(seq_along(cols), rep(seq_along(blocks), lengths(blocks)))
+  vapply(
+    pos,
+    function(idx) {
+      det(cor_mat[idx, idx, drop = FALSE]) *
+        det(cor_mat[-idx, -idx, drop = FALSE]) /
+        det(cor_mat)
+    },
+    numeric(1),
+    USE.NAMES = FALSE
+  )
+}
+
+.clm_data <- function(n = 400) {
+  set.seed(42)
+  d <- data.frame(x1 = rnorm(n), x3 = rnorm(n), x4 = rnorm(n))
+  d$x2 <- d$x1 + rnorm(n, sd = 0.7)
+  latent <- 0.5 * d$x1 + 0.4 * d$x2 - 0.3 * d$x3 + stats::rlogis(n)
+  d$y <- cut(
+    latent,
+    stats::quantile(latent, c(0, 0.25, 0.5, 0.75, 1)),
+    include.lowest = TRUE,
+    labels = c("a", "b", "c", "d"),
+    ordered_result = TRUE
+  )
+  d
+}
+
+test_that("check_collinearity, ordinal clm models with scale effects", {
+  skip_if_not_installed("ordinal")
+  d <- .clm_data()
+  m <- ordinal::clm(y ~ x1 + x2 + x3, scale = ~x1, data = d)
+  expect_message(
+    out <- check_collinearity(m),
+    "scale effects \\(x1\\)"
+  )
+  expect_identical(out$Term, c("x1", "x2", "x3"))
+  # the location slopes follow the thresholds; the scale effect of x1 has a
+  # column with the same name after them
+  slope_cols <- length(m$alpha) + seq_along(m$beta)
+  expect_identical(colnames(stats::vcov(m))[slope_cols], names(m$beta))
+  expect_identical(which(colnames(stats::vcov(m)) == "x1")[1], slope_cols[1])
+  expected <- .gvif_blocks(stats::vcov(m), as.list(slope_cols))
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
+
+  # no message when one location term leaves too few terms for VIFs
+  m2 <- ordinal::clm(y ~ x1, scale = ~x2, data = d)
+  expect_no_message(
+    check_collinearity(m2),
+    message = "location effects only"
+  )
+})
+
+test_that("check_collinearity, ordinal clm models with nominal effects", {
+  skip_if_not_installed("ordinal")
+  d <- .clm_data()
+  m <- ordinal::clm(y ~ x1 + x2 + x4, nominal = ~x3, data = d)
+  expect_message(
+    out <- check_collinearity(m),
+    "nominal effects \\(x3\\)"
+  )
+  expect_identical(out$Term, c("x1", "x2", "x4"))
+  slope_cols <- length(m$alpha) + seq_along(m$beta)
+  expected <- .gvif_blocks(stats::vcov(m), as.list(slope_cols))
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
+
+  # no message without scale or nominal effects
+  m2 <- ordinal::clm(y ~ x1 + x2 + x4, data = d)
+  expect_no_message(check_collinearity(m2))
+
+  # a location term that is also a nominal effect is dropped by clm, which is
+  # not rank deficiency
+  m3 <- ordinal::clm(y ~ x1 + x2 + x3, nominal = ~x3, data = d)
+  expect_no_warning(
+    out3 <- suppressMessages(check_collinearity(m3))
+  )
+  expect_identical(out3$Term, c("x1", "x2"))
+})
+
 test_that("check_collinearity, standard lm models with offset", {
   # Standard linear model with an offset
   m_lm_offset <- lm(mpg ~ wt + cyl + offset(disp), data = mtcars)
@@ -947,6 +1048,101 @@ test_that("check_collinearity, VGAM::vglm cumulative", {
   expect_equal(out2$VIF, unname(expected2), tolerance = 1e-8)
   m_coef2 <- c(1, 1, 1, 2)
   expect_equal(out2$SE_factor, out2$VIF^(1 / (2 * m_coef2)), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, VGAM::vglm sratio, acat, cratio, and poissonff", {
+  skip_if_not_installed("VGAM")
+  d <- .multinom_data()
+  d$o <- cut(
+    0.5 * d$x1 - 0.3 * d$x3 + 0.2 * (d$f == "q") + stats::rlogis(nrow(d)),
+    c(-Inf, -0.5, 0.5, Inf),
+    labels = c("a", "b", "c"),
+    ordered_result = TRUE
+  )
+  d$count <- stats::rpois(nrow(d), exp(0.3 * d$x1 - 0.2 * d$x3))
+  fits <- list(
+    sratio = VGAM::vglm(o ~ x1 + x2 + f, family = VGAM::sratio(), data = d),
+    acat = VGAM::vglm(o ~ x1 + x2 + f, family = VGAM::acat(), data = d),
+    cratio = VGAM::vglm(o ~ x1 + x2 + f, family = VGAM::cratio(), data = d),
+    poissonff = VGAM::vglm(count ~ x1 + x2 + f, family = VGAM::poissonff(), data = d),
+    sratio_parallel = VGAM::vglm(
+      o ~ x1 + x2 + f,
+      family = VGAM::sratio(parallel = TRUE),
+      data = d
+    )
+  )
+  for (i in names(fits)) {
+    m <- fits[[i]]
+    # the "assign" list maps each term to its columns of the
+    # variance-covariance matrix
+    blocks <- attr(stats::model.matrix(m), "assign")
+    blocks <- blocks[names(blocks) != "(Intercept)"]
+    out <- check_collinearity(m)
+    expect_identical(out$Term, c("x1", "x2", "f"), info = i)
+    expected <- .gvif_blocks(stats::vcov(m), blocks)
+    expect_equal(out$VIF, expected, tolerance = 1e-8, info = i)
+    n_cols <- unname(lengths(blocks))
+    expect_equal(out$SE_factor, out$VIF^(1 / (2 * n_cols)), tolerance = 1e-8, info = i)
+  }
+
+  # the poissonff fit is the same model as a poisson glm
+  m_glm <- stats::glm(count ~ x1 + x2 + f, family = stats::poisson(), data = d)
+  expect_equal(
+    check_collinearity(fits$poissonff)$VIF,
+    check_collinearity(m_glm)$VIF,
+    tolerance = 1e-6
+  )
+})
+
+test_that("check_collinearity, multinomial models with backticked names", {
+  skip_if_not_installed("nnet")
+  skip_if_not_installed("brglm2")
+  d <- .multinom_data()
+  d$`my x` <- d$x1
+  d$my_x <- d$x1
+  fits <- list(
+    nnet = nnet::multinom(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE),
+    brmultinom = brglm2::brmultinom(y ~ `my x` + x2 + f + `my x`:f, data = d),
+    bracl = brglm2::bracl(y ~ `my x` + x2 + f + `my x`:f, data = d),
+    bracl_parallel = brglm2::bracl(
+      y ~ `my x` + x2 + f + `my x`:f,
+      data = d,
+      parallel = TRUE
+    )
+  )
+  fits_renamed <- list(
+    nnet = nnet::multinom(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE),
+    brmultinom = brglm2::brmultinom(y ~ my_x + x2 + f + my_x:f, data = d),
+    bracl = brglm2::bracl(y ~ my_x + x2 + f + my_x:f, data = d),
+    bracl_parallel = brglm2::bracl(
+      y ~ my_x + x2 + f + my_x:f,
+      data = d,
+      parallel = TRUE
+    )
+  )
+  for (i in names(fits)) {
+    out <- suppressMessages(check_collinearity(fits[[i]]))
+    out_renamed <- suppressMessages(check_collinearity(fits_renamed[[i]]))
+    expect_identical(out$Term, c("my x", "x2", "f", "my x:f"), info = i)
+    expect_equal(out$VIF, out_renamed$VIF, tolerance = 1e-8, info = i)
+  }
+})
+
+test_that("check_collinearity, mclogit::mblogit with backticked names", {
+  skip_if_not_installed("mclogit")
+  d <- .multinom_data()
+  d$`my x` <- d$x1
+  d$my_x <- d$x1
+  m <- suppressWarnings(
+    mclogit::mblogit(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE)
+  )
+  m_renamed <- suppressWarnings(
+    mclogit::mblogit(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE)
+  )
+  out <- suppressMessages(check_collinearity(m))
+  out_renamed <- suppressMessages(check_collinearity(m_renamed))
+  expect_identical(out$Term, c("my x", "x2", "f", "my x:f"))
+  expect_equal(out$VIF, out_renamed$VIF, tolerance = 1e-8)
 })
 
 test_that("check_collinearity, multinomial models without intercept", {

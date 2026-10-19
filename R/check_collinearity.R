@@ -41,12 +41,12 @@
 #'
 #' For multinomial models from `nnet::multinom()`, `mclogit::mblogit()`,
 #' `brglm2::brmultinom()` and `brglm2::bracl()`, and for `VGAM::vglm()` models
-#' with the multinomial or cumulative family, each term can have its own set
-#' of slopes for each outcome level except one.
+#' with the multinomial, cumulative, sratio, cratio, or acat family, each term
+#' can have its own set of slopes for each outcome level except one.
 #' These models get one VIF per term, computed from the slopes of that term
 #' across all outcome levels, so the VIF does not depend on the reference
-#' level. Parallel models, such as `bracl(parallel = TRUE)`, have one slope
-#' per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
+#' level. Parallel models, such as `bracl(parallel = TRUE)`, and `vglm()`
+#' models with the poissonff family have one slope per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
 #' `<n>` is the number of slopes of the term across all outcome levels.
 #'
 #' The confidence interval of a VIF is an interval for the population R2 of the
@@ -575,10 +575,23 @@ check_collinearity.zerocount <- function(
 
   # ordinal models have one threshold for each outcome level except one, in
   # place of one intercept. polr, svyolr and stan_polr put the thresholds after
-  # the slopes, clm and clm2 put them first, so keep the slopes by name
+  # the slopes, clm2 puts them first, so keep the slopes by name
   if (.is_threshold_model(x)) {
     slopes <- .threshold_slopes(x, component)
-    keep_idx <- colnames(v) %in% slopes$names
+    if (inherits(x, "clm") && is.logical(x$aliased$alpha)) {
+      # clm puts the thresholds first, including those of nominal effects,
+      # then the location slopes without aliased ones, then the scale effects.
+      # A scale effect can have the same name as a location slope, so keep
+      # the slopes by position
+      n_alpha <- sum(!x$aliased$alpha)
+      keep_idx <- seq_len(ncol(v)) %in% (n_alpha + seq_along(slopes$names))
+      # no message when there are too few terms for VIFs
+      if (isTRUE(verbose) && length(unique(stats::na.omit(slopes$assign))) > 1) {
+        .alert_clm_effects(x)
+      }
+    } else {
+      keep_idx <- colnames(v) %in% slopes$names
+    }
     term_assign <- slopes$assign[match(colnames(v)[keep_idx], slopes$names)]
     if (!length(term_assign) || anyNA(term_assign)) {
       if (verbose) {
@@ -606,9 +619,16 @@ check_collinearity.zerocount <- function(
     } else {
       mm <- .safe(insight::get_modelmatrix(x))
     }
-    coef_names <- .multinom_coef_names(x, colnames(v), colnames(mm))
+    # the column names of the variance-covariance matrix from insight have no
+    # backticks, but coefficient and model matrix names can keep them
+    mm_names <- gsub("`", "", colnames(mm), fixed = TRUE)
+    coef_names <- .multinom_coef_names(
+      x,
+      gsub("`", "", colnames(v), fixed = TRUE),
+      mm_names
+    )
     keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
-    term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], colnames(mm))]
+    term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], mm_names)]
     # a coefficient without a term would give VIFs for the wrong terms
     if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_names)) {
       if (verbose) {
@@ -688,6 +708,7 @@ check_collinearity.zerocount <- function(
 
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attr(v, "rank_deficient")) || anyNA(v)) {
+    na_cols <- NULL
     if (!is.null(attr(v, "na_columns_index"))) {
       # If this attribute exists, then NA values were already removed from v
       term_assign <- term_assign[-attr(v, "na_columns_index")]
@@ -1190,11 +1211,40 @@ check_collinearity.zerocount <- function(
   used <- colSums(abs(mm), na.rm = TRUE) > 0
   mm_names <- setdiff(colnames(mm)[used], "(Intercept)")
 
+  # clm drops a location term that is also a nominal effect, which is not
+  # collinearity
+  aliased <- setdiff(mm_names, slope_names)
+  if (inherits(x, "clm")) {
+    nominal <- .safe(labels(stats::terms(x$formulas$nominal)))
+    aliased_terms <- labels(stats::terms(f))[
+      attr(mm, "assign")[match(aliased, colnames(mm))]
+    ]
+    aliased <- aliased[!aliased_terms %in% nominal]
+  }
+
   list(
     names = slope_names,
     assign = attr(mm, "assign")[match(slope_names, colnames(mm))],
-    aliased = setdiff(mm_names, slope_names)
+    aliased = aliased
   )
+}
+
+# clm models can have scale and nominal effects, which are not slopes of the
+# linear predictor, so the VIFs leave them out
+.alert_clm_effects <- function(x) {
+  left_out <- NULL
+  for (i in c("scale", "nominal")) {
+    effects <- .safe(labels(stats::terms(x$formulas[[i]])))
+    if (length(effects)) {
+      left_out <- c(left_out, sprintf("%s effects (%s)", i, toString(effects)))
+    }
+  }
+  if (length(left_out)) {
+    insight::format_alert(
+      "VIFs are computed for the location effects only.",
+      sprintf("Left out: %s.", paste(left_out, collapse = " and "))
+    )
+  }
 }
 
 .warn_rank_deficient <- function(na_cols = NULL) {
@@ -1213,11 +1263,15 @@ check_collinearity.zerocount <- function(
   }
 }
 
-# VGAM models with the multinomial or cumulative family
+# VGAM models with the multinomial, cumulative, sratio, cratio, acat, or
+# poissonff family, whose model matrix has an "assign" list
 .is_vglm_categorical <- function(x) {
   inherits(x, "vglm") &&
     !inherits(x, "vgam") &&
-    isTRUE(.safe(x@family@vfamily[1]) %in% c("multinomial", "cumulative"))
+    isTRUE(
+      .safe(x@family@vfamily[1]) %in%
+        c("multinomial", "cumulative", "sratio", "cratio", "acat", "poissonff")
+    )
 }
 
 # coefficient names of multinomial models are prefixed with the outcome level,
@@ -1255,6 +1309,7 @@ check_collinearity.zerocount <- function(
   if (!is.matrix(coef_mat)) {
     return(coef_names)
   }
+  colnames(coef_mat) <- gsub("`", "", colnames(coef_mat), fixed = TRUE)
   prefixed <- outer(rownames(coef_mat), colnames(coef_mat), paste, sep = sep)
   # level and coefficient names can combine into the same name, for example
   # level "b" with "x1:x3" and level "b:x1" with "x3"

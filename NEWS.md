@@ -22,6 +22,21 @@
   values of the smaller model to the length of the larger one. Now all LOOIC
   weights are `NA`, with a warning.
 
+* `check_collinearity()` now uses only the location slopes of `ordinal::clm()`
+  models with scale effects. Before, the VIF of a location slope also used the
+  scale effect with the same name. For `clm()` models with scale or nominal
+  effects, a message names the effects that the VIFs leave out.
+
+* `check_collinearity()` now works for `VGAM::vglm()` models with the
+  `sratio()`, `cratio()`, `acat()`, and `poissonff()` families. Before, it
+  failed with "'list' object cannot be coerced to type 'integer'" or gave VIFs
+  for the wrong terms.
+
+* `check_collinearity()` now works for multinomial models from *nnet*,
+  *brglm2*, and *mclogit* with backticked variable names, such as
+  `` `my x` ``. Before, it returned `NULL` with "Could not extract model
+  terms".
+
 * `check_collinearity()` now returns correct VIFs for the zero-inflation
   component of *glmmTMB* models whose zero-inflation formula differs from the
   conditional formula. Before, the zero-inflation terms used the term blocks of

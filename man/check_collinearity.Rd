@@ -61,12 +61,12 @@ the square root of the VIF for terms with one coefficient.
 
 For multinomial models from \code{nnet::multinom()}, \code{mclogit::mblogit()},
 \code{brglm2::brmultinom()} and \code{brglm2::bracl()}, and for \code{VGAM::vglm()} models
-with the multinomial or cumulative family, each term can have its own set
-of slopes for each outcome level except one.
+with the multinomial, cumulative, sratio, cratio, or acat family, each term
+can have its own set of slopes for each outcome level except one.
 These models get one VIF per term, computed from the slopes of that term
 across all outcome levels, so the VIF does not depend on the reference
-level. Parallel models, such as \code{bracl(parallel = TRUE)}, have one slope
-per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
+level. Parallel models, such as \code{bracl(parallel = TRUE)}, and \code{vglm()}
+models with the poissonff family have one slope per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
 \verb{<n>} is the number of slopes of the term across all outcome levels.
 
 The confidence interval of a VIF is an interval for the population R2 of the
