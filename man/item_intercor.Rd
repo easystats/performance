@@ -4,22 +4,21 @@
 \alias{item_intercor}
 \title{Mean Inter-Item-Correlation}
 \usage{
-item_intercor(x, method = c("pearson", "spearman", "kendall"))
+item_intercor(x, method = "pearson")
 }
 \arguments{
-\item{x}{A matrix as returned by the \code{cor()}-function,
-or a data frame with items (e.g. from a test or questionnaire).}
+\item{x}{A matrix as returned by the \code{cor()}-function, or a data frame with
+items (e.g. from a test or questionnaire).}
 
-\item{method}{Correlation computation method. May be one of
-\code{"pearson"} (default), \code{"spearman"} or \code{"kendall"}.
-You may use initial letter only.}
+\item{method}{Correlation computation method. May be one of \code{"pearson"}
+(default), \code{"spearman"} or \code{"kendall"}. You may use initial letter only.}
 }
 \value{
 The mean inter-item-correlation value for \code{x}.
 }
 \description{
-Compute various measures of internal consistencies
-for tests or item-scales of questionnaires.
+Compute various measures of internal consistencies for tests or
+item-scales of questionnaires.
 }
 \details{
 This function calculates a mean inter-item-correlation, i.e. a

@@ -2,36 +2,68 @@
 #' @name check_collinearity
 #'
 #' @description
+#' `check_collinearity()` checks regression models for multicollinearity by
+#' calculating the (generalized) variance inflation factor (VIF, Fox & Monette
+#' 1992). `multicollinearity()` is an alias for `check_collinearity()`.
+#' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#' considered as a collinearity check for smooth terms in GAMs. Confidence
+#' intervals for VIF and tolerance invert the noncentral F distribution of the
+#' auxiliary regression of each term on the other terms (Kelley 2007).
 #'
-#'  `check_collinearity()` checks regression models for
-#'  multicollinearity by calculating the variance inflation factor (VIF).
-#'  `multicollinearity()` is an alias for `check_collinearity()`.
-#'  `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
-#'  considered as a collinearity check for smooth terms in GAMs. Confidence
-#'  intervals for VIF and tolerance are based on Marcoulides et al.
-#'  (2019, Appendix B).
-#'
-#' @param x A model object (that should at least respond to `vcov()`,
-#'  and if possible, also to `model.matrix()` - however, it also should
-#'  work without `model.matrix()`).
+#' @param x A model object (that should at least respond to `vcov()`, and if
+#' possible, also to `model.matrix()` - however, it also should work without
+#' `model.matrix()`).
 #' @param component For models with zero-inflation component, multicollinearity
-#'  can be checked for the conditional model (count component,
-#'  `component = "conditional"` or `component = "count"`),
-#'  zero-inflation component (`component = "zero_inflated"` or
-#'  `component = "zi"`) or both components (`component = "all"`).
-#'  Following model-classes are currently supported: `hurdle`,
-#'  `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
+#' can be checked for the conditional model (count component, `component =
+#' "conditional"` or `component = "count"`), zero-inflation component
+#' (`component = "zero_inflated"` or `component = "zi"`) or both components
+#' (`component = "all"`). Following model-classes are currently supported:
+#' `hurdle`, `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
 #' @param ci Confidence Interval (CI) level for VIF and tolerance values.
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with information about name of the model term, the
-#'   variance inflation factor and associated confidence intervals, the factor
-#'   by which the standard error is increased due to possible correlation
-#'   with other terms, and tolerance values (including confidence intervals),
-#'   where `tolerance = 1/vif`.
+#' (generalized) variance inflation factor and associated confidence intervals,
+#' the adjusted VIF, which is the factor by which the standard error is
+#' increased due to possible correlation with other terms (inflation due to
+#' collinearity), and tolerance values (including confidence intervals), where
+#' `tolerance = 1/vif`.
 #'
 #' @seealso [`see::plot.see_check_collinearity()`] for options to customize the plot.
+#'
+#' @details
+#' `check_collinearity()` calculates the generalized variance inflation factor
+#' (Fox & Monette 1992), which also returns valid results for categorical
+#' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<nlevels>)` (Fox &
+#' Monette 1992), which is identical to the square root of the VIF for numeric
+#' predictors, or for categorical variables with two levels.
+#'
+#' For multinomial models from `nnet::multinom()`, `mclogit::mblogit()`,
+#' `brglm2::brmultinom()` and `brglm2::bracl()`, and for `VGAM::vglm()` models
+#' with the multinomial or cumulative family, each term can have its own set
+#' of slopes for each outcome level except one.
+#' These models get one VIF per term, computed from the slopes of that term
+#' across all outcome levels, so the VIF does not depend on the reference
+#' level. Parallel models, such as `bracl(parallel = TRUE)`, have one slope
+#' per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
+#' `<n>` is the number of slopes of the term across all outcome levels.
+#'
+#' The confidence interval of a VIF is an interval for the population R2 of the
+#' auxiliary regression of that term on the other terms. The R2 limits map to
+#' the VIF by `1 / (1 - R2)`. The interval inverts the noncentral F
+#' distribution of the F statistic of that regression, as `MBESS::ci.R2()` does
+#' for fixed predictors (Kelley 2007). The interval assumes a linear model with
+#' fixed predictors. For other models, and for terms with more than one
+#' coefficient, it is an approximation. Its degrees of freedom depend on the
+#' number of coefficients of the other terms, so two terms with the same VIF can
+#' get different intervals. For a VIF very close to 1, both limits can be 1.
+#'
+#' If the correlation matrix of the coefficients is singular because of
+#' collinearity between model terms, for example for exactly collinear
+#' predictors in a model that keeps all coefficients, such as
+#' `nnet::multinom()`, `check_collinearity()` gives a warning and returns
+#' `NULL`.
 #'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
@@ -61,7 +93,7 @@
 #' correlation of that predictor with other predictors. A value between 5 and
 #' 10 indicates a moderate correlation, while VIF values larger than 10 are a
 #' sign for high, not tolerable correlation of model predictors (_James et al.
-#' 2013_). The *Increased SE* column in the output indicates how much larger
+#' 2013_). The *adjusted VIF* column in the output indicates how much larger
 #' the standard error is due to the association with other predictors
 #' conditional on the remaining variables in the model. Note that these
 #' thresholds, although commonly used, are also criticized for being too high.
@@ -73,7 +105,12 @@
 #' This portion of multicollinearity among the component terms of an
 #' interaction is also called "inessential ill-conditioning", which leads to
 #' inflated VIF values that are typically seen for models with interaction
-#' terms _(Francoeur 2013)_.
+#' terms _(Francoeur 2013)_. Centering interaction terms can resolve this
+#' issue _(Kim and Jung 2024)_.
+#'
+#' @section Multicollinearity and Polynomial Terms:
+#' Polynomial transformations are considered a single term and thus VIFs are
+#' not calculated between them.
 #'
 #' @section Concurvity for Smooth Terms in Generalized Additive Models:
 #' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
@@ -90,41 +127,45 @@
 #'
 #' @references
 #'
+#' - Fox, J., & Monette, G. (1992). Generalized Collinearity Diagnostics.
+#'   Journal of the American Statistical Association, 87(417), 178–183.
+#'
 #' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
-#' Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#' Clusters. Open Journal of Statistics, 03(06), 24-44.
+#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-#' An introduction to statistical learning: with applications in R. New York:
-#' Springer.
+#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013). An
+#'   introduction to statistical learning: with applications in R. New York:
+#'   Springer.
 #'
-#' - Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-#' Inflation Factors in Regression Models Using Latent Variable Modeling
-#' Methods. Educational and Psychological Measurement, 79(5), 874–882.
+#' - Kelley, K. (2007). Confidence Intervals for Standardized Effect Sizes:
+#'   Theory, Application, and Implementation. Journal of Statistical Software,
+#'   20(8), 1–24. \doi{10.18637/jss.v020.i08}
+#'
+#' - Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with
+#'   causal graphs. British Journal of Mathematical and Statistical Psychology,
+#'   00, 1–14.
 #'
 #' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
-#' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
-#' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#' [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
+#' - Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
+#'   Meta-Psychology, 5. \doi{10.15626/MP.2021.2548}
 #'
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
-#' common statistical problems: Data exploration. Methods in Ecology and
-#' Evolution (2010) 1:3–14.
+#'   common statistical problems: Data exploration. Methods in Ecology and
+#'   Evolution (2010) 1:3–14.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @note The code to compute the confidence intervals for the VIF and tolerance
-#' values was adapted from the Appendix B from the Marcoulides et al. paper.
-#' Thus, credits go to these authors the original algorithm. There is also
-#' a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
-#' @examplesIf require("see")
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' # plot results
 #' x <- check_collinearity(m)
 #' plot(x)
@@ -139,7 +180,6 @@ check_collinearity <- function(x, ...) {
 multicollinearity <- check_collinearity
 
 
-
 # default ------------------------------
 
 #' @rdname check_collinearity
@@ -148,7 +188,6 @@ check_collinearity.default <- function(x, ci = 0.95, verbose = TRUE, ...) {
   .is_model_valid(x)
   .check_collinearity(x, component = "conditional", ci = ci, verbose = verbose)
 }
-
 
 
 # methods -------------------------------------------
@@ -193,8 +232,8 @@ plot.check_collinearity <- function(x, ...) {
   x <- insight::format_table(x)
   x <- datawizard::data_rename(
     x,
-    pattern = "SE_factor",
-    replacement = "Increased SE",
+    select = "SE_factor",
+    replacement = "adj. VIF",
     verbose = FALSE
   )
 
@@ -216,7 +255,6 @@ plot.check_collinearity <- function(x, ...) {
     print.data.frame(x[high_vif, ], row.names = FALSE)
   }
 }
-
 
 
 # other classes ----------------------------------
@@ -294,74 +332,103 @@ check_collinearity.betaor <- check_collinearity.logitor
 check_collinearity.betamfx <- check_collinearity.logitor
 
 
-
 # zi-models -------------------------------------
 
 #' @rdname check_collinearity
 #' @export
-check_collinearity.glmmTMB <- function(x,
-                                       component = c("all", "conditional", "count", "zi", "zero_inflated"),
-                                       ci = 0.95,
-                                       verbose = TRUE,
-                                       ...) {
-  component <- match.arg(component)
+check_collinearity.glmmTMB <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = TRUE,
+  ...
+) {
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
-check_collinearity.MixMod <- function(x,
-                                      component = c("all", "conditional", "count", "zi", "zero_inflated"),
-                                      ci = 0.95,
-                                      verbose = TRUE,
-                                      ...) {
-  component <- match.arg(component)
+check_collinearity.MixMod <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = TRUE,
+  ...
+) {
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
-check_collinearity.hurdle <- function(x,
-                                      component = c("all", "conditional", "count", "zi", "zero_inflated"),
-                                      ci = 0.95,
-                                      verbose = verbose,
-                                      ...) {
-  component <- match.arg(component)
+check_collinearity.hurdle <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = verbose,
+  ...
+) {
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
-check_collinearity.zeroinfl <- function(x,
-                                        component = c("all", "conditional", "count", "zi", "zero_inflated"),
-                                        ci = 0.95,
-                                        verbose = verbose,
-                                        ...) {
-  component <- match.arg(component)
+check_collinearity.zeroinfl <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = verbose,
+  ...
+) {
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
-check_collinearity.zerocount <- function(x,
-                                         component = c("all", "conditional", "count", "zi", "zero_inflated"),
-                                         ci = 0.95,
-                                         verbose = verbose,
-                                         ...) {
-  component <- match.arg(component)
+check_collinearity.zerocount <- function(
+  x,
+  component = "all",
+  ci = 0.95,
+  verbose = verbose,
+  ...
+) {
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
-
 
 
 # utilities ---------------------------------
 
 .check_collinearity_zi_model <- function(x, component, ci = 0.95, verbose = TRUE) {
-  if (component == "count") component <- "conditional"
-  if (component == "zi") component <- "zero_inflated"
+  if (component == "count") {
+    component <- "conditional"
+  }
+  if (component == "zi") {
+    component <- "zero_inflated"
+  }
 
   mi <- insight::model_info(x, verbose = FALSE)
-  if (!mi$is_zero_inflated) component <- "conditional"
+  if (!mi$is_zero_inflated) {
+    component <- "conditional"
+  }
 
   if (component == "all") {
     cond <- .check_collinearity(x, "conditional", ci = ci, verbose = verbose)
@@ -403,16 +470,23 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
-  v <- insight::get_varcov(x, component = component, verbose = FALSE)
+  v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
+
+  # fix class for fixest, which returns a "fixest_vcov" here
+  if (inherits(v, "fixest_vcov")) {
+    v <- array(v, dim = dim(v), dimnames = dimnames(v))
+  }
 
   # sanity check
   if (is.null(v)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         paste(
-          sprintf("Could not extract the variance-covariance matrix for the %s component of the model.", component),
+          sprintf(
+            "Could not extract the variance-covariance matrix for the %s component of the model.",
+            component
+          ),
           "Please try to run `vcov(model)`, which may help identifying the problem."
         )
       )
@@ -422,42 +496,168 @@ check_collinearity.zerocount <- function(x,
 
   term_assign <- .term_assignments(x, component, verbose = verbose)
 
-  # any assignment found?
-  if (is.null(term_assign) || all(is.na(term_assign))) {
+  # any assignment found? multinomial models build their own assignment below
+  if (!.is_multinom_model(x) && (is.null(term_assign) || all(is.na(term_assign)))) {
     if (verbose) {
       insight::format_alert(
-        sprintf("Could not extract model terms for the %s component of the model.", component)
+        sprintf(
+          "Could not extract model terms for the %s component of the model.",
+          component
+        )
       )
     }
     return(NULL)
   }
 
-
-  # we have rank-deficiency here. remove NA columns from assignment
-  if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
-    term_assign <- term_assign[-attributes(v)$na_columns_index]
-    if (isTRUE(verbose)) {
-      insight::format_alert(
-        "Model matrix is rank deficient. VIFs may not be sensible."
-      )
+  # ordinal models have one threshold for each outcome level except one, in
+  # place of one intercept. polr, svyolr and stan_polr put the thresholds after
+  # the slopes, clm and clm2 put them first, so keep the slopes by name
+  if (.is_threshold_model(x)) {
+    slopes <- .threshold_slopes(x, component)
+    keep_idx <- colnames(v) %in% slopes$names
+    term_assign <- slopes$assign[match(colnames(v)[keep_idx], slopes$names)]
+    if (!length(term_assign) || anyNA(term_assign)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (length(slopes$aliased) && isTRUE(verbose)) {
+      .warn_rank_deficient(slopes$aliased)
+    }
+  } else if (.is_multinom_model(x)) {
+    # multinomial models have one intercept and one set of slopes for each
+    # outcome level except one, so drop all intercepts and
+    # match coefficients to terms by name. All slopes of a term, across the
+    # outcome levels, are one block of the generalized VIF.
+    # brglm2 models store their model matrix, which also works for
+    # transformed terms like `log(x)` or `poly(x, 2)`
+    if (inherits(x, "brmultinom") && is.matrix(x$x)) {
+      mm <- x$x
+    } else {
+      mm <- .safe(insight::get_modelmatrix(x))
+    }
+    coef_names <- .multinom_coef_names(x, colnames(v), colnames(mm))
+    keep_idx <- !is.na(coef_names) & coef_names != "(Intercept)"
+    term_assign <- attr(mm, "assign")[match(coef_names[keep_idx], colnames(mm))]
+    # a coefficient without a term would give VIFs for the wrong terms
+    if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_names)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (all(keep_idx) && isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
+  } else if (.is_vglm_categorical(x)) {
+    # VGAM models can have more than one intercept and more than one slope per
+    # model matrix column. The "assign" attribute of the model matrix is a list
+    # that maps each term to its columns of the variance-covariance matrix.
+    assign_list <- attr(.safe(insight::get_modelmatrix(x)), "assign")
+    coef_terms <- rep(NA_character_, ncol(v))
+    if (is.list(assign_list)) {
+      coef_terms[unlist(assign_list)] <- rep(names(assign_list), lengths(assign_list))
+    }
+    keep_idx <- !is.na(coef_terms) & coef_terms != "(Intercept)"
+    vglm_terms <- labels(stats::terms(insight::find_formula(x, verbose = FALSE)[[
+      component
+    ]]))
+    term_assign <- match(coef_terms[keep_idx], vglm_terms)
+    # a coefficient without a term would give VIFs for the wrong terms
+    if (!length(term_assign) || anyNA(term_assign) || anyNA(coef_terms)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (all(keep_idx) && isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
+  } else if (inherits(x, "brmsfit")) {
+    # brms models can have more than one intercept, for example ordinal
+    # models, so drop all intercepts and match coefficients to terms by name
+    keep_idx <- !.is_intercept(colnames(v))
+    term_assign <- term_assign[match(
+      insight::clean_names(colnames(v)[keep_idx]),
+      names(term_assign)
+    )]
+    # a coefficient without a term would give VIFs for the wrong terms
+    if (!length(term_assign) || anyNA(term_assign)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    if (all(keep_idx) && isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
+  } else {
+    keep_idx <- rep(TRUE, ncol(v))
+    if (insight::has_intercept(x)) {
+      # Standard behavior: drop the first column/row (the singular intercept)
+      keep_idx[1] <- FALSE
+    } else if (isTRUE(verbose)) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
   }
 
-  # check for missing intercept
-  if (insight::has_intercept(x)) {
-    v <- v[-1, -1]
-    term_assign <- term_assign[-1]
-  } else if (isTRUE(verbose)) {
-    insight::format_alert("Model has no intercept. VIFs may not be sensible.")
+  # we have rank-deficiency here. remove NA columns from assignment
+  if (isTRUE(attr(v, "rank_deficient")) || anyNA(v)) {
+    if (!is.null(attr(v, "na_columns_index"))) {
+      # If this attribute exists, then NA values were already removed from v
+      term_assign <- term_assign[-attr(v, "na_columns_index")]
+      na_cols <- names(attr(v, "na_columns_name"))
+    } else if (anyNA(v)) {
+      # If no attribute exists, then we need to identify NA columns manually
+      ## FIXME: this should be fixed in insight::get_varcov() to avoid this step
+      idx_na <- apply(is.na(v), 2, all)
+      na_cols <- colnames(v)[idx_na]
+      keep_idx[idx_na] <- FALSE
+    }
+
+    if (isTRUE(verbose)) {
+      .warn_rank_deficient(na_cols)
+    }
   }
 
-  f <- insight::find_formula(x)
+  # Safely subset the matrix
+  if (sum(keep_idx) < ncol(v)) {
+    if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
+      term_assign <- term_assign[keep_idx]
+    }
+    v <- v[keep_idx, keep_idx, drop = FALSE]
+  }
+
+  f <- insight::find_formula(x, verbose = FALSE)
 
   # hurdle or zeroinfl model can have no zero-inflation formula, in which case
   # we have the same formula as for conditional formula part
-  if (inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
-    component == "zero_inflated" &&
-    is.null(f[["zero_inflated"]])) {
+  if (
+    inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
+      component == "zero_inflated" &&
+      is.null(f[["zero_inflated"]])
+  ) {
     f$zero_inflated <- f$conditional
   }
 
@@ -465,6 +665,12 @@ check_collinearity.zerocount <- function(x,
     model_terms <- labels(x$terms)
   } else {
     model_terms <- labels(stats::terms(f[[component]]))
+  }
+
+  # brms formulas like `y ~ 0 + Intercept + x` list "Intercept" as a term, but
+  # it is the model's intercept, which is not part of the term assignment
+  if (inherits(x, "brmsfit")) {
+    model_terms <- setdiff(model_terms, "Intercept")
   }
 
   if ("instruments" %in% names(f)) {
@@ -476,7 +682,10 @@ check_collinearity.zerocount <- function(x,
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
       insight::format_alert(
-        sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
+        sprintf(
+          "Not enough model terms in the %s part of the model to check for multicollinearity.",
+          component
+        )
       )
     }
     return(NULL)
@@ -487,8 +696,8 @@ check_collinearity.zerocount <- function(x,
 
   result <- vector("numeric")
   na_terms <- vector("numeric")
+  n_coef <- vector("numeric")
 
-  # sanity check - models with offset(?) may contain too many term assignments
   if (length(term_assign) > ncol(v)) {
     term_assign <- term_assign[seq_len(ncol(v))]
   }
@@ -500,9 +709,26 @@ check_collinearity.zerocount <- function(x,
         result,
         det(as.matrix(R[subs, subs])) * det(as.matrix(R[-subs, -subs])) / detR
       )
+      n_coef <- c(n_coef, length(subs))
     } else {
       na_terms <- c(na_terms, term)
     }
+  }
+
+  # a singular correlation matrix, for example from exactly collinear
+  # predictors whose model keeps all coefficients, gives meaningless VIFs,
+  # some of them below 1
+  if (
+    .is_singular_between_terms(R, term_assign) ||
+      any(is.finite(result) & result < 1 - 1e-6)
+  ) {
+    if (isTRUE(verbose)) {
+      insight::format_warning(
+        "The correlation matrix of the model coefficients is singular, so VIFs cannot be computed.",
+        "Check for predictors that are linear combinations of other predictors."
+      )
+    }
+    return(NULL)
   }
 
   # any terms to remove, due to rank deficiency?
@@ -514,40 +740,31 @@ check_collinearity.zerocount <- function(x,
   if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
     insight::format_alert(
       "Model has interaction terms. VIFs might be inflated.",
-      "You may check multicollinearity among predictors of a model without interaction terms."
+      "Try to center the variables used for the interaction, or check multicollinearity among predictors of a model without interaction terms." # nolint
     )
   }
 
-  # CIs, see Appendix B 10.1177/0013164418817803
-  r <- 1 - (1 / result)
-  n <- insight::n_obs(x)
-  p <- insight::n_parameters(x)
-
   # check if CIs are requested
-  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
-    ci_lvl <- (1 + ci) / 2
+  conf_ints <- .vif_ci(x, result, ci, n_coef)
 
-    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-    se_log <- se / (r * (1 - r))
-    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-    ci_lo <- stats::plogis(ci_log_lo)
-    ci_up <- stats::plogis(ci_log_up)
+  # for multinomial and VGAM models, the adjusted VIF uses the number of slopes
+  # of each term across all outcome levels
+  if (.is_multinom_model(x) || .is_vglm_categorical(x)) {
+    se_factor <- result^(1 / (2 * n_coef))
   } else {
-    ci_lo <- ci_up <- NA
+    se_factor <- .adjusted_vif(x, result, model_terms)
   }
 
   out <- insight::text_remove_backticks(
     data.frame(
       Term = model_terms,
       VIF = result,
-      VIF_CI_low = 1 / (1 - ci_lo),
-      VIF_CI_high = 1 / (1 - ci_up),
-      SE_factor = sqrt(result),
+      VIF_CI_low = 1 / (1 - conf_ints$CI_low),
+      VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+      SE_factor = se_factor,
       Tolerance = 1 / result,
-      Tolerance_CI_low = 1 - ci_up,
-      Tolerance_CI_high = 1 - ci_lo,
+      Tolerance_CI_low = 1 - conf_ints$CI_high,
+      Tolerance_CI_high = 1 - conf_ints$CI_low,
       stringsAsFactors = FALSE
     ),
     column = "Term"
@@ -558,17 +775,17 @@ check_collinearity.zerocount <- function(x,
     data.frame(
       Term = model_terms,
       VIF = result,
-      SE_factor = sqrt(result),
+      SE_factor = se_factor,
       stringsAsFactors = FALSE
     ),
     column = "Term"
   )
 
   attr(out, "CI") <- data.frame(
-    VIF_CI_low = 1 / (1 - ci_lo),
-    VIF_CI_high = 1 / (1 - ci_up),
-    Tolerance_CI_low = 1 - ci_up,
-    Tolerance_CI_high = 1 - ci_lo,
+    VIF_CI_low = 1 / (1 - conf_ints$CI_low),
+    VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+    Tolerance_CI_low = 1 - conf_ints$CI_high,
+    Tolerance_CI_high = 1 - conf_ints$CI_low,
     stringsAsFactors = FALSE
   )
 
@@ -577,25 +794,169 @@ check_collinearity.zerocount <- function(x,
 }
 
 
+.vif_ci <- function(x, result, ci, n_coef) {
+  # CIs for the population R2 of each term's auxiliary regression, which is
+  # 1 - 1 / VIF. The F statistic of the auxiliary regression follows a
+  # noncentral F distribution with k and n - k - 1 df, where k is the number
+  # of the other coefficients, and noncentrality lambda = n * R2 / (1 - R2).
+  # The limits for lambda are inverted from that distribution and mapped to
+  # R2 = lambda / (n + lambda), see Kelley (2007, Equations 68, 73, 75, 76).
+  # This is the interval of MBESS::ci.R2() for fixed predictors.
+  ci_lo <- ci_up <- rep(NA_real_, length(result))
+  n <- .safe(insight::n_obs(x))
+
+  if (
+    is.null(ci) ||
+      length(ci) != 1 ||
+      !is.numeric(ci) ||
+      is.na(ci) ||
+      ci <= 0 ||
+      ci >= 1 ||
+      !is.numeric(n) ||
+      length(n) != 1 ||
+      is.na(n)
+  ) {
+    return(list(CI_low = ci_lo, CI_high = ci_up))
+  }
+
+  alpha <- (1 - ci) / 2
+  k <- sum(n_coef) - n_coef
+  df2 <- n - k - 1
+
+  for (i in seq_along(result)) {
+    if (is.na(result[i]) || k[i] < 1 || df2[i] < 1) {
+      next
+    }
+    # VIFs a hair below 1 come from rounding, so R2 is at least 0
+    r2 <- max(0, 1 - 1 / result[i])
+    f_value <- (r2 / k[i]) / ((1 - r2) / df2[i])
+    # integrate() can fail for extreme F values with df2 = 1, so the limit is
+    # then NA rather than an error
+    lambda_lo <- tryCatch(
+      .ncp_limit(f_value, k[i], df2[i], 1 - alpha),
+      error = function(e) NA_real_
+    )
+    lambda_up <- tryCatch(
+      .ncp_limit(f_value, k[i], df2[i], alpha),
+      error = function(e) NA_real_
+    )
+    ci_lo[i] <- .ncp_to_r2(lambda_lo, n)
+    ci_up[i] <- .ncp_to_r2(lambda_up, n)
+  }
+  list(CI_low = ci_lo, CI_high = ci_up)
+}
+
+
+# an infinite noncentrality (infinite VIF) maps to R2 = 1, not NaN
+.ncp_to_r2 <- function(lambda, n) {
+  if (isTRUE(is.infinite(lambda))) {
+    return(1)
+  }
+  lambda / (n + lambda)
+}
+
+
+# noncentrality lambda at which P(F <= f_value | lambda) = prob. The
+# probability decreases in lambda, so the limit is 0 when it is already below
+# prob at lambda = 0, which happens for very small F
+.ncp_limit <- function(f_value, df1, df2, prob) {
+  if (!is.finite(f_value)) {
+    return(Inf)
+  }
+  fun <- function(lambda) .pf_ncp(f_value, df1, df2, lambda) - prob
+  if (fun(0) <= 0) {
+    return(0)
+  }
+  upper <- max(10, 2 * f_value * df1)
+  while (fun(upper) > 0) {
+    upper <- upper * 2
+  }
+  stats::uniroot(fun, c(0, upper), tol = 1e-10 * upper, maxiter = 1000)$root
+}
+
+
+# distribution function of the noncentral F distribution. stats::pf() loses
+# precision for a noncentrality above about 1e6, so above 1e5 the numerator
+# chi-square uses the cube-root normal approximation of Abdel-Aty (1954), and
+# the denominator chi-square is integrated out
+.pf_ncp <- function(q, df1, df2, ncp) {
+  if (ncp <= 1e5) {
+    return(stats::pf(q, df1, df2, ncp = ncp))
+  }
+  h <- 2 * (df1 + 2 * ncp) / (9 * (df1 + ncp)^2)
+  p_num <- function(z) {
+    stats::pnorm(((z / (df1 + ncp))^(1 / 3) - (1 - h)) / sqrt(h))
+  }
+  stats::integrate(
+    function(y) p_num(q * df1 * y / df2) * stats::dchisq(y, df2),
+    lower = stats::qchisq(1e-12, df2),
+    upper = stats::qchisq(1e-12, df2, lower.tail = FALSE),
+    rel.tol = 1e-10
+  )$value
+}
+
+
+.adjusted_vif <- function(x, result, model_terms) {
+  tryCatch(
+    {
+      # get data from model frame, so we know which variables are factors
+      d <- insight::get_data(x, source = "mf", verbose = FALSE)
+      # degrees of freedom per variable - init to 1
+      dof <- rep_len(1, length(model_terms))
+      # find factors, which were converted inside formula. we need to convert
+      # these into real factors now, to determine their number of levels
+      factors <- attributes(d)$factors
+      d[factors] <- lapply(d[factors], as.factor)
+      # add factors from data frame
+      factors <- unique(c(factors, colnames(d)[vapply(d, is.factor, logical(1))]))
+      # find position of factors in model terms. the model frame can also
+      # have factors that are not model terms, such as the response or the
+      # grouping factors of mixed models
+      pos <- match(factors, insight::clean_names(model_terms))
+      factors <- factors[!is.na(pos)]
+      pos <- pos[!is.na(pos)]
+      # copy df for factors
+      dof[pos] <- vapply(d[factors], nlevels, numeric(1)) - 1
+      # finally, calculate adjusted vif
+      result^(1 / (2 * dof))
+    },
+    error = function(e) sqrt(result)
+  )
+}
+
 
 .term_assignments <- function(x, component, verbose = TRUE) {
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-        term_assign <- switch(component,
+        term_assign <- switch(
+          component,
           conditional = attr(insight::get_modelmatrix(x, model = "count"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
-        term_assign <- switch(component,
+        term_assign <- switch(
+          component,
           conditional = attr(insight::get_modelmatrix(x), "assign"),
           zero_inflated = .zi_term_assignment(x, component, verbose = verbose)
         )
       } else if (inherits(x, "MixMod")) {
-        term_assign <- switch(component,
+        term_assign <- switch(
+          component,
           conditional = attr(insight::get_modelmatrix(x, type = "fixed"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, type = "zi_fixed"), "assign")
         )
+      } else if (inherits(x, "brmsfit")) {
+        # the model matrix of brms models drops interaction terms, so build
+        # the term assignment from the model formula instead
+        term_assign <- .find_term_assignment(x, component, verbose = verbose)
+        if (!length(term_assign)) {
+          mm <- insight::get_modelmatrix(x)
+          term_assign <- stats::setNames(
+            attr(mm, "assign"),
+            insight::clean_names(colnames(mm))
+          )
+        }
       } else {
         term_assign <- attr(insight::get_modelmatrix(x), "assign")
       }
@@ -613,40 +974,105 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .find_term_assignment <- function(x, component, verbose = TRUE) {
-  pred <- insight::find_predictors(x)[[component]]
-
-  if (is.null(pred)) {
+  f <- insight::find_formula(x, verbose = FALSE)[[component]]
+  if (is.null(f)) {
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
-
-  parms <- unlist(lapply(seq_along(pred), function(i) {
-    p <- pred[i]
-    if (is.factor(dat[[p]])) {
-      ps <- paste0(p, levels(dat[[p]]))
-      names(ps)[seq_along(ps)] <- i
-      ps
-    } else {
-      names(p) <- i
-      p
+  mm <- NULL
+  mf <- insight::get_data(x, source = "mf", verbose = FALSE)
+  if (!is.null(mf)) {
+    mf_terms <- attr(mf, "terms")
+    if (!is.null(mf_terms)) {
+      mm <- tryCatch(
+        stats::model.matrix(mf_terms, data = mf),
+        error = function(e) NULL
+      )
     }
-  }))
+  }
+
+  if (is.null(mm)) {
+    dat <- insight::get_data(x, verbose = FALSE)
+    if (is.null(dat)) {
+      return(NULL)
+    }
+    # without the response, a response such as `r | trials(n)` in brms is
+    # not evaluated
+    fallback_terms <- list(
+      .safe(stats::terms(x)),
+      .safe(stats::terms(f)),
+      .safe(stats::delete.response(stats::terms(f))),
+      f
+    )
+    for (trm in fallback_terms) {
+      if (is.null(trm)) {
+        next
+      }
+      dat_trm <- tryCatch(
+        stats::model.frame(trm, data = dat, na.action = stats::na.pass),
+        error = function(e) NULL
+      )
+      if (is.null(dat_trm)) {
+        next
+      }
+      mm <- tryCatch(
+        stats::model.matrix(trm, data = dat_trm),
+        error = function(e) NULL
+      )
+      if (!is.null(mm)) {
+        break
+      }
+    }
+  }
+
+  if (is.null(mm)) {
+    return(NULL)
+  }
+
+  term_assign <- attr(mm, "assign")
+  if (is.null(term_assign)) {
+    return(NULL)
+  }
 
   if (insight::is_gam_model(x)) {
-    model_params <- as.vector(unlist(insight::find_parameters(x)[c(component, "smooth_terms")]))
+    model_params <- as.vector(unlist(insight::find_parameters(x)[c(
+      component,
+      "smooth_terms"
+    )]))
   } else {
     model_params <- insight::find_parameters(x)[[component]]
   }
 
-  as.numeric(names(parms)[match(
-    insight::clean_names(model_params),
-    parms
-  )])
-}
+  # brms names population-level effects "b_<name>"
+  if (inherits(x, "brmsfit")) {
+    model_params <- sub("^b_", "", model_params)
+  }
 
+  coef_names <- insight::clean_names(colnames(mm))
+  param_names <- insight::clean_names(model_params)
+
+  if (!.has_intercept(param_names) && .has_intercept(coef_names)) {
+    int_pos <- which(tolower(coef_names) %in% .intercepts())[1]
+    coef_names <- coef_names[-int_pos]
+    term_assign <- term_assign[-int_pos]
+  }
+
+  # brms models match coefficients to terms by name, see `.check_collinearity()`
+  if (inherits(x, "brmsfit")) {
+    names(term_assign) <- coef_names
+  }
+  idx <- match(
+    param_names,
+    coef_names
+  )
+
+  if (anyNA(idx)) {
+    idx <- idx[!is.na(idx)]
+  }
+
+  term_assign[idx]
+}
 
 
 .zi_term_assignment <- function(x, component = "zero_inflated", verbose = TRUE) {
@@ -661,3 +1087,216 @@ check_collinearity.zerocount <- function(x,
     }
   )
 }
+
+# TRUE if the correlation matrix is singular after the columns of each term
+# are made uncorrelated with each other. Correlation between the columns of
+# one term, for example of raw polynomials, does not change the VIFs, so
+# only collinearity between terms counts. The cutoff is the one solve() uses.
+# Without a term for each column, or when the columns of one term cannot be
+# made uncorrelated, this returns FALSE.
+.is_singular_between_terms <- function(R, term_assign) {
+  if (anyNA(R) || length(term_assign) != ncol(R)) {
+    return(FALSE)
+  }
+  w <- diag(ncol(R))
+  for (term in unique(stats::na.omit(term_assign))) {
+    idx <- which(term_assign == term)
+    if (length(idx) > 1) {
+      chol_r <- .safe(chol(R[idx, idx, drop = FALSE]))
+      if (is.null(chol_r)) {
+        return(FALSE)
+      }
+      w[idx, idx] <- backsolve(chol_r, diag(length(idx)))
+    }
+  }
+  rc <- .safe(rcond(crossprod(w, R %*% w)))
+  !is.null(rc) && is.finite(rc) && rc < .Machine$double.eps
+}
+
+# multinomial models from nnet, mclogit and brglm2 (brmultinom, and bracl,
+# which inherits from brmultinom)
+.is_multinom_model <- function(x) {
+  inherits(x, c("multinom", "mblogit", "brmultinom"))
+}
+
+# ordinal models with thresholds in place of one intercept. clmm2 inherits
+# from clm2, and stan_polr fits from polr
+.is_threshold_model <- function(x) {
+  inherits(x, c("clm", "clmm", "clm2", "polr", "svyolr"))
+}
+
+# names of the estimated slopes of an ordinal model, the term each one belongs
+# to, and the model matrix columns the fit dropped as aliased
+.threshold_slopes <- function(x, component) {
+  if (inherits(x, c("clm", "clmm", "clm2"))) {
+    beta <- x$beta
+  } else {
+    beta <- x$coefficients
+  }
+  # clm keeps aliased slopes as NA, polr and clmm drop them. Coefficient names
+  # can keep backticks, which the column names of the variance-covariance
+  # matrix do not have
+  slope_names <- gsub("`", "", names(beta)[!is.na(beta)], fixed = TRUE)
+
+  # build the model matrix from the rows of the fit and with its contrasts,
+  # which can differ from the contrasts in options(). insight cannot build the
+  # model matrix of clm2 and clmm2 models, and returns a list without an
+  # "assign" attribute for clm models
+  f <- insight::find_formula(x, verbose = FALSE)[[component]]
+  mm <- .safe(stats::model.matrix(
+    stats::delete.response(stats::terms(f)),
+    data = insight::get_data(x, verbose = FALSE),
+    contrasts.arg = x$contrasts
+  ))
+  if (is.null(mm)) {
+    mm <- .safe(insight::get_modelmatrix(x))
+  }
+  if (!is.matrix(mm) || is.null(attr(mm, "assign"))) {
+    return(list(names = slope_names, assign = NULL, aliased = character(0)))
+  }
+  colnames(mm) <- gsub("`", "", colnames(mm), fixed = TRUE)
+
+  # a factor level that no row of the fit has gives a column of zeros, which
+  # the fit drops, but it is not an aliased predictor
+  used <- colSums(abs(mm), na.rm = TRUE) > 0
+  mm_names <- setdiff(colnames(mm)[used], "(Intercept)")
+
+  list(
+    names = slope_names,
+    assign = attr(mm, "assign")[match(slope_names, colnames(mm))],
+    aliased = setdiff(mm_names, slope_names)
+  )
+}
+
+.warn_rank_deficient <- function(na_cols = NULL) {
+  if (length(na_cols) > 0) {
+    insight::format_warning(
+      "Model matrix is rank deficient. VIFs may not be sensible.",
+      paste0(
+        "The following coefficients have VIF = Inf / tolerance = 0: ",
+        paste0(na_cols, collapse = ", ")
+      )
+    )
+  } else {
+    insight::format_warning(
+      "Model matrix is rank deficient. VIFs may not be sensible."
+    )
+  }
+}
+
+# VGAM models with the multinomial or cumulative family
+.is_vglm_categorical <- function(x) {
+  inherits(x, "vglm") &&
+    !inherits(x, "vgam") &&
+    isTRUE(.safe(x@family@vfamily[1]) %in% c("multinomial", "cumulative"))
+}
+
+# coefficient names of multinomial models are prefixed with the outcome level,
+# like "b:x1" (nnet::multinom, brglm2) or "b~x1" (mclogit::mblogit). This
+# returns the names without that prefix, and NA for names that could not be
+# matched. Names are returned unchanged when there is no prefix.
+.multinom_coef_names <- function(x, coef_names, mm_names = NULL) {
+  if (inherits(x, "mblogit")) {
+    coef_mat <- x$coefmat
+    sep <- "~"
+  } else {
+    coef_mat <- stats::coef(x)
+    sep <- ":"
+  }
+  # brglm2::bracl returns a vector of coefficients, with the prefix only for
+  # coefficients that differ between outcome levels, so match the names
+  # against all prefixed and plain model matrix columns
+  if (inherits(x, "bracl") && !is.matrix(coef_mat)) {
+    if (!length(mm_names)) {
+      return(rep(NA_character_, length(coef_names)))
+    }
+    prefixed <- outer(x$lev, mm_names, paste, sep = sep)
+    lookup <- stats::setNames(rep(mm_names, each = length(x$lev)), as.vector(prefixed))
+    # in parallel models, the slopes have no prefix
+    if (!isFALSE(x$parallel)) {
+      lookup <- c(lookup, stats::setNames(mm_names, mm_names))
+    }
+    if (anyDuplicated(names(lookup))) {
+      return(rep(NA_character_, length(coef_names)))
+    }
+    return(unname(lookup[coef_names]))
+  }
+  # nnet::multinom models with two outcome levels have no prefix, because
+  # coef() returns a vector
+  if (!is.matrix(coef_mat)) {
+    return(coef_names)
+  }
+  prefixed <- outer(rownames(coef_mat), colnames(coef_mat), paste, sep = sep)
+  # level and coefficient names can combine into the same name, for example
+  # level "b" with "x1:x3" and level "b:x1" with "x3"
+  if (anyDuplicated(as.vector(prefixed))) {
+    return(rep(NA_character_, length(coef_names)))
+  }
+  predictors <- matrix(colnames(coef_mat), nrow(coef_mat), ncol(coef_mat), byrow = TRUE)
+  predictors[match(coef_names, prefixed)]
+}
+
+#' @keywords internal
+.intercepts <- function() {
+  c(
+    "(intercept)_zi",
+    "intercept (zero-inflated)",
+    "intercept (zero-inflation)",
+    "intercept",
+    "zi_intercept",
+    "(intercept)",
+    "b_intercept",
+    "b_zi_intercept"
+  )
+}
+
+#' @keywords internal
+.has_intercept <- function(x) {
+  any(.is_intercept(x))
+}
+
+#' @keywords internal
+.is_intercept <- function(x) {
+  tolower(x) %in% .intercepts() | startsWith(tolower(x), "intercept")
+}
+
+# ========================================================================
+# old code - we keep this as backup for a while, to check whether
+# https://github.com/easystats/performance/pull/952/ works as intended
+# ========================================================================
+
+# .find_term_assignment <- function(x, component, verbose = TRUE) {
+#   pred <- insight::find_predictors(x)[[component]]
+#
+#   if (is.null(pred)) {
+#     return(NULL)
+#   }
+#
+#   dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
+#
+#   parms <- unlist(lapply(seq_along(pred), function(i) {
+#     p <- pred[i]
+#     if (is.factor(dat[[p]])) {
+#       ps <- paste0(p, levels(dat[[p]]))
+#       names(ps)[seq_along(ps)] <- i
+#       ps
+#     } else {
+#       names(p) <- i
+#       p
+#     }
+#   }))
+#
+#   if (insight::is_gam_model(x)) {
+#     model_params <- as.vector(unlist(insight::find_parameters(x)[c(
+#       component,
+#       "smooth_terms"
+#     )]))
+#   } else {
+#     model_params <- insight::find_parameters(x)[[component]]
+#   }
+#
+#   as.numeric(names(parms)[match(
+#     insight::clean_names(model_params),
+#     parms
+#   )])
+# }

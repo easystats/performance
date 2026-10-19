@@ -1,11 +1,13 @@
 #' @rdname display.performance_model
 #' @export
-print_md.performance_model <- function(x,
-                                       digits = 2,
-                                       caption = "Indices of model performance",
-                                       layout = "horizontal",
-                                       ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+print_md.performance_model <- function(
+  x,
+  digits = 2,
+  caption = "Indices of model performance",
+  layout = "horizontal",
+  ...
+) {
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   formatted_table <- format(
     x = x,
     digits = digits,
@@ -15,7 +17,10 @@ print_md.performance_model <- function(x,
 
   # switch to vertical layout
   if (layout == "vertical") {
-    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    formatted_table <- datawizard::rownames_as_column(
+      as.data.frame(t(formatted_table)),
+      "Metric"
+    )
     colnames(formatted_table)[2] <- "Value"
   }
 
@@ -32,58 +37,56 @@ print_md.performance_model <- function(x,
 
 #' @rdname display.performance_model
 #' @export
-print_md.compare_performance <- function(x,
-                                         digits = 2,
-                                         caption = "Comparison of Model Performance Indices",
-                                         layout = "horizontal",
-                                         ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
-  .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "markdown", ...)
-}
-
-
-#' @export
-print_html.compare_performance <- function(x,
-                                           digits = 2,
-                                           caption = "Comparison of Model Performance Indices",
-                                           layout = "horizontal",
-                                           ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
-  .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "html", ...)
-}
-
-
-#' @export
-print_md.check_itemscale <- function(x, digits = 2, ...) {
-  insight::export_table(
-    lapply(seq_along(x), function(i) {
-      out <- x[[i]]
-      attr(out, "caption") <- sprintf("Component %i", i)
-      attr(out, "footer") <- sprintf(
-        "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-        attributes(out)$item_intercorrelation,
-        attributes(out)$cronbachs_alpha
-      )
-      out
-    }),
+print_md.compare_performance <- function(
+  x,
+  digits = 2,
+  caption = "Comparison of Model Performance Indices",
+  layout = "horizontal",
+  ...
+) {
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
+  .print_md_compare_performance(
+    x,
     digits = digits,
+    caption = caption,
+    layout = layout,
     format = "markdown",
-    missing = "<NA>",
-    align = "firstleft",
-    zap_small = TRUE
+    ...
+  )
+}
+
+
+#' @export
+print_html.compare_performance <- function(
+  x,
+  digits = 2,
+  caption = "Comparison of Model Performance Indices",
+  layout = "horizontal",
+  ...
+) {
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
+  .print_md_compare_performance(
+    x,
+    digits = digits,
+    caption = caption,
+    layout = layout,
+    format = .check_format_backend(...),
+    ...
   )
 }
 
 
 # helper ------------------------------------
 
-.print_md_compare_performance <- function(x,
-                                          digits = 2,
-                                          caption = "Comparison of Model Performance Indices",
-                                          layout = "horizontal",
-                                          format = "markdown",
-                                          ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+.print_md_compare_performance <- function(
+  x,
+  digits = 2,
+  caption = "Comparison of Model Performance Indices",
+  layout = "horizontal",
+  format = "markdown",
+  ...
+) {
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   formatted_table <- format(x = x, digits = digits, format = format, ...)
 
   if ("Performance_Score" %in% colnames(x)) {
@@ -99,7 +102,10 @@ print_md.check_itemscale <- function(x, digits = 2, ...) {
 
   # switch to vertical layout
   if (layout == "vertical") {
-    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    formatted_table <- datawizard::rownames_as_column(
+      as.data.frame(t(formatted_table)),
+      "Metric"
+    )
     formatted_table <- datawizard::row_to_colnames(formatted_table)
     colnames(formatted_table)[1] <- "Metric"
   }

@@ -21,7 +21,11 @@ non-constant variance (heteroskedasticity).
 \description{
 Significance testing for linear regression models assumes that
 the model errors (or residuals) have constant variance. If this assumption
-is violated the p-values from the model are no longer reliable.
+is violated the p-values from the model are no longer reliable. For
+generalized linear models, or models from package \emph{glmmTMB} with other
+families than Gaussian, no formal test is carried out, but a \code{plot()}
+method is available, i.e. you can run
+\code{plot(check_heteroscedasticity(model))}.
 }
 \details{
 This test of the hypothesis of (non-)constant error is also called
@@ -36,26 +40,26 @@ m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_heteroscedasticity(m)
 
 # plot results
-if (require("see")) {
-  x <- check_heteroscedasticity(m)
-  plot(x)
-}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+x <- check_heteroscedasticity(m)
+plot(x)
+\dontshow{\}) # examplesIf}
 }
 \references{
 Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity
 and random coefficient variation. Econometrica 47, 1287-1294.
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

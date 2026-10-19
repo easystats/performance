@@ -4,13 +4,13 @@
 \alias{r2_zeroinflated}
 \title{R2 for models with zero-inflation}
 \usage{
-r2_zeroinflated(model, method = c("default", "correlation"))
+r2_zeroinflated(model, method = "default")
 }
 \arguments{
 \item{model}{A model.}
 
-\item{method}{Indicates the method to calculate R2. See 'Details'. May be
-abbreviated.}
+\item{method}{Indicates the method to calculate R2. Can be \code{"default"} or
+\code{"correlation"}. See 'Details'. May be abbreviated.}
 }
 \value{
 For the default-method, a list with the R2 and adjusted R2 values.
@@ -22,8 +22,8 @@ Calculates R2 for models with zero-inflation component, including mixed
 effects models.
 }
 \details{
-The default-method calculates an R2 value based on the residual variance
-divided by the total variance. For \code{method = "correlation"}, R2 is a
+The default-method calculates an R2 value based on the residual
+variance divided by the total variance. For \code{method = "correlation"}, R2 is a
 correlation-based measure, which is rather crude. It simply computes the
 squared correlation between the model's actual and predicted response.
 }

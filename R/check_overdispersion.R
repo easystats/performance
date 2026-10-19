@@ -6,6 +6,13 @@
 #'
 #' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
 #'   (package **MASS**), or an object returned by `simulate_residuals()`.
+#' @param residual_type Character, indicating the type of residuals to be used
+#' for overdispersion tests. For mixed models, the default is `"simulated"`,
+#' which uses simulated residuals. These are based on [`simulate_residuals()`],
+#' using the **DHARMa** package. For `glm`, the default is `"simulated"` for
+#' bernoulli, binomial and negative-binomial models. Set `residual_type = "normal"`
+#' to always use regular (i.e. non-simulated) residuals to assess overdispersion.
+#' @param verbose Toggle warnings and messages.
 #'
 #' @inheritParams check_zeroinflation
 #'
@@ -33,6 +40,19 @@
 #' @section Overdispersion in Negative Binomial or Zero-Inflated Models:
 #' For negative binomial (mixed) models or models with zero-inflation component,
 #' the overdispersion test is based simulated residuals (see [`simulate_residuals()`]).
+#'
+#' @section Overdispersion in Quasi-Poisson and Quasi-Binomial Models:
+#' Models with a `quasipoisson` or `quasibinomial` family already estimate a
+#' dispersion parameter, and their standard errors account for it. For these
+#' models, `check_overdispersion()` gives a warning (unless `verbose = FALSE`).
+#' The returned statistic is the unscaled Pearson chi-squared test, which
+#' compares the residuals with the variance of a Poisson or binomial model. For
+#' a model fitted with `stats::glm()`, the dispersion ratio then equals
+#' `summary(model)$dispersion`, also when coefficients are aliased. For a
+#' `feglm()` model (package **fixest**), it equals the estimated dispersion of
+#' the model. Both hold up to the fitting tolerance.
+#' Simulated residuals are not used, because they are not available for quasi
+#' families.
 #'
 #' @section Overdispersion in Mixed Models:
 #' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
@@ -72,17 +92,19 @@ check_overdispersion <- function(x, ...) {
 }
 
 
-
 # default -----------------------
 
 #' @export
 check_overdispersion.default <- function(x, ...) {
   .is_model_valid(x)
   insight::format_error(
-    paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")
+    paste0(
+      "`check_overdisperion()` not yet implemented for models of class `",
+      class(x)[1],
+      "`."
+    )
   )
 }
-
 
 
 # Methods -----------------------------
@@ -100,8 +122,12 @@ plot.check_overdisp <- function(x, ...) {
       model <- .safe(get(obj_name, envir = globalenv()))
     }
   }
+
+  # detect residual type
+  residual_type <- ifelse(isTRUE(attr(x, "simulated")), "simulated", NULL)
+
   if (!is.null(model)) {
-    x <- .diag_overdispersion(model)
+    x <- .model_diagnostic_overdispersion(model, residual_type = residual_type, ...)
     class(x) <- c("see_check_overdisp", "data.frame")
     attr(x, "colors") <- list(...)$colors
     attr(x, "line_size") <- list(...)$size_line
@@ -120,7 +146,9 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   }
 
   x$p_value <- pval <- round(x$p_value, digits = digits)
-  if (x$p_value < 0.001) x$p_value <- "< 0.001"
+  if (x$p_value < 0.001) {
+    x$p_value <- "< 0.001"
+  }
 
   maxlen <- max(
     nchar(x$dispersion_ratio),
@@ -128,44 +156,75 @@ print.check_overdisp <- function(x, digits = 3, ...) {
     nchar(x$p_value)
   )
 
-  insight::print_color("# Overdispersion test\n\n", "blue")
-  if (is.null(x$chisq_statistic)) {
-    cat(sprintf(" dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-    cat(sprintf("          p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  # using simulated residuals?
+  if (isTRUE(attr(x, "simulated"))) {
+    sim_string <- " (using simulated residuals)"
   } else {
-    cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-    cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
-    cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+    sim_string <- ""
+  }
+
+  insight::print_color(paste0("# Overdispersion test", sim_string, "\n\n"), "blue")
+  if (is.null(x$chisq_statistic)) {
+    cat(sprintf(
+      " dispersion ratio = %s\n",
+      format(x$dispersion_ratio, justify = "right", width = maxlen)
+    ))
+    cat(sprintf(
+      "          p-value = %s\n\n",
+      format(x$p_value, justify = "right", width = maxlen)
+    ))
+  } else {
+    cat(sprintf(
+      "       dispersion ratio = %s\n",
+      format(x$dispersion_ratio, justify = "right", width = maxlen)
+    ))
+    cat(sprintf(
+      "  Pearson's Chi-Squared = %s\n",
+      format(x$chisq_statistic, justify = "right", width = maxlen)
+    ))
+    cat(sprintf(
+      "                p-value = %s\n\n",
+      format(x$p_value, justify = "right", width = maxlen)
+    ))
+  }
+
+  # quasi families already account for the dispersion
+  quasi_family <- attr(x, "quasi_family", exact = TRUE)
+  if (is.null(quasi_family)) {
+    quasi_note <- ""
+  } else {
+    quasi_note <- paste0(
+      " The `",
+      quasi_family,
+      "` model already estimates the dispersion, so its standard errors account for it."
+    )
   }
 
   if (pval > 0.05) {
     message("No overdispersion detected.")
   } else if (x$dispersion_ratio > 1) {
-    message("Overdispersion detected.")
+    message("Overdispersion detected.", quasi_note)
   } else {
-    message("Underdispersion detected.")
+    message("Underdispersion detected.", quasi_note)
   }
 
   invisible(orig_x)
 }
 
 
-
 # Overdispersion for classical models -----------------------------
 
+#' @rdname check_overdispersion
 #' @export
-check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
+check_overdispersion.glm <- function(x, residual_type = NULL, verbose = TRUE, ...) {
   # model info
   info <- insight::model_info(x)
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
-  # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
+  # check whether simulated residuals should be used or not
+  use_simulated <- .use_simulated_residuals(x, residual_type, info)
 
-  # model classes not supported in DHARMa
-  not_supported <- c("fixest", "glmx")
-
-  if (use_simulated && !inherits(x, not_supported)) {
+  if (use_simulated) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
@@ -181,25 +240,89 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
     insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
   }
 
-  yhat <- stats::fitted(x)
+  # quasi families already estimate a dispersion parameter
+  quasi_family <- NULL
+  if (isTRUE(info$family %in% c("quasipoisson", "quasibinomial"))) {
+    quasi_family <- info$family
+    if (verbose) {
+      reference_family <- ifelse(info$family == "quasipoisson", "Poisson", "binomial")
+      insight::format_warning(
+        paste0(
+          "The model uses the `",
+          quasi_family,
+          "` family, which already estimates a dispersion parameter. Its standard errors account for the dispersion."
+        ),
+        paste0(
+          "The test compares the residuals with the variance of a ",
+          reference_family,
+          " model. Simulated residuals are not available for quasi families, so the test uses Pearson residuals."
+        )
+      )
+    }
+  }
 
-  n <- stats::nobs(x)
-  k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+  # `df.residual()` leaves out aliased coefficients and subtracts the fixed
+  # effects of fixest models. glmx has no method, and for svyglm it returns a
+  # design-based value (the design df plus 1 minus the coefficients), not one
+  # based on the observations, so count the parameters for these instead
+  rdf <- NULL
+  if (!inherits(x, "svyglm")) {
+    rdf <- .safe(stats::df.residual(x))
+  }
+  if (is.null(rdf)) {
+    n <- stats::nobs(x)
+    k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+    rdf <- n - k
+  }
 
-  zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
-  chisq <- sum(zi^2)
-  ratio <- chisq / (n - k)
-  p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
+  # use the model's own Pearson residuals - computing them by hand from
+  # `get_response()` is wrong for a two-column `cbind()` response and ignores
+  # prior weights, so stop if the model has none
+  residual_error <- NULL
+  if (inherits(x, "glmx")) {
+    zi <- .pearson_residuals_glmx(x)
+  } else {
+    zi <- tryCatch(
+      insight::get_residuals(x, type = "pearson", verbose = FALSE),
+      error = function(e) {
+        # with `options(easystats_errors = TRUE)`, raise the error again, so
+        # that its message and call come through as with `.safe()`
+        if (isTRUE(getOption("easystats_errors", FALSE))) {
+          stop(e)
+        }
+        e
+      }
+    )
+    if (inherits(zi, "error")) {
+      residual_error <- conditionMessage(zi)
+      zi <- NULL
+    }
+  }
+  if (is.null(zi)) {
+    insight::format_error(
+      paste0(
+        "Pearson residuals are not available for models of class `",
+        class(x)[1],
+        "`, so `check_overdispersion()` cannot compute the overdispersion test."
+      ),
+      if (!is.null(residual_error)) paste0("The error was: ", residual_error)
+    )
+  }
+  # residuals of models with `na.action = na.exclude` are padded with NA
+  chisq <- sum(zi^2, na.rm = TRUE)
+  ratio <- chisq / rdf
+  p.value <- stats::pchisq(chisq, df = rdf, lower.tail = FALSE)
 
   out <- list(
     chisq_statistic = chisq,
     dispersion_ratio = ratio,
-    residual_df = n - k,
+    residual_df = rdf,
     p_value = p.value
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
   attr(out, "object_name") <- obj_name
+  attr(out, "quasi_family") <- quasi_family
 
   out
 }
@@ -209,11 +332,58 @@ check_overdispersion.fixest <- check_overdispersion.glm
 
 #' @export
 check_overdispersion.fixest_multi <- function(x, verbose = TRUE, ...) {
-  lapply(x, check_overdispersion.fixest)
+  lapply(x, check_overdispersion.fixest, verbose = verbose, ...)
 }
 
 #' @export
 check_overdispersion.glmx <- check_overdispersion.glm
+
+
+# glmx has no `residuals()` method, so `residuals(type = "pearson")` returns
+# the stored `$residuals`, which are the deviance contributions of each
+# observation. Compute the Pearson residuals from the family at the estimated
+# extra parameter instead. `x$weights` holds the prior weights times the number
+# of trials for a binomial `cbind()` response. glmx stores `NULL` when these
+# weights are a numeric (not integer) vector of ones, so use 1 then.
+.pearson_residuals_glmx <- function(x) {
+  fam <- x$family$glm
+  is_negbin <- startsWith(fam$family, "Negative Binomial")
+  if (!is_negbin && fam$family != "binomial") {
+    insight::format_error(paste0(
+      "Overdispersion checks for `glmx` models are only available for ",
+      "negative binomial and binomial families, not for the `",
+      fam$family,
+      "` family."
+    ))
+  }
+  y <- x$y
+  if (is.null(y)) {
+    insight::format_error(
+      "The `glmx` model has no stored response. Refit it with `y = TRUE`."
+    )
+  }
+  w <- x$weights
+  if (is.null(w)) {
+    w <- 1
+  }
+  if (!is_negbin) {
+    # a factor, 0/1 or logical response, or one trial per row of a `cbind()`
+    # response
+    is_bernoulli <- if (is.null(dim(y))) {
+      is.factor(y) || all(y %in% c(0, 1))
+    } else {
+      all(rowSums(y) == 1)
+    }
+    if (is_bernoulli) {
+      insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+    }
+  }
+  if (!is.null(dim(y))) {
+    y <- y[, 1] / rowSums(y)
+  }
+  mu <- stats::fitted(x)
+  (y - mu) * sqrt(w) / sqrt(fam$variance(mu))
+}
 
 
 # mfx models ------------------------------
@@ -239,15 +409,18 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 # Overdispersion for mixed models ---------------------------
 
 #' @export
-check_overdispersion.merMod <- function(x, ...) {
+check_overdispersion.merMod <- function(x, residual_type = NULL, ...) {
   # for certain distributions, simulated residuals are more accurate
   info <- insight::model_info(x)
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
-  # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin # nolint
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
 
-  if (use_simulated) {
+  # always use simulated residuals by default
+  if (is.null(residual_type) || identical(residual_type, "simulated")) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
@@ -287,8 +460,11 @@ check_overdispersion.glmmTMB <- check_overdispersion.merMod
 
 #' @rdname check_overdispersion
 #' @export
-check_overdispersion.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
-  alternative <- match.arg(alternative)
+check_overdispersion.performance_simres <- function(x, alternative = "two.sided", ...) {
+  alternative <- insight::validate_argument(
+    alternative,
+    c("two.sided", "less", "greater")
+  )
 
   # check for special arguments - we may pass "object_name" from other methods
   dots <- list(...)
@@ -312,6 +488,7 @@ check_overdispersion.performance_simres <- function(x, alternative = c("two.side
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
   attr(out, "object_name") <- obj_name
+  attr(out, "simulated") <- TRUE
 
   out
 }

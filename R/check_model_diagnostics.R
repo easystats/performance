@@ -1,6 +1,6 @@
 # prepare data for VIF plot ----------------------------------
 
-.diag_vif <- function(model, verbose = TRUE) {
+.model_diagnostic_vif <- function(model, verbose = TRUE) {
   out <- check_collinearity(model, verbose = verbose)
   dat <- insight::compact_list(out)
   if (is.null(dat)) {
@@ -10,16 +10,9 @@
   dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate"
   dat$group[dat$VIF >= 10] <- "high"
 
-  dat <- datawizard::data_rename(
-    dat,
-    c("Term", "VIF", "SE_factor", "Component"),
-    c("x", "y", "se", "facet"),
-    verbose = FALSE
-  )
-
   dat <- datawizard::data_select(
     dat,
-    c("x", "y", "facet", "group"),
+    select = c(x = "Term", y = "VIF", facet = "Component", group = "group"),
     verbose = FALSE
   )
 
@@ -32,11 +25,12 @@
 }
 
 
-
 # prepare data for QQ plot ----------------------------------
 
-.diag_qq <- function(model, model_info = NULL, verbose = TRUE) {
-  if (inherits(model, c("lme", "lmerMod", "merMod", "gam"))) {
+.model_diagnostic_qq <- function(model, model_info = NULL, verbose = TRUE) {
+  if (
+    inherits(model, c("lme", "lmerMod", "merMod", "afex_aov", "BFBayesFactor", "gam"))
+  ) {
     res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
@@ -74,7 +68,10 @@
     return(NULL)
   }
 
-  if (inherits(model, c("glm", "glmerMod")) || (inherits(model, "glmmTMB") && isFALSE(model_info$is_linear))) {
+  if (
+    inherits(model, c("glm", "glmerMod")) ||
+      (inherits(model, "glmmTMB") && isFALSE(model_info$is_linear))
+  ) {
     fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
   } else {
     fitted_ <- stats::fitted(model)
@@ -95,16 +92,23 @@
 }
 
 
-
 # prepare data for random effects QQ plot ----------------------------------
 
-.diag_reqq <- function(model, level = 0.95, model_info = NULL, verbose = TRUE) {
+.model_diagnostic_ranef_qq <- function(
+  model,
+  level = 0.95,
+  model_info = NULL,
+  verbose = TRUE
+) {
   # check if we have mixed model
   if (is.null(model_info) || !model_info$is_mixed) {
     return(NULL)
   }
 
   insight::check_if_installed("lme4")
+
+  ## TODO: check if we can simplify code by using following:
+  ## as.data.frame(lme4::ranef(model, condVar = TRUE), stringsAsFactors = FALSE)
 
   tryCatch(
     if (inherits(model, "glmmTMB")) {
@@ -119,12 +123,20 @@
     }
   )
 
-
   se <- tryCatch(
     suppressWarnings(lapply(re, function(.x) {
       pv <- attr(.x, var_attr, exact = TRUE)
-      cols <- seq_len(dim(pv)[1])
-      unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
+      unlist(lapply(
+        if (is.list(pv)) {
+          pv
+        } else {
+          list(pv)
+        },
+        function(.pv) {
+          cols <- seq_len(dim(.pv)[1])
+          unlist(lapply(cols, function(.y) sqrt(.pv[.y, .y, ])))
+        }
+      ))
     })),
     error = function(e) {
       NULL
@@ -133,35 +145,40 @@
 
   if (is.null(se)) {
     if (verbose) {
-      insight::format_alert("Could not compute standard errors from random effects for diagnostic plot.")
+      insight::format_alert(
+        "Could not compute standard errors from random effects for diagnostic plot."
+      )
     }
     return(NULL)
   }
 
+  Map(
+    function(.re, .se) {
+      ord <- unlist(lapply(.re, order)) +
+        rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
 
-  Map(function(.re, .se) {
-    ord <- unlist(lapply(.re, order)) + rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
+      df.y <- unlist(.re)[ord]
+      df.ci <- stats::qnorm((1 + level) / 2) * .se[ord]
 
-    df.y <- unlist(.re)[ord]
-    df.ci <- stats::qnorm((1 + level) / 2) * .se[ord]
-
-    data.frame(
-      x = rep(stats::qnorm(stats::ppoints(nrow(.re))), ncol(.re)),
-      y = df.y,
-      conf.low = df.y - df.ci,
-      conf.high = df.y + df.ci,
-      facet = gl(ncol(.re), nrow(.re), labels = names(.re)),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-  }, re, se)
+      data.frame(
+        x = rep(stats::qnorm(stats::ppoints(nrow(.re))), ncol(.re)),
+        y = df.y,
+        conf.low = df.y - df.ci,
+        conf.high = df.y + df.ci,
+        facet = gl(ncol(.re), nrow(.re), labels = names(.re)),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    },
+    re,
+    se
+  )
 }
-
 
 
 # prepare data for normality of residuals plot ----------------------------------
 
-.diag_norm <- function(model, verbose = TRUE) {
+.model_diagnostic_normality <- function(model, verbose = TRUE) {
   r <- try(as.numeric(stats::residuals(model)), silent = TRUE)
 
   if (inherits(r, "try-error")) {
@@ -173,43 +190,80 @@
   }
 
   dat <- as.data.frame(bayestestR::estimate_density(r))
-  dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)), mean(r), stats::sd(r))
+  dat$curve <- stats::dnorm(
+    seq(min(dat$x), max(dat$x), length.out = nrow(dat)),
+    mean(r),
+    stats::sd(r)
+  )
   dat
 }
 
 
-
 # prepare data for influential obs plot ----------------------------------
 
-.diag_influential_obs <- function(model, threshold = NULL) {
-  s <- summary(model)
-
-  if (inherits(model, "lm", which = TRUE) == 1) {
-    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
-  } else if (is.null(threshold)) {
-    cook_levels <- c(0.5, 1)
-  } else {
+.model_diagnostic_outlier <- function(model, threshold = NULL) {
+  # use the threshold from `check_outliers()`, so that the contour lines
+  # match the flagged outliers
+  if (!is.null(threshold)) {
     cook_levels <- threshold
+  } else if (inherits(model, "lm", which = TRUE) == 1) {
+    s <- summary(model)
+    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
+  } else {
+    cook_levels <- c(0.5, 1)
   }
 
-  n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
+  if (inherits(model, "glmmTMB")) {
+    influence_glmmTMB <- .influence_glmmTMB(model)
+    if (is.null(influence_glmmTMB)) {
+      return(NULL)
+    }
+    # one row per fitted observation, also with `na.action = na.exclude`. A
+    # data frame keeps the column name `Predicted` of the other models.
+    predicted <- data.frame(Predicted = influence_glmmTMB$fitted)
+    model_resid <- influence_glmmTMB$residuals
+    n_params <- influence_glmmTMB$n_params
+    hat_values <- influence_glmmTMB$hat
+    cooks_distance <- influence_glmmTMB$cooks_distance
+    std_resid <- influence_glmmTMB$std_resid
+  } else {
+    model_resid <- as.numeric(insight::get_residuals(model))
+    predicted <- insight::get_predicted(model, ci = NULL)
+    n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
 
-  infl <- stats::influence(model, do.coef = FALSE)
-  model_resid <- as.numeric(insight::get_residuals(model))
+    infl <- stats::influence(model, do.coef = FALSE)
+    hat_values <- infl$hat
+    cooks_distance <- stats::cooks.distance(model, infl)
 
-  std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) model_resid)
+    std_resid <- tryCatch(
+      stats::rstandard(model, infl),
+      error = function(e) {
+        # no rstandard() method (e.g., lmerMod): standardize Pearson residuals,
+        # so that the Cook's distance contours match `cooks.distance()`
+        .safe(
+          as.numeric(
+            stats::residuals(model, type = "pearson") /
+              (stats::sigma(model) * sqrt(1 - infl$hat))
+          ),
+          model_resid
+        )
+      }
+    )
+  }
 
   plot_data <- data.frame(
-    Hat = infl$hat,
-    Cooks_Distance = stats::cooks.distance(model, infl),
-    Fitted = insight::get_predicted(model, ci = NULL),
+    Hat = hat_values,
+    Cooks_Distance = cooks_distance,
+    Fitted = predicted,
     Residuals = model_resid,
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
   )
   plot_data$Index <- seq_len(nrow(plot_data))
   plot_data$Influential <- "OK"
-  plot_data$Influential[abs(plot_data$Cooks_Distance) >= max(cook_levels)] <- "Influential"
+  plot_data$Influential[
+    abs(plot_data$Cooks_Distance) >= max(cook_levels)
+  ] <- "Influential"
 
   attr(plot_data, "cook_levels") <- cook_levels
   attr(plot_data, "n_params") <- n_params
@@ -217,10 +271,199 @@
 }
 
 
+# glmmTMB has no influence() or hatvalues() method. The hat values are the
+# diagonal of W^(1/2) A H^-1 A' W^(1/2), with A = [X, Z], W the GLM weight
+# a * (dmu/deta)^2 / (phi * V(mu)) with a the prior weights, and
+# H = A' W A + G, where G is zero for the fixed effects and the inverse
+# random-effects covariance for the random effects (after Lee & Nelder 1996,
+# p. 631, with phi moved into W and their diagonal U generalized to G).
+# With L L' equal to that covariance and B = [W^(1/2) Z L, W^(1/2) X], they
+# are the diagonal of B (B'B + D)^-1 B', with D the identity for the random
+# effects and zero for the fixed effects, which also works when a variance
+# is 0. A sparse Cholesky factor of B'B + D keeps this fast for many
+# random-effect levels. Cook's distance is the one-step formula that
+# `cooks.distance()` uses for glm, so that `check_model()` needs no refits.
+# Returns NULL for models that `.glmmTMB_influence_unsupported()` names.
+.influence_glmmTMB <- function(model) {
+  if (!is.null(.glmmTMB_influence_unsupported(model))) {
+    return(NULL)
+  }
+  insight::check_if_installed("Matrix")
+  n_obs <- nrow(glmmTMB::getME(model, "X"))
+
+  # with `na.action = na.exclude`, predictions and residuals have NA rows for
+  # the observations that the model did not use
+  na_action <- attr(stats::model.frame(model), "na.action")
+  fitted_rows <- function(x) {
+    x <- as.vector(x)
+    if (length(x) == n_obs + length(na_action) && length(na_action) > 0) {
+      x <- x[-na_action]
+    }
+    x
+  }
+
+  X <- .glmmTMB_estimated_X(model)
+
+  fam <- stats::family(model)
+  eta <- fitted_rows(stats::predict(model, type = "link"))
+  mu <- fam$linkinv(eta)
+  # for binomial models, the prior weights include the number of trials
+  prior_weights <- fitted_rows(stats::weights(model))
+  if (!length(prior_weights)) {
+    prior_weights <- rep(1, n_obs)
+  }
+  variance <- .glmmTMB_variance(model, mu)
+  w <- prior_weights * fam$mu.eta(eta)^2 / variance
+
+  B <- Matrix::Matrix(X, sparse = TRUE)
+  n_re <- 0
+  re_struc <- model$modelInfo$reStruc$condReStruc
+  if (length(re_struc)) {
+    vc <- glmmTMB::VarCorr(model)$cond
+    roots <- lapply(seq_along(re_struc), function(i) {
+      s <- matrix(unclass(vc[[i]]), nrow = nrow(vc[[i]]))
+      e <- eigen(s, symmetric = TRUE)
+      root <- e$vectors %*% diag(sqrt(pmax(e$values, 0)), nrow = nrow(s))
+      Matrix::kronecker(
+        Matrix::Diagonal(re_struc[[i]]$blockReps),
+        Matrix::Matrix(root, sparse = TRUE)
+      )
+    })
+    ZL <- glmmTMB::getME(model, "Z") %*% Matrix::bdiag(roots)
+    n_re <- ncol(ZL)
+    B <- cbind(ZL, B)
+  }
+  B <- Matrix::Diagonal(x = sqrt(w)) %*% B
+  penalized <- Matrix::crossprod(B) +
+    Matrix::Diagonal(x = rep(c(1, 0), c(n_re, ncol(X))))
+  # a fill-reducing permutation limits the fill-in of the factor, for example
+  # when the random-effect terms are not ordered by their number of levels.
+  # Heavily crossed random effects can still give a dense factor.
+  chol_factor <- Matrix::Cholesky(
+    Matrix::forceSymmetric(penalized),
+    perm = TRUE,
+    LDL = FALSE
+  )
+  solved <- Matrix::solve(
+    chol_factor,
+    Matrix::solve(chol_factor, Matrix::t(B), system = "P"),
+    system = "L"
+  )
+  hat_values <- as.vector(Matrix::colSums(solved^2))
+
+  n_params <- ncol(X)
+  model_resid <- fitted_rows(stats::residuals(model, type = "response"))
+  pearson <- model_resid * sqrt(prior_weights / variance)
+  list(
+    hat = hat_values,
+    cooks_distance = pearson^2 * hat_values / (n_params * (1 - hat_values)^2),
+    std_resid = pearson / sqrt(1 - hat_values),
+    residuals = model_resid,
+    fitted = mu,
+    n_params = n_params
+  )
+}
+
+
+# The reason why `.influence_glmmTMB()` gives no hat values for a glmmTMB
+# model, or NULL if it gives them. The supported families are those whose
+# hat values can be checked against lme4, glm or glm.nb.
+.glmmTMB_influence_unsupported <- function(model) {
+  family_name <- stats::family(model)$family
+  re_terms <- model$modelInfo$reStruc
+  if (ncol(glmmTMB::getME(model, "Xzi")) > 0 || length(re_terms$ziReStruc)) {
+    return("zero-inflation")
+  }
+  dispersion <- .glmmTMB_dispersion_unsupported(model, family_name)
+  if (!is.null(dispersion)) {
+    return(dispersion)
+  }
+  if (!family_name %in% c("gaussian", "poisson", "binomial", "Gamma", "nbinom2")) {
+    return(paste0("the `", family_name, "` family"))
+  }
+  # Cook's distance divides by the number of estimated fixed effects
+  if (ncol(.glmmTMB_estimated_X(model)) == 0) {
+    return("no estimated fixed effects")
+  }
+  re_struc <- re_terms$condReStruc
+  if (length(re_struc)) {
+    vc <- glmmTMB::VarCorr(model)$cond
+    block_sizes <- vapply(re_struc, function(i) i$blockSize, numeric(1))
+    if (
+      length(vc) != length(re_struc) || any(vapply(vc, nrow, numeric(1)) != block_sizes)
+    ) {
+      return("this random-effects structure")
+    }
+  }
+  NULL
+}
+
+
+# Families with a dispersion parameter need an estimated dispersion from
+# `dispformula = ~1`. For poisson and binomial models, the dispersion model
+# has no columns.
+.glmmTMB_dispersion_unsupported <- function(model, family_name) {
+  x_disp <- glmmTMB::getME(model, "Xdisp")
+  n_disp <- ncol(x_disp)
+  has_dispersion <- family_name %in% c("gaussian", "Gamma", "nbinom2")
+  if (
+    n_disp > 1 ||
+      (has_dispersion && n_disp != 1) ||
+      (n_disp == 1 && !all(x_disp[, 1] == 1)) ||
+      length(model$modelInfo$reStruc$dispReStruc)
+  ) {
+    return("a dispersion formula")
+  }
+  # `dispformula = ~0` and `map` fix the dispersion through `betadisp`
+  if (has_dispersion && anyNA(model$obj$env$map[["betadisp"]])) {
+    return("a fixed dispersion")
+  }
+  # `sigma()` ignores an offset in the dispersion formula
+  if (any(model$obj$env$data$dispoffset != 0)) {
+    return("a dispersion formula")
+  }
+  NULL
+}
+
+
+# The conditional fixed-effect model matrix with one column per estimated
+# fixed effect. Fixed effects that `map` fixes are dropped, and fixed effects
+# that `map` sets equal are one column. With `rank_check = "skip"`, aliased
+# columns are dropped. `[[` avoids a partial match of `betadisp` or `betazi`.
+.glmmTMB_estimated_X <- function(model) {
+  X <- as.matrix(glmmTMB::getME(model, "X"))
+  beta_map <- model$obj$env$map[["beta"]]
+  if (!is.null(beta_map)) {
+    estimated <- !is.na(beta_map)
+    beta_level <- droplevels(beta_map[estimated])
+    X <- X[, estimated, drop = FALSE] %*%
+      (outer(as.integer(beta_level), seq_len(nlevels(beta_level)), "==") * 1)
+  }
+  if (ncol(X) > 0) {
+    qr_X <- qr(X)
+    X <- X[, qr_X$pivot[seq_len(qr_X$rank)], drop = FALSE]
+  }
+  X
+}
+
+
+# Var(y | random effects) for a prior weight of 1, for the families in
+# `.glmmTMB_influence_unsupported()`
+.glmmTMB_variance <- function(model, mu) {
+  switch(
+    stats::family(model)$family,
+    gaussian = rep(stats::sigma(model)^2, length(mu)),
+    Gamma = stats::sigma(model)^2 * mu^2,
+    poisson = mu,
+    binomial = mu * (1 - mu),
+    nbinom2 = mu * (1 + mu / stats::sigma(model))
+  )
+}
+
 
 # prepare data for non-constant variance plot ----------------------------------
 
-.diag_ncv <- function(model, verbose = TRUE) {
+.model_diagnostic_ncv <- function(model, verbose = TRUE) {
   ncv <- tryCatch(
     data.frame(
       x = as.numeric(stats::fitted(model)),
@@ -245,10 +488,9 @@
 }
 
 
-
 # prepare data for homogeneity of variance plot ----------------------------------
 
-.diag_homogeneity <- function(model, verbose = TRUE) {
+.model_diagnostic_homogeneity <- function(model, verbose = TRUE) {
   faminfo <- insight::model_info(model)
   r <- tryCatch(
     if (inherits(model, "merMod")) {
@@ -256,12 +498,22 @@
     } else if (inherits(model, "gam")) {
       stats::residuals(model, type = "scaled.pearson")
     } else if (inherits(model, c("glmmTMB", "MixMod"))) {
-      residual_sigma <- if (faminfo$is_mixed) {
-        sqrt(insight::get_variance_residual(model))
+      ## Pearson residuals are scaled by the family's variance function V(mu_i),
+      ## which varies across observations. The fallback below divides by a single
+      ## scalar, which is only correct when V() does not depend on mu (e.g.
+      ## gaussian). For non-mixed binomial/poisson models `.sigma_glmmTMB_nonmixed()`
+      ## returns 1, i.e. no standardization at all.
+      r_pearson <- .safe(stats::residuals(model, type = "pearson"))
+      if (is.null(r_pearson) || all(is.na(r_pearson))) {
+        residual_sigma <- if (faminfo$is_mixed) {
+          sqrt(insight::get_variance_residual(model))
+        } else {
+          .sigma_glmmTMB_nonmixed(model, faminfo)
+        }
+        stats::residuals(model, type = "response") / residual_sigma
       } else {
-        .sigma_glmmTMB_nonmixed(model, faminfo)
+        r_pearson
       }
-      stats::residuals(model) / residual_sigma
     } else if (inherits(model, "glm")) {
       ## TODO: check if we can / should use deviance residuals (as for QQ plots) here as well?
       stats::rstandard(model, type = "pearson")
@@ -290,117 +542,52 @@
 }
 
 
-
-# prepare data for homogeneity of variance plot ----------------------------------
-
-.new_diag_overdispersion <- function(model, ...) {
+.model_diagnostic_overdispersion <- function(model, residual_type = NULL, ...) {
   faminfo <- insight::model_info(model)
+  d <- NULL
 
-  simres <- simulate_residuals(model, ...)
-  predicted <- simres$fittedPredictedResponse
-  d <- data.frame(Predicted = predicted)
-
-  # residuals based on simulated residuals - but we want normally distributed residuals
-  d$Residuals <- stats::residuals(simres, quantile_function = stats::qnorm, ...)
-  d$Res2 <- d$Residuals^2
-  d$StdRes <- insight::get_residuals(model, type = "pearson")
-
-  # data for poisson models
-  if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
-    d$V <- predicted
-  }
-
-  # data for negative binomial models
-  if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    if (inherits(model, "glmmTMB")) {
-      if (faminfo$family == "nbinom1") {
-        # for nbinom1, we can use "sigma()"
-        d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(predicted)
-      } else {
-        # for nbinom2, "sigma()" has "inverse meaning" (see #654)
-        d$V <- (1 / insight::get_sigma(model)^2) * stats::family(model)$variance(predicted)
-      }
-    } else {
-      ## FIXME: this is not correct for glm.nb models?
-      d$V <- predicted * (1 + predicted / insight::get_sigma(model))
+  if (.use_simulated_residuals(model, residual_type, faminfo)) {
+    d <- .safe({
+      simres <- simulate_residuals(model, ...)
+      predicted <- simres$fittedPredictedResponse
+      # Use response-scale residuals (observed - predicted) so that Res2 and V
+      # are on the same scale as the family variance formula.
+      raw_res <- simres$observedResponse - predicted
+      data.frame(
+        Predicted = predicted,
+        Residuals = raw_res,
+        Res2 = raw_res^2
+      )
+    })
+    if (!is.null(d)) {
+      d$V <- .expected_variance(model, faminfo, d)
+      # Pearson-like standardized residuals: divide by sqrt of expected variance.
+      # Use 1e-6 floor to avoid division by near-zero values when predicted
+      # means are very small, while keeping the value practically interpretable.
+      d$StdRes <- d$Residuals / sqrt(pmax(d$V, 1e-6))
+      return(d)
     }
   }
-
-  # data for zero-inflated poisson models
-  if (faminfo$is_poisson && faminfo$is_zero_inflated) {
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$V <- predicted * (1 - d$Prob) * (1 + predicted * d$Prob)
-  }
-
-  # data for zero-inflated negative binomial models
-  if (faminfo$is_negbin && faminfo$is_zero_inflated && !faminfo$is_dispersion) {
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$Disp <- insight::get_sigma(model)
-    d$V <- predicted * (1 + predicted / d$Disp) * (1 - d$Prob) * (1 + predicted * (1 + predicted / d$Disp) * d$Prob) # nolint
-  }
-
-  # data for zero-inflated negative binomial models with dispersion
-  if (faminfo$is_negbin && faminfo$is_zero_inflated && faminfo$is_dispersion) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$Disp <- stats::predict(model, type = "disp")
-    d$V <- predicted * (1 + predicted / d$Disp) * (1 - d$Prob) * (1 + predicted * (1 + predicted / d$Disp) * d$Prob) # nolint
-  }
-
-  d
-}
-
-
-
-.diag_overdispersion <- function(model, ...) {
-  faminfo <- insight::model_info(model)
 
   # data for poisson models
   if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    d$V <- d$Predicted
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
+    if (!is.null(d$StdRes)) {
+      d$StdRes <- d$StdRes / sqrt(.quasipoisson_dispersion(model, faminfo))
+    }
   }
 
   # data for negative binomial models
   if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    if (inherits(model, "glmmTMB")) {
-      d <- data.frame(Predicted = stats::predict(model, type = "response"))
-      d$Residuals <- insight::get_residuals(model, type = "pearson")
-      d$Res2 <- d$Residuals^2
-      d$StdRes <- insight::get_residuals(model, type = "pearson")
-      if (faminfo$family == "nbinom1") {
-        # for nbinom1, we can use "sigma()"
-        d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(d$Predicted)
-      } else {
-        # for nbinom2, "sigma()" has "inverse meaning" (see #654)
-        d$V <- (1 / insight::get_sigma(model)^2) * stats::family(model)$variance(d$Predicted)
-      }
-    } else {
-      ## FIXME: this is not correct for glm.nb models?
-      d <- data.frame(Predicted = stats::predict(model, type = "response"))
-      d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
-      d$Res2 <- d$Residuals^2
-      d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
-      d$StdRes <- insight::get_residuals(model, type = "pearson")
-    }
+    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
+    d$Res2 <- d$Residuals^2
+    d$V <- .expected_variance(model, faminfo, d)
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
   # data for zero-inflated poisson models
@@ -414,7 +601,7 @@
       ptype <- "zero"
     }
     d$Prob <- stats::predict(model, type = ptype)
-    d$V <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -423,14 +610,7 @@
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$Disp <- insight::get_sigma(model)
-    d$V <- d$Predicted * (1 + d$Predicted / d$Disp) * (1 - d$Prob) * (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -439,15 +619,17 @@
     d <- data.frame(Predicted = stats::predict(model, type = "response"))
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
-    if (inherits(model, "glmmTMB")) {
-      ptype <- "zprob"
-    } else {
-      ptype <- "zero"
-    }
-    d$Prob <- stats::predict(model, type = ptype)
-    d$Disp <- stats::predict(model, type = "disp")
-    d$V <- d$Predicted * (1 + d$Predicted / d$Disp) * (1 - d$Prob) * (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
+    d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- insight::get_residuals(model, type = "pearson")
+  }
+
+  # fallback for remaining models
+  if (is.null(d)) {
+    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d$Residuals <- insight::get_residuals(model)
+    d$Res2 <- d$Residuals^2
+    d$V <- .expected_variance(model, faminfo, d)
+    d$StdRes <- d$Residuals / sqrt(pmax(d$V, 1e-6))
   }
 
   d
@@ -456,12 +638,181 @@
 
 # helpers ----------------------------------
 
+.use_simulated_residuals <- function(model, residual_type, faminfo) {
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
+
+  # For mixed models and glmmTMB models, use simulated residuals from DHARMa
+  # for more accurate overdispersion visualization. Pearson residuals can be
+  # misleading for these model types.
+
+  # fmt: skip
+  if (is.null(residual_type)) {
+    if (inherits(model, "glm")) {
+      simres <- faminfo$is_bernoulli ||
+        faminfo$is_binomial ||
+        (!faminfo$is_count && !faminfo$is_binomial) ||
+        faminfo$is_negbin
+    } else {
+      simres <- isTRUE(faminfo$is_mixed) ||
+        inherits(model, "glmmTMB") ||
+        faminfo$is_negbin
+    }
+  } else {
+    simres <- switch(residual_type, normal = FALSE, simulated = TRUE)
+  }
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  not_supported <- c("fixest", "glmx")
+
+  if (
+    inherits(model, not_supported) ||
+      faminfo$family %in% c("quasipoisson", "quasibinomial") ||
+      !requireNamespace("DHARMa", quietly = TRUE)
+  ) {
+    simres <- FALSE
+  }
+
+  simres
+}
+
+
+.expected_variance <- function(model, faminfo, d) {
+  expected_var <- NULL
+
+  # Helper: get per-observation dispersion (if dispersion model) or scalar sigma
+  .get_disp <- function() {
+    if (inherits(model, "cpglmm")) {
+      model@phi
+    } else if (isTRUE(faminfo$is_dispersion)) {
+      stats::predict(model, type = "disp")
+    } else {
+      insight::get_sigma(model)
+    }
+  }
+
+  # Helper: get zero-inflation probability (glmmTMB uses "zprob", others "zero")
+  .get_zprob <- function() {
+    ptype <- if (inherits(model, "glmmTMB")) "zprob" else "zero"
+    stats::predict(model, type = ptype)
+  }
+
+  # handle models without zero-inflation component
+  if (!faminfo$is_zero_inflated) {
+    if (faminfo$is_poisson) {
+      # Poisson: V = mu; quasipoisson glm: V = phi * mu (prior weights are
+      # not included)
+      expected_var <- d$Predicted * .quasipoisson_dispersion(model, faminfo)
+    } else if (isTRUE(faminfo$family == "nbinom1")) {
+      # nbinom1: V = mu(1 + phi)  [phi=0 is Poisson limit; larger phi = more OD]
+      expected_var <- d$Predicted * (1 + .get_disp())
+    } else if (isTRUE(faminfo$family == "nbinom2")) {
+      # nbinom2: V = mu(1 + mu/phi)  [phi->inf is Poisson limit]
+      expected_var <- d$Predicted * (1 + d$Predicted / .get_disp())
+    } else if (faminfo$is_negbin) {
+      # General negbin (e.g., MASS::glm.nb): parameterized as nbinom2
+      expected_var <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+    } else if (faminfo$is_tweedie) {
+      # Tweedie distribution: phi*mu^power
+      if (inherits(model, "cpglmm")) {
+        p <- model@p - 2
+      } else {
+        insight::check_if_installed("glmmTMB")
+        p <- unname(unlist(glmmTMB::family_params(model)))
+      }
+      expected_var <- .get_disp() * d$Predicted^p
+    }
+  } else if (faminfo$is_poisson) {
+    # Zero-inflated Poisson: V = mu(1-p)(1 + mu*p)
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
+  } else if (isTRUE(faminfo$family == "nbinom1")) {
+    # Zero-inflated nbinom1
+    disp <- .get_disp()
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted *
+      (1 + disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + disp) * d$Prob)
+  } else if (isTRUE(faminfo$family == "nbinom2")) {
+    # Zero-inflated nbinom2
+    disp <- .get_disp()
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted *
+      (1 + d$Predicted / disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + d$Predicted / disp) * d$Prob)
+  } else if (faminfo$is_negbin) {
+    # General zero-inflated negbin
+    disp <- insight::get_sigma(model)
+    d$Prob <- .get_zprob()
+    expected_var <- d$Predicted *
+      (1 + d$Predicted / disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + d$Predicted / disp) * d$Prob)
+  }
+
+  # fallback for all other families
+  if (is.null(expected_var)) {
+    # find required arguments
+    formal_args <- .safe(formals(stats::family(model)$variance))
+    # error when not supported
+    if (!is.null(formal_args)) {
+      fun_args <- list()
+      if ("mu" %in% names(formal_args)) {
+        fun_args$mu <- d$Predicted
+      }
+      if ("theta" %in% names(formal_args)) {
+        fun_args$theta <- .get_disp()
+      }
+      if ("phi" %in% names(formal_args)) {
+        fun_args$phi <- .get_disp()
+      }
+      expected_var <- .safe(do.call(stats::family(model)$variance, fun_args))
+    }
+  }
+
+  if (is.null(expected_var)) {
+    insight::format_error(paste0(
+      "Models of class `",
+      class(model)[1],
+      "` or model family `",
+      faminfo$family,
+      "` are not yet supported by `check_overdispersion()`. ",
+      "Please file an issue at {.url https://github.com/easystats/performance/issues/}."
+    ))
+  }
+
+  expected_var
+}
+
+
+# the estimated dispersion phi of a quasipoisson glm, and 1 for other models,
+# or when phi cannot be estimated (for example, with no residual degrees of
+# freedom) or is not positive
+.quasipoisson_dispersion <- function(model, faminfo) {
+  phi <- 1
+  if (inherits(model, "glm") && identical(faminfo$family, "quasipoisson")) {
+    sigma2 <- as.numeric(insight::get_sigma(model))^2
+    if (length(sigma2) == 1 && is.finite(sigma2) && sigma2 > 0) {
+      phi <- sigma2
+    }
+  }
+  phi
+}
+
+
 .sigma_glmmTMB_nonmixed <- function(model, faminfo) {
   if (!is.na(match(faminfo$family, c("binomial", "poisson", "truncated_poisson")))) {
     return(1)
   }
-  betad <- model$fit$par["betad"]
-  switch(faminfo$family,
+  betad <- model$fit$par["betadisp"]
+  switch(
+    faminfo$family,
     gaussian = exp(0.5 * betad),
     Gamma = exp(-0.5 * betad),
     exp(betad)

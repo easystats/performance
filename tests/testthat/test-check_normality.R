@@ -6,17 +6,14 @@ test_that("check_normality | afex", {
 
   obk.long$treatment <- as.character(obk.long$treatment)
   suppressWarnings(suppressMessages({
-    aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+    aM <- afex::aov_car(
+      value ~ treatment * gender + Error(id / (phase * hour)),
       data = obk.long
     )
 
-    aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
-      data = obk.long
-    )
+    aW <- afex::aov_car(value ~ Error(id / (phase * hour)), data = obk.long)
 
-    aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-      data = obk.long
-    )
+    aB <- afex::aov_car(value ~ treatment * gender + Error(id), data = obk.long)
   }))
 
   msg <- capture.output({
@@ -35,7 +32,6 @@ test_that("check_normality | afex", {
 })
 
 test_that("check_normality | glmmTMB", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
 
@@ -76,7 +72,8 @@ test_that("check_normality | t-test", {
       effects = "fixed",
       class = c(
         "check_normality",
-        "see_check_normality", "numeric"
+        "see_check_normality",
+        "numeric"
       )
     ),
     tolerance = 1e-3,
@@ -86,7 +83,7 @@ test_that("check_normality | t-test", {
 
 
 test_that("check_normality | simulated residuals", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
   res <- simulate_residuals(m)
   out <- check_normality(res)

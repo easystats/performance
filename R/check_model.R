@@ -2,14 +2,16 @@
 #' @name check_model
 #'
 #' @description
-#'
 #' Visual check of various model assumptions (normality of residuals, normality
 #' of random effects, linear relationship, homogeneity of variance,
 #' multicollinearity).
 #'
-#' @param x A model object.
-#' @param dot_size,line_size Size of line and dot-geoms.
-#' @param base_size,title_size,axis_title_size Base font size for axis and plot titles.
+#' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
+#' get hints about possible problems.
+#'
+#' @param model A model object.
+#' @param size_dot,size_line Size of line and dot-geoms.
+#' @param base_size,size_title,size_axis_title Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
@@ -21,34 +23,52 @@
 #' `"linearity"`, and checks for non-constant variance, i.e. for
 #' heteroscedasticity, as well as the linear relationship. By default, all
 #' possible checks are performed and plotted.
-#' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
+#' @param alpha,alpha_dot The alpha level of the confidence bands and dot-geoms.
 #' Scalar from 0 to 1.
 #' @param colors Character vector with color codes (hex-format). Must be of
 #' length 3. First color is usually used for reference lines, second color
 #' for dots, and third color for outliers or extreme values.
-#' @param theme String, indicating the name of the plot-theme. Must be in the
-#' format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
+#' @param theme A ggplot2-theme function, e.g. `theme = see::theme_lucid()` or
+#' `theme = ggplot2::theme_dark()`.
 #' @param detrend Logical. Should Q-Q/P-P plots be detrended? Defaults to
 #' `TRUE` for linear models or when `residual_type = "normal"`. Defaults to
 #' `FALSE` for QQ plots based on simulated residuals (i.e. when
 #' `residual_type = "simulated"`).
-#' @param residual_type Character, indicating the type of residuals to be used.
-#' For non-Gaussian models, the default is `"simulated"`, which uses simulated
-#' residuals. These are based on [`simulate_residuals()`] and thus uses the
-#' **DHARMa** package to return randomized quantile residuals. For Gaussian
-#' models, the default is `"normal"`, which uses the default residuals from
-#' the model. Setting `residual_type = "normal"` for non-Gaussian models will
-#' use a half-normal Q-Q plot of the absolute value of the standardized deviance
-#' residuals.
+#' @param residual_type Character, indicating the type of residuals to be used
+#' for QQ-plots and overdispersion tests. For non-Gaussian models, the default
+#' is `"simulated"`, which uses simulated residuals. These are based on
+#' [`simulate_residuals()`] and thus uses the **DHARMa** package to return
+#' randomized quantile residuals. For Gaussian models, the default is
+#' `"normal"`, which uses the default residuals from the model. Setting
+#' `residual_type = "normal"` for non-Gaussian models will use a half-normal Q-Q
+#' plot of the absolute value of the standardized deviance residuals.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #' to `FALSE` for models with many observations, if generating the plot is too
 #' time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
 #' tries to guess whether performance will be poor due to a very large model
 #' and thus automatically shows or hides dots.
+#' @param show_ci Logical, if `TRUE`, confidence intervals in plots are shown.
+#' For models with only categorical predictors, confidence intervals are not shown
+#' by default, because in this case, these are usually on very large scales.
+#' @param show_smooth Logical, if `FALSE`, the Linearity and Homogeneity of
+#' Variance panels draw neither the LOESS smoother nor the cell means, and the
+#' Influential Observations panel draws no LOESS smoother. This needs **see**
+#' newer than 0.14.2. Older versions ignore the setting.
+#' @param maximum_dots Limits the number of data points for models with many
+#' observations, to reduce the time for rendering the plot. Defaults to a
+#' maximum of 2000 data points to render
+#' @param ppc_range An integer vector of length two specifying the x-axis limits
+#' for the posterior predictive checks plot. Use this to zoom in on a specific
+#' region of interest, especially if the response variable has a large range.
 #' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Arguments passed down to the individual check functions, especially
 #' to `check_predictions()` and `binned_residuals()`.
+#' @param x Deprecated, please use `model` instead.
+#'
 #' @inheritParams check_predictions
+#'
+#' @seealso See documentation of [`see::plot.see_check_model()`] for available
+#' arguments to change the plot appearance.
 #'
 #' @return The data frame that is used for plotting.
 #'
@@ -61,10 +81,23 @@
 #' @details For Bayesian models from packages **rstanarm** or **brms**,
 #' models will be "converted" to their frequentist counterpart, using
 #' [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
-#' A more advanced model-check for Bayesian models will be implemented at a
-#' later stage.
+#' If this conversion fails for a **brms** model, `check_model()` returns only
+#' the checks that work on the Bayesian model itself: the posterior predictive
+#' check (`"pp_check"`) and the check for multicollinearity (`"vif"`). A message
+#' then lists the panels of the requested checks that were skipped (for
+#' example, `NORM` for `"normality"`) and the reason why the conversion failed.
+#' If none of the requested checks can be computed, `check_model()` gives an
+#' error. For multivariate **brms** models (models with more than one
+#' response), use the `response` argument to name one response, for example
+#' `check_model(model, response = "y1")`. Only this response is checked. If
+#' `response` is missing or does not name one response, `check_model()` gives
+#' an error that lists the names of the responses. A more advanced model-check for
+#' Bayesian models will be implemented at a later stage.
 #'
 #' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
+#'
+#' If you encounter problems with creating the plots, please see section
+#' *Troubleshooting*.
 #'
 #' @section Posterior Predictive Checks:
 #' Posterior predictive checks can be used to look for systematic discrepancies
@@ -99,6 +132,9 @@
 #' This plot is used to identify influential observations. If any points in this
 #' plot fall outside of Cook’s distance (the dashed lines) then it is considered
 #' an influential observation. See [`check_outliers()`] for further details.
+#' For models from package *glmmTMB*, this plot uses a one-step approximation
+#' of Cook's distance from the hat values, while [`check_outliers()`] computes
+#' Cook's distance by refitting the model without each observation.
 #'
 #' @section Multicollinearity:
 #' This plot checks for potential collinearity among predictors. In a nutshell,
@@ -118,16 +154,23 @@
 #' a half-normal Q-Q plot of the absolute value of the standardized deviance
 #' residuals is shown, however, the interpretation of the plot remains the same.
 #' See [`check_normality()`] for further details. Usually, for generalized linear
-#' (mixed) models, a test for uniformity of residuals based on simulated residuals
-#' is conducted (see next section).
+#' (mixed) models, a test comparing simulated quantile residuals against the
+#' uniform distribution is conducted (see next section).
 #'
-#' @section Uniformity of Residuals:
+#' @section Distribution of Simulated Quantile Residuals:
 #' Fore non-Gaussian models, when `residual_type = "simulated"` (the default
 #' for generalized linear (mixed) models), residuals are not expected to be
-#' normally distributed. In this case, the created Q-Q plot checks the uniformity
-#' of residuals. The interpretation of the plot is the same as for the normal
-#' Q-Q plot. See [`simulate_residuals()`] and [`check_residuals()`] for further
-#' details.
+#' normally distributed. In this case, we generate simulated quantile residuals
+#' to compare whether observed response values deviate from model expectations.
+#' Simulated quantile residuals are generated by simulating a series of
+#' values from a fitted model for each case, comparing the observed response
+#' values to these simulations, and computing the empirical quantile of the
+#' observed value in the distribution of simulated values. When the model is
+#' correctly-specified, these quantile residuals will follow a *uniform* (flat)
+#' distribution. The Q-Q plot compares the simulated quantile residuals against
+#' a uniform distribution.  The plot is interpreted in the same way as for
+#' a normal-distribution Q-Q plot in linear regression.
+#' See [`simulate_residuals()`] and [`check_residuals()`] for further details.
 #'
 #' @section Overdispersion:
 #' For count models, an *overdispersion plot* is shown. Overdispersion occurs
@@ -150,8 +193,8 @@
 #' linear models. The plots for the normality of residuals (with overlayed
 #' normal curve) and for the linearity assumption use the default residuals
 #' for `lm` and `glm` (which are deviance residuals for `glm`). The Q-Q plots
-#' use simulated residuals (see [`simulate_residuals()`]) for non-Gaussian
-#' models and standardized residuals for linear models.
+#' use simulated quantile residuals (see [`simulate_residuals()`]) for
+#' non-Gaussian models and standardized residuals for linear models.
 #'
 #' @section Troubleshooting:
 #' For models with many observations, or for more complex models in general,
@@ -161,9 +204,51 @@
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
 #'
+#' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
+#' get hints about possible problems.
+#'
+#' If your plots are not rendering correctly in your IDE or you receive an error
+#' stating that the viewport is too small, try the following steps to resolve
+#' the issue:
+#'
+#' - *Enlarge the plotting window:* The most common cause is that the plotting
+#'   pane is simply too small. If you are using RStudio, click and drag the
+#'   edges of the 'Plots' pane to increase its dimensions, then try plotting
+#'   again.
+#' - *Reset your IDE zoom settings:* If resizing the window doesn't help, your
+#'   IDE's zoom level might be causing scaling issues. In RStudio, navigate to
+#'   the menu bar and select *View > Actual Size* to reset the zoom. If you are
+#'   using a different IDE, look for a similar zoom reset option.
+#' - *Adjust Windows display scaling:* On Windows, system-wide display scaling can
+#'   sometimes interfere with graphical outputs in R. You can adjust this in
+#'   your system settings: Go to *Start > Settings > System > Display* and locate
+#'   the `"Scale and layout"` section. Try reducing the scaling percentage (e.g.,
+#'   to 100%) and restart your IDE.
+#' - *Decrease the base font size:* As a code-level workaround, you can reduce the
+#'   base font size of your plots to help them fit into smaller viewports. If
+#'   you are using **ggplot2**, load the library and adjust your theme before
+#'   plotting. For example: `theme_set(theme_classic(base_size = 6))`.
+#' - *Update relevant packages:* Ensure your graphics and layout packages are up
+#'   to date. You can update your packages (paying special attention to
+#'   **ggplot2**, **patchwork** and **qqplotr**) by running
+#'   `update.packages(ask = FALSE)`.
+#' - *Update relevant software:* Finally, ensure your R version, and the IDE
+#'   you use, are up to date. Running the most recent versions of R and, e.g.,
+#'   RStudio or Positron can resolve any remaining issues.
+#' - *Plot single panels:* If none of the solutions above work, generate
+#'   individual plots for each check using the `panel` argument:
+#'   `plot(check_model(model, panel = FALSE))`
+#' - *Save plot as file:* Instead of rendering plots interactively,
+#'   you can save them directly to a file, for example:
+#'   ```r
+#'   pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
+#'   check_model(model)
+#'   dev.off()
+#'   ```
+#'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4") && FALSE
 #' \donttest{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_model(m)
@@ -173,41 +258,62 @@
 #' check_model(m, panel = FALSE)
 #' }
 #' @export
-check_model <- function(x, ...) {
+check_model <- function(model = NULL, ...) {
   UseMethod("check_model")
 }
-
 
 
 # default ----------------------------
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x,
-                                panel = TRUE,
-                                check = "all",
-                                detrend = TRUE,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                show_dots = NULL,
-                                dot_size = 2,
-                                line_size = 0.8,
-                                title_size = 12,
-                                axis_title_size = base_size,
-                                base_size = 10,
-                                alpha = 0.2,
-                                dot_alpha = 0.8,
-                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                theme = "see::theme_lucid",
-                                verbose = FALSE,
-                                ...) {
-  # check model formula
-  if (verbose) {
-    insight::formula_ok(x)
+check_model.default <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  ppc_range = NULL,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  show_smooth = TRUE,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
   }
 
-  minfo <- insight::model_info(x, verbose = FALSE)
+  .check_show_smooth(show_smooth)
+
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  minfo <- insight::model_info(model, verbose = FALSE)
+
+  # validate argument
+  if (!is.null(residual_type)) {
+    insight::validate_argument(residual_type, c("normal", "simulated"))
+  }
 
   # set default for residual_type
   if (is.null(residual_type)) {
@@ -218,7 +324,11 @@ check_model.default <- function(x,
   # exceptions here as they appear, but for now, `check_model()` also
   # automatically falls back to normal Q-Q plot for all models not supported
   # by DHARMa
-  if (minfo$family %in% c("quasipoisson", "quasibinomial")) {
+  if (
+    minfo$family %in%
+      c("quasipoisson", "quasibinomial") ||
+      !requireNamespace("DHARMa", quietly = TRUE)
+  ) {
     residual_type <- "normal"
   }
 
@@ -229,11 +339,25 @@ check_model.default <- function(x,
 
   assumptions_data <- tryCatch(
     if (minfo$is_bayesian) {
-      suppressWarnings(.check_assumptions_stan(x, ...))
+      suppressWarnings(.check_assumptions_stan(model, ...))
     } else if (minfo$is_linear) {
-      suppressWarnings(.check_assumptions_linear(x, minfo, check, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_linear(
+        model,
+        minfo,
+        check,
+        residual_type,
+        verbose,
+        ...
+      ))
     } else {
-      suppressWarnings(.check_assumptions_glm(x, minfo, check, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_glm(
+        model,
+        minfo,
+        check,
+        residual_type,
+        verbose,
+        ...
+      ))
     },
     error = function(e) {
       e
@@ -246,7 +370,11 @@ check_model.default <- function(x,
     cleaned_string <- gsub(pattern, replacement, assumptions_data$message)
     insight::format_error(
       paste("`check_model()` returned following error:", cleaned_string),
-      paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
+      paste0(
+        "\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `",
+        class(model)[1],
+        "` are not yet supported."
+      )
     )
   }
 
@@ -254,42 +382,131 @@ check_model.default <- function(x,
   if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
     insight::format_alert(paste0(
       "Cannot simulate residuals for models of class `",
-      class(x)[1],
+      class(model)[1],
       "`. Please try `check_model(..., residual_type = \"normal\")` instead."
     ))
   }
 
+  .add_check_model_attributes(
+    assumptions_data,
+    model = model,
+    minfo = minfo,
+    panel = panel,
+    check = check,
+    detrend = detrend,
+    bandwidth = bandwidth,
+    type = type,
+    type_missing = missing(type),
+    show_dots = show_dots,
+    show_ci = show_ci,
+    show_smooth = show_smooth,
+    maximum_dots = maximum_dots,
+    size_dot = size_dot,
+    size_line = size_line,
+    size_title = size_title,
+    size_axis_title = size_axis_title,
+    base_size = base_size,
+    alpha = alpha,
+    alpha_dot = alpha_dot,
+    ppc_range = ppc_range,
+    colors = colors,
+    theme = theme,
+    verbose = verbose,
+    plot_type = list(...)$plot_type
+  )
+}
+
+
+# add plot settings as attributes, used by see::plot.see_check_model() ------
+
+.add_check_model_attributes <- function(
+  assumptions_data,
+  model,
+  minfo,
+  panel,
+  check,
+  detrend,
+  bandwidth,
+  type,
+  type_missing,
+  show_dots,
+  show_ci,
+  show_smooth,
+  maximum_dots,
+  size_dot,
+  size_line,
+  size_title,
+  size_axis_title,
+  base_size,
+  alpha,
+  alpha_dot,
+  ppc_range,
+  colors,
+  theme,
+  verbose,
+  plot_type = NULL
+) {
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
-  if (missing(type) && suggest_dots) {
+  suggest_dots <- (isTRUE(minfo$is_bernoulli) ||
+    isTRUE(minfo$is_count) ||
+    isTRUE(minfo$is_ordinal) ||
+    isTRUE(minfo$is_categorical) ||
+    isTRUE(minfo$is_multinomial)) # nolint
+  if (type_missing && suggest_dots) {
     type <- "discrete_interval"
   }
 
   # set default for show_dots, based on "model size"
+  n <- .safe(insight::n_obs(model))
   if (is.null(show_dots)) {
-    n <- .safe(insight::n_obs(x))
     show_dots <- is.null(n) || n <= 1e5
   }
 
+  # tell user about limited dots
+  if (!is.null(maximum_dots) && !is.null(n) && n > maximum_dots && verbose) {
+    insight::format_alert(
+      "The model contains a large number of observations. To ensure efficient rendering, the plot is limited to 2,000 data points. You can use the `maximum_dots` argument to adjust this limit."
+    )
+  }
+
+  # if we have only categorical predictors, we don't show CI by default
+  if (is.null(show_ci)) {
+    parameter_types <- .safe(parameters::parameters_type(model))
+    show_ci <- is.null(parameter_types) ||
+      !all(parameter_types$Type %in% c("intercept", "factor"))
+  }
+
   attr(assumptions_data, "panel") <- panel
-  attr(assumptions_data, "dot_size") <- dot_size
-  attr(assumptions_data, "line_size") <- line_size
+  attr(assumptions_data, "dot_size") <- size_dot
+  attr(assumptions_data, "line_size") <- size_line
   attr(assumptions_data, "base_size") <- base_size
-  attr(assumptions_data, "axis_title_size") <- axis_title_size
-  attr(assumptions_data, "title_size") <- title_size
+  attr(assumptions_data, "axis_title_size") <- size_axis_title
+  attr(assumptions_data, "title_size") <- size_title
   attr(assumptions_data, "check") <- check
   attr(assumptions_data, "alpha") <- alpha
-  attr(assumptions_data, "dot_alpha") <- dot_alpha
+  attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
+  attr(assumptions_data, "show_ci") <- isTRUE(show_ci)
+  attr(assumptions_data, "show_smooth") <- isTRUE(show_smooth)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
   attr(assumptions_data, "model_info") <- minfo
-  attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
+  attr(assumptions_data, "overdisp_type") <- plot_type
   attr(assumptions_data, "bandwidth") <- bandwidth
   attr(assumptions_data, "type") <- type
-  attr(assumptions_data, "model_class") <- class(x)[1]
+  attr(assumptions_data, "ppc_range") <- ppc_range
+  attr(assumptions_data, "maximum_dots") <- maximum_dots
+  attr(assumptions_data, "model_class") <- class(model)[1]
   assumptions_data
+}
+
+
+# same check and message as in see::plot.see_check_model()
+.check_show_smooth <- function(show_smooth) {
+  if (!isTRUE(show_smooth) && !isFALSE(show_smooth)) {
+    insight::format_error("`show_smooth` must be either `TRUE` or `FALSE`.")
+  }
 }
 
 
@@ -308,48 +525,132 @@ plot.check_model <- function(x, ...) {
 }
 
 
-
 # other classes ---------------------------
 
 ## TODO for now, convert to freq, see https://github.com/easystats/performance/issues/354
 ## need to fix this later
 
 #' @export
-check_model.stanreg <- function(x,
-                                panel = TRUE,
-                                check = "all",
-                                detrend = TRUE,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                show_dots = NULL,
-                                dot_size = 2,
-                                line_size = 0.8,
-                                title_size = 12,
-                                axis_title_size = base_size,
-                                base_size = 10,
-                                alpha = 0.2,
-                                dot_alpha = 0.8,
-                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                theme = "see::theme_lucid",
-                                verbose = FALSE,
-                                ...) {
-  check_model(bayestestR::bayesian_as_frequentist(x),
-    dot_size = dot_size,
-    line_size = line_size,
+check_model.stanreg <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  ppc_range = NULL,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  response = NULL,
+  show_smooth = TRUE,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
+  .check_show_smooth(show_smooth)
+
+  # multivariate brms models need one response, see https://github.com/easystats/performance/issues/908
+  resp <- .check_multivariate_resp(
+    model,
+    response,
+    "check_model",
+    dot_names = names(match.call(expand.dots = FALSE)$...)
+  )
+
+  freq_model <- tryCatch(
+    if (is.null(resp)) {
+      bayestestR::bayesian_as_frequentist(model)
+    } else if ("response" %in% names(formals(bayestestR::bayesian_as_frequentist))) {
+      # bayestestR renamed `resp` to `response`, see https://github.com/easystats/bayestestR/pull/790
+      bayestestR::bayesian_as_frequentist(model, response = resp)
+    } else {
+      bayestestR::bayesian_as_frequentist(model, resp = resp)
+    },
+    error = function(e) {
+      # let errors propagate when debugging, see `.safe()`
+      if (isTRUE(getOption("easystats_errors", FALSE))) {
+        stop(e)
+      }
+      e
+    }
+  )
+  conversion_error <- NULL
+  if (inherits(freq_model, "error")) {
+    conversion_error <- conditionMessage(freq_model)
+    freq_model <- NULL
+  }
+
+  # if the conversion fails, return the checks that work on the brms model
+  if (is.null(freq_model) && inherits(model, "brmsfit")) {
+    return(.check_model_bayesian_fallback(
+      model,
+      resp = resp,
+      conversion_error = conversion_error,
+      panel = panel,
+      check = check,
+      detrend = detrend,
+      bandwidth = bandwidth,
+      type = type,
+      type_missing = missing(type),
+      show_dots = show_dots,
+      show_ci = show_ci,
+      show_smooth = show_smooth,
+      maximum_dots = maximum_dots,
+      size_dot = size_dot,
+      size_line = size_line,
+      size_title = size_title,
+      size_axis_title = size_axis_title,
+      base_size = base_size,
+      alpha = alpha,
+      alpha_dot = alpha_dot,
+      ppc_range = ppc_range,
+      colors = colors,
+      theme = theme,
+      verbose = verbose,
+      ...
+    ))
+  }
+
+  check_model(
+    model = freq_model,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    dot_alpha = dot_alpha,
+    alpha_dot = alpha_dot,
     colors = colors,
     theme = theme,
     base_size = base_size,
-    axis_title_size = axis_title_size,
+    size_axis_title = size_axis_title,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
+    show_smooth = show_smooth,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
+    maximum_dots = maximum_dots,
+    ppc_range = ppc_range,
     verbose = verbose,
     ...
   )
@@ -360,43 +661,221 @@ check_model.stanreg <- function(x,
 check_model.brmsfit <- check_model.stanreg
 
 
+# checks for Bayesian models that cannot be converted to frequentist models,
+# using only checks that work on the Bayesian model itself
+
+.check_model_bayesian_fallback <- function(
+  model,
+  resp,
+  conversion_error,
+  panel,
+  check,
+  detrend,
+  bandwidth,
+  type,
+  type_missing,
+  show_dots,
+  show_ci,
+  show_smooth,
+  maximum_dots,
+  size_dot,
+  size_line,
+  size_title,
+  size_axis_title,
+  base_size,
+  alpha,
+  alpha_dot,
+  ppc_range,
+  colors,
+  theme,
+  verbose,
+  ...
+) {
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  # for multivariate models, use the model information of response `resp`
+  if (is.null(resp)) {
+    minfo <- insight::model_info(model, verbose = FALSE)
+  } else {
+    minfo <- insight::model_info(model, response = resp, verbose = FALSE)
+  }
+
+  dat <- list()
+
+  # multicollinearity --------------
+  if (any(c("all", "vif") %in% check)) {
+    dat$VIF <- .safe(suppressWarnings(.model_diagnostic_vif(model, verbose = verbose)))
+  }
+
+  # posterior predictive checks --------------
+  if (any(c("all", "pp_check") %in% check)) {
+    dat$PP_CHECK <- .safe(suppressWarnings(check_predictions(
+      model,
+      verbose = verbose,
+      response = resp,
+      ...
+    )))
+  }
+
+  dat <- insight::compact_list(dat)
+  class(dat) <- c("check_model", "see_check_model")
+
+  # reason why the conversion failed
+  if (is.null(conversion_error)) {
+    reason <- NULL
+  } else {
+    reason <- paste(
+      "Reason for the failed conversion:",
+      gsub("(\n|\\s{2,})", " ", conversion_error)
+    )
+  }
+
+  # no check could be computed
+  if (!length(dat)) {
+    insight::format_error(
+      paste(
+        "The conversion to a frequentist model failed, and none of the",
+        "requested checks could be computed for the Bayesian model."
+      ),
+      reason
+    )
+  }
+
+  # tell user which panels of the requested checks need a frequentist model
+  skipped <- .skipped_frequentist_checks(model, minfo, check)
+  msg <- paste(
+    "The conversion to a frequentist model failed, so `check_model()` only",
+    "shows checks that work for Bayesian models."
+  )
+  if (length(skipped)) {
+    msg <- paste0(msg, " Skipped checks: ", toString(skipped), ".")
+  }
+  insight::format_alert(msg, reason)
+
+  .add_check_model_attributes(
+    dat,
+    model = model,
+    minfo = minfo,
+    panel = panel,
+    check = check,
+    detrend = detrend,
+    bandwidth = bandwidth,
+    type = type,
+    type_missing = type_missing,
+    show_dots = show_dots,
+    show_ci = show_ci,
+    show_smooth = show_smooth,
+    maximum_dots = maximum_dots,
+    size_dot = size_dot,
+    size_line = size_line,
+    size_title = size_title,
+    size_axis_title = size_axis_title,
+    base_size = base_size,
+    alpha = alpha,
+    alpha_dot = alpha_dot,
+    ppc_range = ppc_range,
+    colors = colors,
+    theme = theme,
+    verbose = verbose,
+    plot_type = list(...)$plot_type
+  )
+}
+
+
+# names of the panels, other than VIF and PP_CHECK, that
+# `.check_assumptions_linear()` and `.check_assumptions_glm()` would return
+# for the requested checks
+
+.skipped_frequentist_checks <- function(model, minfo, check) {
+  panels <- list(
+    QQ = "qq",
+    REQQ = "reqq",
+    NORM = "normality",
+    NCV = c("ncv", "linearity"),
+    HOMOGENEITY = "homogeneity",
+    OUTLIERS = "outliers",
+    INFLUENTIAL = "outliers",
+    BINNED_RESID = "binned_residuals",
+    OVERDISPERSION = "overdispersion"
+  )
+  if (isTRUE(minfo$is_linear)) {
+    panels$BINNED_RESID <- panels$OVERDISPERSION <- NULL
+  } else {
+    panels$NORM <- panels$NCV <- NULL
+    if (!isTRUE(minfo$is_binomial)) {
+      panels$BINNED_RESID <- NULL
+    }
+    if (!isTRUE(minfo$is_count)) {
+      panels$OVERDISPERSION <- NULL
+    }
+  }
+  if (!insight::is_mixed_model(model)) {
+    panels$REQQ <- NULL
+  }
+  requested <- vapply(panels, function(i) any(c("all", i) %in% check), logical(1))
+  names(panels)[requested]
+}
+
+
 #' @export
-check_model.model_fit <- function(x,
-                                  panel = TRUE,
-                                  check = "all",
-                                  detrend = TRUE,
-                                  bandwidth = "nrd",
-                                  type = "density",
-                                  residual_type = NULL,
-                                  show_dots = NULL,
-                                  dot_size = 2,
-                                  line_size = 0.8,
-                                  title_size = 12,
-                                  axis_title_size = base_size,
-                                  base_size = 10,
-                                  alpha = 0.2,
-                                  dot_alpha = 0.8,
-                                  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                  theme = "see::theme_lucid",
-                                  verbose = FALSE,
-                                  ...) {
+check_model.model_fit <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  ppc_range = NULL,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  show_smooth = TRUE,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
-    x$fit,
-    dot_size = dot_size,
-    line_size = line_size,
+    model$fit,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    axis_title_size = axis_title_size,
-    dot_alpha = dot_alpha,
+    size_axis_title = size_axis_title,
+    alpha_dot = alpha_dot,
     colors = colors,
     theme = theme,
     base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
+    show_smooth = show_smooth,
+    maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
+    ppc_range = ppc_range,
     verbose = verbose,
     ...
   )
@@ -404,42 +883,61 @@ check_model.model_fit <- function(x,
 
 
 #' @export
-check_model.performance_simres <- function(x,
-                                           panel = TRUE,
-                                           check = "all",
-                                           detrend = TRUE,
-                                           bandwidth = "nrd",
-                                           type = "density",
-                                           residual_type = NULL,
-                                           show_dots = NULL,
-                                           dot_size = 2,
-                                           line_size = 0.8,
-                                           title_size = 12,
-                                           axis_title_size = base_size,
-                                           base_size = 10,
-                                           alpha = 0.2,
-                                           dot_alpha = 0.8,
-                                           colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                           theme = "see::theme_lucid",
-                                           verbose = FALSE,
-                                           ...) {
+check_model.performance_simres <- function(
+  model = NULL,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  ppc_range = NULL,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = see::theme_lucid(),
+  verbose = FALSE,
+  x = NULL,
+  show_smooth = TRUE,
+  ...
+) {
+  ## TODO remove deprecation warning later
+  if (!is.null(x) && is.null(model)) {
+    insight::format_warning(
+      "Argument `x` is deprecated; please use `model` instead."
+    )
+    model <- x
+  }
+
   check_model(
-    x$fittedModel,
-    dot_size = dot_size,
-    line_size = line_size,
+    model$fittedModel,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    dot_alpha = dot_alpha,
-    axis_title_size = axis_title_size,
+    alpha_dot = alpha_dot,
+    size_axis_title = size_axis_title,
     colors = colors,
     theme = theme,
     base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
+    show_smooth = show_smooth,
+    maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
     residual_type = "simulated",
+    ppc_range = ppc_range,
     verbose = verbose,
     ...
   )
@@ -449,59 +947,75 @@ check_model.performance_simres <- function(x,
 check_model.DHARMa <- check_model.performance_simres
 
 
-
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, check = "all", residual_type = "normal", verbose = TRUE, ...) {
+.check_assumptions_linear <- function(
+  model,
+  model_info,
+  check = "all",
+  residual_type = "normal",
+  verbose = TRUE,
+  ...
+) {
   dat <- list()
 
   # multicollinearity --------------
   if (any(c("all", "vif") %in% check)) {
-    dat$VIF <- .diag_vif(model, verbose = verbose)
+    dat$VIF <- .model_diagnostic_vif(model, verbose = verbose)
   }
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
-    dat$QQ <- switch(residual_type,
+    dat$QQ <- switch(
+      residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
-      .diag_qq(model, model_info = model_info, verbose = verbose)
+      .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(
+      model,
+      level = 0.95,
+      model_info = model_info,
+      verbose = verbose
+    )
   }
 
   # normal-curve plot (normality of residuals) --------------
   if (any(c("all", "normality") %in% check)) {
-    dat$NORM <- .diag_norm(model, verbose = verbose)
+    dat$NORM <- .model_diagnostic_normality(model, verbose = verbose)
   }
 
   # non-constant variance (heteroskedasticity, liniearity) --------------
   if (any(c("all", "ncv", "linearity") %in% check)) {
-    dat$NCV <- .diag_ncv(model, verbose = verbose)
+    dat$NCV <- .model_diagnostic_ncv(model, verbose = verbose)
   }
 
   # homogeneity of variance --------------
   if (any(c("all", "homogeneity") %in% check)) {
-    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+    dat$HOMOGENEITY <- .model_diagnostic_homogeneity(model, verbose = verbose)
   }
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
+    if (inherits(model, "glmmTMB")) {
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   }
 
   # posterior predictive checks --------------
   if (any(c("all", "pp_check") %in% check)) {
-    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+    dat$PP_CHECK <- .safe(check_predictions(model, verbose = verbose, ...))
   }
 
   dat <- insight::compact_list(dat)
@@ -510,49 +1024,65 @@ check_model.DHARMa <- check_model.performance_simres
 }
 
 
-
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info, check = "all", residual_type = "simulated", verbose = TRUE, ...) {
+.check_assumptions_glm <- function(
+  model,
+  model_info,
+  check = "all",
+  residual_type = "simulated",
+  verbose = TRUE,
+  ...
+) {
   dat <- list()
 
   # multicollinearity --------------
   if (any(c("all", "vif") %in% check)) {
-    dat$VIF <- .diag_vif(model, verbose = verbose)
+    dat$VIF <- .model_diagnostic_vif(model, verbose = verbose)
   }
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
-    dat$QQ <- switch(residual_type,
+    dat$QQ <- switch(
+      residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
-      .diag_qq(model, model_info = model_info, verbose = verbose)
+      .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
   }
 
   # homogeneity of variance --------------
   if (any(c("all", "homogeneity") %in% check)) {
-    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+    dat$HOMOGENEITY <- .model_diagnostic_homogeneity(model, verbose = verbose)
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(
+      model,
+      level = 0.95,
+      model_info = model_info,
+      verbose = verbose
+    )
   }
 
   # outliers --------------
   if (any(c("all", "outliers") %in% check)) {
-    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
-    if (is.null(dat$OUTLIERS)) {
-      threshold <- NULL
+    if (inherits(model, "glmmTMB")) {
+      dat$INFLUENTIAL <- .check_model_influential_glmmTMB(model, verbose)
     } else {
-      threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+      if (is.null(dat$OUTLIERS)) {
+        threshold <- NULL
+      } else {
+        threshold <- attributes(dat$OUTLIERS)$threshold$cook
+      }
+      dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
     }
-    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   }
 
   # posterior predictive checks --------------
   if (any(c("all", "pp_check") %in% check)) {
-    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+    dat$PP_CHECK <- .safe(check_predictions(model, verbose = verbose, ...))
   }
 
   # binned residuals for bernoulli/binomial --------------
@@ -562,7 +1092,11 @@ check_model.DHARMa <- check_model.performance_simres
 
   # misspecified dispersion and zero-inflation --------------
   if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
-    dat$OVERDISPERSION <- .diag_overdispersion(model)
+    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(
+      model,
+      residual_type = residual_type,
+      ...
+    )
   }
 
   dat <- insight::compact_list(dat)
@@ -570,6 +1104,43 @@ check_model.DHARMa <- check_model.performance_simres
   dat
 }
 
+
+# data for the influential observations panel of glmmTMB models ----------
+
+# Cook's distance from `check_outliers()` needs one refit per row for glmmTMB,
+# so the panel uses hat values and a one-step Cook's distance, with the
+# threshold that `check_outliers()` uses
+.check_model_influential_glmmTMB <- function(model, verbose = TRUE) {
+  unsupported <- .safe(
+    .glmmTMB_influence_unsupported(model),
+    "a structure that cannot be read"
+  )
+  if (!is.null(unsupported)) {
+    if (verbose) {
+      insight::format_alert(paste0(
+        "The check for influential observations is skipped for this `glmmTMB` ",
+        "model, because hat values are not available for models with ",
+        unsupported,
+        "."
+      ))
+    }
+    return(NULL)
+  }
+  # without the threshold of `check_outliers()`, for example when n - p < 1,
+  # the contour lines would not match it
+  threshold <- .safe(.check_outliers_cook_threshold(model))
+  out <- NULL
+  if (!is.null(threshold)) {
+    out <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
+  }
+  if (is.null(out) && verbose) {
+    insight::format_alert(paste(
+      "The check for influential observations is skipped for this `glmmTMB`",
+      "model, because its hat values and Cook's distances could not be computed."
+    ))
+  }
+  out
+}
 
 
 # compile plots for checks of Bayesian models  ------------------------
@@ -596,14 +1167,21 @@ check_model.DHARMa <- check_model.performance_simres
 
     # get samples from posterior and prior
 
-    d1 <- d1[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d1), perl = TRUE)]
-    d2 <- d2[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d2), perl = TRUE)]
+    d1 <- d1[, grepl(
+      pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)",
+      colnames(d1),
+      perl = TRUE
+    )]
+    d2 <- d2[, grepl(
+      pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)",
+      colnames(d2),
+      perl = TRUE
+    )]
   } else if (inherits(model, c("stanreg", "stanfit"))) {
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
       insight::format_error("Package `rstanarm` needs to be loaded first!")
     }
-
 
     # get samples from posterior and prior
 
@@ -619,7 +1197,6 @@ check_model.DHARMa <- check_model.performance_simres
 
     d1 <- as.data.frame(model)
     d2 <- as.data.frame(prior)
-
 
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
@@ -640,10 +1217,17 @@ check_model.DHARMa <- check_model.performance_simres
       d2 <- datawizard::data_remove(d2, "sigma")
     }
 
-    d1 <- d1[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d1), perl = TRUE)]
-    d2 <- d2[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d2), perl = TRUE)]
+    d1 <- d1[, grepl(
+      pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)",
+      colnames(d1),
+      perl = TRUE
+    )]
+    d2 <- d2[, grepl(
+      pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)",
+      colnames(d2),
+      perl = TRUE
+    )]
   }
-
 
   # grouping variable
 

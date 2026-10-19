@@ -26,7 +26,7 @@ library(performance)
 ```
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
-[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
+[![downloads](https://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 
 ***Test if your model is a good model!***
 
@@ -36,7 +36,7 @@ The primary goal of the **performance** package is to fill this gap and to provi
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/performance/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/performance/actions)
+[![CRAN](https://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![codecov](https://codecov.io/gh/easystats/performance/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/performance)
 
 The *performance* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
@@ -53,7 +53,7 @@ library("performance")
 
 > **Tip**
 >
-> Instead of `library(performance)`, use `library(easystats)`. This will make all features of the  easystats-ecosystem available.
+> Instead of `library(performance)`, use `library(easystats)`. This will make all features of the easystats-ecosystem available.
 >
 > To stay updated, use `easystats::install_latest()`.
 
@@ -66,6 +66,11 @@ citation("performance")
 ```
 
 ## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
+
 
 There is a nice introduction into the package on [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
 

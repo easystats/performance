@@ -267,11 +267,13 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @inheritParams r2_bayes
 #' @export
 #' @rdname r2_bayes
-r2_posterior.BFBayesFactor <- function(model,
-                                       average = FALSE,
-                                       prior_odds = NULL,
-                                       verbose = TRUE,
-                                       ...) {
+r2_posterior.BFBayesFactor <- function(
+  model,
+  average = FALSE,
+  prior_odds = NULL,
+  verbose = TRUE,
+  ...
+) {
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     if (verbose) {
@@ -303,7 +305,6 @@ r2_posterior.BFBayesFactor <- function(model,
 }
 
 
-
 #' @keywords internal
 .r2_posterior_model_average <- function(model, prior_odds = NULL, verbose = TRUE) {
   insight::check_if_installed("BayesFactor")
@@ -314,7 +315,11 @@ r2_posterior.BFBayesFactor <- function(model,
     BFMods$BF <- exp(BFMods$log_BF)
   }
 
-  has_random <- !is.null(insight::find_predictors(model, effects = "random", flatten = TRUE))
+  has_random <- !is.null(insight::find_predictors(
+    model,
+    effects = "random",
+    flatten = TRUE
+  ))
 
   if (any(is.na(BFMods$BF) | is.infinite(BFMods$BF))) {
     if (verbose) {
@@ -344,7 +349,6 @@ r2_posterior.BFBayesFactor <- function(model,
     }
   }
 
-
   # Compute posterior model probabilities
   if (is.null(prior_odds)) {
     prior_odds <- rep(1, nrow(BFMods))
@@ -359,7 +363,6 @@ r2_posterior.BFBayesFactor <- function(model,
     c(params, list(missing = 0, prior_odds = posterior_odds))
   )
 }
-
 
 
 #' @export
@@ -395,7 +398,6 @@ as.data.frame.r2_bayes <- function(x, ...) {
 }
 
 
-
 # Utils -------------------------------------------------------------------
 
 .get_bfbf_predictions <- function(model, iterations = 4000, verbose = TRUE) {
@@ -418,12 +420,18 @@ as.data.frame.r2_bayes <- function(x, ...) {
   colnames(mm)[1] <- "mu"
 
   # match?
-  if ((length(colnames(params_theta)) != length(colnames(mm))) ||
-    !all(colnames(params_theta) == colnames(mm))) {
+  if (
+    (length(colnames(params_theta)) != length(colnames(mm))) ||
+      !all(colnames(params_theta) == colnames(mm))
+  ) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
-      insight::format_error("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher.")
+      insight::format_error(
+        "R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."
+      )
     }
-    insight::format_error("Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}") # nolint
+    insight::format_error(
+      "Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}"
+    ) # nolint
   }
 
   out <- list(
@@ -431,7 +439,12 @@ as.data.frame.r2_bayes <- function(x, ...) {
     y_pred = (as.matrix(params_theta) %*% t(mm))
   )
 
-  rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE, verbose = FALSE)
+  rand <- insight::find_predictors(
+    model[1],
+    effects = "random",
+    flatten = TRUE,
+    verbose = FALSE
+  )
   if (!is.null(rand)) {
     idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params_theta))
     idx <- apply(idx, 1, any)

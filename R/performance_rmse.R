@@ -30,13 +30,15 @@
 #' # normalized RMSE
 #' performance_rmse(m, normalized = TRUE)
 #' @export
-performance_rmse <- function(model,
-                             normalized = FALSE,
-                             ci = NULL,
-                             iterations = 100,
-                             ci_method = NULL,
-                             verbose = TRUE,
-                             ...) {
+performance_rmse <- function(
+  model,
+  normalized = FALSE,
+  ci = NULL,
+  iterations = 100,
+  ci_method = NULL,
+  verbose = TRUE,
+  ...
+) {
   tryCatch(
     {
       out <- .calculate_rmse(model, normalized, verbose)
@@ -140,11 +142,21 @@ print.performance_rmse <- function(x, ...) {
   .calculate_rmse(model = fit, normalized = normalized)
 }
 
-.bootstrap_rmse <- function(model, iterations = 100, normalized = FALSE, ci_method = NULL, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")) {
+.bootstrap_rmse <- function(
+  model,
+  iterations = 100,
+  normalized = FALSE,
+  ci_method = NULL,
+  ...
+) {
+  if (
+    inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")
+  ) {
     # cannot pass argument "normalized" to "lme4::bootMer()"
     if (isTRUE(normalized)) {
-      insight::format_error("Normalized RMSE cannot be used with confidence intervals. Please use `ci_method = \"boot\"`.") # nolint
+      insight::format_error(
+        "Normalized RMSE cannot be used with confidence intervals. Please use `ci_method = \"boot\"`."
+      ) # nolint
     }
     result <- .do_lme4_bootmer(
       model,

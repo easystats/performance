@@ -26,8 +26,22 @@ curve (\code{Sensitivity} and \code{Specificity}), and a column with the
 model name.
 }
 \description{
-This function calculates a simple ROC curves of x/y coordinates
-based on response and predictions of a binomial model.
+This function calculates a simple ROC curves of x/y coordinates based on
+response and predictions of a binomial model.
+
+It returns the area under the curve (AUC) as a percentage, which corresponds
+to the probability that a randomly chosen observation of "condition 1" is
+correctly classified by the model as having a higher probability of being
+"condition 1" than a randomly chosen "condition 2" observation.
+
+Applying \code{as.data.frame()} to the output returns a data frame containing the
+following:
+\itemize{
+\item \code{Sensitivity} (that actually corresponds to \code{1 - Specificity}): It is the
+False Positive Rate.
+\item \code{Sensitivity}: It is the True Positive Rate, which is the proportion of
+correctly classified "condition 1" observations.
+}
 }
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
@@ -45,6 +59,7 @@ train_data <- iris[-folds, ]
 
 model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
 as.data.frame(performance_roc(model, new_data = test_data))
+as.numeric(performance_roc(model))
 
 roc <- performance_roc(model, new_data = test_data)
 area_under_curve(roc$Specificity, roc$Sensitivity)

@@ -10,12 +10,7 @@ check_zeroinflation(x, ...)
 
 \method{check_zeroinflation}{default}(x, tolerance = 0.05, ...)
 
-\method{check_zeroinflation}{performance_simres}(
-  x,
-  tolerance = 0.1,
-  alternative = c("two.sided", "less", "greater"),
-  ...
-)
+\method{check_zeroinflation}{performance_simres}(x, tolerance = 0.1, alternative = "two.sided", ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
@@ -30,7 +25,8 @@ zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- \code{tolerance} is considered as OK, while a ratio
 beyond or below this threshold would indicate over- or underfitting.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A list with information about the amount of predicted and observed
@@ -70,7 +66,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("glmmTMB") && require("DHARMa")) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(m)
@@ -88,16 +84,16 @@ check_zeroinflation(res)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

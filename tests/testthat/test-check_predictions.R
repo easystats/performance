@@ -7,6 +7,7 @@ test_that("check_predictions", {
   set.seed(99)
   out <- check_predictions(model)
 
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -20,6 +21,7 @@ test_that("check_predictions", {
       "sim_50", "y"
     )
   )
+  # fmt: skip
   expect_equal(
     out$sim_1,
     c(
@@ -34,14 +36,35 @@ test_that("check_predictions", {
 })
 
 
+test_that("check_predictions, log-transform", {
+  data(mtcars)
+  model <- lm(log(mpg) ~ disp, data = mtcars)
+  set.seed(99)
+  out <- check_predictions(model)
+
+  # fmt: skip
+  expect_equal(
+    out$sim_1,
+    c(
+      23.0536, 23.94983, 25.2723, 19.36618, 13.90121, 19.83061, 12.93657,
+      24.66844, 22.09727, 18.26982, 19.76635, 19.97432, 19.4886, 12.20776,
+      7.46809, 11.8529, 11.6847, 20.66802, 28.70296, 28.05167, 28.48142,
+      17.83066, 16.34601, 14.23567, 13.89338, 28.72161, 26.82187, 23.71315,
+      12.26571, 28.21372, 20.20549, 25.8998
+    ),
+    tolerance = 1e-4
+  )
+})
+
+
 test_that("check_predictions, glmmTMB", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   data(mtcars)
   model <- glmmTMB::glmmTMB(vs ~ disp, data = mtcars, family = binomial())
   set.seed(99)
   out <- check_predictions(model)
 
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -55,6 +78,7 @@ test_that("check_predictions, glmmTMB", {
       "sim_50", "y"
     )
   )
+  # fmt: skip
   expect_equal(
     out$sim_1,
     c(
@@ -69,6 +93,7 @@ test_that("check_predictions, glmmTMB", {
   set.seed(99)
   out <- check_predictions(model)
 
+  # fmt: skip
   expect_equal(
     out$sim_1,
     c(
@@ -89,26 +114,13 @@ test_that("check_predictions, glm, binomial", {
   dat <- data.frame(tot, suc)
   dat$prop <- suc / tot
 
-  mod1 <- glm(cbind(suc, tot - suc) ~ 1,
-    family = binomial,
-    data = dat
-  )
+  mod1 <- glm(cbind(suc, tot - suc) ~ 1, family = binomial, data = dat)
 
-  mod2 <- glm(prop ~ 1,
-    family = binomial,
-    data = dat,
-    weights = tot
-  )
+  mod2 <- glm(prop ~ 1, family = binomial, data = dat, weights = tot)
 
-  mod3 <- glm(cbind(suc, tot) ~ 1,
-    family = binomial,
-    data = dat
-  )
+  mod3 <- glm(cbind(suc, tot) ~ 1, family = binomial, data = dat)
 
-  mod4 <- glm(am ~ 1,
-    family = binomial,
-    data = mtcars
-  )
+  mod4 <- glm(am ~ 1, family = binomial, data = mtcars)
 
   set.seed(1)
   out1 <- check_predictions(mod1)
@@ -123,7 +135,11 @@ test_that("check_predictions, glm, binomial", {
   expect_false(attributes(out1)$model_info$is_bernoulli)
   expect_equal(head(out2$sim_1), c(1, 0.9, 0.9, 0.8, 1, 0.8), tolerance = 1e-4)
   expect_false(attributes(out2)$model_info$is_bernoulli)
-  expect_equal(head(out3$sim_1), c(0.4, 0.42105, 0.47368, 0.61111, 0.4, 0.61111), tolerance = 1e-3)
+  expect_equal(
+    head(out3$sim_1),
+    c(0.4, 0.42105, 0.47368, 0.61111, 0.4, 0.61111),
+    tolerance = 1e-3
+  )
   expect_false(attributes(out3)$model_info$is_bernoulli)
   expect_equal(head(out4$sim_1), c(0, 0, 0, 1, 0, 1), tolerance = 1e-4)
   expect_true(attributes(out4)$model_info$is_bernoulli)
@@ -142,4 +158,335 @@ test_that("check_predictions, lm, ratio-response", {
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
+})
+
+
+test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+
+  data("cbpp", package = "lme4")
+  m1 <- glmmTMB::glmmTMB(
+    incidence / size ~ period + herd,
+    weights = size,
+    family = binomial,
+    data = cbpp
+  )
+
+  m2 <- glmmTMB::glmmTMB(
+    cbind(incidence, size - incidence) ~ period + herd,
+    weights = NULL,
+    family = binomial,
+    data = cbpp
+  )
+
+  cbpp <- transform(cbpp, prop = incidence / size)
+  m3 <- glmmTMB::glmmTMB(
+    prop ~ period + herd,
+    weights = size,
+    family = binomial,
+    data = cbpp
+  )
+
+  X <- with(cbpp, cbind(incidence, size - incidence))
+  cbpp$X <- X
+
+  m4 <- glmmTMB::glmmTMB(
+    X ~ period + herd,
+    family = binomial,
+    weights = NULL,
+    data = cbpp
+  )
+
+  set.seed(123)
+  out1 <- check_predictions(m1)
+
+  set.seed(123)
+  out2 <- check_predictions(m2)
+
+  set.seed(123)
+  out3 <- check_predictions(m3)
+
+  set.seed(123)
+  out4 <- check_predictions(m4)
+
+  expect_equal(out1$y, out2$y, tolerance = 1e-4)
+  expect_equal(out1$sim_1, out2$sim_1, tolerance = 1e-4)
+  expect_equal(out1$sim_16, out2$sim_16, tolerance = 1e-4)
+  expect_equal(out1$y, out3$y, tolerance = 1e-4)
+  expect_equal(out1$sim_1, out3$sim_1, tolerance = 1e-4)
+  expect_equal(out1$sim_16, out3$sim_16, tolerance = 1e-4)
+  expect_equal(out1$y, out4$y, tolerance = 1e-4)
+  expect_equal(out1$sim_1, out4$sim_1, tolerance = 1e-4)
+  expect_equal(out1$sim_16, out4$sim_16, tolerance = 1e-4)
+})
+
+
+test_that("check_predictions, glmer, works with proportion and cbind binomial and NA", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+
+  data(cbpp, package = "lme4")
+  cbpp_na <- cbpp
+  set.seed(1234)
+  cbpp_na$herd[sample(nrow(cbpp_na), 3)] <- NA
+  cbpp_na$period[sample(nrow(cbpp_na), 2)] <- NA
+
+  model_NA <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    weights = NULL,
+    family = binomial,
+    data = cbpp_na
+  )
+  set.seed(1234)
+  expect_message(
+    {
+      out <- check_predictions(model_NA)
+    },
+    regex = "Failed to compute"
+  )
+  expect_equal(
+    head(out$sim_1),
+    c(0.142857, 0, 0.111111, 0, 0.227273, 0.166667),
+    tolerance = 1e-4
+  )
+  # fmt: skip
+  expect_named(
+    out,
+    c(
+      "sim_1", "sim_2", "sim_3", "sim_4", "sim_5", "sim_6", "sim_7",
+      "sim_8", "sim_9", "sim_10", "sim_11", "sim_12", "sim_13", "sim_14",
+      "sim_15", "sim_16", "sim_17", "sim_18", "sim_19", "sim_20", "sim_21",
+      "sim_22", "sim_23", "sim_24", "sim_25", "sim_26", "sim_27", "sim_28",
+      "sim_29", "sim_30", "sim_31", "sim_32", "sim_33", "sim_34", "sim_35",
+      "sim_36", "sim_37", "sim_38", "sim_39", "sim_40", "sim_41", "sim_42",
+      "sim_43", "sim_44", "sim_45", "sim_46", "sim_47", "sim_48", "sim_49",
+      "sim_50", "y"
+  )
+  )
+})
+
+
+test_that("check_predictions, Bayesian models use standard predictive-check data", {
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  model <- insight::download_model("stanreg_lm_1")
+  skip_if(is.null(model))
+
+  set.seed(123)
+  out <- check_predictions(model, iterations = 5)
+
+  expect_s3_class(out, "performance_pp_check")
+  expect_named(out, c(paste0("sim_", 1:5), "y"))
+  expect_false("x" %in% names(out))
+  expect_false("Group" %in% names(out))
+  expect_false(isTRUE(attr(out, "is_stan")))
+  expect_identical(attr(out, "type"), "density")
+})
+
+
+test_that("check_predictions, multivariate brms models check one response", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  model <- insight::download_model("brms_mv_1")
+  skip_if(is.null(model))
+  d <- insight::get_data(model)
+
+  set.seed(123)
+  out <- check_predictions(model, response = "gear", iterations = 10)
+
+  expect_s3_class(out, "performance_pp_check")
+  sims <- as.matrix(out[startsWith(colnames(out), "sim_")])
+  expect_identical(ncol(sims), 10L)
+  # means of gear, carb and cyl are 3.69, 2.81 and 6.19
+  expect_lt(abs(mean(sims) - mean(d$gear)), 0.4)
+  expect_equal(out$y, d$gear, ignore_attr = TRUE)
+  expect_identical(attr(out, "response_name"), "gear")
+  expect_identical(attr(out, "type"), "density")
+  expect_true(attr(out, "model_info")$is_linear)
+})
+
+
+test_that("check_predictions, multivariate brms models with `trials()` responses", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  # responses are `outcome1 | trials(trials1)` and so on
+  model <- insight::download_model("brms_mv_7")
+  skip_if(is.null(model))
+
+  set.seed(123)
+  out <- check_predictions(model, response = "outcome2", iterations = 5)
+  expect_s3_class(out, "performance_pp_check")
+  expect_named(out, c(paste0("sim_", 1:5), "y"))
+  expect_equal(out$y, insight::get_data(model)$outcome2, ignore_attr = TRUE)
+})
+
+
+test_that("check_predictions, multivariate brms models need one `response`", {
+  # `response` is a formal argument, so `resp = ` would also partial-match it
+  expect_true("response" %in% names(formals(utils::getS3method("check_predictions", "brmsfit"))))
+  skip_if_not_installed("brms")
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+
+  model <- insight::download_model("brms_mv_1")
+  skip_if(is.null(model))
+  called <- FALSE
+  local_mocked_bindings(
+    estimate_prediction = function(...) {
+      called <<- TRUE
+      stop("prediction failed", call. = FALSE)
+    },
+    .package = "modelbased"
+  )
+
+  for (response in list(NULL, "mpg", c("cyl", "gear"))) {
+    err <- expect_error(
+      check_predictions(model, response = response),
+      "more\\s+than\\s+one\\s+response"
+    )
+    msg <- gsub("\\s+", " ", conditionMessage(err))
+    for (name in c("cyl", "gear", "carb", "response")) {
+      expect_match(msg, paste0("`", name, "`"), fixed = TRUE)
+    }
+    expect_no_match(msg, "`resp`", fixed = TRUE)
+  }
+  # `resp` next to `response` would otherwise reach brms twice
+  expect_error(
+    check_predictions(model, response = "gear", resp = "carb"),
+    "Please use only the `response` argument",
+    fixed = TRUE
+  )
+  expect_false(called)
+  # the mock is in reach of `modelbased::`, so `called` can become TRUE
+  try(modelbased::estimate_prediction(model), silent = TRUE)
+  expect_true(called)
+})
+
+skip_if_not_installed("withr")
+withr::with_environment(
+  new.env(),
+  {
+    test_that("check_predictions, Bayesian discrete models use standard predictive-check data", {
+      skip("Works interactively only")
+      skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+      skip_if_not_installed("curl")
+      skip_if_not_installed("httr2")
+      skip_if_offline()
+
+      model <- insight::download_model("brms_ordinal_1")
+      skip_if(is.null(model))
+
+      data(mtcars)
+      mtcars$cyl_ord <- as.ordered(mtcars$cyl)
+
+      set.seed(123)
+      out <- check_predictions(model, iterations = 5, type = "discrete_interval")
+
+      expect_s3_class(out, "performance_pp_check")
+      expect_named(out, c(paste0("sim_", 1:5), "y"))
+      expect_false("x" %in% names(out))
+      expect_false("Group" %in% names(out))
+      expect_false(isTRUE(attr(out, "is_stan")))
+      expect_identical(attr(out, "type"), "discrete_interval")
+      expect_true(attr(out, "model_info")$is_ordinal)
+    })
+  }
+)
+
+test_that("check_predictions, brms-wiener", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("rstan")
+  skip_if_not_installed("RWiener")
+
+  m <- insight::download_model("brms_wiener_1")
+  skip_if(is.null(m))
+
+  old_opt <- getOption("wiener_backend")
+  options(wiener_backend = "rtdists")
+  on.exit(options(wiener_backend = old_opt))
+  expect_no_error({
+    out <- check_predictions(m)
+  })
+  # fmt: skip
+  expect_named(
+    out,
+    c(
+      "sim_1", "sim_2", "sim_3", "sim_4", "sim_5", "sim_6", "sim_7",
+      "sim_8", "sim_9", "sim_10", "sim_11", "sim_12", "sim_13", "sim_14",
+      "sim_15", "sim_16", "sim_17", "sim_18", "sim_19", "sim_20", "sim_21",
+      "sim_22", "sim_23", "sim_24", "sim_25", "sim_26", "sim_27", "sim_28",
+      "sim_29", "sim_30", "sim_31", "sim_32", "sim_33", "sim_34", "sim_35",
+      "sim_36", "sim_37", "sim_38", "sim_39", "sim_40", "sim_41", "sim_42",
+      "sim_43", "sim_44", "sim_45", "sim_46", "sim_47", "sim_48", "sim_49",
+      "sim_50", "y"
+    )
+  )
+})
+
+
+test_that("check_predictions, RT-choice models keep RT predictions only (mocked)", {
+  skip_if_not_installed("modelbased", minimum_version = "0.12.0")
+
+  n <- 4
+  iter <- 3
+  rt_draws <- matrix(seq_len(n * iter), nrow = n)
+  choice_draws <- matrix(-seq_len(n * iter), nrow = n)
+  colnames(rt_draws) <- colnames(choice_draws) <- paste0("iter_", seq_len(iter))
+  preds <- rbind(
+    data.frame(Component = "rt", rt_draws),
+    data.frame(Component = "response", choice_draws)
+  )
+  colnames(preds) <- c("Component", paste0("iter_", seq_len(iter)))
+  observed <- data.frame(rt = c(0.5, 0.6, 0.7, 0.8), resp = c(1, 0, 1, 1))
+
+  for (flag in c("is_wiener", "is_rtchoice")) {
+    info <- list(
+      is_wiener = FALSE,
+      is_rtchoice = FALSE,
+      is_bernoulli = FALSE,
+      is_count = FALSE,
+      is_ordinal = FALSE,
+      is_categorical = FALSE,
+      is_multinomial = FALSE
+    )
+    info[[flag]] <- TRUE
+    local_mocked_bindings(
+      model_info = function(...) info,
+      find_terms = function(...) list(response = "rt"),
+      find_response = function(...) c("rt", "resp"),
+      get_response = function(...) observed,
+      .package = "insight"
+    )
+    local_mocked_bindings(
+      estimate_prediction = function(...) preds,
+      .package = "modelbased"
+    )
+    model <- structure(list(), class = c("brmsfit", "stanreg"))
+    out <- check_predictions(model, iterations = iter)
+    expect_s3_class(out, "performance_pp_check")
+    expect_equal(nrow(out), n)
+    expect_named(out, c(paste0("sim_", seq_len(iter)), "y"))
+    expect_equal(
+      unname(as.matrix(out[paste0("sim_", seq_len(iter))])),
+      unname(rt_draws)
+    )
+    expect_equal(out$y, observed$rt)
+  }
 })

@@ -9,14 +9,26 @@ format.compare_performance <- function(x, digits = 2, ...) {
   # format weighted ICs
   weighted_ics <- endsWith(colnames(x), "_wt")
   if (any(weighted_ics)) {
-    x[weighted_ics] <- lapply(x[weighted_ics], insight::format_bf, name = NULL, exact = TRUE)
+    x[weighted_ics] <- lapply(x[weighted_ics], function(wt) {
+      out <- insight::format_bf(wt, name = NULL, exact = TRUE)
+      # a model without this IC has no weight, not a weight of 1
+      out[is.na(wt)] <- NA
+      out
+    })
   }
 
   if ("BF" %in% colnames(x)) {
     x$BF[is.na(x$BF)] <- 1
     # x$BF <- insight::format_bf(x$BF, exact = TRUE)
   }
-  insight::format_table(x, digits = digits, ...)
+  out <- insight::format_table(x, digits = digits, ...)
+
+  # drop the empty "()" that format_table() adds for a missing weight
+  weight_columns <- endsWith(colnames(out), "(weights)")
+  out[weight_columns] <- lapply(out[weight_columns], function(i) {
+    trimws(gsub("()", "", i, fixed = TRUE))
+  })
+  out
 }
 
 

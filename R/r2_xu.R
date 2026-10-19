@@ -26,7 +26,9 @@ r2_xu <- function(model) {
     insight::format_error("Xu's R2 is only applicable for linear models.")
   }
 
-  .r2_xu <- 1 - stats::var(stats::residuals(model, verbose = FALSE)) / stats::var(insight::get_response(model, verbose = FALSE))
+  .r2_xu <- 1 -
+    stats::var(stats::residuals(model, verbose = FALSE)) /
+      stats::var(insight::get_response(model, verbose = FALSE))
   names(.r2_xu) <- "Xu's R2"
   .r2_xu
 }

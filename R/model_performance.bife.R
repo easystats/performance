@@ -11,7 +11,6 @@ model_performance.bife <- function(model, metrics = "all", verbose = TRUE, ...) 
     metrics <- c("AIC", "R2")
   }
 
-
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   info <- insight::model_info(model)
@@ -31,7 +30,12 @@ model_performance.bife <- function(model, metrics = "all", verbose = TRUE, ...) 
     .logloss <- performance_logloss(model, verbose = verbose)
     if (!is.na(.logloss)) out$Log_loss <- .logloss
   }
-  if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_multinomial && !info$is_ordinal) {
+  if (
+    ("PCP" %in% toupper(metrics)) &&
+      info$is_binomial &&
+      !info$is_multinomial &&
+      !info$is_ordinal
+  ) {
     out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model
   }
 

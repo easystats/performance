@@ -156,6 +156,11 @@ structures, like models with random slopes or nested design (more than two
 levels) and is applicable for models with other distributions than Gaussian.
 For more details on the computation of the variances, see
 \code{?insight::get_variance}.
+
+For models with uncorrelated random slopes, such as \code{(x || group)} in
+\strong{lme4}, the ICC changes when a predictor is shifted (for example,
+centered), because the shift changes the model itself. See the details in
+\code{\link[=r2_nakagawa]{r2_nakagawa()}}.
 }
 
 \subsection{ICC for unconditional and conditional models}{
@@ -212,7 +217,7 @@ should be accurate and reliable for following mixed models or model families:
 \item Bernoulli (logistic) regression
 \item Binomial regression (with other than binary outcomes)
 \item Poisson and Quasi-Poisson regression
-\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Negative binomial regression (including nbinom1, nbinom2 and nbinom12 families)
 \item Gaussian regression (linear models)
 \item Gamma regression
 \item Tweedie regression
@@ -227,6 +232,7 @@ Following model families are not yet validated, but should work:
 \item Compound Poisson regression
 \item Generalized Poisson regression
 \item Log-normal regression
+\item Skew-normal regression
 }
 
 Extracting variance components for models with zero-inflation part is not
@@ -242,7 +248,7 @@ r-squared values, which may not be meaningful.
 }
 
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 icc(model)
 
@@ -278,4 +284,8 @@ Publication.
 applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 Publications.
 }
+}
+\seealso{
+\code{\link[=performance_ior]{performance_ior()}}, \code{\link[=performance_mor]{performance_mor()}} and \code{\link[=performance_poor]{performance_poor()}}
+as additional metrics specifically for logistic multilevel regression models.
 }

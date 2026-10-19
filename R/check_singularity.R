@@ -5,8 +5,10 @@
 #'
 #' @param x A mixed model.
 #' @param tolerance Indicates up to which value the convergence result is
-#'    accepted. The larger `tolerance` is, the stricter the test
-#'    will be.
+#'   accepted. The larger `tolerance` is, the stricter the test
+#'   will be.
+#' @param check Indicates whether singularity check should be carried out for
+#'   the full model (`"model"`, the default), or per random effects term (`"terms"`).
 #' @param ... Currently not used.
 #'
 #' @return `TRUE` if the model fit is singular.
@@ -95,8 +97,12 @@
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
+#' # any singular fits?
 #' check_singularity(model)
+#' # singular fit for which particular random effects terms?
+#' check_singularity(model, check = "terms")
 #'
+#' \dontrun{
 #' # Fixing singularity issues using priors in glmmTMB
 #' # Example taken from `vignette("priors", package = "glmmTMB")`
 #' dat <- readRDS(system.file(
@@ -120,50 +126,76 @@
 #' model_with_priors <- update(model, priors = prior)
 #' # no singular fit
 #' check_singularity(model_with_priors)
-#'
+#' }
 #' @export
 check_singularity <- function(x, tolerance = 1e-5, ...) {
   UseMethod("check_singularity")
 }
 
 
-
 #' @export
-check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
-  insight::check_if_installed("lme4")
+check_singularity.merMod <- function(x, tolerance = 1e-5, check = "model", ...) {
+  insight::check_if_installed(c("lme4", "reformulas"))
 
-  theta <- lme4::getME(x, "theta")
-  # diagonal elements are identifiable because they are fitted
-  #  with a lower bound of zero ...
-  diag.element <- lme4::getME(x, "lower") == 0
-  any(abs(theta[diag.element]) < tolerance)
+  check <- insight::validate_argument(check, c("model", "terms"))
+  result <- list()
+  vv <- lme4::VarCorr(x)
+
+  re_names <- vapply(
+    reformulas::findbars(stats::formula(x)),
+    insight::safe_deparse,
+    FUN.VALUE = character(1)
+  )
+  result <- vapply(
+    vv,
+    function(x) det(x) < tolerance,
+    FUN.VALUE = logical(1)
+  )
+
+  switch(
+    check,
+    model = any(unlist(result, use.names = FALSE)),
+    insight::compact_list(result)
+  )
 }
 
 #' @export
 check_singularity.rlmerMod <- check_singularity.merMod
 
 
+#' @rdname check_singularity
 #' @export
-check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
-  insight::check_if_installed("lme4")
+check_singularity.glmmTMB <- function(x, tolerance = 1e-5, check = "model", ...) {
+  insight::check_if_installed(c("lme4", "reformulas"))
 
-  eigen_values <- list()
+  check <- insight::validate_argument(check, c("model", "terms"))
+  result <- list()
   vv <- lme4::VarCorr(x)
-  for (component in c("cond", "zi")) {
-    for (i in seq_along(vv[[component]])) {
-      eigen_values <- c(
-        eigen_values,
-        list(eigen(vv[[component]][[i]], only.values = TRUE)$values)
-      )
-    }
+
+  for (component in c("cond", "zi", "disp")) {
+    re_names <- vapply(
+      reformulas::findbars(stats::formula(x, component = component)),
+      insight::safe_deparse,
+      FUN.VALUE = character(1)
+    )
+    result[[component]] <- vapply(
+      vv[[component]],
+      function(x) det(x) < tolerance,
+      FUN.VALUE = logical(1)
+    )
+    names(result[[component]]) <- re_names
   }
-  any(vapply(eigen_values, min, numeric(1), na.rm = TRUE) < tolerance)
+
+  switch(
+    check,
+    model = any(unlist(result, use.names = FALSE)),
+    insight::compact_list(result)
+  )
 }
 
 
 #' @export
 check_singularity.glmmadmb <- check_singularity.glmmTMB
-
 
 
 #' @export
@@ -175,7 +207,6 @@ check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
 }
 
 
-
 #' @export
 check_singularity.cpglmm <- function(x, tolerance = 1e-5, ...) {
   insight::check_if_installed("cplm")
@@ -184,21 +215,25 @@ check_singularity.cpglmm <- function(x, tolerance = 1e-5, ...) {
 }
 
 
-
 #' @export
 check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
   any(sapply(diag(x$D), function(.x) any(abs(.x) < tolerance)))
 }
 
 
-
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
   insight::check_if_installed("nlme")
 
-  any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x)))) < tolerance))
-}
+  vc <- x$modelStruct$reStruct
 
+  if (!is.list(vc)) {
+    vc <- list(vc)
+  }
+
+  vc_diag <- unlist(lapply(vc, function(.x) diag(as.matrix(.x))), use.names = FALSE)
+  any(abs(stats::na.omit(as.numeric(vc_diag))) < tolerance)
+}
 
 
 #' @export

@@ -29,7 +29,6 @@ performance_mse <- function(model, ...) {
 mse <- performance_mse
 
 
-
 #' @export
 performance_mse.default <- function(model, verbose = TRUE, ...) {
   res <- .safe(insight::get_residuals(model, verbose = verbose, type = "response", ...))
@@ -53,15 +52,15 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   # for multivariate response models...
   if (is.data.frame(res)) {
     if (verbose) {
-      insight::format_warning("Multiple response variables detected. Cannot reliably compute (R)MSE.")
+      insight::format_warning(
+        "Multiple response variables detected. Cannot reliably compute (R)MSE."
+      )
     }
     return(NA)
   }
 
   mean(res^2, na.rm = TRUE)
 }
-
-
 
 
 # mfx models -------------------------------

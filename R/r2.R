@@ -10,6 +10,9 @@
 #' (`TRUE`) or not (`FALSE`)?
 #' @param ci Confidence interval level, as scalar. If `NULL` (default), no
 #' confidence intervals for R2 are calculated.
+#' @param multivariate Logical. Should multiple R2 values be reported as
+#' separated by response (FALSE) or should a single R2 be reported as
+#' combined across responses computed by [`r2_mlm`] (TRUE).
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -17,11 +20,17 @@
 #'   for the given model (or `NULL` if no R2 could be extracted). See the
 #'   list below:
 #'   - Logistic models: [Tjur's R2][r2_tjur]
-#'   - General linear models: [Nagelkerke's R2][r2_nagelkerke]
+#'   - Generalized linear models: [Nagelkerke's R2][r2_nagelkerke]
 #'   - Multinomial Logit: [McFadden's R2][r2_mcfadden]
+#'   - Beta or ordered Beta: [Ferrari's R2][r2_ferrari]
 #'   - Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
 #'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
 #'   - Bayesian models: [R2 bayes][r2_bayes]
+#'   - Additional model families from package *glmmTMB* that are not mentioned
+#'     above (like `nbinom1`, `compois`, `betabinomial` etc.) default to
+#'     [McFadden's R2][r2_mcfadden].
+#'   - R2 for models from package *gamlss* is extracted directly from the
+#'     `summary()`, if available. Else, [McFadden's R2][r2_mcfadden] is returned.
 #'
 #' @note
 #' If there is no `r2()`-method defined for the given model class, `r2()` tries
@@ -31,7 +40,7 @@
 #' @seealso
 #' [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`], [`r2_loo()`],
 #' [`r2_mcfadden()`], [`r2_nagelkerke()`], [`r2_nakagawa()`], [`r2_tjur()`],
-#' [`r2_xu()`] and [`r2_zeroinflated()`].
+#' [`r2_xu()`], [`r2_zeroinflated()`], and [`r2_mlm()`].
 #'
 #' @examplesIf require("lme4")
 #' # Pseudo r-quared for GLM
@@ -90,7 +99,10 @@ r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
   )
 
   if (is.null(out) && isTRUE(verbose)) {
-    insight::print_color(sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]), "red")
+    insight::print_color(
+      sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]),
+      "red"
+    )
   }
 
   if (!is.null(out)) {
@@ -207,7 +219,8 @@ r2.cph <- r2.ols
 r2.mhurdle <- function(model, ...) {
   resp <- insight::get_response(model, verbose = FALSE)
   mean_resp <- mean(resp, na.rm = TRUE)
-  ftd <- model$fitted.values[, "pos", drop = TRUE] * (1 - model$fitted.values[, "zero", drop = TRUE])
+  ftd <- model$fitted.values[, "pos", drop = TRUE] *
+    (1 - model$fitted.values[, "zero", drop = TRUE])
   n <- length(resp)
   K <- insight::n_parameters(model)
   Ko <- length(model$naive$coefficients)
@@ -245,24 +258,28 @@ r2.aov <- function(model, ci = NULL, ...) {
   structure(class = "r2_generic", out)
 }
 
-
+#' @rdname r2
 #' @export
-r2.mlm <- function(model, ...) {
-  model_summary <- summary(model)
+r2.mlm <- function(model, multivariate = TRUE, ...) {
+  if (multivariate) {
+    out <- r2_mlm(model)
+  } else {
+    model_summary <- summary(model)
 
-  out <- lapply(names(model_summary), function(i) {
-    tmp <- list(
-      R2 = model_summary[[i]]$r.squared,
-      R2_adjusted = model_summary[[i]]$adj.r.squared,
-      Response = sub("Response ", "", i, fixed = TRUE)
-    )
-    names(tmp$R2) <- "R2"
-    names(tmp$R2_adjusted) <- "adjusted R2"
-    names(tmp$Response) <- "Response"
-    tmp
-  })
+    out <- lapply(names(model_summary), function(i) {
+      tmp <- list(
+        R2 = model_summary[[i]]$r.squared,
+        R2_adjusted = model_summary[[i]]$adj.r.squared,
+        Response = sub("Response ", "", i, fixed = TRUE)
+      )
+      names(tmp$R2) <- "R2"
+      names(tmp$R2_adjusted) <- "adjusted R2"
+      names(tmp$Response) <- "Response"
+      tmp
+    })
 
-  names(out) <- names(model_summary)
+    names(out) <- names(model_summary)
+  }
 
   attr(out, "model_type") <- "Multivariate Linear"
   structure(class = "r2_mlm", out)
@@ -289,7 +306,9 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
     class(out) <- c("r2_pseudo", class(out))
   } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     out <- NULL
   } else if (info$is_orderedbeta) {
@@ -320,9 +339,7 @@ r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
 }
 
 
-
 # mfx models ---------------------
-
 
 #' @export
 r2.logitmfx <- function(model, ...) {
@@ -357,10 +374,7 @@ r2.betaor <- r2.logitmfx
 r2.model_fit <- r2.logitmfx
 
 
-
-
 # Cox & Snell R2 ---------------------
-
 
 #' @export
 r2.BBreg <- function(model, ...) {
@@ -377,10 +391,7 @@ r2.crch <- r2.BBreg
 r2.bayesx <- r2.BBreg
 
 
-
-
 # Nagelkerke R2 ----------------------
-
 
 #' @export
 r2.censReg <- function(model, ...) {
@@ -434,11 +445,7 @@ r2.mblogit <- function(model, ...) {
 }
 
 
-
-
-
 # McFadden ----------------------
-
 
 #' @export
 r2.multinom <- function(model, ...) {
@@ -451,10 +458,7 @@ r2.multinom <- function(model, ...) {
 r2.mlogit <- r2.multinom
 
 
-
-
 # Zeroinflated R2 ------------------
-
 
 #' @export
 r2.hurdle <- function(model, ...) {
@@ -469,7 +473,6 @@ r2.zeroinfl <- r2.hurdle
 
 
 # Nakagawa R2 ----------------------
-
 
 #' @rdname r2
 #' @export
@@ -503,55 +506,78 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
   # most models are mixed models
   if (insight::is_mixed_model(model)) {
     return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
-  } else {
-    if (!is.null(ci) && !is.na(ci)) {
-      return(.r2_ci(model, ci = ci, ...))
-    }
-    # calculate r2 for non-mixed glmmTMB models here -------------------------
-    info <- insight::model_info(model, verbose = FALSE)
+  }
 
-    if (info$is_linear) {
-      # for linear models, use the manual calculation
-      out <- .safe(.r2_lm_manual(model))
-    } else if (info$is_logit && info$is_bernoulli) {
-      # logistic regression with binary outcome
-      out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
-      attr(out, "model_type") <- "Logistic"
-      names(out$R2_Tjur) <- "Tjur's R2"
-      class(out) <- c("r2_pseudo", class(out))
-    } else if (info$is_binomial && !info$is_bernoulli) {
-      # currently, non-bernoulli binomial models are not supported
-      if (verbose) {
-        insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+  # retrieve information about model
+  info <- insight::model_info(model, verbose = FALSE)
+
+  # all zero-inflated models use the default method
+  if (info$is_zero_inflated) {
+    return(r2_zeroinflated(model))
+  }
+
+  # call default method again, and calculate confidence intervals. ".r2_ci()"
+  # will just call the default "r2()" with "ci = NULL" again.
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
+
+  # calculate r2 for non-mixed glmmTMB models here -------------------------
+  model_family <- info$family
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+
+  switch(
+    model_family,
+    gaussian = .safe(.r2_lm_manual(model)),
+    binomial = {
+      if (!info$is_bernoulli) {
+        # currently, non-bernoulli binomial models are not supported
+        if (verbose) {
+          insight::format_warning(
+            "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+          )
+        }
+        NULL
+      } else {
+        # logistic regression with binary outcome
+        out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
+        attr(out, "model_type") <- "Logistic"
+        names(out$R2_Tjur) <- "Tjur's R2"
+        class(out) <- c("r2_pseudo", class(out))
+        out
       }
-      out <- NULL
-    } else if ((info$is_poisson && !info$is_zero_inflated) || info$is_exponential) {
-      # Poisson-regression or Gamma uses Nagelkerke's R2
+    },
+    betabinomial = {
+      # currently, beta-binomial models without proportion response are not
+      # supported
+      if (matrix_response) {
+        if (verbose) {
+          insight::format_warning(
+            "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
+          )
+        }
+        NULL
+      } else {
+        r2_mcfadden(model)
+      }
+    },
+    # Poisson-regression or Gamma uses Nagelkerke's R2
+    Gamma = ,
+    poisson = {
       out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
       names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
       attr(out, "model_type") <- "Generalized Linear"
       class(out) <- c("r2_pseudo", class(out))
-    } else if (info$is_zero_inflated) {
-      # zero-inflated models use the default method
-      out <- r2_zeroinflated(model)
-    } else if (info$is_orderedbeta) {
-      # ordered-beta-regression
-      out <- r2_ferrari(model, correct_bounds = TRUE)
-    } else if (info$is_beta) {
-      # beta-regression
-      out <- r2_ferrari(model)
-    } else {
-      insight::format_error(paste0(
-        "`r2()` does not support models of class `glmmTMB` without random effects and from ",
-        info$family,
-        "-family with ",
-        info$link_function,
-        "-link-function."
-      ))
-    }
-  }
-  out
+      out
+    },
+    ordbeta = r2_ferrari(model, correct_bounds = TRUE),
+    beta = r2_ferrari(model),
+    # all remaining families default to McFadden (#928)
+    # Nagelkerke is unreliable for GLMs with non-fixed dispersion parameters
+    r2_mcfadden(model)
+  )
 }
+
 
 #' @export
 r2.wbm <- function(model, tolerance = 1e-5, ...) {
@@ -579,7 +605,6 @@ r2.wbm <- function(model, tolerance = 1e-5, ...) {
 }
 
 
-
 #' @export
 r2.sem <- function(model, ...) {
   r2_conditional <- model$r2c
@@ -598,9 +623,7 @@ r2.sem <- function(model, ...) {
 }
 
 
-
 # Bayes R2 ------------------------
-
 
 #' @export
 r2.brmsfit <- function(model, ...) {
@@ -617,17 +640,27 @@ r2.BFBayesFactor <- r2.brmsfit
 
 # Other methods ------------------------------
 
+#' @export
+r2.gamlss <- function(model, ...) {
+  # summary.gamlss prints results automatically for some families
+  printout <- utils::capture.output({
+    s <- summary(model)
+  })
+
+  # ... but not for all families, so try safe extraction
+  gamlss_r2 <- .safe(s$r.sq)
+
+  # default to McFadden if R2 is not provided in the summary
+  if (is.null(gamlss_r2)) {
+    r2_mcfadden(model)
+  } else {
+    list(R2 = c(`Adjusted R2` = gamlss_r2))
+  }
+}
 
 #' @export
 r2.gam <- function(model, ...) {
-  # gamlss inherits from gam, and summary.gamlss prints results automatically
-  printout <- utils::capture.output(s <- summary(model)) # nolint
-
-  if (is.null(s$r.sq)) {
-    NextMethod()
-  } else {
-    list(R2 = c(`Adjusted R2` = s$r.sq))
-  }
+  NextMethod()
 }
 
 #' @export
@@ -657,7 +690,6 @@ r2.rma <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.feis <- function(model, ...) {
   out <- list(
@@ -670,26 +702,31 @@ r2.feis <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.fixest <- function(model, ...) {
   insight::check_if_installed("fixest")
 
   r2 <- fixest::r2(model)
 
-  out_normal <- insight::compact_list(list(
-    R2 = r2["r2"],
-    R2_adjusted = r2["ar2"],
-    R2_within = r2["wr2"],
-    R2_within_adjusted = r2["war2"]
-  ), remove_na = TRUE)
+  out_normal <- insight::compact_list(
+    list(
+      R2 = r2["r2"],
+      R2_adjusted = r2["ar2"],
+      R2_within = r2["wr2"],
+      R2_within_adjusted = r2["war2"]
+    ),
+    remove_na = TRUE
+  )
 
-  out_pseudo <- insight::compact_list(list(
-    R2 = r2["pr2"],
-    R2_adjusted = r2["apr2"],
-    R2_within = r2["wpr2"],
-    R2_within_adjusted = r2["wapr2"]
-  ), remove_na = TRUE)
+  out_pseudo <- insight::compact_list(
+    list(
+      R2 = r2["pr2"],
+      R2_adjusted = r2["apr2"],
+      R2_within = r2["wpr2"],
+      R2_within_adjusted = r2["wapr2"]
+    ),
+    remove_na = TRUE
+  )
 
   if (length(out_normal)) {
     out <- out_normal
@@ -701,11 +738,17 @@ r2.fixest <- function(model, ...) {
   structure(class = "r2_generic", out)
 }
 
+
 #' @export
 r2.fixest_multi <- function(model, ...) {
   lapply(model, r2.fixest)
 }
 
+
+#' @export
+r2.oohbchoice <- function(model, ...) {
+  NULL
+}
 
 
 #' @export
@@ -721,8 +764,6 @@ r2.felm <- function(model, ...) {
 }
 
 
-
-
 #' @export
 r2.iv_robust <- function(model, ...) {
   out <- list(
@@ -733,7 +774,6 @@ r2.iv_robust <- function(model, ...) {
   attr(out, "model_type") <- "Two-Stage Least Squares Instrumental-Variable"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -749,7 +789,6 @@ r2.ivreg <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.bigglm <- function(model, ...) {
   out <- list(R2_CoxSnell = summary(model)$rsq)
@@ -757,7 +796,6 @@ r2.bigglm <- function(model, ...) {
   class(out) <- c("r2_pseudo", class(out))
   out
 }
-
 
 
 #' @export
@@ -781,7 +819,6 @@ r2.biglm <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.lmrob <- function(model, ...) {
   model_summary <- summary(model)
@@ -798,7 +835,6 @@ r2.lmrob <- function(model, ...) {
 r2.complmrob <- r2.lmrob
 
 
-
 #' @export
 r2.mmclogit <- function(model, ...) {
   list(R2 = NA)
@@ -808,12 +844,13 @@ r2.mmclogit <- function(model, ...) {
 #' @export
 r2.Arima <- function(model, ...) {
   if (requireNamespace("forecast", quietly = TRUE)) {
-    list(R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2)
+    list(
+      R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2
+    )
   } else {
     list(R2 = NA)
   }
 }
-
 
 
 #' @export
@@ -827,7 +864,6 @@ r2.plm <- function(model, ...) {
   attr(out, "model_type") <- "Panel Data"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -846,7 +882,6 @@ r2.selection <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.svyglm <- function(model, ...) {
   rsq <- (model$null.deviance - model$deviance) / model$null.deviance
@@ -862,7 +897,6 @@ r2.svyglm <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.vglm <- function(model, ...) {
   out <- list(R2_McKelvey = r2_mckelvey(model))
@@ -875,7 +909,6 @@ r2.vglm <- function(model, ...) {
 r2.vgam <- r2.vglm
 
 
-
 #' @export
 r2.DirichletRegModel <- function(model, ...) {
   out <- list(R2_Nagelkerke = r2_nagelkerke(model))
@@ -885,16 +918,27 @@ r2.DirichletRegModel <- function(model, ...) {
 }
 
 
-
-
-
 # helper -------------------
 
-.check_r2_ci_args <- function(ci = NULL, ci_method = "bootstrap", valid_ci_method = NULL, verbose = TRUE) {
-  if (!is.null(ci) && !is.na(ci) && !is.null(valid_ci_method) && !ci_method %in% valid_ci_method) {
+.check_r2_ci_args <- function(
+  ci = NULL,
+  ci_method = "bootstrap",
+  valid_ci_method = NULL,
+  verbose = TRUE
+) {
+  if (
+    !is.null(ci) &&
+      !is.na(ci) &&
+      !is.null(valid_ci_method) &&
+      !ci_method %in% valid_ci_method
+  ) {
     if (verbose) {
       insight::format_warning(
-        paste0("Method `", ci_method, "` to compute confidence intervals for R2 not supported.")
+        paste0(
+          "Method `",
+          ci_method,
+          "` to compute confidence intervals for R2 not supported."
+        )
       )
     }
     return(NULL)

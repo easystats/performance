@@ -1,7 +1,4 @@
-
-
 # sort_variables ----------------------------------------------------------
-
 
 r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
   l1_vars <- c()
@@ -54,15 +51,7 @@ r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
 }
 
 
-
-
-
-
 # get_random_slope_vars ---------------------------------------------------
-
-
-
-
 
 r2mlm_get_random_slope_vars <- function(model) {
   temp_cov_list <- insight::get_parameters(model, effects = "random")
@@ -91,9 +80,7 @@ r2mlm_get_random_slope_vars <- function(model) {
 }
 
 
-
 # get_cwc -----------------------------------------------------------------
-
 
 r2mlm_get_cwc <- function(l1_vars, cluster_variable, data) {
   # Group data
@@ -128,13 +115,7 @@ r2mlm_get_cwc <- function(l1_vars, cluster_variable, data) {
 }
 
 
-
 # get_covs ----------------------------------------------------------------
-
-
-
-
-
 
 r2mlm_get_covs <- function(variable_list, data) {
   cov_list <- c() # create empty list to fill

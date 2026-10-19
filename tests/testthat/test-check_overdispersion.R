@@ -1,5 +1,6 @@
+skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+
 test_that("check_overdispersion, glmmTMB-poisson", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
@@ -42,7 +43,8 @@ test_that("check_overdispersion, glmmTMB-poisson", {
         dispersion_ratio = 3.91516791651235,
         p_value = 0
       ),
-      class = c("check_overdisp", "see_check_overdisp")
+      class = c("check_overdisp", "see_check_overdisp"),
+      simulated = TRUE
     ),
     tolerance = 1e-3
   )
@@ -50,9 +52,10 @@ test_that("check_overdispersion, glmmTMB-poisson", {
 
 
 test_that("check_overdispersion, glmmTMB-poisson mixed", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+
   data(Salamanders, package = "glmmTMB")
 
   m2 <- glmmTMB::glmmTMB(
@@ -60,8 +63,9 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
     family = poisson,
     data = Salamanders
   )
+  set.seed(123)
   expect_equal(
-    check_overdispersion(m2),
+    check_overdispersion(m2, residual_type = "normal"),
     structure(
       list(
         chisq_statistic = 1475.87512547128,
@@ -74,13 +78,22 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
     ),
     tolerance = 1e-3
   )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m2),
+    structure(
+      list(dispersion_ratio = 3.04011005020607, p_value = 0),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m2",
+      simulated = TRUE
+    ),
+    tolerance = 1e-3
+  )
 })
 
 
 test_that("check_overdispersion, zero-inflated and negbin", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -100,6 +113,8 @@ test_that("check_overdispersion, zero-inflated and negbin", {
     family = glmmTMB::nbinom1(),
     data = Salamanders
   )
+
+  set.seed(123)
   expect_equal(
     check_overdispersion(m1),
     structure(
@@ -107,13 +122,33 @@ test_that("check_overdispersion, zero-inflated and negbin", {
         dispersion_ratio = 1.98057695890769,
         p_value = 0
       ),
-      class = c("check_overdisp", "see_check_overdisp")
+      class = c("check_overdisp", "see_check_overdisp"),
+      simulated = TRUE
     ),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  set.seed(123)
   expect_equal(
-    check_overdispersion(m2),
+    check_overdispersion(m1, residual_type = "normal"),
+    structure(
+      list(
+        chisq_statistic = 1027.18155565511,
+        dispersion_ratio = 1.63563941983298,
+        residual_df = 628L,
+        p_value = 9.12825627359497e-22
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m1"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m2, residual_type = "normal"),
     structure(
       list(
         chisq_statistic = 1873.7105986433,
@@ -127,14 +162,43 @@ test_that("check_overdispersion, zero-inflated and negbin", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+  set.seed(123)
   expect_equal(
-    check_overdispersion(m1),
+    check_overdispersion(m2),
+    structure(
+      list(dispersion_ratio = 3.91516799008681, p_value = 0),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m2",
+      simulated = TRUE
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m3, residual_type = "normal"),
     structure(
       list(
-        dispersion_ratio = 1.98057695890769,
-        p_value = 0
+        chisq_statistic = 544.29641690291,
+        dispersion_ratio = 0.857159711658125,
+        residual_df = 635L,
+        p_value = 0.996077528983478
       ),
-      class = c("check_overdisp", "see_check_overdisp")
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m3"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(m3),
+    structure(
+      list(dispersion_ratio = 1.18027855021855, p_value = 0.232),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m3",
+      simulated = TRUE
     ),
     tolerance = 1e-4,
     ignore_attr = TRUE
@@ -144,7 +208,6 @@ test_that("check_overdispersion, zero-inflated and negbin", {
 
 test_that("check_overdispersion, MASS::negbin", {
   skip_if_not_installed("MASS")
-  skip_if_not_installed("DHARMa")
   set.seed(3)
   mu <- rpois(500, lambda = 3)
   x <- rnorm(500, mu, mu * 3)
@@ -167,7 +230,7 @@ test_that("check_overdispersion, MASS::negbin", {
   expect_identical(
     capture.output(print(out)),
     c(
-      "# Overdispersion test",
+      "# Overdispersion test (using simulated residuals)",
       "",
       " dispersion ratio =   0.410",
       "          p-value = < 0.001",
@@ -177,15 +240,13 @@ test_that("check_overdispersion, MASS::negbin", {
   expect_message(capture.output(print(out)), "Underdispersion detected")
 
   # check that plot works
-  skip_if_not_installed("see")
+  skip_if_not_installed("see", minimum_version = "0.9.1")
   expect_s3_class(plot(out), "ggplot")
 })
 
 
 test_that("check_overdispersion, genpois", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -194,16 +255,536 @@ test_that("check_overdispersion, genpois", {
     family = glmmTMB::genpois(),
     data = Salamanders
   )
+  set.seed(123)
   expect_equal(
     check_overdispersion(model),
     structure(
-      list(
-        dispersion_ratio = 0.971975646955856,
-        p_value = 0.88
-      ),
-      class = c("check_overdisp", "see_check_overdisp")
+      list(dispersion_ratio = 1.13005481966618, p_value = 0.408),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "model",
+      simulated = TRUE
     ),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
+    tolerance = 1e-4
+  )
+  set.seed(123)
+  expect_equal(
+    check_overdispersion(model, residual_type = "normal"),
+    structure(
+      list(
+        chisq_statistic = 473.48007461303,
+        dispersion_ratio = 0.74681399781235,
+        residual_df = 634L,
+        p_value = 0.999999604566096
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "model"
+    ),
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("check_overdispersion, glm can use normal residuals", {
+  #fmt: skip
+  dat <- data.frame(
+    n = c(
+      55, 59, 74, 7, 54, 54, 57, 48, 55, 57, 41,
+      20, 13, 21, 13, 32, 38, 42, 37, 14, 19
+    ),
+    success = c(
+      26, 35, 28, 6, 16, 35, 28, 21, 31, 10, 2, 9, 7,
+      18, 1, 26, 28, 3, 17, 11, 17
+    ),
+    x = c(
+      3.464, 1.599, 3.39, 3.047, 2.442, 1.777, 3.363,
+      4.626, 2.701, 4.636, 3.622, 2.031, 1.666, 2.218, 3.338, 4.255,
+      2.476, 4.727, 3.317, 3.925, 2.854
+    )
+  )
+
+  mod1 <- glm(cbind(success, n - success) ~ x, data = dat, family = binomial)
+
+  set.seed(123)
+  out <- check_overdispersion(mod1, residual_type = "normal")
+  expect_equal(
+    out,
+    structure(
+      list(
+        chisq_statistic = 137.09656611108,
+        dispersion_ratio = 7.21560874268842,
+        residual_df = 19L,
+        p_value = 6.54224660869874e-20
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "mod1"
+    ),
+    tolerance = 1e-4
+  )
+
+  set.seed(123)
+  out <- check_overdispersion(mod1)
+  expect_equal(
+    out,
+    structure(
+      list(dispersion_ratio = 1.07771876659311, p_value = 0.528),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "mod1",
+      simulated = TRUE
+    ),
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("check_overdispersion, glm binomial with cbind() uses Pearson residuals", {
+  #fmt: skip
+  dat <- data.frame(
+    n = c(
+      55, 59, 74, 7, 54, 54, 57, 48, 55, 57, 41,
+      20, 13, 21, 13, 32, 38, 42, 37, 14, 19
+    ),
+    success = c(
+      26, 35, 28, 6, 16, 35, 28, 21, 31, 10, 2, 9, 7,
+      18, 1, 26, 28, 3, 17, 11, 17
+    ),
+    x = c(
+      3.464, 1.599, 3.39, 3.047, 2.442, 1.777, 3.363,
+      4.626, 2.701, 4.636, 3.622, 2.031, 1.666, 2.218, 3.338, 4.255,
+      2.476, 4.727, 3.317, 3.925, 2.854
+    )
+  )
+  mod1 <- glm(cbind(success, n - success) ~ x, data = dat, family = binomial)
+  m_binom <- glm(cbind(ncases, ncontrols) ~ agegp, family = binomial, data = esoph)
+
+  for (fit in list(mod1, m_binom)) {
+    out <- check_overdispersion(fit, residual_type = "normal")
+    pearson_chisq <- sum(stats::residuals(fit, type = "pearson")^2)
+    expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+    expect_equal(
+      out$dispersion_ratio,
+      pearson_chisq / stats::df.residual(fit),
+      tolerance = 1e-6
+    )
+  }
+})
+
+
+test_that("check_overdispersion, quasi families warn", {
+  m_quasipois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = quasipoisson,
+    data = Seatbelts
+  )
+  m_quasibinom <- glm(
+    cbind(ncases, ncontrols) ~ agegp,
+    family = quasibinomial,
+    data = esoph
+  )
+
+  for (fit in list(m_quasipois, m_quasibinom)) {
+    fam <- stats::family(fit)$family
+    for (rt in list(NULL, "simulated")) {
+      warns <- character(0)
+      withCallingHandlers(
+        check_overdispersion(fit, residual_type = rt),
+        warning = function(w) {
+          warns <<- c(warns, gsub("\\s+", " ", conditionMessage(w)))
+          invokeRestart("muffleWarning")
+        }
+      )
+      expect_length(warns, 1)
+      expect_match(warns, fam, fixed = TRUE)
+      expect_match(warns, "already estimates a dispersion parameter", fixed = TRUE)
+      expect_match(warns, "Simulated residuals are not available", fixed = TRUE)
+    }
+    expect_no_warning(check_overdispersion(fit, verbose = FALSE))
+    expect_no_warning(
+      check_overdispersion(fit, residual_type = "simulated", verbose = FALSE)
+    )
+  }
+})
+
+
+test_that("check_overdispersion, quasi families return the unscaled Pearson test", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+  m_quasipois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = quasipoisson,
+    data = Seatbelts
+  )
+  m_binom <- glm(cbind(ncases, ncontrols) ~ agegp, family = binomial, data = esoph)
+  m_quasibinom <- glm(
+    cbind(ncases, ncontrols) ~ agegp,
+    family = quasibinomial,
+    data = esoph
+  )
+  stats_names <- c("chisq_statistic", "dispersion_ratio", "residual_df", "p_value")
+
+  out_pois <- check_overdispersion(m_pois)
+  out_quasipois <- check_overdispersion(m_quasipois, verbose = FALSE)
+  expect_equal(unclass(out_quasipois)[stats_names], unclass(out_pois)[stats_names])
+
+  out_binom <- check_overdispersion(m_binom, residual_type = "normal")
+  out_quasibinom <- check_overdispersion(m_quasibinom, verbose = FALSE)
+  expect_equal(unclass(out_quasibinom)[stats_names], unclass(out_binom)[stats_names])
+})
+
+
+test_that("check_overdispersion, print notes quasi families", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+  m_quasipois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = quasipoisson,
+    data = Seatbelts
+  )
+
+  expect_no_warning(check_overdispersion(m_pois))
+  out_pois <- check_overdispersion(m_pois)
+  msgs <- character(0)
+  withCallingHandlers(
+    capture.output(print(out_pois)),
+    message = function(m) {
+      msgs <<- c(msgs, conditionMessage(m))
+      invokeRestart("muffleMessage")
+    }
+  )
+  expect_identical(msgs, "Overdispersion detected.\n")
+
+  out_quasipois <- check_overdispersion(m_quasipois, verbose = FALSE)
+  msgs <- character(0)
+  withCallingHandlers(
+    capture.output(print(out_quasipois)),
+    message = function(m) {
+      msgs <<- c(msgs, conditionMessage(m))
+      invokeRestart("muffleMessage")
+    }
+  )
+  expect_length(msgs, 1)
+  expect_match(msgs, "Overdispersion detected\\..*dispersion")
+})
+
+
+test_that("check_overdispersion, fixest quasipoisson warns", {
+  skip_if_not_installed("fixest")
+  m_fixest <- fixest::feglm(
+    DriversKilled ~ PetrolPrice,
+    data = as.data.frame(Seatbelts),
+    family = "quasipoisson"
+  )
+  warns <- character(0)
+  withCallingHandlers(
+    check_overdispersion(m_fixest),
+    warning = function(w) {
+      warns <<- c(warns, gsub("\\s+", " ", conditionMessage(w)))
+      invokeRestart("muffleWarning")
+    }
+  )
+  expect_length(warns, 1)
+  expect_match(warns, "already estimates a dispersion parameter", fixed = TRUE)
+  expect_no_warning(check_overdispersion(m_fixest, verbose = FALSE))
+
+  m_fixest_multi <- fixest::feglm(
+    c(DriversKilled, VanKilled) ~ PetrolPrice,
+    data = as.data.frame(Seatbelts),
+    family = "quasipoisson"
+  )
+  expect_no_warning(check_overdispersion(m_fixest_multi, verbose = FALSE))
+})
+
+
+test_that("check_overdispersion, glm with na.exclude", {
+  d <- as.data.frame(Seatbelts)
+  d$PetrolPrice[c(3, 50, 120)] <- NA
+  m_pois <- glm(
+    DriversKilled ~ PetrolPrice,
+    family = poisson,
+    data = d,
+    na.action = na.exclude
+  )
+  out <- check_overdispersion(m_pois)
+  pearson_chisq <- sum(stats::residuals(m_pois, type = "pearson")^2, na.rm = TRUE)
+  expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+  expect_identical(out$residual_df, stats::df.residual(m_pois))
+  expect_message(capture.output(print(out)), "Overdispersion detected")
+})
+
+
+test_that("check_overdispersion, glm poisson with prior weights", {
+  d <- as.data.frame(Seatbelts)
+  d$w <- rep(1:3, length.out = nrow(d))
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = d, weights = w)
+  out <- check_overdispersion(m_pois)
+  pearson_chisq <- sum(stats::residuals(m_pois, type = "pearson")^2)
+  expect_equal(out$chisq_statistic, pearson_chisq, tolerance = 1e-6)
+  expect_equal(
+    out$dispersion_ratio,
+    pearson_chisq / stats::df.residual(m_pois),
+    tolerance = 1e-6
+  )
+})
+
+
+test_that("check_overdispersion, glm uses df.residual() with aliased coefficients", {
+  d_pois <- as.data.frame(Seatbelts)
+  d_pois$PetrolPrice2 <- 2 * d_pois$PetrolPrice
+  d_binom <- esoph
+  d_binom$alc <- as.numeric(d_binom$alcgp)
+  d_binom$alc2 <- 2 * d_binom$alc
+
+  fits <- list(
+    poisson = glm(DriversKilled ~ PetrolPrice + PetrolPrice2, poisson, d_pois),
+    quasipoisson = glm(DriversKilled ~ PetrolPrice + PetrolPrice2, quasipoisson, d_pois),
+    binomial = glm(cbind(ncases, ncontrols) ~ alc + alc2, binomial, d_binom),
+    quasibinomial = glm(cbind(ncases, ncontrols) ~ alc + alc2, quasibinomial, d_binom)
+  )
+
+  for (fam in names(fits)) {
+    fit <- fits[[fam]]
+    # the aliased coefficient makes the parameter count differ from df.residual()
+    expect_true(anyNA(stats::coef(fit)))
+    out <- check_overdispersion(fit, residual_type = "normal", verbose = FALSE)
+    rdf <- stats::df.residual(fit)
+    expect_identical(out$residual_df, rdf)
+    expect_equal(out$dispersion_ratio, out$chisq_statistic / rdf, tolerance = 1e-10)
+    expect_equal(
+      out$p_value,
+      stats::pchisq(out$chisq_statistic, rdf, lower.tail = FALSE),
+      tolerance = 1e-10
+    )
+    if (startsWith(fam, "quasi")) {
+      expect_equal(out$dispersion_ratio, summary(fit)$dispersion, tolerance = 1e-6)
+    }
+  }
+})
+
+
+test_that("check_overdispersion, fixest uses df.residual() with fixed effects", {
+  skip_if_not_installed("fixest")
+  set.seed(2)
+  d <- data.frame(x = rnorm(150), f = rep(1:10, 15))
+  d$y <- rpois(150, exp(1 + 0.3 * d$x + d$f / 10))
+
+  m_pois <- fixest::fepois(y ~ x | f, data = d)
+  out <- check_overdispersion(m_pois)
+  rdf <- stats::df.residual(m_pois)
+  # the fixed effects make the parameter count differ from df.residual()
+  expect_lt(rdf, stats::nobs(m_pois) - 1)
+  expect_identical(out$residual_df, rdf)
+  expect_equal(out$dispersion_ratio, out$chisq_statistic / rdf, tolerance = 1e-10)
+  expect_equal(
+    out$p_value,
+    stats::pchisq(out$chisq_statistic, rdf, lower.tail = FALSE),
+    tolerance = 1e-10
+  )
+
+  m_quasi <- fixest::feglm(y ~ x | f, data = d, family = "quasipoisson")
+  out <- check_overdispersion(m_quasi, verbose = FALSE)
+  expect_identical(out$residual_df, stats::df.residual(m_quasi))
+  expect_equal(out$dispersion_ratio, m_quasi$dispersion, tolerance = 1e-4)
+})
+
+
+test_that("check_overdispersion, fixest_multi from split matches each sample", {
+  skip_if_not_installed("fixest")
+  set.seed(2)
+  d <- data.frame(
+    x = rnorm(150),
+    f = rep(1:10, 15),
+    g = rep(c("a", "b"), c(100, 50)),
+    stringsAsFactors = FALSE
+  )
+  d$y <- rpois(150, exp(1 + 0.3 * d$x))
+
+  m_multi <- fixest::fepois(y ~ x | f, data = d, split = ~g)
+  expect_no_warning({
+    out <- check_overdispersion(m_multi)
+  })
+  expect_length(out, 2)
+
+  stats_names <- c("chisq_statistic", "dispersion_ratio", "residual_df", "p_value")
+  for (i in seq_along(out)) {
+    grp <- c("a", "b")[i]
+    m_single <- fixest::fepois(y ~ x | f, data = d[d$g == grp, ])
+    expect_equal(
+      unclass(out[[i]])[stats_names],
+      unclass(check_overdispersion(m_single))[stats_names],
+      tolerance = 1e-10
+    )
+  }
+})
+
+
+test_that("check_overdispersion, glmx uses Pearson residuals of the fitted family", {
+  skip_if_not_installed("glmx")
+  skip_if_not_installed("MASS")
+
+  # negative binomial, data from the glmx help page
+  set.seed(1)
+  d <- data.frame(x = stats::runif(200, -1, 1))
+  d$y <- stats::rnbinom(200, mu = exp(0 + 3 * d$x), size = 1)
+  m_nb <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0
+  )
+  m_ref <- MASS::glm.nb(y ~ x, data = d)
+  out <- check_overdispersion(m_nb)
+  expect_equal(
+    out$chisq_statistic,
+    sum(stats::residuals(m_ref, type = "pearson")^2),
+    tolerance = 1e-3
+  )
+  expect_identical(out$residual_df, as.integer(stats::nobs(m_nb) - m_nb$df))
+
+  # glmx stores no weights when they are given as a numeric vector of ones
+  d$one <- 1
+  m_nb1 <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0,
+    weights = one
+  )
+  expect_null(m_nb1$weights)
+
+  # without a stored response, there are no Pearson residuals
+  m_noy <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = MASS::negative.binomial,
+    xlink = "log",
+    xstart = 0,
+    y = FALSE
+  )
+  expect_error(check_overdispersion(m_noy), "no stored response")
+  expect_equal(
+    check_overdispersion(m_nb1)$chisq_statistic,
+    out$chisq_statistic,
+    tolerance = 1e-8
+  )
+
+  # binomial with a cbind() response, unweighted and weighted
+  set.seed(4)
+  d <- data.frame(x = stats::rnorm(150))
+  d$s <- stats::rbinom(150, 10, stats::plogis(0.3 + d$x))
+  d$f <- 10 - d$s
+  d$pw <- rep_len(1:3, 150)
+  fam <- function(shape) stats::binomial(link = glmx::gosset(shape))
+  for (weighted in c(FALSE, TRUE)) {
+    if (weighted) {
+      m_binom <- glmx::glmx(
+        cbind(s, f) ~ x,
+        data = d,
+        family = fam,
+        xlink = "log",
+        xstart = 0,
+        weights = pw
+      )
+      m_ref <- glm(cbind(s, f) ~ x, data = d, family = m_binom$family$glm, weights = pw)
+    } else {
+      m_binom <- glmx::glmx(
+        cbind(s, f) ~ x,
+        data = d,
+        family = fam,
+        xlink = "log",
+        xstart = 0
+      )
+      m_ref <- glm(cbind(s, f) ~ x, data = d, family = m_binom$family$glm)
+    }
+    out <- check_overdispersion(m_binom)
+    expect_equal(
+      out$chisq_statistic,
+      sum(stats::residuals(m_ref, type = "pearson")^2),
+      tolerance = 1e-8
+    )
+    expect_identical(out$residual_df, as.integer(stats::nobs(m_binom) - m_binom$df))
+  }
+
+  # Bernoulli models are rejected, as for glm
+  d$b <- as.integer(d$s > 5)
+  m_bern <- glmx::glmx(b ~ x, data = d, family = fam, xlink = "log", xstart = 0)
+  expect_error(
+    check_overdispersion(m_bern),
+    "cannot be used for Bernoulli models"
+  )
+  d$b_factor <- factor(ifelse(d$s > 5, "yes", "no"))
+  m_bern <- glmx::glmx(b_factor ~ x, data = d, family = fam, xlink = "log", xstart = 0)
+  expect_error(
+    check_overdispersion(m_bern),
+    "cannot be used for Bernoulli models"
+  )
+
+  # other glmx families are not supported
+  set.seed(1)
+  d <- data.frame(x = stats::runif(200, -1, 1))
+  d$y <- stats::rpois(200, exp(1 + d$x))
+  m_pois <- glmx::glmx(
+    y ~ x,
+    data = d,
+    family = function(p) stats::poisson(link = stats::power(p)),
+    xlink = "identity",
+    xstart = 0.5
+  )
+  expect_error(
+    check_overdispersion(m_pois),
+    "only available for\\s+negative\\s+binomial\\s+and\\s+binomial\\s+families"
+  )
+})
+
+
+test_that("check_overdispersion, glm errors without Pearson residuals", {
+  m_pois <- glm(DriversKilled ~ PetrolPrice, family = poisson, data = Seatbelts)
+
+  local_mocked_bindings(get_residuals = function(...) NULL, .package = "insight")
+  expect_error(
+    check_overdispersion(m_pois),
+    "Pearson residuals are not available for models of class `glm`"
+  )
+
+  local_mocked_bindings(
+    get_residuals = function(...) stop("no residuals", call. = FALSE),
+    .package = "insight"
+  )
+  expect_error(
+    check_overdispersion(m_pois),
+    "Pearson residuals are not available for models of class `glm`"
+  )
+  expect_error(check_overdispersion(m_pois), "The error was: no residuals")
+
+  # with `easystats_errors`, the original error comes through
+  withr::local_options(easystats_errors = TRUE)
+  expect_error(check_overdispersion(m_pois), "^no residuals$")
+})
+
+
+test_that("check_overdispersion, svyglm keeps the observation-based df", {
+  skip_if_not_installed("survey")
+  data(api, package = "survey")
+  des <- survey::svydesign(
+    id = ~ dnum + snum,
+    weights = ~pw,
+    data = apiclus2,
+    fpc = ~ fpc1 + fpc2
+  )
+  m_svy <- survey::svyglm(
+    I(round(api00 / 10)) ~ ell + meals,
+    design = des,
+    family = poisson
+  )
+  out <- check_overdispersion(m_svy, residual_type = "normal")
+  # df.residual() gives a design-based df (design df + 1 - coefficients), far
+  # below this count
+  expect_lt(stats::df.residual(m_svy), out$residual_df)
+  expect_identical(
+    out$residual_df,
+    as.integer(stats::nobs(m_svy) - length(stats::coef(m_svy)))
+  )
+  expect_equal(
+    out$dispersion_ratio,
+    out$chisq_statistic / out$residual_df,
+    tolerance = 1e-10
   )
 })

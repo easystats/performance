@@ -4,8 +4,8 @@ on:
     # Trigger once a week at 00:00 on Sunday
     - cron: "0 0 * * SUN"
 
-name: R-CMD-check-devel-easystats
+name: R-CMD-check-weekly
 
 jobs:
-  R-CMD-check-devel-easystats:
-    uses: easystats/workflows/.github/workflows/R-CMD-check-devel-easystats.yaml@main
+  R-CMD-check:
+    uses: easystats/workflows/.github/workflows/R-CMD-check-main.yaml@main

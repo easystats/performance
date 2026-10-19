@@ -3,12 +3,15 @@
 \name{r2}
 \alias{r2}
 \alias{r2.default}
+\alias{r2.mlm}
 \alias{r2.merMod}
 \title{Compute the model's R2}
 \usage{
 r2(model, ...)
 
 \method{r2}{default}(model, ci = NULL, verbose = TRUE, ...)
+
+\method{r2}{mlm}(model, multivariate = TRUE, ...)
 
 \method{r2}{merMod}(model, ci = NULL, tolerance = 1e-05, ...)
 }
@@ -23,6 +26,10 @@ confidence intervals for R2 are calculated.}
 \item{verbose}{Logical. Should details about R2 and CI methods be given
 (\code{TRUE}) or not (\code{FALSE})?}
 
+\item{multivariate}{Logical. Should multiple R2 values be reported as
+separated by response (FALSE) or should a single R2 be reported as
+combined across responses computed by \code{\link{r2_mlm}} (TRUE).}
+
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
 or not. Indicates up to which value the convergence result is accepted. When
@@ -36,11 +43,17 @@ for the given model (or \code{NULL} if no R2 could be extracted). See the
 list below:
 \itemize{
 \item Logistic models: \link[=r2_tjur]{Tjur's R2}
-\item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
+\item Generalized linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
 \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
+\item Beta or ordered Beta: \link[=r2_ferrari]{Ferrari's R2}
 \item Models with zero-inflation: \link[=r2_zeroinflated]{R2 for zero-inflated models}
 \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
 \item Bayesian models: \link[=r2_bayes]{R2 bayes}
+\item Additional model families from package \emph{glmmTMB} that are not mentioned
+above (like \code{nbinom1}, \code{compois}, \code{betabinomial} etc.) default to
+\link[=r2_mcfadden]{McFadden's R2}.
+\item R2 for models from package \emph{gamlss} is extracted directly from the
+\code{summary()}, if available. Else, \link[=r2_mcfadden]{McFadden's R2} is returned.
 }
 }
 \description{
@@ -54,7 +67,7 @@ to return a "generic" r-quared value, calculated as following:
 \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2)}
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 # Pseudo r-quared for GLM
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
@@ -70,5 +83,5 @@ r2(model)
 \seealso{
 \code{\link[=r2_bayes]{r2_bayes()}}, \code{\link[=r2_coxsnell]{r2_coxsnell()}}, \code{\link[=r2_kullback]{r2_kullback()}}, \code{\link[=r2_loo]{r2_loo()}},
 \code{\link[=r2_mcfadden]{r2_mcfadden()}}, \code{\link[=r2_nagelkerke]{r2_nagelkerke()}}, \code{\link[=r2_nakagawa]{r2_nakagawa()}}, \code{\link[=r2_tjur]{r2_tjur()}},
-\code{\link[=r2_xu]{r2_xu()}} and \code{\link[=r2_zeroinflated]{r2_zeroinflated()}}.
+\code{\link[=r2_xu]{r2_xu()}}, \code{\link[=r2_zeroinflated]{r2_zeroinflated()}}, and \code{\link[=r2_mlm]{r2_mlm()}}.
 }

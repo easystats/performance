@@ -22,7 +22,6 @@ performance_mae <- function(model, ...) {
 mae <- performance_mae
 
 
-
 #' @export
 performance_mae.default <- function(model, verbose = TRUE, ...) {
   .is_model_valid(model)
@@ -32,8 +31,6 @@ performance_mae.default <- function(model, verbose = TRUE, ...) {
   observed <- insight::get_response(model)
   mean(abs(observed - pred))
 }
-
-
 
 
 # mfx models -------------------------------

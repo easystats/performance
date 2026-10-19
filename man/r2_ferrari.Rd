@@ -26,7 +26,7 @@ Calculates Ferrari's and Cribari-Neto's pseudo R2 (for
 beta-regression models).
 }
 \examples{
-\dontshow{if (require("betareg")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("betareg")) withAutoprint(\{ # examplesIf}
 data("GasolineYield", package = "betareg")
 model <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
 r2_ferrari(model)

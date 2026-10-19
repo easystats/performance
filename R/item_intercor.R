@@ -1,14 +1,13 @@
 #' @title Mean Inter-Item-Correlation
 #' @name item_intercor
 #'
-#' @description Compute various measures of internal consistencies
-#'    for tests or item-scales of questionnaires.
+#' @description Compute various measures of internal consistencies for tests or
+#' item-scales of questionnaires.
 #'
-#' @param x A matrix as returned by the `cor()`-function,
-#'    or a data frame with items (e.g. from a test or questionnaire).
-#' @param method Correlation computation method. May be one of
-#'    `"pearson"` (default), `"spearman"` or `"kendall"`.
-#'    You may use initial letter only.
+#' @param x A matrix as returned by the `cor()`-function, or a data frame with
+#' items (e.g. from a test or questionnaire).
+#' @param method Correlation computation method. May be one of `"pearson"`
+#' (default), `"spearman"` or `"kendall"`. You may use initial letter only.
 #'
 #' @return The mean inter-item-correlation value for `x`.
 #'
@@ -36,9 +35,9 @@
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_intercor(x)
 #' @export
-item_intercor <- function(x, method = c("pearson", "spearman", "kendall")) {
+item_intercor <- function(x, method = "pearson") {
   # Check parameter
-  method <- match.arg(method)
+  method <- insight::validate_argument(method, c("pearson", "spearman", "kendall"))
 
   # Mean-interitem-corelation
   if (inherits(x, "matrix")) {

@@ -20,7 +20,12 @@ test_that("r2_BayesFactor", {
   # with random effects:
   skip_if_not_installed("BayesFactor", minimum_version = "0.9.12.4.3")
   mtcars$gear <- factor(mtcars$gear)
-  model <- BayesFactor::lmBF(mpg ~ hp + cyl + gear + gear:wt, mtcars, progress = FALSE, whichRandom = c("gear", "gear:wt"))
+  model <- BayesFactor::lmBF(
+    mpg ~ hp + cyl + gear + gear:wt,
+    mtcars,
+    progress = FALSE,
+    whichRandom = c("gear", "gear:wt")
+  )
   r_BF <- r2(model, ci = 0.89)
   r_CI <- attr(r_BF, "CI")$R2_Bayes
 
@@ -38,6 +43,7 @@ test_that("r2_bayes", {
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("rstantools")
   model <- insight::download_model("stanreg_lmerMod_1")
+  skip_if(is.null(model))
   set.seed(123)
   out <- r2_bayes(model)
   expect_equal(out$R2_Bayes, 0.642, tolerance = 1e-3)

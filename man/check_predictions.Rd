@@ -3,31 +3,30 @@
 \name{check_predictions}
 \alias{check_predictions}
 \alias{check_predictions.default}
-\alias{posterior_predictive_check}
-\alias{check_posterior_predictions}
 \title{Posterior predictive checks}
 \usage{
-check_predictions(object, ...)
+check_predictions(model = NULL, ...)
 
 \method{check_predictions}{default}(
-  object,
+  model = NULL,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
   bandwidth = "nrd",
   type = "density",
+  x_limits = NULL,
   verbose = TRUE,
+  object = NULL,
   ...
 )
-
-posterior_predictive_check(object, ...)
-
-check_posterior_predictions(object, ...)
 }
 \arguments{
-\item{object}{A statistical model.}
+\item{model}{A statistical model.}
 
-\item{...}{Passed down to \code{simulate()}.}
+\item{...}{Additional arguments passed on to downstream functions. For
+frequentist models, these are forwarded to \code{simulate()}; for Bayesian models
+(e.g., \code{stanreg}, \code{brmsfit}), they are forwarded to
+\code{modelbased::estimate_prediction()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
@@ -54,7 +53,13 @@ to a different value.}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
+\item{x_limits}{An integer vector of length two specifying the x-axis limits
+for the plot. Use this to zoom in on a specific region of interest,
+especially if the response variable has a large range.}
+
 \item{verbose}{Toggle warnings.}
+
+\item{object}{Deprecated, please use \code{model} instead.}
 }
 \value{
 A data frame of simulated responses and the original response vector.
@@ -68,25 +73,39 @@ simulated data" (\emph{Gelman et al. 2014, p. 169}).
 
 \strong{performance} provides posterior predictive check methods for a variety
 of frequentist models (e.g., \code{lm}, \code{merMod}, \code{glmmTMB}, ...). For Bayesian
-models, the model is passed to \code{\link[bayesplot:pp_check]{bayesplot::pp_check()}}.
+models, posterior predictions are computed with
+\code{modelbased::estimate_prediction()} and plotted with the same machinery as
+for other supported models.
+
+If \code{check_predictions()} doesn't work as expected, try setting
+\code{verbose = TRUE} to get hints about possible problems.
 }
 \details{
 An example how posterior predictive checks can also be used for model
 comparison is Figure 6 from \emph{Gabry et al. 2019, Figure 6}.
 
-\if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
+\if{html}{\cr \figure{pp_check.png}{options: style="width: 25\%;" alt="Posterior Predictive Check"} \cr}
 The model shown in the right panel (b) can simulate new data that are more
 similar to the observed outcome than the model in the left panel (a). Thus,
 model (b) is likely to be preferred over model (a).
+
+For multivariate \strong{brms} models (models with more than one response), use
+the \code{response} argument to name one response, for example
+\code{check_predictions(model, response = "y1")}. If \code{response} is missing or
+does not name one response, \code{check_predictions()} gives an error that
+lists the names of the responses.
 }
 \note{
 Every model object that has a \code{simulate()}-method should work with
 \code{check_predictions()}. On R 3.6.0 and higher, if \strong{bayesplot} (or a
 package that imports \strong{bayesplot} such as \strong{rstanarm} or \strong{brms})
 is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
+
+If \code{check_predictions()} doesn't work as expected, try setting \code{verbose = TRUE}
+to get hints about possible problems.
 }
 \examples{
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # linear model
 model <- lm(mpg ~ disp, data = mtcars)
 check_predictions(model)
@@ -120,16 +139,16 @@ Cambridge University Press.
 \code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_residuals]{check_residuals()}}. See also
 \code{\link[see:print.see_performance_pp_check]{see::print.see_performance_pp_check()}} for options to customize the plot.
 
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

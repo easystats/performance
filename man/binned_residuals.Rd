@@ -10,8 +10,8 @@ binned_residuals(
   n_bins = NULL,
   show_dots = NULL,
   ci = 0.95,
-  ci_type = c("exact", "gaussian", "boot"),
-  residuals = c("deviance", "pearson", "response"),
+  ci_type = "exact",
+  residuals = NULL,
   iterations = 1000,
   verbose = TRUE,
   ...
@@ -45,9 +45,10 @@ bootstrap method, where confidence intervals are calculated based on the
 quantiles of the bootstrap distribution.}
 
 \item{residuals}{Character, the type of residuals to calculate. Can be
-\code{"deviance"} (default), \code{"pearson"} or \code{"response"}. It is recommended to
-use \code{"response"} only for those models where other residuals are not
-available.}
+\code{"response"}, \code{"pearson"} or \code{"deviance"}. For Bernoulli models, response
+residuals are used as default (defined "as observed minus expected values",
+(cf Gelman and Hill 2007, pp. 97-98). For other binomial models, deviance
+residuals are used.}
 
 \item{iterations}{Integer, the number of iterations to use for the
 bootstrap method. Only used if \code{ci_type = "boot"}.}
@@ -93,13 +94,27 @@ result
 # look at the data frame
 as.data.frame(result)
 
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
 # plot
-if (require("see")) {
-  plot(result, show_dots = TRUE)
-}
+plot(result, show_dots = TRUE)
 }
 
+# run simulation where we know linearity assumptions are met
+set.seed(1)
+n <- 5000
+x <- runif(n, 0, 10)
+logit_true <- -2 + 0.4 * x
+d <- data.frame(x = x, y = rbinom(n, 1, plogis(logit_true)))
+model <- glm(y ~ x, data = d, family = binomial)
+
+result <- binned_residuals(model, term = "x")
+result
+
+\donttest{
+plot(result)
+}
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gelman, A., and Hill, J. (2007). Data analysis using regression and

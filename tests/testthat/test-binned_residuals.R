@@ -31,7 +31,12 @@ test_that("binned_residuals", {
 test_that("binned_residuals, n_bins", {
   data(mtcars)
   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-  result <- binned_residuals(model, ci_type = "gaussian", residuals = "response", n_bins = 10)
+  result <- binned_residuals(
+    model,
+    ci_type = "gaussian",
+    residuals = "response",
+    n_bins = 10
+  )
   expect_named(
     result,
     c("xbar", "ybar", "n", "x.lo", "x.hi", "se", "CI_low", "CI_high", "group")
@@ -39,16 +44,32 @@ test_that("binned_residuals, n_bins", {
   expect_equal(
     result$xbar,
     c(
-      0.02373, 0.06301, 0.08441, 0.17907, 0.29225, 0.44073, 0.54951,
-      0.69701, 0.9168, 0.99204
+      0.02373,
+      0.06301,
+      0.08441,
+      0.17907,
+      0.29225,
+      0.44073,
+      0.54951,
+      0.69701,
+      0.9168,
+      0.99204
     ),
     tolerance = 1e-4
   )
   expect_equal(
     result$ybar,
     c(
-      -0.02373, -0.06301, -0.08441, -0.17907, 0.20775, -0.1074, 0.11715,
-      0.30299, -0.25014, 0.00796
+      -0.02373,
+      -0.06301,
+      -0.08441,
+      -0.17907,
+      0.20775,
+      -0.1074,
+      0.11715,
+      0.30299,
+      -0.25014,
+      0.00796
     ),
     tolerance = 1e-4
   )
@@ -58,7 +79,12 @@ test_that("binned_residuals, n_bins", {
 test_that("binned_residuals, terms", {
   data(mtcars)
   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-  result <- binned_residuals(model, ci_type = "gaussian", residuals = "response", term = "mpg")
+  result <- binned_residuals(
+    model,
+    ci_type = "gaussian",
+    residuals = "response",
+    term = "mpg"
+  )
   expect_named(
     result,
     c("xbar", "ybar", "n", "x.lo", "x.hi", "se", "CI_low", "CI_high", "group")
@@ -122,12 +148,12 @@ test_that("binned_residuals, default", {
   )
   expect_equal(
     result$ybar,
-    c(-0.26905, -0.44334, 0.03763, -0.19917, 0.81563, -0.23399),
+    c(-0.03786, -0.09514, 0.07423, -0.07955, 0.28891, -0.13786),
     tolerance = 1e-4
   )
   expect_equal(
     result$CI_low,
-    c(-0.52997, -0.70426, -0.32935, -0.59948, 0.55472, -0.55251),
+    c(-0.29878, -0.35605, -0.29275, -0.47986, 0.028, -0.45637),
     tolerance = 1e-4
   )
 })
@@ -150,15 +176,16 @@ test_that("binned_residuals, bootstrapped CI", {
   )
   expect_equal(
     result$ybar,
-    c(-0.26905, -0.44334, 0.03763, -0.19917, 0.81563, -0.23399),
+    c(-0.03786, -0.09514, 0.07423, -0.07955, 0.28891, -0.13786),
     tolerance = 1e-4
   )
   expect_equal(
     result$CI_low,
-    c(-0.32623, -0.50543, -0.80879, -1.15154, 0.67569, -0.65748),
+    c(-0.05307, -0.12229, -0.28119, -0.4845, 0.21073, -0.29864),
     tolerance = 1e-4
   )
 })
+
 
 test_that("binned_residuals, msg for non-bernoulli", {
   skip_on_cran()
@@ -169,17 +196,15 @@ test_that("binned_residuals, msg for non-bernoulli", {
   dat$prop <- suc / tot
   dat$x1 <- as.factor(sample.int(5, 100, replace = TRUE))
 
-  mod <- glm(prop ~ x1,
-    family = binomial,
-    data = dat,
-    weights = tot
-  )
+  mod <- glm(prop ~ x1, family = binomial, data = dat, weights = tot)
 
   expect_message(binned_residuals(mod), regex = "Using `ci_type = \"gaussian\"`")
   expect_silent(binned_residuals(mod, verbose = FALSE))
 })
 
+
 test_that("binned_residuals, empty bins", {
+  # fmt: skip
   eel <- data.frame(
     cured_bin = c(
       1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0,
@@ -219,7 +244,8 @@ test_that("binned_residuals, empty bins", {
       "No treatment", "Intervention", "No treatment", "No treatment",
       "No treatment", "No treatment", "No treatment", "Intervention",
       "Intervention", "No treatment", "No treatment", "Intervention"
-    ), duration = c(
+    ),
+    duration = c(
       7L, 7L, 6L, 8L, 7L, 6L, 7L, 7L, 8L, 7L, 7L, 7L,
       5L, 9L, 6L, 7L, 8L, 7L, 7L, 9L, 7L, 9L, 8L, 7L, 6L, 8L, 7L, 6L,
       7L, 6L, 7L, 6L, 5L, 6L, 7L, 7L, 8L, 7L, 5L, 7L, 9L, 10L, 7L,
@@ -240,7 +266,55 @@ test_that("binned_residuals, empty bins", {
   )
   expect_equal(
     out$CI_low,
-    c(-0.42552, -0.45162, -0.10819, -0.7339, -0.28086, -0.52599, 0.02795, -0.44023),
+    c(-0.28012, -0.24056, -0.13855, -0.4351, -0.29561, -0.41477, -0.11549, -0.38747),
     tolerance = 1e-4
   )
+})
+
+
+test_that("binned_residuals, validate against simulation", {
+  set.seed(1)
+  n <- 5000
+  x <- runif(n, 0, 10)
+
+  logit_true <- -2 + 0.4 * x
+  y <- rbinom(n, 1, plogis(logit_true))
+
+  df <- data.frame(x = x, y = y)
+  model <- glm(y ~ x, data = df, family = binomial)
+  result <- binned_residuals(model, term = "x")
+
+  # fmt: skip
+  expect_equal(
+    result$ybar,
+    c(
+      0.04592, -0.04543, -0.03811, -0.02816, -0.02203, -0.02699,
+      0.0949, -0.08555, -0.00579, 0.08263, 0.02126, -0.0474, 0.00384,
+      -0.04725, -0.0321, 0.03138, -0.06732, -0.04722, 0.00915, 0.04655,
+      0.02111, 0.00525, 0.05276, 0.04798, 0.07258, -0.05213, 0.07211,
+      -0.01983, -0.11933, 0.04429, 0.11146, 0.03407, -0.0497, 0.05634,
+      -0.02326, -0.0425, -0.10596, -0.01356, -0.00548, -0.01922, 0.0854,
+      0.03831, -0.01169, -0.00412, 0.05522, 0.02123, -0.03672, 0.07975,
+      -0.03666, 0.05404, 0.00856, -0.00471, -0.05573, 0.02943, -0.07636,
+      -0.00416, 0.03117, -0.01042, -0.09085, 0.0734, 0.00484, 0.02838,
+      -0.06734, 0.01231, -0.04072, 0.00871, 0.01839, -0.04733, -0.00821,
+      -0.01694, 0.04996
+    ),
+    tolerance = 1e-3
+  )
+})
+
+
+test_that("binned_residuals, binomial (non-Bernoulli) uses deviance as default", {
+  set.seed(1)
+  n <- 600
+  size <- 20
+  x <- runif(n, -3, 3)
+  d <- data.frame(x = x, y = rbinom(n, size, plogis(-0.5 + 1.2 * x)))
+  d$f <- size - d$y
+  m <- glm(cbind(y, f) ~ x, family = binomial, data = d)
+  out1 <- binned_residuals(m)
+  out2 <- binned_residuals(m, residuals = "deviance")
+  expect_equal(out1$xbar, out2$xbar, tolerance = 1e-5)
+  expect_equal(out1$ybar, out2$ybar, tolerance = 1e-5)
 })

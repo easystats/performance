@@ -24,21 +24,25 @@ check_sphericity <- function(x, ...) {
 }
 
 
-
 # default --------------------------
 
 #' @export
 check_sphericity.default <- function(x, ...) {
-  insight::format_error(paste0("Test not supported yet for object of class `", class(x)[1], "`."))
+  insight::format_error(paste0(
+    "Test not supported yet for object of class `",
+    class(x)[1],
+    "`."
+  ))
 }
-
 
 
 # methods ------------------------------
 
 #' @export
 plot.check_sphericity <- function(x, ...) {
-  insight::format_warning("There is currently no `plot()` method for `check_sphericity()`.")
+  insight::format_warning(
+    "There is currently no `plot()` method for `check_sphericity()`."
+  )
 }
 
 
@@ -55,7 +59,6 @@ print.check_sphericity <- function(x, ...) {
   }
   invisible(x)
 }
-
 
 
 # other classes ------------------
@@ -81,7 +84,9 @@ check_sphericity.Anova.mlm <- function(x, ...) {
 #' @export
 check_sphericity.afex_aov <- function(x, ...) {
   if (length(attr(x, "within")) == 0) {
-    insight::format_error("Mauchly Test of Sphericity is only aplicable to ANOVAs with within-subjects factors.")
+    insight::format_error(
+      "Mauchly Test of Sphericity is only aplicable to ANOVAs with within-subjects factors."
+    )
   }
 
   check_sphericity.Anova.mlm(x, ...)

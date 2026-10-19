@@ -65,9 +65,10 @@
 #' @export
 simulate_residuals <- function(x, iterations = 250, ...) {
   insight::check_if_installed("DHARMa")
-  # TODO (low priority): Note that DHARMa::simulateResiduals(x, ...) does its own checks for whether
-  # or not the model passed to it is supported, do we want to use this or do our
-  # own checks so we can supply our own error message?
+  # TODO (low priority): Note that DHARMa::simulateResiduals(x, ...) does its
+  # own checks for whether or not the model passed to it is supported, do we
+  # want to use this or do our own checks so we can supply our own error
+  # message?
   if (iterations < 2) {
     insight::format_error("`iterations` must be at least 2.")
   }
@@ -89,8 +90,11 @@ print.performance_simres <- function(x, ...) {
   # DHARMa uses, but with an easystats style. For now we can just stick with
   # DHARMa's method.
   msg <- paste0(
-    "Simulated residuals from a model of class `", class(x$fittedModel)[1],
-    "` based on ", x$nSim, " simulations. Use `check_residuals()` to check",
+    "Simulated residuals from a model of class `",
+    class(x$fittedModel)[1],
+    "` based on ",
+    x$nSim,
+    " simulations. Use `check_residuals()` to check",
     " uniformity of residuals or `residuals()` to extract simulated residuals.",
     " It is recommended to refer to `?DHARMa::simulateResiudals` and",
     " `vignette(\"DHARMa\")` for more information about different settings",
@@ -110,7 +114,12 @@ plot.performance_simres <- function(x, ...) {
 
 #' @rdname simulate_residuals
 #' @export
-residuals.performance_simres <- function(object, quantile_function = NULL, outlier_values = NULL, ...) {
+residuals.performance_simres <- function(
+  object,
+  quantile_function = NULL,
+  outlier_values = NULL,
+  ...
+) {
   # check for DHARMa argument names
   dots <- list(...)
   if (!is.null(dots$quantileFunction)) {
@@ -152,7 +161,8 @@ residuals.performance_simres <- function(object, quantile_function = NULL, outli
     simulated <- apply(x$simulatedResponse, 2, statistic_fun)
   }
   # p is simply ratio of simulated zeros to observed zeros
-  p <- switch(alternative,
+  p <- switch(
+    alternative,
     greater = mean(simulated >= observed),
     less = mean(simulated <= observed),
     min(min(mean(simulated <= observed), mean(simulated >= observed)) * 2, 1)

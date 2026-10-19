@@ -97,6 +97,13 @@ appropriate for mixed models with random slopes or nested random effects
 
 The contribution of random effects can be deduced by subtracting the
 marginal R2 from the conditional R2 or by computing the \code{\link[=icc]{icc()}}.
+
+For models with uncorrelated random slopes, such as \code{(x || group)} in
+\strong{lme4}, the r-squared values change when a predictor is shifted (for
+example, centered). The shift changes the model itself: with the correlation
+between random intercepts and slopes fixed at zero, the random intercept
+variance cannot adjust to the new origin of the predictor. For models with
+correlated random slopes, such as \code{(x | group)}, the values do not change.
 }
 \section{Supported models and model families}{
 
@@ -111,7 +118,7 @@ should be accurate and reliable for following mixed models or model families:
 \item Bernoulli (logistic) regression
 \item Binomial regression (with other than binary outcomes)
 \item Poisson and Quasi-Poisson regression
-\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Negative binomial regression (including nbinom1, nbinom2 and nbinom12 families)
 \item Gaussian regression (linear models)
 \item Gamma regression
 \item Tweedie regression
@@ -126,6 +133,7 @@ Following model families are not yet validated, but should work:
 \item Compound Poisson regression
 \item Generalized Poisson regression
 \item Log-normal regression
+\item Skew-normal regression
 }
 
 Extracting variance components for models with zero-inflation part is not
@@ -141,7 +149,7 @@ r-squared values, which may not be meaningful.
 }
 
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2_nakagawa(model)
 r2_nakagawa(model, by_group = TRUE)

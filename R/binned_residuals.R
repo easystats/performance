@@ -19,9 +19,10 @@
 #'   bootstrap method, where confidence intervals are calculated based on the
 #'   quantiles of the bootstrap distribution.
 #' @param residuals Character, the type of residuals to calculate. Can be
-#'   `"deviance"` (default), `"pearson"` or `"response"`. It is recommended to
-#'   use `"response"` only for those models where other residuals are not
-#'   available.
+#'   `"response"`, `"pearson"` or `"deviance"`. For Bernoulli models, response
+#'   residuals are used as default (defined "as observed minus expected values",
+#'   (cf Gelman and Hill 2007, pp. 97-98). For other binomial models, deviance
+#'   residuals are used.
 #' @param iterations Integer, the number of iterations to use for the
 #'   bootstrap method. Only used if `ci_type = "boot"`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
@@ -68,34 +69,70 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' \donttest{
 #' # plot
-#' if (require("see")) {
-#'   plot(result, show_dots = TRUE)
-#' }
+#' plot(result, show_dots = TRUE)
 #' }
 #'
+#' # run simulation where we know linearity assumptions are met
+#' set.seed(1)
+#' n <- 5000
+#' x <- runif(n, 0, 10)
+#' logit_true <- -2 + 0.4 * x
+#' d <- data.frame(x = x, y = rbinom(n, 1, plogis(logit_true)))
+#' model <- glm(y ~ x, data = d, family = binomial)
+#'
+#' result <- binned_residuals(model, term = "x")
+#' result
+#'
+#' \donttest{
+#' plot(result)
+#' }
 #' @export
-binned_residuals <- function(model,
-                             term = NULL,
-                             n_bins = NULL,
-                             show_dots = NULL,
-                             ci = 0.95,
-                             ci_type = c("exact", "gaussian", "boot"),
-                             residuals = c("deviance", "pearson", "response"),
-                             iterations = 1000,
-                             verbose = TRUE,
-                             ...) {
-  ci_type <- match.arg(ci_type)
-  residuals <- match.arg(residuals)
+binned_residuals <- function(
+  model,
+  term = NULL,
+  n_bins = NULL,
+  show_dots = NULL,
+  ci = 0.95,
+  ci_type = "exact",
+  residuals = NULL,
+  iterations = 1000,
+  verbose = TRUE,
+  ...
+) {
+  ci_type <- insight::validate_argument(
+    ci_type,
+    c("exact", "gaussian", "boot")
+  )
+
+  # extract model information - need this for Bernoulli checks
+  m_info <- insight::model_info(model)
 
   # for non-bernoulli models, `"exact"` doesn't work
-  if (isFALSE(insight::model_info(model)$is_bernoulli)) {
+  if (isFALSE(m_info$is_bernoulli)) {
     ci_type <- "gaussian"
     if (verbose) {
-      insight::format_alert("Using `ci_type = \"gaussian\"` because model is not bernoulli.")
+      insight::format_alert(
+        "Using `ci_type = \"gaussian\"` because model is not bernoulli."
+      )
     }
   }
+
+  # set default, depending on response-type
+  if (is.null(residuals)) {
+    if (isTRUE(m_info$is_bernoulli)) {
+      residuals <- "response"
+    } else {
+      residuals <- "deviance"
+    }
+  }
+
+  residuals <- insight::validate_argument(
+    residuals,
+    c("deviance", "pearson", "response")
+  )
 
   fitted_values <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
@@ -116,7 +153,8 @@ binned_residuals <- function(model,
   y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
 
   # calculate residuals
-  y <- switch(residuals,
+  y <- switch(
+    residuals,
     response = y0 - fitted_values,
     pearson = .safe((y0 - fitted_values) / sqrt(fitted_values * (1 - fitted_values))),
     deviance = .safe(stats::residuals(model, type = "deviance"))
@@ -124,10 +162,14 @@ binned_residuals <- function(model,
 
   # make sure we really have residuals
   if (is.null(y)) {
-    insight::format_error("Could not calculate residuals. Try using `residuals = \"response\"`.")
+    insight::format_error(
+      "Could not calculate residuals. Try using `residuals = \"response\"`."
+    )
   }
 
-  if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
+  if (is.null(n_bins)) {
+    n_bins <- round(sqrt(length(pred)))
+  }
 
   breaks.index <- floor(length(pred) * (1:(n_bins - 1)) / n_bins)
   breaks <- unique(c(-Inf, sort(pred)[breaks.index], Inf))
@@ -146,8 +188,13 @@ binned_residuals <- function(model,
     if (n == 0) {
       conf_int <- stats::setNames(c(NA, NA), c("CI_low", "CI_high"))
     } else {
-      conf_int <- switch(ci_type,
-        gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
+      conf_int <- switch(
+        ci_type,
+        gaussian = stats::qnorm(
+          c((1 - ci) / 2, (1 + ci) / 2),
+          mean = ybar,
+          sd = sdev / sqrt(n)
+        ),
         exact = {
           out <- stats::binom.test(sum(y0[items]), n)$conf.int
           # center CIs around point estimate

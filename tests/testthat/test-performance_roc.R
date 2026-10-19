@@ -1,7 +1,10 @@
-test_that("performance_roc", {
+skip_if_not_installed("bayestestR")
+
+test_that("performance_roc-mixed-1", {
   skip_if_not_installed("lme4")
   m <- lme4::glmer(vs ~ mpg + (1 | gear), family = "binomial", data = mtcars)
   roc <- performance_roc(m)
+  # fmt: skip
   expect_equal(
     roc$Sensitivity,
     c(
@@ -14,7 +17,8 @@ test_that("performance_roc", {
   )
 })
 
-test_that("performance_roc", {
+
+test_that("performance_roc-2", {
   set.seed(123)
   d <- iris[sample(1:nrow(iris), size = 50), ]
   d$y <- as.factor(rbinom(nrow(d), size = 1, 0.3))
@@ -26,6 +30,7 @@ test_that("performance_roc", {
     family = "binomial"
   )
   roc <- performance_roc(m)
+  # fmt: skip
   expect_equal(
     roc$Sensitivity,
     c(
@@ -38,5 +43,25 @@ test_that("performance_roc", {
       1, 1, 1, 1, 1
     ),
     tolerance = 1e-3
+  )
+})
+
+
+test_that("performance_roc, as.numeric", {
+  data(iris)
+  set.seed(123)
+  iris$y <- rbinom(nrow(iris), size = 1, .3)
+  folds <- sample(nrow(iris), size = nrow(iris) / 8, replace = FALSE)
+  test_data <- iris[folds, ]
+  train_data <- iris[-folds, ]
+
+  model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
+  roc <- performance_roc(model)
+  out <- as.numeric(roc)
+  expect_equal(
+    out,
+    bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
   )
 })

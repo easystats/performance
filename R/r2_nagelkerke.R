@@ -22,10 +22,7 @@ r2_nagelkerke <- function(model, ...) {
 }
 
 
-
-
 # helper ---------------------------
-
 
 .r2_nagelkerke <- function(model, l_base) {
   L.full <- insight::get_loglikelihood(model)
@@ -47,9 +44,6 @@ r2_nagelkerke <- function(model, ...) {
 }
 
 
-
-
-
 # Nagelkerke's R2 based on Cox&Snell's R2 ----------------
 
 #' @export
@@ -61,7 +55,9 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
 
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
@@ -72,7 +68,8 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
+  r2_nagelkerke <- r2cox /
+    (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
@@ -90,7 +87,9 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
 
   if (info$is_binomial && !info$is_bernoulli) {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
@@ -110,7 +109,8 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  r2_nagelkerke <- r2cox / (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
+  r2_nagelkerke <- r2cox /
+    (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
@@ -126,7 +126,8 @@ r2_nagelkerke.nestedLogit <- function(model, ...) {
       if (is.null(m$deviance)) {
         return(NA)
       }
-      r2_nagelkerke <- (1 - exp((m$deviance - m$null.deviance) / n[[i]])) / (1 - exp(-m$null.deviance / n[[i]]))
+      r2_nagelkerke <- (1 - exp((m$deviance - m$null.deviance) / n[[i]])) /
+        (1 - exp(-m$null.deviance / n[[i]]))
       names(r2_nagelkerke) <- "Nagelkerke's R2"
       r2_nagelkerke
     }),
@@ -137,15 +138,14 @@ r2_nagelkerke.nestedLogit <- function(model, ...) {
 
 #' @export
 r2_nagelkerke.bife <- function(model, ...) {
-  r2_nagelkerke <- r2_coxsnell(model) / (1 - exp(-model$null_deviance / insight::n_obs(model)))
+  r2_nagelkerke <- r2_coxsnell(model) /
+    (1 - exp(-model$null_deviance / insight::n_obs(model)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
 
 
-
 # mfx models ---------------------
-
 
 #' @export
 r2_nagelkerke.logitmfx <- function(model, ...) {
@@ -171,26 +171,23 @@ r2_nagelkerke.negbinirr <- r2_nagelkerke.logitmfx
 r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
 
 
-
-
 # Nagelkerke's R2 based on LogLik ----------------
-
 
 #' @export
 r2_nagelkerke.multinom <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm2 <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(model, ~1))
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
     return(NULL)
@@ -226,9 +223,7 @@ r2_nagelkerke.truncreg <- r2_nagelkerke.clm
 r2_nagelkerke.DirichletRegModel <- r2_coxsnell.clm
 
 
-
 # Nagelkerke's R2 based on LogLik stored in model object ----------------
-
 
 #' @export
 r2_nagelkerke.coxph <- function(model, ...) {

@@ -63,9 +63,10 @@ test_that("hdi which", {
 })
 
 test_that("bci which", {
+  skip_if_not_installed("bayestestR", minimum_version = "0.19.0")
   expect_identical(
     which(check_outliers(mtcars$mpg, method = "bci", threshold = 0.95)),
-    as.integer(c(15, 16, 20))
+    as.integer(c(15, 16, 20, 24))
   )
 })
 
@@ -89,7 +90,12 @@ test_that("mcd which", {
   # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
-    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45, verbose = FALSE))),
+    tail(which(check_outliers(
+      mtcars[1:4],
+      method = "mcd",
+      threshold = 45,
+      verbose = FALSE
+    ))),
     31L
   )
   expect_warning(
@@ -138,6 +144,18 @@ test_that("zscore print", {
   expect_output(
     print(check_outliers(mtcars, method = "zscore", threshold = 2.2)),
     "5 outliers detected: cases 9, 16, 19, 20, 31."
+  )
+})
+
+test_that("multiple methods print keeps method-threshold order", {
+  expect_output(
+    print(check_outliers(
+      mtcars,
+      method = c("mahalanobis", "iqr", "zscore"),
+      threshold = list(mahalanobis = 20, iqr = 1.2, zscore = 2.2)
+    )),
+    regex = "mahalanobis (20)",
+    fixed = TRUE
   )
 })
 
@@ -208,16 +226,35 @@ test_that("all methods which", {
   skip_if_not_installed("loo")
 
   expect_identical(
-    which(check_outliers(mtcars,
+    which(check_outliers(
+      mtcars,
       method = c(
-        "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-        "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+        "zscore",
+        "zscore_robust",
+        "iqr",
+        "ci",
+        "eti",
+        "hdi",
+        "bci",
+        "mahalanobis",
+        "mahalanobis_robust",
+        "mcd",
+        "optics",
+        "lof"
       ),
       threshold = list(
-        zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
-        ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
-        mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
-        optics = 14, lof = 0.005
+        zscore = 2.2,
+        zscore_robust = 2.2,
+        iqr = 1.2,
+        ci = 0.95,
+        eti = 0.95,
+        hdi = 0.90,
+        bci = 0.95,
+        mahalanobis = 20,
+        mahalanobis_robust = 25,
+        mcd = 25,
+        optics = 14,
+        lof = 0.005
       ),
       verbose = FALSE
     )),
@@ -226,7 +263,6 @@ test_that("all methods which", {
 })
 
 # 5. Next, we test adding ID
-
 
 test_that("multiple methods with ID", {
   skip_if_not_installed("bigutilsr")
@@ -237,16 +273,35 @@ test_that("multiple methods with ID", {
   skip_if_not_installed("loo")
 
   data <- datawizard::rownames_as_column(mtcars, var = "car")
-  x <- attributes(check_outliers(data,
+  x <- attributes(check_outliers(
+    data,
     method = c(
-      "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-      "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+      "zscore",
+      "zscore_robust",
+      "iqr",
+      "ci",
+      "eti",
+      "hdi",
+      "bci",
+      "mahalanobis",
+      "mahalanobis_robust",
+      "mcd",
+      "optics",
+      "lof"
     ),
     threshold = list(
-      zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
-      ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
-      mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
-      optics = 14, lof = 0.005
+      zscore = 2.2,
+      zscore_robust = 2.2,
+      iqr = 1.2,
+      ci = 0.95,
+      eti = 0.95,
+      hdi = 0.90,
+      bci = 0.95,
+      mahalanobis = 20,
+      mahalanobis_robust = 25,
+      mcd = 25,
+      optics = 14,
+      lof = 0.005
     ),
     ID = "car",
     verbose = FALSE
@@ -294,6 +349,7 @@ test_that("cook multiple methods which", {
 })
 
 test_that("pareto which", {
+  skip_on_cran()
   skip_if_not_installed("dbscan")
   skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
@@ -303,7 +359,7 @@ test_that("pareto which", {
 
   expect_identical(
     which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
-    17L
+    c(17L, 18L)
   )
 })
 
@@ -361,14 +417,32 @@ test_that("check_outliers with invald data", {
 })
 
 
+test_that("check_outliers on numeric data only", {
+  data(mtcars)
+  # all predictors categorical
+  mtcars$wt <- as.factor(mtcars$wt)
+  mtcars$mpg <- as.factor(mtcars$mpg)
+  model <- suppressWarnings(glm(vs ~ wt + mpg, data = mtcars, family = "binomial"))
+  # one fixed effect per observation, so Cook's distance is not defined
+  expect_error(
+    check_outliers(model),
+    regex = "n\\s+=\\s+32\\s+observations\\s+and\\s+p\\s+=\\s+32\\s+fixed"
+  )
+})
+
+
 test_that("check_outliers with DHARMa", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   mt1 <- mtcars[, c(1, 3, 4)]
   # create some fake outliers and attach outliers to main df
-  mt2 <- rbind(mt1, data.frame(
-    mpg = c(37, 40), disp = c(300, 400),
-    hp = c(110, 120)
-  ))
+  mt2 <- rbind(
+    mt1,
+    data.frame(
+      mpg = c(37, 40),
+      disp = c(300, 400),
+      hp = c(110, 120)
+    )
+  )
   # fit model with outliers
   model <- lm(disp ~ mpg + hp, data = mt2)
   set.seed(123)
@@ -378,8 +452,10 @@ test_that("check_outliers with DHARMa", {
     out,
     structure(
       list(
-        Coefficient = 0.0294117647058824, Expected = 0.00796812749003984,
-        CI_low = 0.000744364234690261, CI_high = 0.153267669560318,
+        Coefficient = 0.0294117647058824,
+        Expected = 0.00796812749003984,
+        CI_low = 0.000744364234690261,
+        CI_high = 0.153267669560318,
         p_value = 0.238146844116552
       ),
       class = c("check_outliers_simres", "list")
@@ -390,9 +466,66 @@ test_that("check_outliers with DHARMa", {
   expect_identical(
     capture.output(print(out)),
     c(
-      "# Outliers detection", "", "  Proportion of observed outliers: 2.94%",
+      "# Outliers detection",
+      "",
+      "  Proportion of observed outliers: 2.94%",
       "  Proportion of expected outliers: 0.80%, 95% CI [0.07, 15.33]",
       ""
     )
   )
+})
+
+
+test_that("check_outliers numeric, z-score", {
+  data(mtcars)
+  out <- check_outliers(mtcars$mpg, method = "zscore", threshold = 2)
+  expect_equal(which(as.numeric(out) == 1), c(18, 20))
+})
+
+
+test_that("influential observations plot data uses standardized residuals for lmer models", {
+  skip_if_not_installed("lme4")
+
+  # the plot draws Cook's distance contours from leverage, standardized
+  # residuals and the number of parameters, so these must reproduce the
+  # Cook's distance that check_outliers() tests (#857)
+  m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = lme4::sleepstudy)
+  out <- check_outliers(m)
+  d <- attributes(out)$influential_obs
+  p <- attributes(d)$n_params
+  implied_cook <- d$Std_Residuals^2 * d$Hat / (p * (1 - d$Hat))
+  expect_equal(implied_cook, d$Cooks_Distance, tolerance = 1e-6, ignore_attr = TRUE)
+  expect_identical(
+    which(implied_cook > attributes(out)$threshold$cook),
+    which(as.numeric(out) == 1)
+  )
+})
+
+
+test_that("influential observations plot data uses the Cook's distance threshold for lm models", {
+  # the contour lines must follow the threshold that check_outliers() uses,
+  # including a user-supplied threshold (#916)
+  m <- lm(disp ~ mpg + hp, data = mtcars)
+  for (th in list(NULL, list(cook = 2))) {
+    out <- check_outliers(m, method = "cook", threshold = th)
+    d <- attributes(out)$influential_obs
+    expect_equal(attributes(d)$cook_levels, attributes(out)$threshold$cook)
+    expect_identical(
+      which(d$Influential == "Influential"),
+      which(as.numeric(out) == 1)
+    )
+  }
+})
+
+
+test_that("check_outliers with psych", {
+  skip_if_not_installed("psych")
+  data(Harman.5, package = "psych")
+  pc <- psych::principal(Harman.5, 2, rotate = "varimax")
+  out <- check_outliers(pc)
+  expect_equal(which(as.numeric(out) == 1), 5)
+  out <- check_outliers(pc, threshold = 0.1)
+  expect_equal(which(as.numeric(out) == 1), integer(0))
+  out <- check_outliers(pc, threshold = 0.02)
+  expect_equal(which(as.numeric(out) == 1), c(3, 5, 6, 8))
 })

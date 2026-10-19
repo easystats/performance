@@ -47,19 +47,18 @@ NULL
 #' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
-#' @examplesIf require("lme4") && require("parameters") && require("randomForest")
+#' @examplesIf all(insight::check_if_installed(c("lme4", "parameters", "randomForest"), quietly = TRUE))
 #' data(sleepstudy, package = "lme4")
 #' model <<- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 #' check_distribution(model)
 #'
-#' @examplesIf require("see") && require("patchwork") && require("randomForest")
+#' @examplesIf all(insight::check_if_installed(c("see", "patchwork", "randomForest"), quietly = TRUE))
 #' plot(check_distribution(model))
 #'
 #' @export
 check_distribution <- function(model) {
   UseMethod("check_distribution")
 }
-
 
 
 # default -----------------------------
@@ -77,8 +76,11 @@ check_distribution.default <- function(model) {
   }
   dat <- .extract_features(x, "residuals")
 
-  dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
-
+  dist_residuals <- as.data.frame(t(stats::predict(
+    classify_distribution,
+    dat,
+    type = "prob"
+  )))
 
   # Extract features
   x <- datawizard::to_numeric(
@@ -88,7 +90,11 @@ check_distribution.default <- function(model) {
   )
   dat <- .extract_features(x, "response")
 
-  dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
+  dist_response <- as.data.frame(t(stats::predict(
+    classify_distribution,
+    dat,
+    type = "prob"
+  )))
 
   out <- data.frame(
     Distribution = rownames(dist_response),
@@ -104,7 +110,6 @@ check_distribution.default <- function(model) {
 
   out
 }
-
 
 
 # methods --------------------------
@@ -160,7 +165,6 @@ plot.check_distribution_numeric <- function(x, ...) {
 }
 
 
-
 # other classes -------------------
 
 #' @export
@@ -177,12 +181,15 @@ check_distribution.numeric <- function(model) {
     row.names = NULL
   )
 
-  class(out) <- unique(c("check_distribution_numeric", "see_check_distribution_numeric", class(out)))
+  class(out) <- unique(c(
+    "check_distribution_numeric",
+    "see_check_distribution_numeric",
+    class(out)
+  ))
   attr(out, "data") <- model
 
   out
 }
-
 
 
 # utilities -----------------------------
@@ -241,7 +248,6 @@ check_distribution.numeric <- function(model) {
     Integer = all(.is_integer(x))
   )
 }
-
 
 
 .is_integer <- function(x) {

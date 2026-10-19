@@ -16,6 +16,7 @@ check_outliers(x, ...)
   threshold = NULL,
   ID = NULL,
   verbose = TRUE,
+  group = NULL,
   ...
 )
 
@@ -33,7 +34,9 @@ check_outliers(x, ...)
 }
 \arguments{
 \item{x}{A model, a data.frame, a \code{performance_simres} \code{\link[=simulate_residuals]{simulate_residuals()}}
-or a \code{DHARMa} object.}
+or a \code{DHARMa} object, or an EFA/PCA/Omega object returned by the \strong{psych}
+package, or an object returned by \code{parameters::factor_analysis()} or
+\code{item_omega()}.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
@@ -49,12 +52,18 @@ or \code{DHARMa}, further arguments are passed down to \code{DHARMa::testOutlier
 \item{threshold}{A list containing the threshold values for each method (e.g.
 \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 considered as outlier. If \code{NULL}, default values will be used (see
-'Details'). If a numeric value is given, it will be used as the threshold
-for any of the method run.}
+'Details'). If a numeric value is given, it will be used as the threshold for
+any of the method run. For EFA/PCA/Omega, indicates the threshold for
+correlation of residuals (by default, 0.05).}
 
 \item{ID}{Optional, to report an ID column along with the row number.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{group}{Optional, name of a grouping variable in the data used to fit
+a \strong{glmmTMB} or \strong{lme4} model. If given, Cook's distance is computed for
+each level of this variable rather than for each observation (only for
+\code{method = "cook"}). See section 'Model-specific methods'.}
 
 \item{type}{Type of method to test for outliers. Can be one of \code{"default"},
 \code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
@@ -63,15 +72,19 @@ by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
 
 \item{iterations}{Number of simulations to run.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
-considered as outlier can be recovered with the \link{as.data.frame}
-function. Note that the function will (silently) return a vector of \code{FALSE}
-for non-supported data types such as character strings.
+considered as outlier can be recovered with the \link{as.data.frame} function.
+Note that the function will (silently) return a vector of \code{FALSE} for
+non-supported data types such as character strings. If \code{group} is given,
+the vector has one element per level of the grouping variable, and the data
+returned by \code{as.data.frame()} has one row per level, with the level in the
+\code{Group} column.
 }
 \description{
 Checks for and locates influential observations (i.e.,
@@ -90,8 +103,8 @@ Outliers can be defined as particularly influential observations.
 Most methods rely on the computation of some distance metric, and the
 observations greater than a certain threshold are considered outliers.
 Importantly, outliers detection methods are meant to provide information to
-consider for the researcher, rather than to be an automatized procedure
-which mindless application is a substitute for thinking.
+consider for the researcher, rather than to be an automatized procedure which
+mindless application is a substitute for thinking.
 
 An \strong{example sentence} for reporting the usage of the composite method
 could be:
@@ -109,10 +122,9 @@ that were classified as outliers by at least half of the methods used."}
 \note{
 There is also a
 \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-implemented in the
-\href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please
-note} that the range of the distance-values along the y-axis is re-scaled
-to range from 0 to 1.
+implemented in the \href{https://easystats.github.io/see/}{\strong{see} package}.
+\strong{Please note} that the range of the distance-values along the y-axis is
+re-scaled to range from 0 to 1.
 }
 \section{Model-specific methods}{
 
@@ -123,11 +135,40 @@ common than the basic Mahalanobis distance, but still used. Cook's distance
 estimates the variations in regression coefficients after removing each
 observation, one by one (Cook, 1977). Since Cook's distance is in the metric
 of an F distribution with p and n-p degrees of freedom, the median point of
-the quantile distribution can be used as a cut-off (Bollen, 1985). A common
+the quantile distribution can be used as a cut-off (Bollen, 1985). This is
+the default threshold, with p the number of fixed effects of the
+conditional model and n the number of observations used to fit it. A common
 approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
 outliers are detected). This only works for frequentist models. For Bayesian
 models, see \code{pareto}.
+
+For models from package \strong{glmmTMB}, Cook's distance is computed for the
+fixed effects of the conditional model by refitting the model once per
+row, leaving out that row (by giving it a weight of zero, so that terms
+like \code{scale()} or \code{poly()} are computed on the full data), and comparing
+the estimates with those of the full model. Thus, computation time grows
+with the number of observations. Each refit starts at the full model's
+estimates of the fixed effects and variance parameters, while the random
+effects are re-estimated from scratch. Rows where the refit fails, does
+not converge, has a non-positive-definite Hessian or returns different
+fixed-effect terms get a missing distance and are not counted as outliers
+by this method. \code{check_model()} skips this computation for
+\strong{glmmTMB} models.
+
+For models from packages \strong{glmmTMB} and \strong{lme4}, the \code{group} argument
+gives Cook's distance for each level of a grouping variable (e.g.,
+participants or schools) rather than for each observation. The model is
+refit once per level, leaving out that level, and Cook's distance is
+\verb{D_g = (b - b_(g))' V(b)^-1 (b - b_(g)) / p}, where \code{b} and \code{b_(g)} are
+the fixed effects of the full model and of the model without level g,
+\code{V(b)} is their variance-covariance matrix in the full model, and \code{p} is
+the number of fixed effects. The default threshold is \code{4 / G}, with \code{G}
+the number of levels (Nieuwenhuis et al., 2012). Levels where the refit
+fails or does not converge get a missing distance and are not counted as
+outliers. Note that \code{cooks.distance(stats::influence(model, groups = ))}
+from \strong{lme4} multiplies the distance by \code{(G - p) / G}, so its values are
+smaller.
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
@@ -202,7 +243,7 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}}
+1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:dist_ogk]{bigutilsr::dist_ogk()}}
 function.
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
@@ -236,7 +277,8 @@ detect several outliers (as these are usually defined as a percentage of
 extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
 \strong{dbscan} package to be installed, and that it takes some time to compute
-the results.
+the results. Additionally, the \code{optics_xi} (default to 0.05) is passed to
+the \code{\link[dbscan:extractXi]{dbscan::extractXi()}} function to further refine the cluster selection.
 \item \strong{Local Outlier Factor}:
 Based on a K nearest neighbors algorithm, LOF compares the local density of
 a point to the local densities of its neighbors instead of computing a
@@ -276,16 +318,20 @@ Default thresholds are currently specified as follows:
   eti = 1 - 0.001,
   hdi = 1 - 0.001,
   bci = 1 - 0.001,
-  cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+  cook = stats::qf(0.5, p, n - p),
   pareto = 0.7,
   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
   mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
   mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
   ics = 0.001,
   optics = 2 * ncol(x),
+  optics_xi = 0.05,
   lof = 0.001
 )
 }\if{html}{\out{</div>}}
+
+For \code{cook}, \code{p} is the number of fixed effects of the conditional model and
+\code{n} the number of observations used to fit it.
 }
 
 \section{Meta-analysis models}{
@@ -300,17 +346,16 @@ pooled effect.
 data <- mtcars # Size nrow(data) = 32
 
 # For single variables ------------------------------------------------------
-outliers_list <- check_outliers(data$mpg) # Find outliers
+# Find all observations beyond +/- 2 SD
+outliers_list <- check_outliers(data$mpg, method = "zscore", threshold = 2)
 outliers_list # Show the row index of the outliers
 as.numeric(outliers_list) # The object is a binary vector...
 filtered_data <- data[!outliers_list, ] # And can be used to filter a data frame
-nrow(filtered_data) # New size, 28 (4 outliers removed)
+nrow(filtered_data) # New size, 30 (2 outliers removed)
 
-# Find all observations beyond +/- 2 SD
-check_outliers(data$mpg, method = "zscore", threshold = 2)
 
 # For dataframes ------------------------------------------------------
-check_outliers(data) # It works the same way on data frames
+check_outliers(data, threshold = 2) # It works the same way on data frames
 
 # You can also use multiple methods at once
 outliers_list <- check_outliers(data, method = c(
@@ -331,13 +376,9 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 # We can run the function stratified by groups using `{datawizard}` package:
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
-# nolint start
-\dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# nolint end
-\donttest{
-# You can also run all the methods
-check_outliers(data, method = "all", verbose = FALSE)
 
+\dontshow{if (all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
+\donttest{
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
 mt1 <- mtcars[, c(1, 3, 4)]
@@ -377,6 +418,9 @@ regression. \emph{Technometrics}, \emph{19}(1), 15-18.
 \item Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
 multivariate outliers: Use a robust variant of Mahalanobis distance. \emph{Journal
 of Experimental Social Psychology}, 74, 150-156.
+\item Nieuwenhuis, R., te Grotenhuis, M., and Pelzer, B. (2012). influence.ME:
+Tools for detecting influential data in mixed effects models. \emph{The R
+Journal}, \emph{4}(2), 38-47. \doi{10.32614/RJ-2012-011}
 \item Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation forest.
 In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
 IEEE.
@@ -396,16 +440,16 @@ association}, \emph{85}(411), 633-639.
 \seealso{
 \code{\link[see:plot.see_check_outliers]{see::plot.see_check_outliers()}} for options to customize the plot.
 
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

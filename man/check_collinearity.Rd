@@ -14,20 +14,14 @@ multicollinearity(x, ...)
 
 \method{check_collinearity}{default}(x, ci = 0.95, verbose = TRUE, ...)
 
-\method{check_collinearity}{glmmTMB}(
-  x,
-  component = c("all", "conditional", "count", "zi", "zero_inflated"),
-  ci = 0.95,
-  verbose = TRUE,
-  ...
-)
+\method{check_collinearity}{glmmTMB}(x, component = "all", ci = 0.95, verbose = TRUE, ...)
 
 check_concurvity(x, ...)
 }
 \arguments{
-\item{x}{A model object (that should at least respond to \code{vcov()},
-and if possible, also to \code{model.matrix()} - however, it also should
-work without \code{model.matrix()}).}
+\item{x}{A model object (that should at least respond to \code{vcov()}, and if
+possible, also to \code{model.matrix()} - however, it also should work without
+\code{model.matrix()}).}
 
 \item{...}{Currently not used.}
 
@@ -36,34 +30,63 @@ work without \code{model.matrix()}).}
 \item{verbose}{Toggle off warnings or messages.}
 
 \item{component}{For models with zero-inflation component, multicollinearity
-can be checked for the conditional model (count component,
-\code{component = "conditional"} or \code{component = "count"}),
-zero-inflation component (\code{component = "zero_inflated"} or
-\code{component = "zi"}) or both components (\code{component = "all"}).
-Following model-classes are currently supported: \code{hurdle},
-\code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
+can be checked for the conditional model (count component, \code{component = "conditional"} or \code{component = "count"}), zero-inflation component
+(\code{component = "zero_inflated"} or \code{component = "zi"}) or both components
+(\code{component = "all"}). Following model-classes are currently supported:
+\code{hurdle}, \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
 }
 \value{
 A data frame with information about name of the model term, the
-variance inflation factor and associated confidence intervals, the factor
-by which the standard error is increased due to possible correlation
-with other terms, and tolerance values (including confidence intervals),
-where \code{tolerance = 1/vif}.
+(generalized) variance inflation factor and associated confidence intervals,
+the adjusted VIF, which is the factor by which the standard error is
+increased due to possible correlation with other terms (inflation due to
+collinearity), and tolerance values (including confidence intervals), where
+\code{tolerance = 1/vif}.
 }
 \description{
-\code{check_collinearity()} checks regression models for
-multicollinearity by calculating the variance inflation factor (VIF).
-\code{multicollinearity()} is an alias for \code{check_collinearity()}.
+\code{check_collinearity()} checks regression models for multicollinearity by
+calculating the (generalized) variance inflation factor (VIF, Fox & Monette
+1992). \code{multicollinearity()} is an alias for \code{check_collinearity()}.
 \code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
 considered as a collinearity check for smooth terms in GAMs. Confidence
-intervals for VIF and tolerance are based on Marcoulides et al.
-(2019, Appendix B).
+intervals for VIF and tolerance invert the noncentral F distribution of the
+auxiliary regression of each term on the other terms (Kelley 2007).
+}
+\details{
+\code{check_collinearity()} calculates the generalized variance inflation factor
+(Fox & Monette 1992), which also returns valid results for categorical
+variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} (Fox &
+Monette 1992), which is identical to the square root of the VIF for numeric
+predictors, or for categorical variables with two levels.
+
+For multinomial models from \code{nnet::multinom()}, \code{mclogit::mblogit()},
+\code{brglm2::brmultinom()} and \code{brglm2::bracl()}, and for \code{VGAM::vglm()} models
+with the multinomial or cumulative family, each term can have its own set
+of slopes for each outcome level except one.
+These models get one VIF per term, computed from the slopes of that term
+across all outcome levels, so the VIF does not depend on the reference
+level. Parallel models, such as \code{bracl(parallel = TRUE)}, have one slope
+per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
+\verb{<n>} is the number of slopes of the term across all outcome levels.
+
+The confidence interval of a VIF is an interval for the population R2 of the
+auxiliary regression of that term on the other terms. The R2 limits map to
+the VIF by \code{1 / (1 - R2)}. The interval inverts the noncentral F
+distribution of the F statistic of that regression, as \code{MBESS::ci.R2()} does
+for fixed predictors (Kelley 2007). The interval assumes a linear model with
+fixed predictors. For other models, and for terms with more than one
+coefficient, it is an approximation. Its degrees of freedom depend on the
+number of coefficients of the other terms, so two terms with the same VIF can
+get different intervals. For a VIF very close to 1, both limits can be 1.
+
+If the correlation matrix of the coefficients is singular because of
+collinearity between model terms, for example for exactly collinear
+predictors in a model that keeps all coefficients, such as
+\code{nnet::multinom()}, \code{check_collinearity()} gives a warning and returns
+\code{NULL}.
 }
 \note{
-The code to compute the confidence intervals for the VIF and tolerance
-values was adapted from the Appendix B from the Marcoulides et al. paper.
-Thus, credits go to these authors the original algorithm. There is also
-a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
 implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \section{Multicollinearity}{
@@ -97,7 +120,7 @@ multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
 10 indicates a moderate correlation, while VIF values larger than 10 are a
 sign for high, not tolerable correlation of model predictors (\emph{James et al.
-2013}). The \emph{Increased SE} column in the output indicates how much larger
+2013}). The \emph{adjusted VIF} column in the output indicates how much larger
 the standard error is due to the association with other predictors
 conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
@@ -111,7 +134,14 @@ If interaction terms are included in a model, high VIF values are expected.
 This portion of multicollinearity among the component terms of an
 interaction is also called "inessential ill-conditioning", which leads to
 inflated VIF values that are typically seen for models with interaction
-terms \emph{(Francoeur 2013)}.
+terms \emph{(Francoeur 2013)}. Centering interaction terms can resolve this
+issue \emph{(Kim and Jung 2024)}.
+}
+
+\section{Multicollinearity and Polynomial Terms}{
+
+Polynomial transformations are considered a single term and thus VIFs are
+not calculated between them.
 }
 
 \section{Concurvity for Smooth Terms in Generalized Additive Models}{
@@ -133,7 +163,7 @@ increasing lack of identifiability. The \emph{VIF proportion} column equals the
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
 
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # plot results
 x <- check_collinearity(m)
 plot(x)
@@ -141,19 +171,24 @@ plot(x)
 }
 \references{
 \itemize{
+\item Fox, J., & Monette, G. (1992). Generalized Collinearity Diagnostics.
+Journal of the American Statistical Association, 87(417), 178–183.
 \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
 Clusters. Open Journal of Statistics, 03(06), 24-44.
-\item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-An introduction to statistical learning: with applications in R. New York:
+\item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013). An
+introduction to statistical learning: with applications in R. New York:
 Springer.
-\item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-Inflation Factors in Regression Models Using Latent Variable Modeling
-Methods. Educational and Psychological Measurement, 79(5), 874–882.
+\item Kelley, K. (2007). Confidence Intervals for Standardized Effect Sizes:
+Theory, Application, and Implementation. Journal of Statistical Software,
+20(8), 1–24. \doi{10.18637/jss.v020.i08}
+\item Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with
+causal graphs. British Journal of Mathematical and Statistical Psychology,
+00, 1–14.
 \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
-\item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-\href{https://janhove.github.io/posts/2019-09-11-collinearity/}{webpage}
+\item Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
+Meta-Psychology, 5. \doi{10.15626/MP.2021.2548}
 \item Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 common statistical problems: Data exploration. Methods in Ecology and
 Evolution (2010) 1:3–14.
@@ -162,16 +197,16 @@ Evolution (2010) 1:3–14.
 \seealso{
 \code{\link[see:plot.see_check_collinearity]{see::plot.see_check_collinearity()}} for options to customize the plot.
 
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

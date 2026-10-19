@@ -117,6 +117,11 @@
 #' For more details on the computation of the variances, see
 #' `?insight::get_variance`.
 #'
+#' For models with uncorrelated random slopes, such as `(x || group)` in
+#' **lme4**, the ICC changes when a predictor is shifted (for example,
+#' centered), because the shift changes the model itself. See the details in
+#' [`r2_nakagawa()`].
+#'
 #' ## ICC for unconditional and conditional models
 #' Usually, the ICC is calculated for the null model ("unconditional model").
 #' However, according to _Raudenbush and Bryk (2002)_ or
@@ -152,6 +157,9 @@
 #' very large, the variance ratio in the output makes no sense, e.g. because
 #' it is negative. In such cases, it might help to use `robust = TRUE`.
 #'
+#' @seealso [`performance_ior()`], [`performance_mor()`] and [`performance_poor()`]
+#' as additional metrics specifically for logistic multilevel regression models.
+#'
 #' @examplesIf require("lme4")
 #' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' icc(model)
@@ -172,17 +180,19 @@
 #' )
 #' icc(model, by_group = TRUE)
 #' @export
-icc <- function(model,
-                by_group = FALSE,
-                tolerance = 1e-05,
-                ci = NULL,
-                iterations = 100,
-                ci_method = NULL,
-                null_model = NULL,
-                approximation = "lognormal",
-                model_component = NULL,
-                verbose = TRUE,
-                ...) {
+icc <- function(
+  model,
+  by_group = FALSE,
+  tolerance = 1e-05,
+  ci = NULL,
+  iterations = 100,
+  ci_method = NULL,
+  null_model = NULL,
+  approximation = "lognormal",
+  model_component = NULL,
+  verbose = TRUE,
+  ...
+) {
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)
@@ -233,12 +243,13 @@ icc <- function(model,
     }
 
     if (!is.null(ci) && !is.na(ci) && verbose) {
-      insight::format_alert("Confidence intervals are not yet supported for `by_group = TRUE`.")
+      insight::format_alert(
+        "Confidence intervals are not yet supported for `by_group = TRUE`."
+      )
     }
 
     # icc per group factor with reference to overall model
     icc_overall <- vars$var.intercept / (vars$var.random + vars$var.residual)
-
 
     out <- data.frame(
       Group = names(icc_overall),
@@ -267,7 +278,8 @@ icc <- function(model,
   } else {
     # Calculate ICC values
     icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
-    icc_unadjusted <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
+    icc_unadjusted <- vars$var.random /
+      (vars$var.fixed + vars$var.random + vars$var.residual)
 
     out <- data.frame(
       ICC_adjusted = icc_adjusted,
@@ -313,9 +325,18 @@ icc <- function(model,
         }
       }
       out_ci <- data.frame(
-        ICC_adjusted = c(CI_low = icc_ci_adjusted$CI_low, CI_high = icc_ci_adjusted$CI_high),
-        ICC_conditional = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high),
-        ICC_unadjusted = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high)
+        ICC_adjusted = c(
+          CI_low = icc_ci_adjusted$CI_low,
+          CI_high = icc_ci_adjusted$CI_high
+        ),
+        ICC_conditional = c(
+          CI_low = icc_ci_unadjusted$CI_low,
+          CI_high = icc_ci_unadjusted$CI_high
+        ),
+        ICC_unadjusted = c(
+          CI_low = icc_ci_unadjusted$CI_low,
+          CI_high = icc_ci_unadjusted$CI_high
+        )
       )
       out <- rbind(out, out_ci)
       attr(out, "ci") <- ci
@@ -327,14 +348,15 @@ icc <- function(model,
 }
 
 
-
 #' @rdname icc
 #' @export
-variance_decomposition <- function(model,
-                                   re_formula = NULL,
-                                   robust = TRUE,
-                                   ci = 0.95,
-                                   ...) {
+variance_decomposition <- function(
+  model,
+  re_formula = NULL,
+  robust = TRUE,
+  ci = 0.95,
+  ...
+) {
   if (!inherits(model, "brmsfit")) {
     insight::format_error("Only models from package `brms` are supported.")
   }
@@ -370,7 +392,13 @@ variance_decomposition <- function(model,
 
   var_icc <- var_rand_intercept / var_total
   var_residual <- var_total - var_rand_intercept
-  ci_icc <- rev(1 - stats::quantile(var_rand_intercept / var_total, probs = c((1 - ci) / 2, (1 + ci) / 2)))
+  ci_icc <- rev(
+    1 -
+      stats::quantile(
+        var_rand_intercept / var_total,
+        probs = c((1 - ci) / 2, (1 + ci) / 2)
+      )
+  )
 
   result <- structure(
     class = "icc_decomposed",
@@ -399,7 +427,6 @@ variance_decomposition <- function(model,
 }
 
 
-
 # methods ------------------------------
 
 #' @export
@@ -426,10 +453,20 @@ print.icc <- function(x, digits = 3, ...) {
 
   # add CI
   if (length(x$ICC_adjusted) == 3) {
-    out[1] <- .add_r2_ci_to_print(out[1], x$ICC_adjusted[2], x$ICC_adjusted[3], digits = digits)
+    out[1] <- .add_r2_ci_to_print(
+      out[1],
+      x$ICC_adjusted[2],
+      x$ICC_adjusted[3],
+      digits = digits
+    )
   }
   if (length(x$ICC_unadjusted) == 3) {
-    out[2] <- .add_r2_ci_to_print(out[2], x$ICC_unadjusted[2], x$ICC_unadjusted[3], digits = digits)
+    out[2] <- .add_r2_ci_to_print(
+      out[2],
+      x$ICC_unadjusted[2],
+      x$ICC_unadjusted[3],
+      digits = digits
+    )
   }
 
   # separate lines for multiple R2
@@ -481,7 +518,10 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
     ci.icc.hi
   ))
 
-  cat(insight::print_color("\n## Variances of Posterior Predicted Distribution\n", "blue"))
+  cat(insight::print_color(
+    "\n## Variances of Posterior Predicted Distribution\n",
+    "blue"
+  ))
 
   null.model <- sprintf("%.*f", digits, attr(x, "var_rand_intercept", exact = TRUE))
 
@@ -544,20 +584,22 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 }
 
 
-
 # helper -----------------
 
-.compute_random_vars <- function(model,
-                                 tolerance,
-                                 components = c("var.fixed", "var.random", "var.residual"),
-                                 name_fun = "icc()",
-                                 name_full = "ICC",
-                                 null_model = NULL,
-                                 model_component = NULL,
-                                 approximation = "lognormal",
-                                 verbose = TRUE) {
+.compute_random_vars <- function(
+  model,
+  tolerance,
+  components = c("var.fixed", "var.random", "var.residual"),
+  name_fun = "icc()",
+  name_full = "ICC",
+  null_model = NULL,
+  model_component = NULL,
+  approximation = "lognormal",
+  verbose = TRUE
+) {
   vars <- tryCatch(
-    insight::get_variance(model,
+    insight::get_variance(
+      model,
       name_fun = name_fun,
       name_full = name_full,
       tolerance = tolerance,
@@ -666,7 +708,9 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 # main function for bootstrapping
 .bootstrap_icc <- function(model, iterations, tolerance, ci_method = NULL, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")) {
+  if (
+    inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")
+  ) {
     result <- .do_lme4_bootmer(
       model,
       .boot_icc_fun_lme4,

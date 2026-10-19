@@ -8,12 +8,12 @@
 #' @param ... Currently not used.
 #'
 #' @details
-#' This index was proposed by *Cox and Snell (1989, pp. 208-9)* and,
-#' apparently independently, by *Magee (1990)*; but had been suggested
-#' earlier for binary response models by *Maddala (1983)*. However, this
-#' index achieves a maximum of less than 1 for discrete models (i.e. models
-#' whose likelihood is a product of probabilities) which have a maximum of 1,
-#' instead of densities, which can become infinite *(Nagelkerke, 1991)*.
+#' This index was proposed by *Cox and Snell (1989, pp. 208-9)* and, apparently
+#' independently, by *Magee (1990)*; but had been suggested earlier for binary
+#' response models by *Maddala (1983)*. However, this index achieves a maximum
+#' of less than 1 for discrete models (i.e. models whose likelihood is a product
+#' of probabilities) which have a maximum of 1, instead of densities, which can
+#' become infinite *(Nagelkerke, 1991)*.
 #'
 #' @return A named vector with the R2 value.
 #'
@@ -24,12 +24,12 @@
 #' @references
 #' - Cox, D. R., Snell, E. J. (1989). Analysis of binary data (Vol. 32).
 #'   Monographs on Statistics and Applied Probability.
-#' - Magee, L. (1990). R 2 measures based on Wald and likelihood ratio
-#'   joint significance tests. The American Statistician, 44(3), 250-253.
+#' - Magee, L. (1990). R 2 measures based on Wald and likelihood ratio joint
+#'   significance tests. The American Statistician, 44(3), 250-253.
 #' - Maddala, G. S. (1986). Limited-dependent and qualitative variables in
 #'   econometrics (No. 3). Cambridge university press.
-#' - Nagelkerke, N. J. (1991). A note on a general definition of the
-#'   coefficient of determination. Biometrika, 78(3), 691-692.
+#' - Nagelkerke, N. J. (1991). A note on a general definition of the coefficient
+#'   of determination. Biometrika, 78(3), 691-692.
 #'
 #' @export
 r2_coxsnell <- function(model, ...) {
@@ -38,7 +38,6 @@ r2_coxsnell <- function(model, ...) {
 
 
 # helper ---------------------------
-
 
 .r2_coxsnell <- function(model, l_base) {
   l_full <- insight::get_loglikelihood(model)
@@ -59,9 +58,7 @@ r2_coxsnell <- function(model, ...) {
 }
 
 
-
 # r2-coxsnell based on model information ---------------------------
-
 
 #' @export
 r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
@@ -69,10 +66,28 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+  if (
+    info$is_binomial &&
+      !info$is_betabinomial &&
+      !info$is_bernoulli &&
+      class(model)[1] %in% c("glm", "glmmTMB")
+  ) {
     if (verbose) {
-      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_alert(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
+    }
+    return(NULL)
+  }
+  # currently, beta-binomial models without proportion response are not supported
+  if (info$is_betabinomial && matrix_response) {
+    if (verbose) {
+      insight::format_warning(
+        "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
+      )
     }
     return(NULL)
   }
@@ -80,7 +95,10 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(model$deviance)) {
     return(NULL)
   }
-  r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)))
+  r2_coxsnell <- (1 -
+    exp(
+      (model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)
+    ))
   names(r2_coxsnell) <- "Cox & Snell's R2"
   r2_coxsnell
 }
@@ -96,9 +114,11 @@ r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli) {
+  if (info$is_binomial && !info$is_bernoulli && !info$is_betabinomial) {
     if (verbose) {
-      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_alert(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
@@ -159,9 +179,7 @@ r2_coxsnell.bife <- function(model, ...) {
 }
 
 
-
 # mfx models ---------------------
-
 
 #' @export
 r2_coxsnell.logitmfx <- function(model, ...) {
@@ -187,10 +205,7 @@ r2_coxsnell.negbinirr <- r2_coxsnell.logitmfx
 r2_coxsnell.negbinmfx <- r2_coxsnell.logitmfx
 
 
-
-
 # r2-coxsnell based on loglik stored in model object ---------------------------
-
 
 #' @export
 r2_coxsnell.coxph <- function(model, ...) {
@@ -208,31 +223,24 @@ r2_coxsnell.svycoxph <- function(model, ...) {
 }
 
 
-
 # r2-coxsnell based on loglik of null-model (update) ---------------------------
-
 
 #' @export
 r2_coxsnell.multinom <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
-r2_coxsnell.clm2 <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
-  .r2_coxsnell(model, l_base)
-}
+r2_coxsnell.clm2 <- r2_coxsnell.multinom
 
 #' @export
-r2_coxsnell.bayesx <- function(model, ...) {
-  junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1))) # nolint
-  .r2_coxsnell(model, l_base)
-}
+r2_coxsnell.bayesx <- r2_coxsnell.multinom
 
 #' @export
 r2_coxsnell.clm <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(model, ~1))
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
+
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
     return(NULL)

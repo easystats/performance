@@ -3,7 +3,11 @@
 #'
 #' @description Significance testing for linear regression models assumes that
 #'   the model errors (or residuals) have constant variance. If this assumption
-#'   is violated the p-values from the model are no longer reliable.
+#'   is violated the p-values from the model are no longer reliable. For
+#'   generalized linear models, or models from package *glmmTMB* with other
+#'   families than Gaussian, no formal test is carried out, but a `plot()`
+#'   method is available, i.e. you can run
+#'   `plot(check_heteroscedasticity(model))`.
 #'
 #' @param x A model object.
 #' @param ... Currently not used.
@@ -27,10 +31,9 @@
 #' check_heteroscedasticity(m)
 #'
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_heteroscedasticity(m)
-#'   plot(x)
-#' }
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
+#' x <- check_heteroscedasticity(m)
+#' plot(x)
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
@@ -53,7 +56,10 @@ check_heteroscedasticity.default <- function(x, ...) {
   if (!info$is_linear) {
     msg <- "This Breusch-Pagan Test currently only works Gaussian models."
     if (info$is_count) {
-      paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
+      msg <- paste0(
+        msg,
+        " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()')."
+      )
     }
     insight::format_alert(msg)
     return(NULL)
@@ -73,11 +79,49 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   attr(p.val, "data") <- x
   attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
-  class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
+  class(p.val) <- unique(c(
+    "check_heteroscedasticity",
+    "see_check_heteroscedasticity",
+    class(p.val)
+  ))
 
   p.val
 }
 
+
+#' @export
+check_heteroscedasticity.glmmTMB <- function(x, ...) {
+  # for linear models, compute p-value
+  info <- insight::model_info(x)
+  if (info$is_linear) {
+    return(check_heteroscedasticity.default(x))
+  }
+
+  # no formal test for p-values for other families, only plots
+  p.val <- NA
+  obj_name <- insight::safe_deparse_symbol(substitute(x))
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- obj_name
+  class(p.val) <- unique(c(
+    "check_heteroscedasticity",
+    "see_check_heteroscedasticity",
+    class(p.val)
+  ))
+
+  insight::format_alert(
+    paste0(
+      "There is only a `plot()` method for this model family. Please run `plot(check_heteroscedasticity(",
+      obj_name,
+      "))`."
+    )
+  )
+
+  invisible(p.val)
+}
+
+#' @export
+check_heteroscedasticity.glm <- check_heteroscedasticity.glmmTMB
 
 
 # methods -----------------------
@@ -110,7 +154,6 @@ plot.check_heteroscedasticity <- function(x, ...) {
   insight::check_if_installed("see", "for residual plots")
   NextMethod()
 }
-
 
 
 # utilities -----------------------

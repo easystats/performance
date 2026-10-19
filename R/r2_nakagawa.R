@@ -30,7 +30,7 @@
 #' - Bernoulli (logistic) regression
 #' - Binomial regression (with other than binary outcomes)
 #' - Poisson and Quasi-Poisson regression
-#' - Negative binomial regression (including nbinom1 and nbinom2 families)
+#' - Negative binomial regression (including nbinom1, nbinom2 and nbinom12 families)
 #' - Gaussian regression (linear models)
 #' - Gamma regression
 #' - Tweedie regression
@@ -44,6 +44,7 @@
 #' - Compound Poisson regression
 #' - Generalized Poisson regression
 #' - Log-normal regression
+#' - Skew-normal regression
 #'
 #' Extracting variance components for models with zero-inflation part is not
 #' straightforward, because it is not definitely clear how the distribution-specific
@@ -70,6 +71,13 @@
 #' The contribution of random effects can be deduced by subtracting the
 #' marginal R2 from the conditional R2 or by computing the [`icc()`].
 #'
+#' For models with uncorrelated random slopes, such as `(x || group)` in
+#' **lme4**, the r-squared values change when a predictor is shifted (for
+#' example, centered). The shift changes the model itself: with the correlation
+#' between random intercepts and slopes fixed at zero, the random intercept
+#' variance cannot adjust to the new origin of the predictor. For models with
+#' correlated random slopes, such as `(x | group)`, the values do not change.
+#'
 #' @references
 #'  - Hox, J. J. (2010). Multilevel analysis: techniques and applications
 #'    (2nd ed). New York: Routledge.
@@ -89,17 +97,19 @@
 #' r2_nakagawa(model)
 #' r2_nakagawa(model, by_group = TRUE)
 #' @export
-r2_nakagawa <- function(model,
-                        by_group = FALSE,
-                        tolerance = 1e-8,
-                        ci = NULL,
-                        iterations = 100,
-                        ci_method = NULL,
-                        null_model = NULL,
-                        approximation = "lognormal",
-                        model_component = NULL,
-                        verbose = TRUE,
-                        ...) {
+r2_nakagawa <- function(
+  model,
+  by_group = FALSE,
+  tolerance = 1e-8,
+  ci = NULL,
+  iterations = 100,
+  ci_method = NULL,
+  null_model = NULL,
+  approximation = "lognormal",
+  model_component = NULL,
+  verbose = TRUE,
+  ...
+) {
   # calculate random effect variances
   vars <- .compute_random_vars(
     model,
@@ -122,11 +132,15 @@ r2_nakagawa <- function(model,
   if (isTRUE(by_group)) {
     # with random slopes, explained variance is inaccurate
     if (!is.null(insight::find_random_slopes(model)) && verbose) {
-      insight::format_warning("Model contains random slopes. Explained variance by levels is not accurate.")
+      insight::format_warning(
+        "Model contains random slopes. Explained variance by levels is not accurate."
+      )
     }
 
     if (!is.null(ci) && !is.na(ci) && verbose) {
-      insight::format_warning("Confidence intervals are not yet supported for `by_group = TRUE`.")
+      insight::format_warning(
+        "Confidence intervals are not yet supported for `by_group = TRUE`."
+      )
     }
 
     # null-model
@@ -146,7 +160,8 @@ r2_nakagawa <- function(model,
     group_names <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
 
     # compute r2 by level
-    r2_random <- 1 - (vars$var.intercept[group_names] / vars_null$var.intercept[group_names])
+    r2_random <- 1 -
+      (vars$var.intercept[group_names] / vars_null$var.intercept[group_names])
     r2_fixed <- 1 - (vars$var.residual / vars_null$var.residual)
 
     out <- data.frame(
@@ -161,13 +176,18 @@ r2_nakagawa <- function(model,
     if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
       if (verbose) {
         # if no random effect variance, return simple R2
-        insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red") # nolint
+        insight::print_color(
+          "Random effect variances not available. Returned R2 does not account for random effects.\n",
+          "red"
+        ) # nolint
       }
       r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)
       r2_conditional <- NA
     } else {
-      r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual)
-      r2_conditional <- (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+      r2_marginal <- vars$var.fixed /
+        (vars$var.fixed + vars$var.random + vars$var.residual)
+      r2_conditional <- (vars$var.fixed + vars$var.random) /
+        (vars$var.fixed + vars$var.random + vars$var.residual)
     }
 
     names(r2_conditional) <- "Conditional R2"
@@ -234,7 +254,6 @@ r2_nakagawa <- function(model,
 }
 
 
-
 # methods ------
 
 #' @export
@@ -266,10 +285,20 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
   # add CI
   if (length(x$R2_conditional) == 3) {
-    out[1] <- .add_r2_ci_to_print(out[1], x$R2_conditional[2], x$R2_conditional[3], digits = digits)
+    out[1] <- .add_r2_ci_to_print(
+      out[1],
+      x$R2_conditional[2],
+      x$R2_conditional[3],
+      digits = digits
+    )
   }
   if (length(x$R2_marginal) == 3) {
-    out[2] <- .add_r2_ci_to_print(out[2], x$R2_marginal[2], x$R2_marginal[3], digits = digits)
+    out[2] <- .add_r2_ci_to_print(
+      out[2],
+      x$R2_marginal[2],
+      x$R2_marginal[3],
+      digits = digits
+    )
   }
 
   # separate lines for multiple R2
@@ -279,7 +308,6 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   cat("\n")
   invisible(x)
 }
-
 
 
 # bootstrapping --------------
@@ -302,7 +330,8 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   } else {
     c(
       vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual),
-      (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+      (vars$var.fixed + vars$var.random) /
+        (vars$var.fixed + vars$var.random + vars$var.residual)
     )
   }
 }
@@ -323,14 +352,17 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   } else {
     c(
       vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual),
-      (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+      (vars$var.fixed + vars$var.random) /
+        (vars$var.fixed + vars$var.random + vars$var.residual)
     )
   }
 }
 
 # main bootstrap function
 .bootstrap_r2_nakagawa <- function(model, iterations, tolerance, ci_method = NULL, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")) {
+  if (
+    inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")
+  ) {
     result <- .do_lme4_bootmer(
       model,
       .boot_r2_fun_lme4,

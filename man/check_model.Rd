@@ -5,10 +5,10 @@
 \alias{check_model.default}
 \title{Visual check of model assumptions}
 \usage{
-check_model(x, ...)
+check_model(model = NULL, ...)
 
 \method{check_model}{default}(
-  x,
+  model = NULL,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -16,21 +16,26 @@ check_model(x, ...)
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  dot_size = 2,
-  line_size = 0.8,
-  title_size = 12,
-  axis_title_size = base_size,
+  show_ci = NULL,
+  maximum_dots = 2000,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
   base_size = 10,
   alpha = 0.2,
-  dot_alpha = 0.8,
+  alpha_dot = 0.8,
+  ppc_range = NULL,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
+  x = NULL,
+  show_smooth = TRUE,
   ...
 )
 }
 \arguments{
-\item{x}{A model object.}
+\item{model}{A model object.}
 
 \item{...}{Arguments passed down to the individual check functions, especially
 to \code{check_predictions()} and \code{binned_residuals()}.}
@@ -64,14 +69,14 @@ to a different value.}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
-\item{residual_type}{Character, indicating the type of residuals to be used.
-For non-Gaussian models, the default is \code{"simulated"}, which uses simulated
-residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the
-\strong{DHARMa} package to return randomized quantile residuals. For Gaussian
-models, the default is \code{"normal"}, which uses the default residuals from
-the model. Setting \code{residual_type = "normal"} for non-Gaussian models will
-use a half-normal Q-Q plot of the absolute value of the standardized deviance
-residuals.}
+\item{residual_type}{Character, indicating the type of residuals to be used
+for QQ-plots and overdispersion tests. For non-Gaussian models, the default
+is \code{"simulated"}, which uses simulated residuals. These are based on
+\code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the \strong{DHARMa} package to return
+randomized quantile residuals. For Gaussian models, the default is
+\code{"normal"}, which uses the default residuals from the model. Setting
+\code{residual_type = "normal"} for non-Gaussian models will use a half-normal Q-Q
+plot of the absolute value of the standardized deviance residuals.}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
 to \code{FALSE} for models with many observations, if generating the plot is too
@@ -79,21 +84,40 @@ time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_mo
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
 
-\item{dot_size, line_size}{Size of line and dot-geoms.}
+\item{show_ci}{Logical, if \code{TRUE}, confidence intervals in plots are shown.
+For models with only categorical predictors, confidence intervals are not shown
+by default, because in this case, these are usually on very large scales.}
 
-\item{base_size, title_size, axis_title_size}{Base font size for axis and plot titles.}
+\item{maximum_dots}{Limits the number of data points for models with many
+observations, to reduce the time for rendering the plot. Defaults to a
+maximum of 2000 data points to render}
 
-\item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
+\item{size_dot, size_line}{Size of line and dot-geoms.}
+
+\item{base_size, size_title, size_axis_title}{Base font size for axis and plot titles.}
+
+\item{alpha, alpha_dot}{The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.}
+
+\item{ppc_range}{An integer vector of length two specifying the x-axis limits
+for the posterior predictive checks plot. Use this to zoom in on a specific
+region of interest, especially if the response variable has a large range.}
 
 \item{colors}{Character vector with color codes (hex-format). Must be of
 length 3. First color is usually used for reference lines, second color
 for dots, and third color for outliers or extreme values.}
 
-\item{theme}{String, indicating the name of the plot-theme. Must be in the
-format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
+\item{theme}{A ggplot2-theme function, e.g. \code{theme = see::theme_lucid()} or
+\code{theme = ggplot2::theme_dark()}.}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
+
+\item{x}{Deprecated, please use \code{model} instead.}
+
+\item{show_smooth}{Logical, if \code{FALSE}, the Linearity and Homogeneity of
+Variance panels draw neither the LOESS smoother nor the cell means, and the
+Influential Observations panel draws no LOESS smoother. This needs \strong{see}
+newer than 0.14.2. Older versions ignore the setting.}
 }
 \value{
 The data frame that is used for plotting.
@@ -102,15 +126,31 @@ The data frame that is used for plotting.
 Visual check of various model assumptions (normality of residuals, normality
 of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
+
+If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
+get hints about possible problems.
 }
 \details{
 For Bayesian models from packages \strong{rstanarm} or \strong{brms},
 models will be "converted" to their frequentist counterpart, using
 \href{https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html}{\code{bayestestR::bayesian_as_frequentist}}.
-A more advanced model-check for Bayesian models will be implemented at a
-later stage.
+If this conversion fails for a \strong{brms} model, \code{check_model()} returns only
+the checks that work on the Bayesian model itself: the posterior predictive
+check (\code{"pp_check"}) and the check for multicollinearity (\code{"vif"}). A message
+then lists the panels of the requested checks that were skipped (for
+example, \code{NORM} for \code{"normality"}) and the reason why the conversion failed.
+If none of the requested checks can be computed, \code{check_model()} gives an
+error. For multivariate \strong{brms} models (models with more than one
+response), use the \code{response} argument to name one response, for example
+\code{check_model(model, response = "y1")}. Only this response is checked. If
+\code{response} is missing or does not name one response, \code{check_model()} gives
+an error that lists the names of the responses. A more advanced model-check for
+Bayesian models will be implemented at a later stage.
 
 See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
+
+If you encounter problems with creating the plots, please see section
+\emph{Troubleshooting}.
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
@@ -159,6 +199,9 @@ horizontal line and show no apparent deviation.
 This plot is used to identify influential observations. If any points in this
 plot fall outside of Cook’s distance (the dashed lines) then it is considered
 an influential observation. See \code{\link[=check_outliers]{check_outliers()}} for further details.
+For models from package \emph{glmmTMB}, this plot uses a one-step approximation
+of Cook's distance from the hat values, while \code{\link[=check_outliers]{check_outliers()}} computes
+Cook's distance by refitting the model without each observation.
 }
 
 \section{Multicollinearity}{
@@ -182,18 +225,25 @@ the line. For generalized linear models and when \code{residual_type = "normal"}
 a half-normal Q-Q plot of the absolute value of the standardized deviance
 residuals is shown, however, the interpretation of the plot remains the same.
 See \code{\link[=check_normality]{check_normality()}} for further details. Usually, for generalized linear
-(mixed) models, a test for uniformity of residuals based on simulated residuals
-is conducted (see next section).
+(mixed) models, a test comparing simulated quantile residuals against the
+uniform distribution is conducted (see next section).
 }
 
-\section{Uniformity of Residuals}{
+\section{Distribution of Simulated Quantile Residuals}{
 
 Fore non-Gaussian models, when \code{residual_type = "simulated"} (the default
 for generalized linear (mixed) models), residuals are not expected to be
-normally distributed. In this case, the created Q-Q plot checks the uniformity
-of residuals. The interpretation of the plot is the same as for the normal
-Q-Q plot. See \code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_residuals]{check_residuals()}} for further
-details.
+normally distributed. In this case, we generate simulated quantile residuals
+to compare whether observed response values deviate from model expectations.
+Simulated quantile residuals are generated by simulating a series of
+values from a fitted model for each case, comparing the observed response
+values to these simulations, and computing the empirical quantile of the
+observed value in the distribution of simulated values. When the model is
+correctly-specified, these quantile residuals will follow a \emph{uniform} (flat)
+distribution. The Q-Q plot compares the simulated quantile residuals against
+a uniform distribution.  The plot is interpreted in the same way as for
+a normal-distribution Q-Q plot in linear regression.
+See \code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_residuals]{check_residuals()}} for further details.
 }
 
 \section{Overdispersion}{
@@ -222,8 +272,8 @@ residuals for generalized linear models, and standardized residuals for
 linear models. The plots for the normality of residuals (with overlayed
 normal curve) and for the linearity assumption use the default residuals
 for \code{lm} and \code{glm} (which are deviance residuals for \code{glm}). The Q-Q plots
-use simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}) for non-Gaussian
-models and standardized residuals for linear models.
+use simulated quantile residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}) for
+non-Gaussian models and standardized residuals for linear models.
 }
 
 \section{Troubleshooting}{
@@ -234,10 +284,53 @@ underlying graphic engine becomes slow for plotting many data points. In
 such cases, setting the argument \code{show_dots = FALSE} might help. Furthermore,
 look at the \code{check} argument and see if some of the model checks could be
 skipped, which also increases performance.
+
+If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
+get hints about possible problems.
+
+If your plots are not rendering correctly in your IDE or you receive an error
+stating that the viewport is too small, try the following steps to resolve
+the issue:
+\itemize{
+\item \emph{Enlarge the plotting window:} The most common cause is that the plotting
+pane is simply too small. If you are using RStudio, click and drag the
+edges of the 'Plots' pane to increase its dimensions, then try plotting
+again.
+\item \emph{Reset your IDE zoom settings:} If resizing the window doesn't help, your
+IDE's zoom level might be causing scaling issues. In RStudio, navigate to
+the menu bar and select \emph{View > Actual Size} to reset the zoom. If you are
+using a different IDE, look for a similar zoom reset option.
+\item \emph{Adjust Windows display scaling:} On Windows, system-wide display scaling can
+sometimes interfere with graphical outputs in R. You can adjust this in
+your system settings: Go to \emph{Start > Settings > System > Display} and locate
+the \code{"Scale and layout"} section. Try reducing the scaling percentage (e.g.,
+to 100\%) and restart your IDE.
+\item \emph{Decrease the base font size:} As a code-level workaround, you can reduce the
+base font size of your plots to help them fit into smaller viewports. If
+you are using \strong{ggplot2}, load the library and adjust your theme before
+plotting. For example: \code{theme_set(theme_classic(base_size = 6))}.
+\item \emph{Update relevant packages:} Ensure your graphics and layout packages are up
+to date. You can update your packages (paying special attention to
+\strong{ggplot2}, \strong{patchwork} and \strong{qqplotr}) by running
+\code{update.packages(ask = FALSE)}.
+\item \emph{Update relevant software:} Finally, ensure your R version, and the IDE
+you use, are up to date. Running the most recent versions of R and, e.g.,
+RStudio or Positron can resolve any remaining issues.
+\item \emph{Plot single panels:} If none of the solutions above work, generate
+individual plots for each check using the \code{panel} argument:
+\code{plot(check_model(model, panel = FALSE))}
+\item \emph{Save plot as file:} Instead of rendering plots interactively,
+you can save them directly to a file, for example:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{pdf("myfile.pdf", width = 12, height = 16, pointsize = 20)
+check_model(model)
+dev.off()
+}\if{html}{\out{</div>}}
+}
 }
 
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4") && FALSE) withAutoprint(\{ # examplesIf}
 \donttest{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_model(m)
@@ -249,16 +342,19 @@ check_model(m, panel = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+See documentation of \code{\link[see:plot.see_check_model]{see::plot.see_check_model()}} for available
+arguments to change the plot appearance.
+
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

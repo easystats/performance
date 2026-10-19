@@ -1,6 +1,6 @@
 test_that("check_residuals and simulate_residuals", {
   skip_on_cran()
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
   set.seed(123)
   dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
   m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
@@ -19,13 +19,13 @@ test_that("check_residuals and simulate_residuals", {
   # check raw residuals
   expect_equal(
     head(residuals(res)),
-    c(0.55349, 0.44012, 0.39826, 0.9825, 0.90753, 0.05809),
+    c(0.01815, 0.7062, 0.56076, 0.19282, 0.31423, 0.10115),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
   expect_equal(
     head(residuals(res, quantile_function = stats::qnorm)),
-    c(0.13448, -0.15068, -0.25785, 2.10826, 1.3257, -1.57097),
+    c(-2.09365, 0.54232, 0.1529, -0.86756, -0.4839, -1.27504),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
@@ -52,15 +52,25 @@ test_that("check_residuals and simulate_residuals", {
   )
   # outlier_values works
   expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm))), 3L)
-  expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm, outlier_values = c(-100, 100)))), 0L) # nolint
-  expect_error(residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3), regex = "`outlier_values` must be") # nolint
+  expect_identical(
+    sum(is.infinite(residuals(
+      res,
+      quantile_function = stats::qnorm,
+      outlier_values = c(-100, 100)
+    ))),
+    0L
+  ) # nolint
+  expect_error(
+    residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3),
+    regex = "`outlier_values` must be"
+  ) # nolint
 
   # check_residuals
   out <- check_residuals(res)
-  expect_equal(out, 0.01884602, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(out, 0.02574286, ignore_attr = TRUE, tolerance = 1e-4)
   expect_identical(
     capture.output(print(out)),
-    "Warning: Non-uniformity of simulated residuals detected (p = 0.019)."
+    "Warning: Non-uniformity of simulated residuals detected (p = 0.026)."
   )
   expect_error(simulate_residuals(m, iterations = 1), "`iterations` must be")
 

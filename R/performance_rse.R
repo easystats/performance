@@ -17,5 +17,8 @@
 #' @export
 performance_rse <- function(model) {
   # Residual standard error
-  sqrt(sum(insight::get_residuals(model)^2, na.rm = TRUE) / insight::get_df(model, type = "residual"))
+  sqrt(
+    sum(insight::get_residuals(model)^2, na.rm = TRUE) /
+      insight::get_df(model, type = "residual")
+  )
 }

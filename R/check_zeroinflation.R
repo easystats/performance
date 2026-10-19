@@ -11,6 +11,7 @@
 #' between 1 +/- `tolerance` is considered as OK, while a ratio
 #' beyond or below this threshold would indicate over- or underfitting.
 #' @param alternative A character string specifying the alternative hypothesis.
+#' Can be one of `"two.sided"`, `"less"`, or `"greater"`.
 #' @param ... Arguments passed down to [`simulate_residuals()`]. This only applies
 #' for models with zero-inflation component, or for models of class `glmmTMB`
 #' from `nbinom1` or `nbinom2` family.
@@ -89,7 +90,12 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
 
   # for models with zero-inflation component or negative binomial families,
   # we use simulate_residuals()
-  if (!inherits(x, not_supported) && (model_info$is_zero_inflated || model_info$is_negbin || model_info$family == "genpois")) { # nolint
+  if (
+    !inherits(x, not_supported) &&
+      (model_info$is_zero_inflated ||
+        model_info$is_negbin ||
+        model_info$family == "genpois")
+  ) {
     if (missing(tolerance)) {
       tolerance <- 0.1
     }
@@ -116,14 +122,23 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
 
 #' @rdname check_zeroinflation
 #' @export
-check_zeroinflation.performance_simres <- function(x,
-                                                   tolerance = 0.1,
-                                                   alternative = c("two.sided", "less", "greater"),
-                                                   ...) {
-  alternative <- match.arg(alternative)
+check_zeroinflation.performance_simres <- function(
+  x,
+  tolerance = 0.1,
+  alternative = "two.sided",
+  ...
+) {
+  alternative <- insight::validate_argument(
+    alternative,
+    c("two.sided", "less", "greater")
+  )
 
   # compute test results
-  result <- .simres_statistics(x, statistic_fun = function(i) sum(i == 0), alternative = alternative)
+  result <- .simres_statistics(
+    x,
+    statistic_fun = function(i) sum(i == 0),
+    alternative = alternative
+  )
 
   structure(
     class = "check_zi",

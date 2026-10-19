@@ -100,7 +100,7 @@
 #'   models are nested.
 #'
 #'   Note: this test is also available in base R
-#'   through the [`anova()`][anova] function. It returns an `F-value` column
+#'   through the [`anova()`][stats::anova] function. It returns an `F-value` column
 #'   as a statistic and its associated p-value.
 #'
 #' - **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
@@ -113,18 +113,17 @@
 #'   the Wald test for small sample sizes (under or about 30) or if the
 #'   parameters are large.
 #'
+#'   The test statistic is calculated by comparing the -2 * log-likelihood
+#'   (-2LL) values for each model. In the output table, the `Criterion` column
+#'   represents this -2LL value. The difference in the criterion values
+#'   between the nested models corresponds to the `Chi2` statistic. This
+#'   Chi-square value is then used to compute the p-value based on the
+#'   difference in degrees of freedom (`df_diff`).
+#'
 #'   Note: for regression models, this is similar to
 #'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`, depending
 #'   on the `estimator` argument. For **lavaan** models (SEM, CFA), the function
 #'   calls `lavaan::lavTestLRT()`.
-#'
-#'   For models with transformed response variables (like `log(x)` or `sqrt(x)`),
-#'   `logLik()` returns a wrong log-likelihood. However, `test_likelihoodratio()`
-#'   calls `insight::get_loglikelihood()` with `check_response=TRUE`, which
-#'   returns a corrected log-likelihood value for models with transformed
-#'   response variables. Furthermore, since the LRT only accepts nested
-#'   models (i.e. models that differ in their fixed effects), the computed
-#'   log-likelihood is always based on the ML estimator, not on the REML fits.
 #'
 #' - **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
@@ -230,11 +229,15 @@ test_performance <- function(..., reference = 1, verbose = TRUE) {
 }
 
 
-
 # default --------------------------------
 
 #' @export
-test_performance.default <- function(..., reference = 1, include_formula = FALSE, verbose = TRUE) {
+test_performance.default <- function(
+  ...,
+  reference = 1,
+  include_formula = FALSE,
+  verbose = TRUE
+) {
   # Attribute class to list and get names from the global environment
   my_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
@@ -242,16 +245,23 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # ensure proper object names
-  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  my_objects <- .check_objectnames(
+    my_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+  if (
+    inherits(
+      my_objects,
+      c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan")
+    )
+  ) {
     test_performance(my_objects, reference = reference, include_formula = include_formula)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
   }
 }
-
 
 
 # methods ------------------------------
@@ -270,7 +280,12 @@ format.test_performance <- function(x, digits = 2, ...) {
   # Format cols and names
   out <- insight::format_table(x, digits = digits, exact = FALSE, ...)
 
-  if (isTRUE(attributes(x)$is_nested)) {
+  if (isTRUE(attributes(x)$is_lavaan)) {
+    footer <- paste0(
+      "Models are compared in sequential order of their degrees of freedom.\n",
+      "The likelihood-ratio test assumes that each model is nested in the next.\n"
+    )
+  } else if (isTRUE(attributes(x)$is_nested)) {
     footer <- paste0(
       "Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.\n"
     )
@@ -301,28 +316,39 @@ print_md.test_performance <- function(x, digits = 2, ...) {
 
 #' @export
 print_html.test_performance <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
+  insight::export_table(
+    format(x, digits = digits, ...),
+    format = .check_format_backend(...),
+    ...
+  )
 }
 
 
 #' @export
 display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
-  if (format == "markdown") {
-    print_md(x = object, digits = digits, ...)
+  format <- .display_default_format(format)
+  if (format %in% c("html", "tt")) {
+    print_html(
+      x = object,
+      digits = digits,
+      backend = ifelse(format == "tt", "tt", "html"),
+      ...
+    )
   } else {
-    print_html(x = object, digits = digits, ...)
+    print_md(x = object, digits = digits, ...)
   }
 }
-
 
 
 # other classes -----------------------------------
 
 #' @export
-test_performance.ListNestedRegressions <- function(objects,
-                                                   reference = 1,
-                                                   include_formula = FALSE,
-                                                   ...) {
+test_performance.ListNestedRegressions <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
@@ -356,17 +382,23 @@ test_performance.ListNestedRegressions <- function(objects,
   )
 
   attr(out, "is_nested") <- attributes(objects)$is_nested
-  attr(out, "reference") <- if (attributes(objects)$is_nested_increasing) "increasing" else "decreasing"
+  attr(out, "reference") <- if (attributes(objects)$is_nested_increasing) {
+    "increasing"
+  } else {
+    "decreasing"
+  }
   class(out) <- c("test_performance", class(out))
   out
 }
 
 
 #' @export
-test_performance.ListNonNestedRegressions <- function(objects,
-                                                      reference = 1,
-                                                      include_formula = FALSE,
-                                                      ...) {
+test_performance.ListNonNestedRegressions <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
@@ -406,6 +438,83 @@ test_performance.ListNonNestedRegressions <- function(objects,
 }
 
 
+#' @export
+test_performance.ListLavaan <- function(
+  objects,
+  reference = 1,
+  include_formula = FALSE,
+  ...
+) {
+  insight::check_if_installed("lavaan")
+
+  # lavTestLRT() compares models in order of their df, so we do the same
+  dfs <- vapply(
+    objects,
+    function(x) as.numeric(lavaan::fitMeasures(x, "df")),
+    numeric(1)
+  )
+  model_class <- class(objects)
+  objects <- objects[order(dfs)]
+  class(objects) <- model_class
+
+  # .test_performance_checks() skips the same-data check for lavaan models,
+  # so we check the observations and observed variables here
+  .check_lavaan_same_data(objects)
+
+  out <- .test_performance_init(objects, include_formula = include_formula, ...)
+
+  # BF test - insight cannot read the model info of lavaan fits, so
+  # bayesfactor_models() warns that the data may differ even when they are the
+  # same. We only muffle these two warnings, the data were checked above.
+  tryCatch(
+    {
+      rez <- withCallingHandlers(
+        test_bf(objects, reference = "sequential"),
+        warning = function(w) {
+          # messages are wrapped across lines, so we normalize white space
+          msg <- gsub("\\s+", " ", conditionMessage(w))
+          if (
+            grepl("Could not access model information", msg, fixed = TRUE) ||
+              grepl("not all models were fit from same data", msg, fixed = TRUE)
+          ) {
+            invokeRestart("muffleWarning")
+          }
+        }
+      )
+      if (!is.null(rez)) {
+        rez$Model <- NULL
+        out <- cbind(out, rez)
+      }
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
+
+  # LRT
+  tryCatch(
+    {
+      rez <- do.call(
+        test_likelihoodratio_ListLavaan,
+        c(unname(as.list(objects)), list(objects = objects))
+      )
+      rez$Name <- rez$Model
+      rez$Model <- NULL
+      rez$Type <- NULL
+      out <- merge(out, rez, sort = FALSE)
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
+
+  # nesting is not checked for lavaan models, so the footer says what is assumed
+  attr(out, "is_nested") <- FALSE
+  attr(out, "is_lavaan") <- TRUE
+  class(out) <- c("test_performance", class(out))
+  out
+}
+
 
 # TESTS IMPLEMENTED IN OTHER PACKAGES
 
@@ -415,9 +524,23 @@ test_performance.ListNonNestedRegressions <- function(objects,
 # lmtest::encomptest(m2, m3)
 # nonnest2::icci(m2, m3)
 
-
-
 # Helpers -----------------------------------------------------------------
+
+.check_lavaan_same_data <- function(objects) {
+  n_obs <- vapply(
+    objects,
+    function(x) as.numeric(lavaan::lavInspect(x, "ntotal")),
+    numeric(1)
+  )
+  observed <- lapply(objects, function(x) sort(lavaan::lavNames(x, "ov")))
+  same_observed <- all(vapply(observed, identical, logical(1), observed[[1]]))
+
+  if (length(unique(n_obs)) > 1 || !same_observed) {
+    insight::format_warning(
+      "The models were not fit to the same observations or the same observed variables, so the Bayes factors and the likelihood-ratio test are probably not valid." # nolint
+    )
+  }
+}
 
 
 .test_performance_init <- function(objects, include_formula = FALSE) {
@@ -432,8 +555,12 @@ test_performance.ListNonNestedRegressions <- function(objects,
 }
 
 
-
-.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE, verbose = TRUE) {
+.test_performance_checks <- function(
+  objects,
+  multiple = TRUE,
+  same_response = TRUE,
+  verbose = TRUE
+) {
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
   if (multiple && insight::is_model(objects)) {
     null_model <- .safe(insight::null_model(objects, verbose = FALSE))
@@ -451,7 +578,11 @@ test_performance.ListNonNestedRegressions <- function(objects,
     }
   }
 
-  if (same_response && !inherits(objects, "ListLavaan") && isFALSE(attributes(objects)$same_response)) {
+  if (
+    same_response &&
+      !inherits(objects, "ListLavaan") &&
+      isFALSE(attributes(objects)$same_response)
+  ) {
     insight::format_error(
       "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models." # nolint
     )
@@ -472,18 +603,19 @@ test_performance.ListNonNestedRegressions <- function(objects,
 }
 
 
-
 .check_objectnames <- function(objects, dot_names) {
   # Replace with names from the global environment, if these are not yet properly set
   object_names <- insight::compact_character(names(objects))
   # check if we have any names at all
-  if ((is.null(object_names) ||
-    # or if length of names doesn't match number of models
-    length(object_names) != length(objects) ||
-    # or if names are "..1", "..2" pattern
-    all(grepl("\\.\\.\\d", object_names))) &&
-    # and length of dot-names must match length of objects
-    length(objects) == length(dot_names)) {
+  if (
+    (is.null(object_names) ||
+      # or if length of names doesn't match number of models
+      length(object_names) != length(objects) ||
+      # or if names are "..1", "..2" pattern
+      all(grepl("\\.\\.\\d", object_names))) &&
+      # and length of dot-names must match length of objects
+      length(objects) == length(dot_names)
+  ) {
     names(objects) <- dot_names
   }
   objects

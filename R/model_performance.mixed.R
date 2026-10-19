@@ -20,6 +20,12 @@
 #'   interest when judging the variance attributed to the random effects part of
 #'   the model (see also [icc()]).
 #' }
+#' \subsection{Null model}{
+#'   For non-Gaussian mixed models, both R2 and ICC need the null model. When
+#'   both are requested, the null model is fitted only once and used for both
+#'   indices. A null model that was already fitted can be passed via
+#'   `null_model`, so that it is not fitted at all.
+#' }
 #' \subsection{REML versus ML estimator}{
 #' The default behaviour of `model_performance()` when computing AIC or BIC of
 #' linear mixed model from package **lme4** is the same as for `AIC()` or
@@ -39,11 +45,14 @@
 #' model <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #' model_performance(model)
 #' @export
-model_performance.merMod <- function(model,
-                                     metrics = "all",
-                                     estimator = "REML",
-                                     verbose = TRUE,
-                                     ...) {
+model_performance.merMod <- function(
+  model,
+  metrics = "all",
+  estimator = "REML",
+  verbose = TRUE,
+  null_model = NULL,
+  ...
+) {
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
@@ -56,7 +65,6 @@ model_performance.merMod <- function(model,
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
   }
-
 
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
@@ -81,13 +89,29 @@ model_performance.merMod <- function(model,
     out$BIC <- .get_BIC(model, estimator = estimator)
   }
 
+  # for non-Gaussian mixed models, R2 and ICC both need the null model, and
+  # each would refit it - often the slowest step for large models. If both are
+  # requested, fit it once here and share it (unless the user supplied one).
+  if (
+    is.null(null_model) &&
+      all(c("R2", "ICC") %in% toupper(metrics)) &&
+      insight::is_mixed_model(model) &&
+      !(mi$is_linear && !mi$is_tweedie)
+  ) {
+    null_model <- .safe(insight::null_model(model, verbose = FALSE))
+  }
+
   if ("R2" %in% toupper(metrics)) {
-    rsq <- suppressWarnings(r2(model))
+    if (is.null(null_model)) {
+      rsq <- suppressWarnings(r2(model))
+    } else {
+      rsq <- suppressWarnings(r2(model, null_model = null_model))
+    }
     if (!all(is.na(rsq))) out <- c(out, rsq)
   }
 
   if ("ICC" %in% toupper(metrics)) {
-    icc_mm <- suppressWarnings(icc(model))
+    icc_mm <- suppressWarnings(icc(model, null_model = null_model))
     if (!all(is.na(icc_mm))) out$ICC <- icc_mm$ICC_adjusted
   }
 
@@ -105,7 +129,9 @@ model_performance.merMod <- function(model,
 
   if (("SCORE" %in% toupper(metrics)) && (mi$is_binomial || mi$is_count)) {
     .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$logarithmic)) {
+      out$Score_log <- .scoring_rules$logarithmic
+    }
     if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
   }
 
@@ -138,12 +164,8 @@ model_performance.mixed <- model_performance.merMod
 model_performance.glmmTMB <- model_performance.merMod
 
 
-
 #' @export
-model_performance.mixor <- function(model,
-                                    metrics = "all",
-                                    verbose = TRUE,
-                                    ...) {
+model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
@@ -161,12 +183,21 @@ model_performance.mixor <- function(model,
   if ("BIC" %in% metrics) {
     out$BIC <- .get_BIC(model)
   }
-  if (("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal && !mi$is_multinomial) {
+  if (
+    ("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal && !mi$is_multinomial
+  ) {
     out$Log_loss <- performance_logloss(model, verbose = verbose)
   }
-  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count) && !mi$is_ordinal && !mi$is_multinomial) {
+  if (
+    ("SCORE" %in% metrics) &&
+      (mi$is_binomial || mi$is_count) &&
+      !mi$is_ordinal &&
+      !mi$is_multinomial
+  ) {
     .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$logarithmic)) {
+      out$Score_log <- .scoring_rules$logarithmic
+    }
     if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
   }
 

@@ -29,7 +29,7 @@
 #' standardized deviance residuals is shown (in line with changes in
 #' `plot.lm()` for R 4.3+).
 #'
-#' @examplesIf require("see")
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
 #'
@@ -50,7 +50,6 @@ check_normality <- function(x, ...) {
 }
 
 
-
 # default -------------------------
 
 #' @export
@@ -59,7 +58,8 @@ check_normality.default <- function(x, ...) {
 
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
+      "Checking normality of residuals is only appropriate for linear models.",
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." # nolint
     )
     return(NULL)
   }
@@ -75,6 +75,38 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# PCA / FA ---------------
+
+#' @export
+check_normality.parameters_efa <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(insight::get_residuals(x), x)
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  attr(p.val, "is_fa") <- TRUE
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
+  p.val
+}
+
+#' @export
+check_normality.fa <- check_normality.parameters_efa
+
+#' @export
+check_normality.principal <- check_normality.parameters_efa
+
+#' @export
+check_normality.omega <- check_normality.parameters_efa
+
+#' @export
+check_normality.item_omega <- function(x, ...) {
+  model <- attributes(x)$model
+  check_normality(model, ...)
+}
+
+
 # glm ---------------
 
 #' @export
@@ -87,8 +119,8 @@ check_normality.glm <- function(x, ...) {
   class(out) <- unique(c("check_normality", "see_check_normality", class(out)))
 
   insight::format_alert(
-    "There's no formal statistical test for normality for generalized linear model.",
-    "Instead, please use `simulate_residuals()` and `check_residuals()` to check for uniformity of residuals."
+    "Generalized linear model residuals are not expected to follow a normal distribution.",
+    "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." # nolint
   )
   invisible(out)
 }
@@ -120,14 +152,18 @@ check_normality.numeric <- function(x, ...) {
   attr(p.val, "data") <- x
   attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
   attr(p.val, "effects") <- "fixed"
-  class(p.val) <- unique(c("check_normality", "see_check_normality", "check_normality_numeric", class(p.val)))
+  class(p.val) <- unique(c(
+    "check_normality",
+    "see_check_normality",
+    "check_normality_numeric",
+    class(p.val)
+  ))
 
   p.val
 }
 
 
 # methods ----------------------
-
 
 #' @importFrom stats residuals
 #' @export
@@ -160,29 +196,59 @@ print.check_normality <- function(x, ...) {
     for (i in seq_along(x)) {
       if (x[i] < 0.05) {
         insight::print_color(
-          sprintf("Warning: Non-normality for random effects '%s' detected (%s).\n", re_groups[i], pstring[i]),
+          sprintf(
+            "Warning: Non-normality for random effects '%s' detected (%s).\n",
+            re_groups[i],
+            pstring[i]
+          ),
           "red"
         )
       } else {
         insight::print_color(
-          sprintf("OK: Random effects '%s' appear as normally distributed (%s).\n", re_groups[i], pstring[i]),
+          sprintf(
+            "OK: Random effects '%s' appear as normally distributed (%s).\n",
+            re_groups[i],
+            pstring[i]
+          ),
           "green"
         )
       }
     }
   } else {
-    if (length(x) > 1 && "units" %in% names(attributes(x))) type <- attributes(x)$units
+    if (length(x) > 1 && "units" %in% names(attributes(x))) {
+      type <- attributes(x)$units
+    }
     for (i in seq_along(x)) {
       if (x[i] < 0.05) {
-        insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type[i], pstring[i]), "red")
+        insight::print_color(
+          sprintf("Warning: Non-normality of %s detected (%s).\n", type[i], pstring[i]),
+          "red"
+        )
       } else {
-        insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type[i], pstring[i]), "green")
+        insight::print_color(
+          sprintf("OK: %s appear as normally distributed (%s).\n", type[i], pstring[i]),
+          "green"
+        )
       }
     }
   }
+
+  # add FA / PCA information
+  if (isTRUE(attributes(x)$is_fa)) {
+    res <- insight::get_residuals(attributes(x)$data)
+    lge_resid_tot <- sum(abs(res) > 0.05)
+    lge_resid_pct <- lge_resid_tot / length(res)
+    cat(paste0(
+      "\nAbsolute residuals > 0.05 = ",
+      lge_resid_tot,
+      " (",
+      insight::format_percent(lge_resid_pct),
+      ")\n"
+    ))
+  }
+
   invisible(x)
 }
-
 
 
 # other classes --------------------
@@ -191,15 +257,16 @@ print.check_normality <- function(x, ...) {
 
 #' @rdname check_normality
 #' @export
-check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
+check_normality.merMod <- function(x, effects = "fixed", ...) {
   # args
-  effects <- match.arg(effects)
+  effects <- insight::validate_argument(effects, c("fixed", "random"))
   info <- insight::model_info(x)
 
   # valid model?
   if (!info$is_linear && effects == "fixed") {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
+      "Checking normality of residuals is only appropriate for linear models.",
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." # nolint
     )
     return(NULL)
   }
@@ -231,7 +298,11 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
           p.val <- c(p.val, .check_normality(re[[i]][[j]], x, "random effects"))
         }
       }
-      attr(p.val, "re_qq") <- .diag_reqq(x, level = 0.95, model_info = info)
+      attr(p.val, "re_qq") <- .model_diagnostic_ranef_qq(
+        x,
+        level = 0.95,
+        model_info = info
+      )
       attr(p.val, "type") <- "random effects"
       attr(p.val, "re_groups") <- re_groups
     }
@@ -276,7 +347,6 @@ check_normality.afex_aov <- function(x, ...) {
 check_normality.BFBayesFactor <- check_normality.afex_aov
 
 
-
 # helper ---------------------
 
 .check_normality <- function(x, model, type = "residuals") {
@@ -290,7 +360,10 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 
   if (is.null(ts_result)) {
     insight::print_color(
-      sprintf("`check_normality()` does not support models of class `%s`.\n", class(model)[1]),
+      sprintf(
+        "`check_normality()` does not support models of class `%s`.\n",
+        class(model)[1]
+      ),
       "red"
     )
     return(NULL)

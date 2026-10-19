@@ -11,14 +11,16 @@ rhalfcauchy <- function(n, location, scale) {
 }
 
 
-generate_distribution <- function(family = "normal",
-                                  size = 1000,
-                                  location = 0,
-                                  scale = 1,
-                                  trials = 1,
-                                  prob = .5,
-                                  mu = 3,
-                                  zi = .2) {
+generate_distribution <- function(
+  family = "normal",
+  size = 1000,
+  location = 0,
+  scale = 1,
+  trials = 1,
+  prob = .5,
+  mu = 3,
+  zi = .2
+) {
   if (family == "normal") {
     rnorm(size, location, scale)
   } else if (family == "beta") {
@@ -72,10 +74,27 @@ generate_distribution <- function(family = "normal",
 
 df <- data.frame()
 distrs <- c(
-  "normal", "beta", "chi", "F", "exponential", "gamma", "inverse-gamma",
-  "lognormal", "poisson", "uniform", "negative binomial", "bernoulli", "cauchy",
-  "half-cauchy", "poisson (zero-infl.)", "neg. binomial (zero-infl.)",
-  "weibull", "beta-binomial", "binomial", "pareto", "tweedie"
+  "normal",
+  "beta",
+  "chi",
+  "F",
+  "exponential",
+  "gamma",
+  "inverse-gamma",
+  "lognormal",
+  "poisson",
+  "uniform",
+  "negative binomial",
+  "bernoulli",
+  "cauchy",
+  "half-cauchy",
+  "poisson (zero-infl.)",
+  "neg. binomial (zero-infl.)",
+  "weibull",
+  "beta-binomial",
+  "binomial",
+  "pareto",
+  "tweedie"
 )
 
 .is.integer <- function(x) {

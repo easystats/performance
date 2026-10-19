@@ -27,7 +27,8 @@
 #'   where `delta_ic` is the difference between the model's IC value and the
 #'   smallest IC value in the model set (Burnham and Anderson, 2002).
 #'   For LOOIC, weights are computed as "stacking weights" using
-#'   [loo::stacking_weights()].
+#'   [loo::stacking_weights()]. LOOIC weights are `NA` when the models were
+#'   fit to different numbers of observations.
 #' }
 #'
 #' \subsection{Ranking Models}{
@@ -84,15 +85,26 @@
 #' compare_performance(m1, m2, m3)
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
+compare_performance <- function(
+  ...,
+  metrics = "all",
+  rank = FALSE,
+  estimator = "ML",
+  verbose = TRUE
+) {
   # process input
   model_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # ensure proper object names
-  model_objects <- .check_objectnames(model_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  model_objects <- .check_objectnames(
+    model_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # drop unsupport models
-  supported_models <- sapply(model_objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
+  supported_models <- sapply(model_objects, function(i) {
+    insight::is_model_supported(i) | inherits(i, "lavaan")
+  })
   object_names <- names(model_objects)
 
   if (!all(supported_models)) {
@@ -105,13 +117,31 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # iterate over all models, i.e. model-performance for each model
-  m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
-    model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
-    perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
-    attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
-    perf_df
-  }, model_objects, object_names, SIMPLIFY = FALSE)
+  m <- mapply(
+    function(.x, .y) {
+      dat <- model_performance(
+        .x,
+        metrics = metrics,
+        estimator = estimator,
+        verbose = FALSE
+      )
+      model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
+      perf_df <- data.frame(
+        Name = model_name,
+        Model = class(.x)[1],
+        dat,
+        stringsAsFactors = FALSE
+      )
+      attributes(perf_df) <- c(
+        attributes(perf_df),
+        attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")]
+      )
+      perf_df
+    },
+    model_objects,
+    object_names,
+    SIMPLIFY = FALSE
+  )
 
   attri <- lapply(m, function(x) {
     attri <- attributes(x)
@@ -127,8 +157,31 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   if ("LOOIC" %in% names(dfs)) {
-    lpd_point <- do.call(cbind, lapply(attri, function(x) x$loo$pointwise[, "elpd_loo"]))
-    dfs$LOOIC_wt <- as.numeric(loo::stacking_weights(lpd_point))
+    # stacking weights only for models that have LOO, e.g. not for a glm
+    # compared with a brms model. NA for the other models.
+    has_loo <- !vapply(attri, function(x) is.null(x$loo), logical(1))
+    dfs$LOOIC_wt <- NA_real_
+    if (sum(has_loo) > 1) {
+      # stacking weights need the same observations in all models. We can only
+      # check that the counts match, else cbind() recycles the shorter columns
+      # and the weights are wrong
+      n_loo <- vapply(attri[has_loo], function(x) nrow(x$loo$pointwise), integer(1))
+      if (length(unique(n_loo)) > 1) {
+        if (isTRUE(verbose)) {
+          insight::format_warning(paste0(
+            "The models with LOOIC were fit to different numbers of observations (",
+            datawizard::text_concatenate(sort(unique(n_loo))),
+            "), so no LOOIC weights are reported."
+          ))
+        }
+      } else {
+        lpd_point <- lapply(attri[has_loo], function(x) x$loo$pointwise[, "elpd_loo"])
+        lpd_point <- do.call(cbind, lpd_point)
+        loo_names <- vapply(m[has_loo], function(x) x$Name[1], character(1))
+        loo_wt <- as.numeric(loo::stacking_weights(lpd_point))
+        dfs$LOOIC_wt[match(loo_names, dfs$Name)] <- loo_wt
+      }
+    }
   }
 
   # check if all models were fit from same data
@@ -152,7 +205,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
   if (all(c("AIC", "AIC_wt") %in% names(dfs))) {
     idx1 <- grep("^AIC$", names(dfs))
-    idx2 <- grep("AIC_wt", names(dfs), fixed = TRUE)
+    idx2 <- grep("^AIC_wt$", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
@@ -182,15 +235,17 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # for REML fits, warn user
-  if (isTRUE(verbose) &&
-    # only warn for REML fit
-    identical(estimator, "REML") &&
-    # only for IC comparison
-    any(grepl("(AIC|BIC)", names(dfs))) &&
-    # only when mixed models are involved, others probably don't have problems with REML fit
-    any(sapply(model_objects, insight::is_mixed_model)) &&
-    # only if not all models have same fixed effects (else, REML is ok)
-    !isTRUE(attributes(model_objects)$same_fixef)) {
+  if (
+    isTRUE(verbose) &&
+      # only warn for REML fit
+      identical(estimator, "REML") &&
+      # only for IC comparison
+      any(grepl("(AIC|BIC)", names(dfs))) &&
+      # only when mixed models are involved, others probably don't have problems with REML fit
+      any(sapply(model_objects, insight::is_mixed_model)) &&
+      # only if not all models have same fixed effects (else, REML is ok)
+      !isTRUE(attributes(model_objects)$same_fixef)
+  ) {
     insight::format_alert(
       "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
       "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
@@ -203,29 +258,46 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 }
 
 
-
 # methods ----------------------------
 
 #' @export
 print.compare_performance <- function(x, digits = 3, layout = "horizontal", ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   table_caption <- c("# Comparison of Model Performance Indices", "blue")
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
   if ("Performance_Score" %in% colnames(formatted_table)) {
-    footer <- c(sprintf("\nModel `%s` (of class `%s`) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+    footer <- c(
+      sprintf(
+        "\nModel `%s` (of class `%s`) performed best with an overall performance score of %s.",
+        formatted_table$Model[1],
+        formatted_table$Type[1],
+        formatted_table$Performance_Score[1]
+      ),
+      "yellow"
+    )
   } else {
     footer <- NULL
   }
 
   # switch to vertical layout
   if (layout == "vertical") {
-    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    formatted_table <- datawizard::rownames_as_column(
+      as.data.frame(t(formatted_table)),
+      "Metric"
+    )
     formatted_table <- datawizard::row_to_colnames(formatted_table)
     colnames(formatted_table)[1] <- "Metric"
   }
 
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
+  cat(insight::export_table(
+    x = formatted_table,
+    digits = digits,
+    format = "text",
+    caption = table_caption,
+    footer = footer,
+    ...
+  ))
   invisible(x)
 }
 
@@ -235,7 +307,6 @@ plot.compare_performance <- function(x, ...) {
   insight::check_if_installed("see", "for model comparison plots")
   NextMethod()
 }
-
 
 
 # utilities ------------------------------
@@ -249,7 +320,9 @@ plot.compare_performance <- function(x, ...) {
   }
 
   # set reference for Bayes factors to 1
-  if ("BF" %in% colnames(x)) x$BF[is.na(x$BF)] <- 1
+  if ("BF" %in% colnames(x)) {
+    x$BF[is.na(x$BF)] <- 1
+  }
 
   # don't include test statistic in ranking
   x$p_CochransQ <- NULL
@@ -278,12 +351,18 @@ plot.compare_performance <- function(x, ...) {
 
   # normalize indices, for comparison
   out[] <- lapply(out, function(i) {
-    if (is.numeric(i)) i <- .normalize_vector(i)
+    if (is.numeric(i)) {
+      i <- .normalize_vector(i)
+    }
     i
   })
 
-  # recode some indices, so higher values = better fit
-  for (i in c("RMSE", "Sigma")) {
+  # recode some indices, so higher values = better fit. Log_loss belongs here
+  # for the same reason RMSE does: it is an error measure, so the model with
+  # the smallest value is the best one. The scoring rules do not: Score_log
+  # runs over [-Inf, 0] and Score_spherical over [0, 1], and both are already
+  # oriented so that larger is better.
+  for (i in c("RMSE", "Sigma", "Log_loss")) {
     if (i %in% colnames(out)) {
       out[[i]] <- 1 - out[[i]]
     }

@@ -1,3 +1,15 @@
+test_that("check_homogeneity | levene", {
+  skip_if_not_installed("car")
+
+  data("mtcars")
+  mtcars$am_f <- factor(mtcars$am)
+  mtcars$cyl_f <- factor(mtcars$cyl)
+  m <- lm(mpg ~ am_f * cyl_f, data = mtcars)
+
+  pm <- check_homogeneity(m, method = "levene")
+  expect_equal(pm, 0.04086063, tolerance = 0.0001, ignore_attr = TRUE)
+})
+
 test_that("check_homogeneity | afex", {
   skip_if_not_installed("afex")
 
@@ -5,21 +17,21 @@ test_that("check_homogeneity | afex", {
 
   obk.long$treatment <- as.character(obk.long$treatment)
   suppressWarnings(suppressMessages({
-    aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+    aM <- afex::aov_car(
+      value ~ treatment * gender + Error(id / (phase * hour)),
       data = obk.long
     )
 
-    aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
-      data = obk.long
-    )
+    aW <- afex::aov_car(value ~ Error(id / (phase * hour)), data = obk.long)
 
-    aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-      data = obk.long
-    )
+    aB <- afex::aov_car(value ~ treatment * gender + Error(id), data = obk.long)
   }))
 
   expect_error(check_homogeneity(aW))
-  msg <- capture.output(expect_message(check_homogeneity(aB, method = "bartlett"), "Only"))
+  msg <- capture.output(expect_message(
+    check_homogeneity(aB, method = "bartlett"),
+    "Only"
+  ))
 
   msg <- capture.output({
     pM <- check_homogeneity(aM)
@@ -48,7 +60,8 @@ test_that("check_homogeneity | t-test", {
       method = "Bartlett Test",
       class = c(
         "check_homogeneity",
-        "see_check_homogeneity", "numeric"
+        "see_check_homogeneity",
+        "numeric"
       )
     ),
     tolerance = 1e-3,

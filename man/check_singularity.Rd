@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_singularity.R
 \name{check_singularity}
 \alias{check_singularity}
+\alias{check_singularity.glmmTMB}
 \title{Check mixed models for boundary fits}
 \usage{
 check_singularity(x, tolerance = 1e-05, ...)
+
+\method{check_singularity}{glmmTMB}(x, tolerance = 1e-05, check = "model", ...)
 }
 \arguments{
 \item{x}{A mixed model.}
@@ -14,6 +17,9 @@ accepted. The larger \code{tolerance} is, the stricter the test
 will be.}
 
 \item{...}{Currently not used.}
+
+\item{check}{Indicates whether singularity check should be carried out for
+the full model (\code{"model"}, the default), or per random effects term (\code{"terms"}).}
 }
 \value{
 \code{TRUE} if the model fit is singular.
@@ -75,7 +81,7 @@ question of whether we can assume that the numerical optimization has
 worked correctly or not.
 }
 \examples{
-\dontshow{if (require("lme4") && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4") && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -90,8 +96,12 @@ model <- lme4::lmer(
   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
   data = sleepstudy
 )
+# any singular fits?
 check_singularity(model)
+# singular fit for which particular random effects terms?
+check_singularity(model, check = "terms")
 
+\dontrun{
 # Fixing singularity issues using priors in glmmTMB
 # Example taken from `vignette("priors", package = "glmmTMB")`
 dat <- readRDS(system.file(
@@ -115,6 +125,7 @@ prior <- data.frame(
 model_with_priors <- update(model, priors = prior)
 # no singular fit
 check_singularity(model_with_priors)
+}
 \dontshow{\}) # examplesIf}
 }
 \references{
@@ -133,16 +144,16 @@ and power in linear mixed models. Journal of Memory and Language, 94:305-315, 20
 }
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_overdispersion}()},
-\code{\link{check_predictions}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

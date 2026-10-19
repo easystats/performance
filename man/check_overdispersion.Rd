@@ -2,12 +2,15 @@
 % Please edit documentation in R/check_overdispersion.R
 \name{check_overdispersion}
 \alias{check_overdispersion}
+\alias{check_overdispersion.glm}
 \alias{check_overdispersion.performance_simres}
 \title{Check overdispersion (and underdispersion) of GL(M)M's}
 \usage{
 check_overdispersion(x, ...)
 
-\method{check_overdispersion}{performance_simres}(x, alternative = c("two.sided", "less", "greater"), ...)
+\method{check_overdispersion}{glm}(x, residual_type = NULL, verbose = TRUE, ...)
+
+\method{check_overdispersion}{performance_simres}(x, alternative = "two.sided", ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
@@ -17,7 +20,17 @@ check_overdispersion(x, ...)
 for models with zero-inflation component, or for models of class \code{glmmTMB}
 from \code{nbinom1} or \code{nbinom2} family.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{residual_type}{Character, indicating the type of residuals to be used
+for overdispersion tests. For mixed models, the default is \code{"simulated"},
+which uses simulated residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}},
+using the \strong{DHARMa} package. For \code{glm}, the default is \code{"simulated"} for
+bernoulli, binomial and negative-binomial models. Set \code{residual_type = "normal"}
+to always use regular (i.e. non-simulated) residuals to assess overdispersion.}
+
+\item{verbose}{Toggle warnings and messages.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A list with results from the overdispersion test, like chi-squared
@@ -54,6 +67,21 @@ For Poisson models, the overdispersion test is based on the code from
 
 For negative binomial (mixed) models or models with zero-inflation component,
 the overdispersion test is based simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}).
+}
+
+\section{Overdispersion in Quasi-Poisson and Quasi-Binomial Models}{
+
+Models with a \code{quasipoisson} or \code{quasibinomial} family already estimate a
+dispersion parameter, and their standard errors account for it. For these
+models, \code{check_overdispersion()} gives a warning (unless \code{verbose = FALSE}).
+The returned statistic is the unscaled Pearson chi-squared test, which
+compares the residuals with the variance of a Poisson or binomial model. For
+a model fitted with \code{stats::glm()}, the dispersion ratio then equals
+\code{summary(model)$dispersion}, also when coefficients are aliased. For a
+\code{feglm()} model (package \strong{fixest}), it equals the estimated dispersion of
+the model. Both hold up to the fitting tolerance.
+Simulated residuals are not used, because they are not available for quasi
+families.
 }
 
 \section{Overdispersion in Mixed Models}{
@@ -95,7 +123,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_overdispersion(m)
@@ -111,16 +139,16 @@ Press.
 }
 }
 \seealso{
-Other functions to check model assumptions and and assess model quality: 
-\code{\link{check_autocorrelation}()},
-\code{\link{check_collinearity}()},
-\code{\link{check_convergence}()},
-\code{\link{check_heteroscedasticity}()},
-\code{\link{check_homogeneity}()},
-\code{\link{check_model}()},
-\code{\link{check_outliers}()},
-\code{\link{check_predictions}()},
-\code{\link{check_singularity}()},
-\code{\link{check_zeroinflation}()}
+Other functions to check model assumptions and and assess model quality:
+\code{\link[=check_autocorrelation]{check_autocorrelation()}},
+\code{\link[=check_collinearity]{check_collinearity()}},
+\code{\link[=check_convergence]{check_convergence()}},
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}},
+\code{\link[=check_homogeneity]{check_homogeneity()}},
+\code{\link[=check_model]{check_model()}},
+\code{\link[=check_outliers]{check_outliers()}},
+\code{\link[=check_predictions]{check_predictions()}},
+\code{\link[=check_singularity]{check_singularity()}},
+\code{\link[=check_zeroinflation]{check_zeroinflation()}}
 }
 \concept{functions to check model assumptions and and assess model quality}

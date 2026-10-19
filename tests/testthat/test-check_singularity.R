@@ -16,6 +16,33 @@ test_that("check_singularity, lme4", {
     data = sleepstudy
   ))
   expect_true(check_singularity(model))
+
+  # term-wise
+  out <- check_singularity(model, check = "terms")
+  expect_identical(
+    out,
+    c(`mysubgrp:mygrp` = TRUE, Subject = FALSE, mygrp = FALSE)
+  )
+})
+
+
+test_that("check_singularity, nlme", {
+  skip_on_cran()
+  skip_if_not_installed("nlme")
+
+  data(Pixel, package = "nlme")
+  model <- nlme::lme(pixel ~ day, random = ~ 1 | Dog / Side, data = Pixel)
+
+  expect_false(check_singularity(model))
+
+  data(Orthodont, package = "nlme")
+  negative_model <- nlme::lme(distance ~ age, random = ~ 1 | Subject, data = Orthodont)
+  negative_model$modelStruct$reStruct[[1]] <- structure(
+    matrix(-1, nrow = 1, dimnames = list("(Intercept)", "(Intercept)")),
+    class = c("fake_pdMat", "matrix")
+  )
+
+  expect_false(check_singularity(negative_model))
 })
 
 
@@ -24,16 +51,35 @@ test_that("check_singularity", {
   skip_if_not_installed("glmmTMB")
   set.seed(101)
   dd <- expand.grid(x = factor(1:6), f = factor(1:20), rep = 1:5)
-  dd$y <- glmmTMB::simulate_new(~ 1 + (x | f),
+  dd$y <- glmmTMB::simulate_new(
+    ~ 1 + (x | f),
     newdata = dd,
     newparam = list(
       beta = 0,
       theta = rep(0, 21),
-      betad = 0
+      betadisp = 0
     )
   )[[1]]
   expect_warning(expect_warning({
     m2 <- glmmTMB::glmmTMB(y ~ 1 + (x | f), data = dd, REML = FALSE)
   }))
   expect_true(check_singularity(m2))
+
+  data(Salamanders, package = "glmmTMB")
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    data = Salamanders[Salamanders$count > 0, , drop = FALSE],
+    family = glmmTMB::truncated_nbinom2(),
+    ziformula = ~ spp + (1 | site),
+    dispformula = ~ spp + (1 | site)
+  ))
+  out <- check_singularity(m, check = "terms")
+  expect_identical(
+    out,
+    list(
+      cond = c(`1 | site` = TRUE),
+      zi = c(`1 | site` = TRUE),
+      disp = c(`1 | site` = TRUE)
+    )
+  )
 })

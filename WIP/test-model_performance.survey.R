@@ -31,7 +31,9 @@ test_that("model_performance.survey-cox", {
   pbc$randomized <- with(pbc, !is.na(trt) & trt > 0)
   biasmodel <- glm(randomized ~ age * edema, data = pbc, family = binomial)
   pbc$randprob <- fitted(biasmodel)
-  if (is.null(pbc$albumin)) pbc$albumin <- pbc$alb ## pre2.9.0
+  if (is.null(pbc$albumin)) {
+    pbc$albumin <- pbc$alb
+  } ## pre2.9.0
 
   dpbc <- survey::svydesign(
     id = ~1,
@@ -40,7 +42,10 @@ test_that("model_performance.survey-cox", {
     data = subset(pbc, randomized)
   )
   rpbc <- survey::as.svrepdesign(dpbc)
-  model <- survey::svycoxph(Surv(time, status > 0) ~ log(bili) + protime + albumin, design = dpbc)
+  model <- survey::svycoxph(
+    Surv(time, status > 0) ~ log(bili) + protime + albumin,
+    design = dpbc
+  )
 
   mp <- suppressWarnings(model_performance(model))
 
