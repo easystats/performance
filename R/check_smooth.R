@@ -16,7 +16,9 @@ check_smooth <- function(x, iterations = 400, ...) {
   # Based on k.check in https://github.com/cran/mgcv/blob/master/R/plots.r
   n_smooths <- length(x$smooth) # TODO: fix that for brms
 
-  if (n_smooths == 0) stop("No smooth terms were detected.")
+  if (n_smooths == 0) {
+    insight::format_error("No smooth terms were detected.")
+  }
 
   rsd <- insight::get_residuals(x)
   if (insight::model_info(x)$is_bayesian) {
@@ -42,8 +44,16 @@ check_smooth <- function(x, iterations = 400, ...) {
     dat <- mgcv_ExtractData(x$smooth[[s]], modelmatrix, NULL)$data
 
     # Sanity check that 'dat' is of the good format
-    if (!is.null(attr(dat, "index")) || !is.null(attr(dat[[1]], "matrix")) || is.matrix(dat[[1]])) ok <- FALSE
-    if (ok) dat <- as.data.frame(dat)
+    if (
+      !is.null(attr(dat, "index")) ||
+        !is.null(attr(dat[[1]], "matrix")) ||
+        is.matrix(dat[[1]])
+    ) {
+      ok <- FALSE
+    }
+    if (ok) {
+      dat <- as.data.frame(dat)
+    }
 
     # Get info
     snames[s] <- x$smooth[[s]]$label # Smooth name
@@ -53,14 +63,17 @@ check_smooth <- function(x, iterations = 400, ...) {
     nc <- x$smooth[[s]]$dim
 
     # drop any by variables
-    if (ok && ncol(dat) > nc) dat <- dat[, 1:nc, drop = FALSE]
+    if (ok && ncol(dat) > nc) {
+      dat <- dat[, 1:nc, drop = FALSE]
+    }
     # Check if any factor
-    for (j in 1:nc) if (is.factor(dat[[j]])) ok <- FALSE
+    for (j in 1:nc) {
+      if (is.factor(dat[[j]])) ok <- FALSE
+    }
     if (!ok) {
       p.val[s] <- v.obs[s] <- NA # can't do this test with summation convention/factors
       next # Skip iteration
     }
-
 
     if (nc == 1) {
       # 1-Dimensional term -----------
@@ -96,14 +109,18 @@ check_smooth <- function(x, iterations = 400, ...) {
       ni <- mgcv_nearest(nn, as.matrix(dat))$ni # TODO: this function calls an mgcv internal
 
       e <- rsd - rsd[ni[, 1]]
-      for (j in 2:nn) e <- c(e, rsd - rsd[ni[, j]])
+      for (j in 2:nn) {
+        e <- c(e, rsd - rsd[ni[, j]])
+      }
       v.obs[s] <- mean(e^2) / 2
 
       # Reshuffle n-times
       for (i in 1:iterations) {
         rsdr <- rsd[sample(1:nr, nr)] ## shuffle
         e <- rsdr - rsdr[ni[, 1]]
-        for (j in 2:nn) e <- c(e, rsdr - rsdr[ni[, j]])
+        for (j in 2:nn) {
+          e <- c(e, rsdr - rsdr[ni[, j]])
+        }
         ve[i] <- mean(e^2) / 2
       }
     }
@@ -115,32 +132,29 @@ check_smooth <- function(x, iterations = 400, ...) {
 }
 
 
-
-
 # Utils -------------------------------------------------------------------
-
 
 # https://github.com/cran/mgcv/blob/c263c882daf8b2ed55e6e3d1fb712cf20d79a710/R/smooth.r#L3614
 #' @keywords internal
 mgcv_ExtractData <- function(object, data, knots) {
-
   insight::check_if_installed("mgcv")
 
   # https://github.com/cran/mgcv/blob/c263c882daf8b2ed55e6e3d1fb712cf20d79a710/R/smooth.r#L318
-  get.var <- function(txt, data, vecMat = TRUE)
-                      # txt contains text that may be a variable name and may be an expression
-                      # for creating a variable. get.var first tries data[[txt]] and if that
-                      # fails tries evaluating txt within data (only). Routine returns NULL
-                      # on failure, or if result is not numeric or a factor.
-                      # matrices are coerced to vectors, which facilitates matrix arguments
-  # to smooths.
-  {
+  get.var <- function(txt, data, vecMat = TRUE) {
+    # txt contains text that may be a variable name and may be an expression
+    # for creating a variable. get.var first tries data[[txt]] and if that
+    # fails tries evaluating txt within data (only). Routine returns NULL
+    # on failure, or if result is not numeric or a factor.
+    # matrices are coerced to vectors, which facilitates matrix arguments
+    # to smooths.
     x <- data[[txt]]
     if (is.null(x)) {
       x <- try(eval(parse(text = txt), data, enclos = NULL), silent = TRUE)
       if (inherits(x, "try-error")) x <- NULL
     }
-    if (!is.numeric(x) && !is.factor(x)) x <- NULL
+    if (!is.numeric(x) && !is.factor(x)) {
+      x <- NULL
+    }
     if (is.matrix(x)) {
       if (ncol(x) == 1) {
         x <- as.numeric(x)
@@ -151,11 +165,14 @@ mgcv_ExtractData <- function(object, data, knots) {
     } else {
       ismat <- FALSE
     }
-    if (vecMat && is.matrix(x)) x <- x[1:prod(dim(x))] ## modified from x <- as.numeric(x) to allow factors
-    if (ismat) attr(x, "matrix") <- TRUE
+    if (vecMat && is.matrix(x)) {
+      x <- x[1:prod(dim(x))]
+    } ## modified from x <- as.numeric(x) to allow factors
+    if (ismat) {
+      attr(x, "matrix") <- TRUE
+    }
     x
   }
-
 
   ## `data' and `knots' contain the data needed to evaluate the `terms', `by'
   ## and `knots' elements of `object'. This routine does so, and returns
@@ -173,13 +190,17 @@ mgcv_ExtractData <- function(object, data, knots) {
   }
   names(dat) <- object$term
   m <- length(object$term)
-  if (!is.null(attr(dat[[1]], "matrix")) && vecMat) { ## strip down to unique covariate combinations
+  if (!is.null(attr(dat[[1]], "matrix")) && vecMat) {
+    ## strip down to unique covariate combinations
     n <- length(dat[[1]])
     X <- matrix(unlist(dat), n, m)
     if (is.numeric(X)) {
       X <- mgcv::uniquecombs(X)
-      if (nrow(X) < n * .9) { ## worth the hassle
-        for (i in 1:m) dat[[i]] <- X[, i] ## return only unique rows
+      if (nrow(X) < n * .9) {
+        ## worth the hassle
+        for (i in 1:m) {
+          dat[[i]] <- X[, i]
+        } ## return only unique rows
         attr(dat, "index") <- attr(X, "index") ## index[i] is row of dat[[i]] containing original row i
       }
     } ## end if(is.numeric(X))
@@ -195,11 +216,9 @@ mgcv_ExtractData <- function(object, data, knots) {
 }
 
 
-
 # https://github.com/cran/mgcv/blob/2db5036f529dff6ec8a4a4ba0d2df1804a4d2668/R/sparse.r#L129
 #' @keywords internal
 mgcv_nearest <- function(k, X, gt.zero = FALSE, get.a = FALSE) {
-
   insight::check_if_installed("mgcv")
 
   ## The rows of X contain coordinates of points.
@@ -221,23 +240,40 @@ mgcv_nearest <- function(k, X, gt.zero = FALSE, get.a = FALSE) {
     Xu <- X
     ind <- 1:nrow(X)
   }
-  if (k > nrow(Xu)) stop("not enough unique values to find k nearest")
+  if (k > nrow(Xu)) {
+    stop("not enough unique values to find k nearest")
+  }
   nobs <- length(ind)
   n <- nrow(Xu)
   d <- ncol(Xu)
   dist <- matrix(0, n, k)
-  if (get.a) a <- 1:n else a <- 1
+  if (get.a) {
+    a <- 1:n
+  } else {
+    a <- 1
+  }
 
   # TODO: how to get that without the call to an internal????
-  oo <- .C(mgcv:::C_k_nn,
-    Xu = as.double(Xu), dist = as.double(dist), a = as.double(a), ni = as.integer(dist),
-    n = as.integer(n), d = as.integer(d), k = as.integer(k), get.a = as.integer(get.a)
+  oo <- .C(
+    mgcv:::C_k_nn,
+    Xu = as.double(Xu),
+    dist = as.double(dist),
+    a = as.double(a),
+    ni = as.integer(dist),
+    n = as.integer(n),
+    d = as.integer(d),
+    k = as.integer(k),
+    get.a = as.integer(get.a)
   )
 
   dist <- matrix(oo$dist, n, k)[ind, ]
   rind <- 1:nobs
   rind[ind] <- 1:nobs
   ni <- matrix(rind[oo$ni + 1], n, k)[ind, ]
-  if (get.a) a <- oo$a[ind] else a <- NULL
+  if (get.a) {
+    a <- oo$a[ind]
+  } else {
+    a <- NULL
+  }
   list(ni = ni, dist = dist, a = a)
 }

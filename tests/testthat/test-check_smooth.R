@@ -3,17 +3,20 @@ if (requiet("testthat") && requiet("performance") && requiet("mgcv") && requiet(
     skip_if_not_installed("mgcv")
     set.seed(333)
 
-    m1 <- mgcv::gam(Sepal.Length ~ s(Petal.Length, k = 3) + s(Petal.Width, k=5), data = iris)
-    m2 <- mgcv::gam(Sepal.Length ~ t2(Petal.Length, Petal.Width, k=5), data = iris)
+    m1 <- mgcv::gam(
+      Sepal.Length ~ s(Petal.Length, k = 3) + s(Petal.Width, k = 5),
+      data = iris
+    )
+    m2 <- mgcv::gam(Sepal.Length ~ t2(Petal.Length, Petal.Width, k = 5), data = iris)
     m3 <- mgcv::gam(Sepal.Length ~ s(Petal.Length, k = 3, by = Species), data = iris)
 
-    rez1 <- check_smooth(m1, iterations=1000)
-    rez2 <- check_smooth(m2, iterations=1000)
-    rez3 <- check_smooth(m3, iterations=1000)
+    rez1 <- check_smooth(m1, iterations = 1000)
+    rez2 <- check_smooth(m2, iterations = 1000)
+    rez3 <- check_smooth(m3, iterations = 1000)
 
-    c1 <- as.data.frame(mgcv::k.check(m1, n.rep=1000))
-    c2 <- as.data.frame(mgcv::k.check(m2, n.rep=1000))
-    c3 <- as.data.frame(mgcv::k.check(m3, n.rep=1000))
+    c1 <- as.data.frame(mgcv::k.check(m1, n.rep = 1000))
+    c2 <- as.data.frame(mgcv::k.check(m2, n.rep = 1000))
+    c3 <- as.data.frame(mgcv::k.check(m3, n.rep = 1000))
 
     # Deterministic
     expect_equal(max(rez1$EDF_max - c1$`k'`), 0, tolerance = 0)
