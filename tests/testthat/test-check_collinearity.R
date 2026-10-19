@@ -2316,11 +2316,11 @@ test_that("check_collinearity, one rank-deficiency warning for aliased and NA co
   expect_equal(out$VIF, expected, tolerance = 1e-8)
 })
 
-test_that("check_collinearity, named term blocks skip the formula-based term assignment", {
+test_that("check_collinearity, named term blocks skip .term_assignments()", {
   skip_if_not_installed("mgcv")
   skip_if_not_installed("survival")
-  # the formula-based assignment can rebuild the model data, which can warn,
-  # for example for mgcv models with `paraPen`
+  # for mgcv models, `.term_assignments()` can rebuild the model data from the
+  # formula, which can warn, for example for models with `paraPen`
   testthat::local_mocked_bindings(
     .term_assignments = function(...) stop("not used for these models")
   )

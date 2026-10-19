@@ -565,8 +565,8 @@ check_collinearity.zerocount <- function(
     term_assign <- .term_assignments(x, component, verbose = verbose)
   }
 
-  # names of the terms, and aliased coefficients, for models whose terms are
-  # not the labels of their formula, see `.named_term_blocks()`
+  # names of the terms, and aliased coefficients, for models whose
+  # coefficients are matched to terms by name, see `.named_term_blocks()`
   term_names <- NULL
   aliased_cols <- NULL
 
