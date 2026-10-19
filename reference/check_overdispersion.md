@@ -37,7 +37,7 @@ check_overdispersion(x, alternative = "two.sided", ...)
   which uses simulated residuals. These are based on
   [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md),
   using the **DHARMa** package. For `glm`, the default is `"simulated"`
-  for bernoulli, binomial and negative-binomial models. Set
+  for Bernoulli, binomial and negative-binomial models. Set
   `residual_type = "normal"` to always use regular (i.e. non-simulated)
   residuals to assess overdispersion.
 

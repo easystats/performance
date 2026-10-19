@@ -99,7 +99,7 @@ variable is perfectly predicted by the grouping variable
 (`"between"`). - For numeric variables it is the square-root of the
 inter class correlation (ICC), aka the correlation ratio \\(\eta\\)
 (Ayres, 1920). - For non-numeric variables it is a non-symmetric
-Cramer's *V* (when `{effectsize}` is available)
+Cramér's *V* (when `{effectsize}` is available)
 
 ## Details
 
