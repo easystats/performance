@@ -2013,6 +2013,7 @@ test_that("check_collinearity, pscl zero-inflation terms differ from the count t
   d$x2 <- stats::rnorm(n) + 2 * d$x1
   d$x3 <- stats::runif(n) + 0.5 * d$x1
   d$y <- sin(2 * pi * d$x1) + 0.5 * d$x2 + 0.3 * (d$f == "b") + stats::rnorm(n, sd = 0.5)
+  d$x4 <- stats::runif(n)
   d
 }
 
@@ -2035,10 +2036,9 @@ test_that("check_collinearity, mgcv models use the columns of each term", {
     smooth_first = mgcv::gam(y ~ s(x1) + x2 + f, data = d),
     smooth_last = mgcv::gam(y ~ x2 + f + s(x1), data = d),
     bam = mgcv::bam(y ~ s(x1) + x2 + f, data = d),
-    # `s(x1, k = 5)` has the label "s(x1)", and the label of `te(x1, x3)` has
-    # no space. The correlation matrix of this fit is close to singular, so
-    # the blocks keep the order of the coefficients
-    two_smooths = mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x1, x3), data = d),
+    # `s(x1, k = 5)` has the label "s(x1)", and the label of
+    # `te(x3, x4, k = 3)` is "te(x3,x4)"
+    two_smooths = mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x3, x4, k = 3), data = d),
     # `by = f` gives one smooth for each level of f
     by_factor = mgcv::gam(y ~ s(x1, by = f) + x2 * f, data = d)
   )
@@ -2053,7 +2053,7 @@ test_that("check_collinearity, mgcv models use the columns of each term", {
     smooth_first = c("x2", "f", "s(x1)"),
     smooth_last = c("x2", "f", "s(x1)"),
     bam = c("x2", "f", "s(x1)"),
-    two_smooths = c("x2", "s(x1)", "te(x1,x3)"),
+    two_smooths = c("x2", "s(x1)", "te(x3,x4)"),
     by_factor = c("x2", "f", "x2:f", "s(x1):fa", "s(x1):fb", "s(x1):fc")
   )
   for (i in names(fits)) {
@@ -2075,6 +2075,12 @@ test_that("check_collinearity, mgcv models use the columns of each term", {
       info = i
     )
   }
+
+  # a tensor smooth that shares `x1` with another smooth keeps its row. The
+  # correlation matrix of this fit is close to singular, so its VIFs are not
+  # compared
+  m_shared <- mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x1, x3), data = d)
+  expect_identical(check_collinearity(m_shared)$Term, c("x2", "s(x1)", "te(x1,x3)"))
 
   # the order of the terms in the formula does not change the VIFs
   out_first <- check_collinearity(fits$smooth_first)
