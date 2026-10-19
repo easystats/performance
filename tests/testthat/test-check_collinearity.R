@@ -397,7 +397,8 @@ test_that("check_collinearity, glmmTMB hurdle w/o zi", {
     ziformula = ~0,
     dispformula = ~1
   )
-  out <- check_collinearity(mod_trunc_error)
+  # without a zero-inflation formula, there is no zero-inflation part to report
+  expect_no_message(out <- check_collinearity(mod_trunc_error))
   expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)
 })
 
@@ -451,6 +452,76 @@ test_that("check_collinearity, adjusted vif with factors outside the model terms
   out <- check_collinearity(mod)
   expect_identical(out$Term, c("cyl", "wt", "hp"))
   expect_equal(out$SE_factor, out$VIF^(1 / (2 * c(2, 1, 1))), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, adjusted vif uses the number of coefficients of each term", {
+  skip_if_not_installed("car")
+  skip_if_not_installed("splines")
+  set.seed(123)
+  d <- data.frame(
+    x1 = rnorm(200),
+    x2 = rnorm(200),
+    f = factor(sample(letters[1:3], 200, replace = TRUE)),
+    g = factor(sample(c("p", "q", "r"), 200, replace = TRUE))
+  )
+  d$y <- d$x1 + d$x2 + rnorm(200)
+  d$b <- rbinom(200, 1, stats::plogis(d$x1))
+
+  expect_car_se_factor <- function(mod) {
+    # car warns for the model without intercept
+    out1 <- suppressWarnings(suppressMessages(car::vif(mod, type = "terms")))
+    out2 <- check_collinearity(mod, verbose = FALSE)
+    expect_identical(out2$Term, rownames(out1))
+    expect_equal(out2$VIF, out1[, "GVIF"], tolerance = 1e-8, ignore_attr = TRUE)
+    expect_equal(
+      out2$SE_factor,
+      out1[, "GVIF^(1/(2*Df))"],
+      tolerance = 1e-8,
+      ignore_attr = TRUE
+    )
+  }
+
+  # polynomial, and a factor converted inside the formula
+  expect_car_se_factor(lm(mpg ~ poly(hp, 2) + wt + factor(cyl), data = mtcars))
+  # numeric-by-factor interaction
+  expect_car_se_factor(lm(y ~ x1 * f + x2, data = d))
+  expect_car_se_factor(glm(b ~ x1 * f + x2, data = d, family = binomial))
+  # spline
+  expect_car_se_factor(lm(y ~ splines::ns(x1, 3) + x2 + f, data = d))
+  # factor in a model without intercept
+  expect_car_se_factor(lm(y ~ 0 + f + x1 + x2, data = d))
+  # factor-by-factor interaction
+  expect_car_se_factor(lm(y ~ f * g + x1, data = d))
+})
+
+test_that("check_collinearity, adjusted vif of interaction terms in mixed models", {
+  skip_if_not_installed("car")
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+  set.seed(123)
+  d <- data.frame(
+    x1 = rnorm(200),
+    x2 = rnorm(200),
+    f = factor(sample(letters[1:3], 200, replace = TRUE)),
+    grp = factor(rep(1:20, each = 10))
+  )
+  d$y <- d$x1 + d$x2 + rnorm(20)[d$grp] + rnorm(200)
+
+  mod <- suppressMessages(lme4::lmer(y ~ x1 * f + x2 + (1 | grp), data = d))
+  out1 <- suppressMessages(car::vif(mod, type = "terms"))
+  out2 <- check_collinearity(mod, verbose = FALSE)
+  expect_identical(out2$Term, rownames(out1))
+  expect_equal(
+    out2$SE_factor,
+    out1[, "GVIF^(1/(2*Df))"],
+    tolerance = 1e-8,
+    ignore_attr = TRUE
+  )
+
+  mod <- glmmTMB::glmmTMB(y ~ x1 * f + x2 + (1 | grp), data = d)
+  out <- check_collinearity(mod, verbose = FALSE)
+  expect_identical(out$Term, c("x1", "f", "x2", "x1:f"))
+  expect_equal(out$SE_factor, out$VIF^(1 / (2 * c(1, 2, 1, 2))), tolerance = 1e-8)
 })
 
 test_that("check_collinearity, ordinal clmm models", {
@@ -1710,5 +1781,228 @@ test_that("check_collinearity, ordinal models with backticks, unused levels, or 
     out <- check_collinearity(m)
     expect_identical(out$Term, ref$Term)
     expect_equal(out$VIF, ref$VIF, tolerance = 1e-4)
+  }
+})
+
+# generalized VIFs from the correlation matrix of the coefficients, with the
+# term blocks taken from the "assign" attribute of a model matrix
+.gvif_direct <- function(v, assign) {
+  R <- stats::cov2cor(v)
+  vapply(
+    unique(assign),
+    function(term) {
+      s <- which(assign == term)
+      det(R[s, s, drop = FALSE]) * det(R[-s, -s, drop = FALSE]) / det(R)
+    },
+    numeric(1)
+  )
+}
+
+.zi_test_data <- function(n = 600) {
+  set.seed(123)
+  d <- data.frame(x1 = rnorm(n), g = factor(sample(1:15, n, replace = TRUE)))
+  d$x2 <- 0.6 * d$x1 + rnorm(n)
+  d$f <- factor(
+    ifelse(d$x1 + rnorm(n) > 0.5, "c", ifelse(d$x2 + rnorm(n) > 0, "b", "a"))
+  )
+  p_zero <- stats::plogis(-0.5 + 0.8 * d$x2 - 0.5 * d$x1 + 0.4 * (d$f == "b"))
+  d$y <- stats::rpois(n, exp(0.5 + 0.3 * d$x1)) * stats::rbinom(n, 1, 1 - p_zero)
+  d
+}
+
+test_that("check_collinearity, glmmTMB zero-inflation terms differ from the conditional terms", {
+  skip_if_not_installed("glmmTMB")
+  d <- .zi_test_data()
+  mm <- stats::model.matrix(~ x2 + x1 + f, data = d)
+  assign <- attr(mm, "assign")[-1]
+
+  for (cond in list(y ~ x1, y ~ x1 + f, y ~ f + x2)) {
+    m <- glmmTMB::glmmTMB(cond, ziformula = ~ x2 + x1 + f, data = d, family = poisson())
+    v <- vcov(m)$zi[-1, -1]
+    out <- check_collinearity(m, component = "zero_inflated")
+    expect_identical(out$Term, c("x2", "x1", "f"))
+    expect_equal(out$VIF, .gvif_direct(v, assign), tolerance = 1e-8)
+  }
+})
+
+test_that("check_collinearity, glmmTMB zero-inflation terms with transformations, interactions, random effects, or missing values", {
+  skip_if_not_installed("glmmTMB")
+  d <- .zi_test_data()
+  d_na <- d
+  d_na$x2[c(3, 50, 200, 333, 512)] <- NA
+
+  cases <- list(
+    list(zi = ~ log(x2 + 5) + x1 + f, fixed = ~ log(x2 + 5) + x1 + f, data = d),
+    list(zi = ~ x2 * f + x1, fixed = ~ x2 * f + x1, data = d),
+    list(zi = ~ x2 + x1 + f + (1 | g), fixed = ~ x2 + x1 + f, data = d),
+    list(zi = ~ x2 + x1 + f, fixed = ~ x2 + x1 + f, data = d_na)
+  )
+  for (case in cases) {
+    m <- glmmTMB::glmmTMB(
+      y ~ x1,
+      ziformula = case$zi,
+      data = case$data,
+      family = poisson()
+    )
+    assign <- attr(stats::model.matrix(case$fixed, data = case$data), "assign")[-1]
+    v <- vcov(m)$zi[-1, -1]
+    out <- check_collinearity(m, component = "zero_inflated", verbose = FALSE)
+    expect_equal(out$VIF, .gvif_direct(v, assign), tolerance = 1e-8)
+    if (identical(case$fixed, ~ x2 + x1 + f)) {
+      expect_identical(out$Term, c("x2", "x1", "f"))
+    }
+  }
+})
+
+test_that("check_collinearity, glmmTMB zero-inflation component with one term", {
+  skip_if_not_installed("glmmTMB")
+  d <- .zi_test_data()
+  m <- glmmTMB::glmmTMB(y ~ x1 + f, ziformula = ~x2, data = d, family = poisson())
+
+  out_cond <- check_collinearity(m, component = "conditional", verbose = FALSE)
+  out_all <- check_collinearity(m, component = "all", verbose = FALSE)
+  expect_identical(out_all$Component, rep("conditional", nrow(out_cond)))
+  out_all$Component <- NULL
+  expect_equal(out_all, out_cond)
+
+  expect_message(
+    check_collinearity(m, component = "all", verbose = TRUE),
+    "Not enough model terms in the zero-inflat"
+  )
+  expect_no_message(check_collinearity(m, component = "all", verbose = FALSE))
+})
+
+test_that("check_collinearity, glmmTMB zero-inflation component without VIFs for other reasons", {
+  skip_if_not_installed("glmmTMB")
+  d <- .zi_test_data()
+  m <- glmmTMB::glmmTMB(y ~ x1 + f, ziformula = ~ x2 + x1, data = d, family = poisson())
+  check_part <- .check_collinearity
+  local_mocked_bindings(
+    .check_collinearity = function(x, component, ...) {
+      if (component == "zero_inflated") NULL else check_part(x, component, ...)
+    }
+  )
+  expect_message(
+    out <- check_collinearity(m, component = "all"),
+    "Could not compute VIFs for the zero-inflation part"
+  )
+  expect_identical(out$Term, c("x1", "f"))
+
+  # a zero-inflation formula with only a random effect has no fixed terms
+  m <- glmmTMB::glmmTMB(y ~ x1 + f, ziformula = ~ (1 | g), data = d, family = poisson())
+  expect_message(
+    check_collinearity(m, component = "all"),
+    "Not enough model terms in the zero-inflat"
+  )
+})
+
+test_that("check_collinearity, glmmTMB zero-inflation formula with only an intercept", {
+  skip_if_not_installed("glmmTMB")
+  d <- .zi_test_data()
+  m <- glmmTMB::glmmTMB(y ~ x1 + f, ziformula = ~1, data = d, family = poisson())
+  out_cond <- check_collinearity(m, component = "conditional", verbose = FALSE)
+  expect_message(
+    out_all <- check_collinearity(m, component = "all"),
+    "Not enough model terms in the zero-inflat"
+  )
+  expect_identical(out_all$Term, out_cond$Term)
+  expect_equal(out_all$VIF, out_cond$VIF)
+  expect_null(check_collinearity(m, component = "zero_inflated", verbose = FALSE))
+
+  # the zero-inflation part has an intercept, also when the conditional part
+  # has none
+  m <- glmmTMB::glmmTMB(y ~ 0 + x1 + f, ziformula = ~1, data = d, family = poisson())
+  msgs <- testthat::capture_messages(
+    out_zi <- check_collinearity(m, component = "zero_inflated")
+  )
+  expect_null(out_zi)
+  expect_false(any(grepl("Model without intercept", msgs)))
+  expect_true(any(grepl("Not enough model terms", msgs)))
+})
+
+test_that("check_collinearity, pscl zero-inflation formula with one term", {
+  skip_if_not_installed("pscl")
+  d <- .zi_test_data()
+  models <- list(
+    pscl::zeroinfl(y ~ x1 + f | x2, data = d),
+    pscl::hurdle(y ~ x1 + f | x2, data = d)
+  )
+  for (m in models) {
+    expect_message(
+      out <- check_collinearity(m),
+      "Not enough model terms in the zero-inflat"
+    )
+    expect_identical(out$Term, c("x1", "f"))
+  }
+})
+
+test_that("check_collinearity, zero-inflation and conditional parts with different intercepts", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("pscl")
+  d <- .zi_test_data()
+  assign_no_int <- attr(stats::model.matrix(~ 0 + x2 + x1 + f, data = d), "assign")
+  assign_int <- attr(stats::model.matrix(~ x2 + x1 + f, data = d), "assign")[-1]
+
+  # zero-inflation part without intercept, conditional part with intercept
+  m <- glmmTMB::glmmTMB(y ~ x1, ziformula = ~ 0 + x2 + x1 + f, data = d, family = poisson())
+  expect_message(
+    out <- check_collinearity(m, component = "zero_inflated"),
+    "Model without intercept"
+  )
+  expect_identical(out$Term, c("x2", "x1", "f"))
+  expect_equal(out$VIF, .gvif_direct(vcov(m)$zi, assign_no_int), tolerance = 1e-8)
+
+  m <- pscl::zeroinfl(y ~ x1 + f | 0 + x2 + x1 + f, data = d)
+  out <- check_collinearity(m, component = "zero_inflated", verbose = FALSE)
+  zero_cols <- grep("^zero_", colnames(vcov(m)))
+  expect_identical(out$Term, c("x2", "x1", "f"))
+  expect_equal(
+    out$VIF,
+    .gvif_direct(vcov(m)[zero_cols, zero_cols], assign_no_int),
+    tolerance = 1e-8
+  )
+
+  # zero-inflation part with intercept, conditional part without intercept
+  m <- glmmTMB::glmmTMB(y ~ 0 + x1 + x2, ziformula = ~ x2 + x1 + f, data = d, family = poisson())
+  expect_no_message(out <- check_collinearity(m, component = "zero_inflated"))
+  expect_identical(out$Term, c("x2", "x1", "f"))
+  expect_equal(out$VIF, .gvif_direct(vcov(m)$zi[-1, -1], assign_int), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, pscl models with a message and the default verbose", {
+  skip_if_not_installed("pscl")
+  d <- .zi_test_data()
+  models <- list(
+    pscl::zeroinfl(y ~ x1 | x2 + x1, data = d),
+    pscl::hurdle(y ~ x1 | x2 + x1, data = d)
+  )
+  for (m in models) {
+    expect_message(
+      out <- check_collinearity(m),
+      "Not enough model terms in the conditional part"
+    )
+    expect_identical(out$Term, c("x2", "x1"))
+  }
+})
+
+test_that("check_collinearity, pscl zero-inflation terms differ from the count terms", {
+  skip_if_not_installed("pscl")
+  d <- .zi_test_data()
+  assign <- attr(stats::model.matrix(~ x2 + x1 + f, data = d), "assign")[-1]
+
+  models <- list(
+    pscl::zeroinfl(y ~ x1 | x2 + x1 + f, data = d),
+    pscl::hurdle(y ~ x1 | x2 + x1 + f, data = d)
+  )
+  for (m in models) {
+    v <- vcov(m)
+    zero_cols <- grep("^zero_", colnames(v))[-1]
+    out <- check_collinearity(m, component = "zero_inflated")
+    expect_identical(out$Term, c("x2", "x1", "f"))
+    expect_equal(
+      out$VIF,
+      .gvif_direct(v[zero_cols, zero_cols], assign),
+      tolerance = 1e-8
+    )
   }
 })

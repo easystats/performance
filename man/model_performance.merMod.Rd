@@ -9,6 +9,7 @@
   metrics = "all",
   estimator = "REML",
   verbose = TRUE,
+  null_model = NULL,
   ...
 )
 }
@@ -28,6 +29,12 @@ the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
 \item{verbose}{Toggle warnings and messages.}
 
+\item{null_model}{Optional, a null model to compute the random effect variances,
+which is passed to \code{\link[insight:get_variance]{insight::get_variance()}}. Usually only required if
+calculation of r-squared or ICC fails when \code{null_model} is not specified. If
+calculating the null model takes longer and you already have fit the null
+model, you can pass it here, too, to speed up the process.}
+
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
@@ -42,6 +49,12 @@ Compute indices of model performance for mixed models.
 This method returns the \emph{adjusted ICC} only, as this is typically of
 interest when judging the variance attributed to the random effects part of
 the model (see also \code{\link[=icc]{icc()}}).
+}
+\subsection{Null model}{
+For non-Gaussian mixed models, both R2 and ICC need the null model. When
+both are requested, the null model is fitted only once and used for both
+indices. A null model that was already fitted can be passed via
+\code{null_model}, so that it is not fitted at all.
 }
 \subsection{REML versus ML estimator}{
 The default behaviour of \code{model_performance()} when computing AIC or BIC of

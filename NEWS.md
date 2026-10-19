@@ -1,6 +1,21 @@
 # performance (devel)
 
+## Changes
+
+* `model_performance()` for mixed models now fits the null model only once
+  when both R2 and ICC are requested, instead of once for each index. This
+  applies to non-Gaussian models, for which both indices need the null model.
+  A new `null_model` argument takes a null model that was already fitted, and
+  passes it to `r2()` and `icc()`.
+
 ## Bug fixes
+
+* `check_collinearity()` now computes the adjusted VIF (`SE_factor`) of each
+  term from its number of coefficients, as `car::vif()` does. Before,
+  polynomial and spline terms and interaction terms got the square root of the
+  VIF, as did factors converted inside the formula when the model also had a
+  polynomial or spline term. The first factor in a model without intercept used
+  one coefficient less than it has.
 
 * `compare_performance()` no longer returns wrong LOOIC weights for models fit
   to different numbers of observations. Before, it recycled the pointwise LOO
@@ -21,6 +36,19 @@
   *brglm2*, and *mclogit* with backticked variable names, such as
   `` `my x` ``. Before, it returned `NULL` with "Could not extract model
   terms".
+
+* `check_collinearity()` now returns correct VIFs for the zero-inflation
+  component of *glmmTMB* models whose zero-inflation formula differs from the
+  conditional formula. Before, the zero-inflation terms used the term blocks of
+  the conditional formula, so rows were missing or had the VIF of another term.
+  For *glmmTMB* and *pscl* models, the zero-inflation component now keeps or
+  drops its intercept by its own formula, not by the conditional formula. If
+  the zero-inflation component gets no VIFs with `component = "all"` and
+  `verbose = TRUE`, a message now says so.
+
+* If `check_collinearity()` has a message to give for a *pscl* model, for
+  example for a count formula with one term, it no longer fails with "promise
+  already under evaluation".
 
 # performance 0.19.0
 
