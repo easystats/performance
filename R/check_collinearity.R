@@ -759,7 +759,7 @@ check_collinearity.zerocount <- function(
       if (is.null(term_names)) {
         term_assign <- term_assign[-attr(v, "na_columns_index")]
       }
-      na_cols <- c(na_cols, names(attr(v, "na_columns_name")))
+      na_cols <- unique(c(na_cols, names(attr(v, "na_columns_name"))))
     } else if (anyNA(v)) {
       # If no attribute exists, then we need to identify NA columns manually
       ## FIXME: this should be fixed in insight::get_varcov() to avoid this step

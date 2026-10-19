@@ -2347,3 +2347,17 @@ test_that("check_collinearity, named term blocks skip .term_assignments()", {
   ))
   expect_identical(out$Term, c("age", "sex"))
 })
+
+test_that("check_collinearity, sparse frailty() terms of coxph get no row", {
+  skip_if_not_installed("survival")
+  m <- survival::coxph(
+    survival::Surv(time, status) ~ age + sex + survival::frailty(inst),
+    data = survival::lung
+  )
+  # the `assign` list has an index past the coefficients for the frailty term
+  expect_gt(max(unlist(m$assign)), length(stats::coef(m)))
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("age", "sex"))
+  expected <- .gvif_blocks(stats::vcov(m), list("age", "sex"))
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
+})
