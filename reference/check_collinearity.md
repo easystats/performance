@@ -82,12 +82,13 @@ For multinomial models from
 [`brglm2::brmultinom()`](https://rdrr.io/pkg/brglm2/man/brmultinom.html)
 and [`brglm2::bracl()`](https://rdrr.io/pkg/brglm2/man/bracl.html), and
 for [`VGAM::vglm()`](https://rdrr.io/pkg/VGAM/man/vglm.html) models with
-the multinomial or cumulative family, each term can have its own set of
-slopes for each outcome level except one. These models get one VIF per
-term, computed from the slopes of that term across all outcome levels,
-so the VIF does not depend on the reference level. Parallel models, such
-as `bracl(parallel = TRUE)`, have one slope per model matrix column. The
-adjusted VIF is then `VIF^(1/(2*<n>))`, where `<n>` is the number of
+the multinomial, cumulative, sratio, cratio, or acat family, each term
+can have its own set of slopes for each outcome level except one. These
+models get one VIF per term, computed from the slopes of that term
+across all outcome levels, so the VIF does not depend on the reference
+level. Parallel models, such as `bracl(parallel = TRUE)`, and `vglm()`
+models with the poissonff family have one slope per model matrix column.
+The adjusted VIF is then `VIF^(1/(2*<n>))`, where `<n>` is the number of
 slopes of the term across all outcome levels.
 
 The confidence interval of a VIF is an interval for the population R2 of
