@@ -2320,6 +2320,14 @@ test_that("check_collinearity, one rank-deficiency warning for aliased and NA co
   expect_identical(out$Term, c("age", "sex", "wt.loss"))
   expected <- .gvif_blocks(v, list("age", "sex", "wt.loss"))
   expect_equal(out$VIF, expected, tolerance = 1e-8)
+
+  # an aliased coefficient that is also an NA column is named once
+  v_na["age_sex", ] <- NA
+  v_na[, "age_sex"] <- NA
+  warnings <- testthat::capture_warnings(out <- check_collinearity(m))
+  expect_length(warnings, 1)
+  expect_length(gregexpr("age_sex", warnings, fixed = TRUE)[[1]], 1)
+  expect_identical(out$Term, c("age", "sex", "wt.loss"))
 })
 
 test_that("check_collinearity, named term blocks skip .term_assignments()", {

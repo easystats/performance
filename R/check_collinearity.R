@@ -764,7 +764,7 @@ check_collinearity.zerocount <- function(
       # If no attribute exists, then we need to identify NA columns manually
       ## FIXME: this should be fixed in insight::get_varcov() to avoid this step
       idx_na <- apply(is.na(v), 2, all)
-      na_cols <- c(na_cols, colnames(v)[idx_na])
+      na_cols <- unique(c(na_cols, colnames(v)[idx_na]))
       keep_idx[idx_na] <- FALSE
     }
 
