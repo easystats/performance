@@ -35,9 +35,9 @@
 #' @details
 #' `check_collinearity()` calculates the generalized variance inflation factor
 #' (Fox & Monette 1992), which also returns valid results for categorical
-#' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<nlevels>)` (Fox &
-#' Monette 1992), which is identical to the square root of the VIF for numeric
-#' predictors, or for categorical variables with two levels.
+#' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<n>))` (Fox &
+#' Monette 1992), where `<n>` is the number of coefficients of the term. It is
+#' the square root of the VIF for terms with one coefficient.
 #'
 #' For multinomial models from `nnet::multinom()`, `mclogit::mblogit()`,
 #' `brglm2::brmultinom()` and `brglm2::bracl()`, and for `VGAM::vglm()` models
@@ -747,13 +747,10 @@ check_collinearity.zerocount <- function(
   # check if CIs are requested
   conf_ints <- .vif_ci(x, result, ci, n_coef)
 
-  # for multinomial and VGAM models, the adjusted VIF uses the number of slopes
-  # of each term across all outcome levels
-  if (.is_multinom_model(x) || .is_vglm_categorical(x)) {
-    se_factor <- result^(1 / (2 * n_coef))
-  } else {
-    se_factor <- .adjusted_vif(x, result, model_terms)
-  }
+  # the adjusted VIF uses the number of coefficients of each term, as
+  # car::vif() does. For multinomial and VGAM models, this is the number of
+  # slopes of the term across all outcome levels
+  se_factor <- result^(1 / (2 * n_coef))
 
   out <- insight::text_remove_backticks(
     data.frame(
@@ -893,35 +890,6 @@ check_collinearity.zerocount <- function(
     upper = stats::qchisq(1e-12, df2, lower.tail = FALSE),
     rel.tol = 1e-10
   )$value
-}
-
-
-.adjusted_vif <- function(x, result, model_terms) {
-  tryCatch(
-    {
-      # get data from model frame, so we know which variables are factors
-      d <- insight::get_data(x, source = "mf", verbose = FALSE)
-      # degrees of freedom per variable - init to 1
-      dof <- rep_len(1, length(model_terms))
-      # find factors, which were converted inside formula. we need to convert
-      # these into real factors now, to determine their number of levels
-      factors <- attributes(d)$factors
-      d[factors] <- lapply(d[factors], as.factor)
-      # add factors from data frame
-      factors <- unique(c(factors, colnames(d)[vapply(d, is.factor, logical(1))]))
-      # find position of factors in model terms. the model frame can also
-      # have factors that are not model terms, such as the response or the
-      # grouping factors of mixed models
-      pos <- match(factors, insight::clean_names(model_terms))
-      factors <- factors[!is.na(pos)]
-      pos <- pos[!is.na(pos)]
-      # copy df for factors
-      dof[pos] <- vapply(d[factors], nlevels, numeric(1)) - 1
-      # finally, calculate adjusted vif
-      result^(1 / (2 * dof))
-    },
-    error = function(e) sqrt(result)
-  )
 }
 
 

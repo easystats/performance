@@ -20,6 +20,13 @@
   `type = "density"` and `detrend = TRUE` by default. These objects also ignored
   `size_title`, which is now passed on.
 
+* `check_collinearity()` now computes the adjusted VIF (`SE_factor`) of each
+  term from its number of coefficients, as `car::vif()` does. Before,
+  polynomial and spline terms and interaction terms got the square root of the
+  VIF, as did factors converted inside the formula when the model also had a
+  polynomial or spline term. The first factor in a model without intercept used
+  one coefficient less than it has.
+
 * `compare_performance()` no longer returns wrong LOOIC weights for models fit
   to different numbers of observations. Before, it recycled the pointwise LOO
   values of the smaller model to the length of the larger one. Now all LOOIC
