@@ -1158,7 +1158,7 @@ check_collinearity.zerocount <- function(
   coef_clean <- gsub("`", "", coef_names, fixed = TRUE)
   col_assign <- coef_assign[match(col_clean, coef_clean)]
 
-  # a column without a term would give VIFs for the wrong terms
+  # a column without a term would be left out of the VIFs without notice
   no_term <- is.na(col_assign)
   if (inherits(x, "survreg")) {
     no_term <- no_term & !startsWith(col_clean, "Log(scale")
