@@ -589,6 +589,7 @@ check_model.stanreg <- function(
       # bayestestR renamed `resp` to `response`, see https://github.com/easystats/bayestestR/pull/790
       bayestestR::bayesian_as_frequentist(model, response = resp)
     } else {
+      ## TODO: remove this once bayestest 0.20.1 or higher is on CRAN
       bayestestR::bayesian_as_frequentist(model, resp = resp)
     },
     error = function(e) {
