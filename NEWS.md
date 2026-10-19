@@ -8,9 +8,9 @@
   weights are `NA`, with a warning.
 
 * `check_collinearity()` now uses only the location slopes of `ordinal::clm()`
-  models with scale or nominal effects. A message names the scale and nominal
-  effects that it leaves out. Before, the VIF of a location slope also used the
-  scale effect with the same name.
+  models with scale effects. Before, the VIF of a location slope also used the
+  scale effect with the same name. For `clm()` models with scale or nominal
+  effects, a message names the effects that the VIFs leave out.
 
 * `check_collinearity()` now works for `VGAM::vglm()` models with the
   `sratio()`, `cratio()`, `acat()`, and `poissonff()` families. Before, it

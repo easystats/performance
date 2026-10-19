@@ -41,12 +41,12 @@
 #'
 #' For multinomial models from `nnet::multinom()`, `mclogit::mblogit()`,
 #' `brglm2::brmultinom()` and `brglm2::bracl()`, and for `VGAM::vglm()` models
-#' with the multinomial or cumulative family, each term can have its own set
-#' of slopes for each outcome level except one.
+#' with the multinomial, cumulative, sratio, cratio, or acat family, each term
+#' can have its own set of slopes for each outcome level except one.
 #' These models get one VIF per term, computed from the slopes of that term
 #' across all outcome levels, so the VIF does not depend on the reference
-#' level. Parallel models, such as `bracl(parallel = TRUE)`, have one slope
-#' per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
+#' level. Parallel models, such as `bracl(parallel = TRUE)`, and `vglm()`
+#' models with the poissonff family have one slope per model matrix column. The adjusted VIF is then `VIF^(1/(2*<n>))`, where
 #' `<n>` is the number of slopes of the term across all outcome levels.
 #'
 #' The confidence interval of a VIF is an interval for the population R2 of the
@@ -511,16 +511,18 @@ check_collinearity.zerocount <- function(
 
   # ordinal models have one threshold for each outcome level except one, in
   # place of one intercept. polr, svyolr and stan_polr put the thresholds after
-  # the slopes, clm and clm2 put them first, so keep the slopes by name
+  # the slopes, clm2 puts them first, so keep the slopes by name
   if (.is_threshold_model(x)) {
     slopes <- .threshold_slopes(x, component)
     if (inherits(x, "clm") && is.logical(x$aliased$alpha)) {
-      # clm puts the location slopes right after the thresholds, and the
-      # scale effects after them. A scale effect can have the same name as a
-      # location slope, so keep the slopes by position
+      # clm puts the thresholds first, including those of nominal effects,
+      # then the location slopes without aliased ones, then the scale effects.
+      # A scale effect can have the same name as a location slope, so keep
+      # the slopes by position
       n_alpha <- sum(!x$aliased$alpha)
       keep_idx <- seq_len(ncol(v)) %in% (n_alpha + seq_along(slopes$names))
-      if (isTRUE(verbose)) {
+      # no message when there are too few terms for VIFs
+      if (isTRUE(verbose) && length(unique(stats::na.omit(slopes$assign))) > 1) {
         .alert_clm_effects(x)
       }
     } else {
@@ -1180,10 +1182,21 @@ check_collinearity.zerocount <- function(
   used <- colSums(abs(mm), na.rm = TRUE) > 0
   mm_names <- setdiff(colnames(mm)[used], "(Intercept)")
 
+  # clm drops a location term that is also a nominal effect, which is not
+  # collinearity
+  aliased <- setdiff(mm_names, slope_names)
+  if (inherits(x, "clm")) {
+    nominal <- .safe(labels(stats::terms(x$formulas$nominal)))
+    aliased_terms <- labels(stats::terms(f))[
+      attr(mm, "assign")[match(aliased, colnames(mm))]
+    ]
+    aliased <- aliased[!aliased_terms %in% nominal]
+  }
+
   list(
     names = slope_names,
     assign = attr(mm, "assign")[match(slope_names, colnames(mm))],
-    aliased = setdiff(mm_names, slope_names)
+    aliased = aliased
   )
 }
 

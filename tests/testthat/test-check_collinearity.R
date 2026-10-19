@@ -598,8 +598,17 @@ test_that("check_collinearity, ordinal clm models with scale effects", {
   # the location slopes follow the thresholds; the scale effect of x1 has a
   # column with the same name after them
   slope_cols <- length(m$alpha) + seq_along(m$beta)
+  expect_identical(colnames(stats::vcov(m))[slope_cols], names(m$beta))
+  expect_identical(which(colnames(stats::vcov(m)) == "x1")[1], slope_cols[1])
   expected <- .gvif_blocks(stats::vcov(m), as.list(slope_cols))
   expect_equal(out$VIF, expected, tolerance = 1e-8)
+
+  # no message when one location term leaves too few terms for VIFs
+  m2 <- ordinal::clm(y ~ x1, scale = ~x2, data = d)
+  expect_no_message(
+    check_collinearity(m2),
+    message = "location effects only"
+  )
 })
 
 test_that("check_collinearity, ordinal clm models with nominal effects", {
@@ -618,6 +627,14 @@ test_that("check_collinearity, ordinal clm models with nominal effects", {
   # no message without scale or nominal effects
   m2 <- ordinal::clm(y ~ x1 + x2 + x4, data = d)
   expect_no_message(check_collinearity(m2))
+
+  # a location term that is also a nominal effect is dropped by clm, which is
+  # not rank deficiency
+  m3 <- ordinal::clm(y ~ x1 + x2 + x3, nominal = ~x3, data = d)
+  expect_no_warning(
+    out3 <- suppressMessages(check_collinearity(m3))
+  )
+  expect_identical(out3$Term, c("x1", "x2"))
 })
 
 test_that("check_collinearity, standard lm models with offset", {
@@ -996,6 +1013,14 @@ test_that("check_collinearity, VGAM::vglm sratio, acat, cratio, and poissonff", 
     n_cols <- unname(lengths(blocks))
     expect_equal(out$SE_factor, out$VIF^(1 / (2 * n_cols)), tolerance = 1e-8, info = i)
   }
+
+  # the poissonff fit is the same model as a poisson glm
+  m_glm <- stats::glm(count ~ x1 + x2 + f, family = stats::poisson(), data = d)
+  expect_equal(
+    check_collinearity(fits$poissonff)$VIF,
+    check_collinearity(m_glm)$VIF,
+    tolerance = 1e-6
+  )
 })
 
 test_that("check_collinearity, multinomial models with backticked names", {
@@ -1004,15 +1029,32 @@ test_that("check_collinearity, multinomial models with backticked names", {
   d <- .multinom_data()
   d$`my x` <- d$x1
   d$my_x <- d$x1
+  skip_if_not_installed("mclogit")
   fits <- list(
     nnet = nnet::multinom(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE),
     brmultinom = brglm2::brmultinom(y ~ `my x` + x2 + f + `my x`:f, data = d),
-    bracl = brglm2::bracl(y ~ `my x` + x2 + f + `my x`:f, data = d)
+    bracl = brglm2::bracl(y ~ `my x` + x2 + f + `my x`:f, data = d),
+    bracl_parallel = brglm2::bracl(
+      y ~ `my x` + x2 + f + `my x`:f,
+      data = d,
+      parallel = TRUE
+    ),
+    mblogit = suppressWarnings(
+      mclogit::mblogit(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE)
+    )
   )
   fits_renamed <- list(
     nnet = nnet::multinom(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE),
     brmultinom = brglm2::brmultinom(y ~ my_x + x2 + f + my_x:f, data = d),
-    bracl = brglm2::bracl(y ~ my_x + x2 + f + my_x:f, data = d)
+    bracl = brglm2::bracl(y ~ my_x + x2 + f + my_x:f, data = d),
+    bracl_parallel = brglm2::bracl(
+      y ~ my_x + x2 + f + my_x:f,
+      data = d,
+      parallel = TRUE
+    ),
+    mblogit = suppressWarnings(
+      mclogit::mblogit(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE)
+    )
   )
   for (i in names(fits)) {
     out <- suppressMessages(check_collinearity(fits[[i]]))
