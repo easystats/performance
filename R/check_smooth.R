@@ -13,6 +13,8 @@
 #' }
 #' @export
 check_smooth <- function(x, iterations = 400, ...) {
+  insight::check_if_installed("mgcv")
+
   # Based on k.check in https://github.com/cran/mgcv/blob/master/R/plots.r
   n_smooths <- length(x$smooth) # TODO: fix that for brms
 
@@ -41,7 +43,7 @@ check_smooth <- function(x, iterations = 400, ...) {
   for (s in 1:n_smooths) {
     ok <- TRUE
     x$smooth[[s]]$by <- "NA" # Can't deal with 'by' variables
-    dat <- mgcv_ExtractData(x$smooth[[s]], modelmatrix, NULL)$data
+    dat <- .mgcv_ExtractData(x$smooth[[s]], modelmatrix, NULL)$data
 
     # Sanity check that 'dat' is of the good format
     if (
@@ -106,7 +108,7 @@ check_smooth <- function(x, iterations = 400, ...) {
         }
       }
       nn <- 3
-      ni <- mgcv_nearest(nn, as.matrix(dat))$ni # TODO: this function calls an mgcv internal
+      ni <- .mgcv_nearest(nn, as.matrix(dat))$ni # TODO: this function calls an mgcv internal
 
       e <- rsd - rsd[ni[, 1]]
       for (j in 2:nn) {
@@ -136,43 +138,8 @@ check_smooth <- function(x, iterations = 400, ...) {
 
 # https://github.com/cran/mgcv/blob/c263c882daf8b2ed55e6e3d1fb712cf20d79a710/R/smooth.r#L3614
 #' @keywords internal
-mgcv_ExtractData <- function(object, data, knots) {
+.mgcv_ExtractData <- function(object, data, knots) {
   insight::check_if_installed("mgcv")
-
-  # https://github.com/cran/mgcv/blob/c263c882daf8b2ed55e6e3d1fb712cf20d79a710/R/smooth.r#L318
-  get.var <- function(txt, data, vecMat = TRUE) {
-    # txt contains text that may be a variable name and may be an expression
-    # for creating a variable. get.var first tries data[[txt]] and if that
-    # fails tries evaluating txt within data (only). Routine returns NULL
-    # on failure, or if result is not numeric or a factor.
-    # matrices are coerced to vectors, which facilitates matrix arguments
-    # to smooths.
-    x <- data[[txt]]
-    if (is.null(x)) {
-      x <- try(eval(parse(text = txt), data, enclos = NULL), silent = TRUE)
-      if (inherits(x, "try-error")) x <- NULL
-    }
-    if (!is.numeric(x) && !is.factor(x)) {
-      x <- NULL
-    }
-    if (is.matrix(x)) {
-      if (ncol(x) == 1) {
-        x <- as.numeric(x)
-        ismat <- FALSE
-      } else {
-        ismat <- TRUE
-      }
-    } else {
-      ismat <- FALSE
-    }
-    if (vecMat && is.matrix(x)) {
-      x <- x[1:prod(dim(x))]
-    } ## modified from x <- as.numeric(x) to allow factors
-    if (ismat) {
-      attr(x, "matrix") <- TRUE
-    }
-    x
-  }
 
   ## `data' and `knots' contain the data needed to evaluate the `terms', `by'
   ## and `knots' elements of `object'. This routine does so, and returns
@@ -185,8 +152,8 @@ mgcv_ExtractData <- function(object, data, knots) {
   ## should data be processed as for summation convention with matrix arguments?
   vecMat <- if (is.null(object$xt$sumConv)) TRUE else object$xt$sumConv
   for (i in 1:length(object$term)) {
-    dat[[object$term[i]]] <- get.var(object$term[i], data, vecMat = vecMat)
-    knt[[object$term[i]]] <- get.var(object$term[i], knots, vecMat = vecMat)
+    dat[[object$term[i]]] <- .get_var(object$term[i], data, vecMat = vecMat)
+    knt[[object$term[i]]] <- .get_var(object$term[i], knots, vecMat = vecMat)
   }
   names(dat) <- object$term
   m <- length(object$term)
@@ -206,7 +173,7 @@ mgcv_ExtractData <- function(object, data, knots) {
     } ## end if(is.numeric(X))
   }
   if (object$by != "NA") {
-    by <- get.var(object$by, data)
+    by <- .get_var(object$by, data)
     if (!is.null(by)) {
       dat[[m + 1]] <- by
       names(dat)[m + 1] <- object$by
@@ -216,9 +183,45 @@ mgcv_ExtractData <- function(object, data, knots) {
 }
 
 
+# https://github.com/cran/mgcv/blob/c263c882daf8b2ed55e6e3d1fb712cf20d79a710/R/smooth.r#L318
+.get_var <- function(txt, data, vecMat = TRUE) {
+  # txt contains text that may be a variable name and may be an expression
+  # for creating a variable. get.var first tries data[[txt]] and if that
+  # fails tries evaluating txt within data (only). Routine returns NULL
+  # on failure, or if result is not numeric or a factor.
+  # matrices are coerced to vectors, which facilitates matrix arguments
+  # to smooths.
+  x <- data[[txt]]
+  if (is.null(x)) {
+    x <- try(eval(parse(text = txt), data, enclos = NULL), silent = TRUE)
+    if (inherits(x, "try-error")) x <- NULL
+  }
+  if (!is.numeric(x) && !is.factor(x)) {
+    x <- NULL
+  }
+  if (is.matrix(x)) {
+    if (ncol(x) == 1) {
+      x <- as.numeric(x)
+      ismat <- FALSE
+    } else {
+      ismat <- TRUE
+    }
+  } else {
+    ismat <- FALSE
+  }
+  if (vecMat && is.matrix(x)) {
+    x <- x[1:prod(dim(x))]
+  } ## modified from x <- as.numeric(x) to allow factors
+  if (ismat) {
+    attr(x, "matrix") <- TRUE
+  }
+  x
+}
+
+
 # https://github.com/cran/mgcv/blob/2db5036f529dff6ec8a4a4ba0d2df1804a4d2668/R/sparse.r#L129
 #' @keywords internal
-mgcv_nearest <- function(k, X, gt.zero = FALSE, get.a = FALSE) {
+.mgcv_nearest <- function(k, X, gt.zero = FALSE, get.a = FALSE) {
   insight::check_if_installed("mgcv")
 
   ## The rows of X contain coordinates of points.
