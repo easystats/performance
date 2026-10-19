@@ -436,6 +436,76 @@ test_that("check_collinearity, adjusted vif with factors outside the model terms
   expect_equal(out$SE_factor, out$VIF^(1 / (2 * c(2, 1, 1))), tolerance = 1e-8)
 })
 
+test_that("check_collinearity, adjusted vif uses the number of coefficients of each term", {
+  skip_if_not_installed("car")
+  skip_if_not_installed("splines")
+  set.seed(123)
+  d <- data.frame(
+    x1 = rnorm(200),
+    x2 = rnorm(200),
+    f = factor(sample(letters[1:3], 200, replace = TRUE)),
+    g = factor(sample(c("p", "q", "r"), 200, replace = TRUE))
+  )
+  d$y <- d$x1 + d$x2 + rnorm(200)
+  d$b <- rbinom(200, 1, stats::plogis(d$x1))
+
+  expect_car_se_factor <- function(mod) {
+    # car warns for the model without intercept
+    out1 <- suppressWarnings(suppressMessages(car::vif(mod, type = "terms")))
+    out2 <- check_collinearity(mod, verbose = FALSE)
+    expect_identical(out2$Term, rownames(out1))
+    expect_equal(out2$VIF, out1[, "GVIF"], tolerance = 1e-8, ignore_attr = TRUE)
+    expect_equal(
+      out2$SE_factor,
+      out1[, "GVIF^(1/(2*Df))"],
+      tolerance = 1e-8,
+      ignore_attr = TRUE
+    )
+  }
+
+  # polynomial, and a factor converted inside the formula
+  expect_car_se_factor(lm(mpg ~ poly(hp, 2) + wt + factor(cyl), data = mtcars))
+  # numeric-by-factor interaction
+  expect_car_se_factor(lm(y ~ x1 * f + x2, data = d))
+  expect_car_se_factor(glm(b ~ x1 * f + x2, data = d, family = binomial))
+  # spline
+  expect_car_se_factor(lm(y ~ splines::ns(x1, 3) + x2 + f, data = d))
+  # factor in a model without intercept
+  expect_car_se_factor(lm(y ~ 0 + f + x1 + x2, data = d))
+  # factor-by-factor interaction
+  expect_car_se_factor(lm(y ~ f * g + x1, data = d))
+})
+
+test_that("check_collinearity, adjusted vif of interaction terms in mixed models", {
+  skip_if_not_installed("car")
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+  set.seed(123)
+  d <- data.frame(
+    x1 = rnorm(200),
+    x2 = rnorm(200),
+    f = factor(sample(letters[1:3], 200, replace = TRUE)),
+    grp = factor(rep(1:20, each = 10))
+  )
+  d$y <- d$x1 + d$x2 + rnorm(20)[d$grp] + rnorm(200)
+
+  mod <- suppressMessages(lme4::lmer(y ~ x1 * f + x2 + (1 | grp), data = d))
+  out1 <- suppressMessages(car::vif(mod, type = "terms"))
+  out2 <- check_collinearity(mod, verbose = FALSE)
+  expect_identical(out2$Term, rownames(out1))
+  expect_equal(
+    out2$SE_factor,
+    out1[, "GVIF^(1/(2*Df))"],
+    tolerance = 1e-8,
+    ignore_attr = TRUE
+  )
+
+  mod <- glmmTMB::glmmTMB(y ~ x1 * f + x2 + (1 | grp), data = d)
+  out <- check_collinearity(mod, verbose = FALSE)
+  expect_identical(out$Term, c("x1", "f", "x2", "x1:f"))
+  expect_equal(out$SE_factor, out$VIF^(1 / (2 * c(1, 2, 1, 2))), tolerance = 1e-8)
+})
+
 test_that("check_collinearity, ordinal clmm models", {
   skip_if_not_installed("ordinal")
   set.seed(999)
