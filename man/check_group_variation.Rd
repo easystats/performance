@@ -63,7 +63,7 @@ A data frame with Group, Variable, Variation, Design, and r columns.
 when it is 0 the grouping variable carries no predictive information (\code{"within"}),
 and when it is 1 the variable is perfectly predicted by the grouping variable (\code{"between"}).
 - For numeric variables it is the square-root of the inter class correlation (ICC), aka the correlation ratio \eqn{\eta} (Ayres, 1920).
-- For non-numeric variables it is a non-symmetric Cramer's \emph{V} (when \code{{effectsize}} is available)
+- For non-numeric variables it is a non-symmetric Cramér's \emph{V} (when \code{{effectsize}} is available)
 }
 \description{
 Checks if variables vary within and/or between levels of grouping variables.
