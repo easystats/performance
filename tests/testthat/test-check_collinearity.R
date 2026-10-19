@@ -2153,7 +2153,16 @@ test_that("check_collinearity, coxph has no intercept to drop", {
   # Cox models
   expect_no_message(out <- check_collinearity(m), message = "Model without intercept")
   expect_identical(out$Term, c("age", "sex", "ph.ecog"))
-  expect_equal(out$VIF, unname(suppressWarnings(car::vif(m))), tolerance = 1e-8)
+  # car warns "No intercept: vifs may not be sensible." for Cox models
+  car_vif <- withCallingHandlers(
+    car::vif(m),
+    warning = function(w) {
+      if (startsWith(conditionMessage(w), "No intercept")) {
+        invokeRestart("muffleWarning")
+      }
+    }
+  )
+  expect_equal(out$VIF, unname(car_vif), tolerance = 1e-8)
 
   m_strata <- survival::coxph(
     survival::Surv(time, status) ~ age + factor(ph.ecog) + sex + survival::strata(inst),
@@ -2166,4 +2175,111 @@ test_that("check_collinearity, coxph has no intercept to drop", {
   expect_identical(out$Term, c("age", "factor(ph.ecog)", "sex"))
   blocks <- list("age", paste0("factor(ph.ecog)", 1:3), "sex")
   expect_equal(out$VIF, .gvif_blocks(stats::vcov(m_strata), blocks), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, survival models with backticked names", {
+  skip_if_not_installed("survival")
+  lung <- survival::lung
+  lung$`my var` <- lung$wt.loss
+  lung$my_var <- lung$wt.loss
+  fits <- list(
+    coxph = function(f) survival::coxph(f, data = lung),
+    survreg = function(f) survival::survreg(f, data = lung)
+  )
+  for (i in names(fits)) {
+    out <- check_collinearity(fits[[i]](
+      survival::Surv(time, status) ~ age + sex + `my var`
+    ))
+    out_plain <- check_collinearity(fits[[i]](
+      survival::Surv(time, status) ~ age + sex + my_var
+    ))
+    expect_identical(out$Term, c("age", "sex", "my var"), info = i)
+    expect_equal(out$VIF, out_plain$VIF, tolerance = 1e-8, info = i)
+  }
+})
+
+test_that("check_collinearity, survreg with an interaction of a strata() term", {
+  skip_if_not_installed("survival")
+  m <- survival::survreg(
+    survival::Surv(time, status) ~ age * survival::strata(sex) + ph.ecog,
+    data = survival::lung
+  )
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("age", "ph.ecog", "age:strata(sex)"))
+  blocks <- as.list(setdiff(names(stats::coef(m)), "(Intercept)"))
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, survival models with an aliased coefficient", {
+  skip_if_not_installed("survival")
+  lung <- survival::lung
+  lung$age_sex <- lung$age + lung$sex
+  fits <- list(
+    coxph = survival::coxph(
+      survival::Surv(time, status) ~ age + sex + age_sex + ph.ecog,
+      data = lung
+    ),
+    survreg = survival::survreg(
+      survival::Surv(time, status) ~ age + sex + age_sex + ph.ecog,
+      data = lung
+    )
+  )
+  for (i in names(fits)) {
+    m <- fits[[i]]
+    expect_true(is.na(stats::coef(m)[["age_sex"]]), info = i)
+    expect_warning(
+      out <- check_collinearity(m),
+      "Model matrix is rank deficient",
+      info = i
+    )
+    expect_identical(out$Term, c("age", "sex", "ph.ecog"), info = i)
+    expected <- .gvif_blocks(stats::vcov(m), list("age", "sex", "ph.ecog"))
+    expect_equal(out$VIF, expected, tolerance = 1e-8, info = i)
+  }
+})
+
+test_that("check_collinearity, NA columns of the covariance matrix of a survreg model", {
+  skip_if_not_installed("survival")
+  # the intercept and the scale parameter are not used, so the term
+  # assignment is shorter than the covariance matrix
+  m <- survival::survreg(
+    survival::Surv(time, status) ~ age + sex + ph.ecog + wt.loss,
+    data = survival::lung
+  )
+  v <- stats::vcov(m)
+  v_na <- v
+  v_na["sex", ] <- NA
+  v_na[, "sex"] <- NA
+  testthat::local_mocked_bindings(
+    get_varcov = function(...) v_na,
+    .package = "insight"
+  )
+  expect_warning(
+    out <- check_collinearity(m),
+    "Model matrix is rank deficient"
+  )
+  expect_identical(out$Term, c("age", "ph.ecog", "wt.loss"))
+  expected <- .gvif_blocks(v, list("age", "ph.ecog", "wt.loss"))
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
+})
+
+test_that("check_collinearity, multi-state coxph models keep the formula terms", {
+  skip_if_not_installed("survival")
+  d <- survival::mgus2
+  d$etime <- ifelse(d$pstat == 0, d$futime, d$ptime)
+  d$event <- factor(
+    ifelse(d$pstat == 0, 2 * d$death, 1),
+    0:2,
+    labels = c("censor", "pcm", "death")
+  )
+  m <- survival::coxph(
+    survival::Surv(etime, event) ~ age + sex + mspike,
+    data = d,
+    id = id
+  )
+  # each term has one coefficient for each transition, which the assignment of
+  # the terms does not map
+  expect_false(performance:::.has_named_term_blocks(m))
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("age", "sex", "mspike"))
 })
