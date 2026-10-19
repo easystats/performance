@@ -16,8 +16,8 @@
   models from package *survival*. Before, some VIFs of these models used the
   coefficients of other terms, and `coxph()` models lost their first term.
   Smooth terms are named by their *mgcv* label and come after the parametric
-  terms. The scale parameters of `survreg()` models
-  are no longer part of the computation.
+  terms. The scale parameters of `survreg()` models are no longer part of the
+  computation.
 
 * `check_model()` now applies its defaults for `type` and `detrend` to more
   objects. These are *rstanarm* and *brms* models that can be converted to a
