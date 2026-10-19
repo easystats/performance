@@ -2076,11 +2076,17 @@ test_that("check_collinearity, mgcv models use the columns of each term", {
     )
   }
 
-  # a tensor smooth that shares `x1` with another smooth keeps its row. The
-  # correlation matrix of this fit is close to singular, so its VIFs are not
-  # compared
+  # a tensor smooth that shares `x1` with another smooth keeps its own term.
+  # The correlation matrix of this fit is close to singular, so only the
+  # term blocks are compared
   m_shared <- mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x1, x3), data = d)
-  expect_identical(check_collinearity(m_shared)$Term, c("x2", "s(x1)", "te(x1,x3)"))
+  v_names <- colnames(stats::vcov(m_shared))
+  blocks <- performance:::.named_term_blocks(m_shared, v_names)
+  expect_identical(blocks$terms, c("x2", "s(x1)", "te(x1,x3)"))
+  expect_identical(
+    blocks$assign,
+    c(0L, 1L, rep(2L, 4), rep(3L, sum(startsWith(v_names, "te(x1,x3)."))))
+  )
 
   # the order of the terms in the formula does not change the VIFs
   out_first <- check_collinearity(fits$smooth_first)
