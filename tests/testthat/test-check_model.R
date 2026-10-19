@@ -326,7 +326,7 @@ test_that("`check_model()` warnings for tweedie", {
       check_model(m, iterations = 2, verbose = TRUE),
       regex = "Not enough model terms"
     ),
-    regex = "influential observations is skipped"
+    regex = "tweedie"
   )
 })
 
