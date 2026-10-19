@@ -10,6 +10,16 @@
 
 ## Bug fixes
 
+* `check_model()` now applies its defaults for `type` and `detrend` to more
+  objects. These are *rstanarm* and *brms* models that can be converted to a
+  frequentist model, and `model_fit` objects from package *parsnip*. They are
+  also objects from `simulate_residuals()` or package *DHARMa*. Models with a
+  binary, count, ordinal, categorical, or multinomial response thus get the
+  `"discrete_interval"` posterior predictive check. Q-Q plots of simulated
+  residuals are no longer detrended by default. Before, these objects always got
+  `type = "density"` and `detrend = TRUE` by default. These objects also ignored
+  `size_title`, which is now passed on.
+
 * `check_collinearity()` now computes the adjusted VIF (`SE_factor`) of each
   term from its number of coefficients, as `car::vif()` does. Before,
   polynomial and spline terms and interaction terms got the square root of the

@@ -332,8 +332,9 @@ check_model.default <- function(
     residual_type <- "normal"
   }
 
-  # set default for detrend
-  if (missing(detrend)) {
+  # set default for detrend; methods that call `check_model()` on another
+  # model pass `detrend = NULL` when the user gave no `detrend`
+  if (missing(detrend) || is.null(detrend)) {
     detrend <- residual_type == "normal"
   }
 
@@ -396,7 +397,9 @@ check_model.default <- function(
     detrend = detrend,
     bandwidth = bandwidth,
     type = type,
-    type_missing = missing(type),
+    # methods that call `check_model()` on another model pass `type = NULL`
+    # when the user gave no `type`
+    type_missing = missing(type) || is.null(type),
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
@@ -454,6 +457,9 @@ check_model.default <- function(
     isTRUE(minfo$is_multinomial)) # nolint
   if (type_missing && suggest_dots) {
     type <- "discrete_interval"
+  }
+  if (is.null(type)) {
+    type <- "density"
   }
 
   # set default for show_dots, based on "model size"
@@ -583,6 +589,7 @@ check_model.stanreg <- function(
       # bayestestR renamed `resp` to `response`, see https://github.com/easystats/bayestestR/pull/790
       bayestestR::bayesian_as_frequentist(model, response = resp)
     } else {
+      ## TODO: remove this once bayestest 0.20.1 or higher is on CRAN
       bayestestR::bayesian_as_frequentist(model, resp = resp)
     },
     error = function(e) {
@@ -607,10 +614,11 @@ check_model.stanreg <- function(
       conversion_error = conversion_error,
       panel = panel,
       check = check,
-      detrend = detrend,
+      # `detrend` is NULL when a `model_fit` object wraps the model
+      detrend = is.null(detrend) || isTRUE(detrend),
       bandwidth = bandwidth,
       type = type,
-      type_missing = missing(type),
+      type_missing = missing(type) || is.null(type),
       show_dots = show_dots,
       show_ci = show_ci,
       show_smooth = show_smooth,
@@ -634,6 +642,7 @@ check_model.stanreg <- function(
     model = freq_model,
     size_dot = size_dot,
     size_line = size_line,
+    size_title = size_title,
     panel = panel,
     check = check,
     alpha = alpha,
@@ -642,12 +651,14 @@ check_model.stanreg <- function(
     theme = theme,
     base_size = base_size,
     size_axis_title = size_axis_title,
-    detrend = detrend,
+    # NULL lets `check_model.default()` choose the default for the converted model
+    detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
     bandwidth = bandwidth,
-    type = type,
+    # NULL lets `check_model.default()` choose the default for the converted model
+    type = if (!missing(type)) type,
     residual_type = residual_type,
     maximum_dots = maximum_dots,
     ppc_range = ppc_range,
@@ -859,6 +870,7 @@ check_model.model_fit <- function(
     model$fit,
     size_dot = size_dot,
     size_line = size_line,
+    size_title = size_title,
     panel = panel,
     check = check,
     alpha = alpha,
@@ -867,13 +879,15 @@ check_model.model_fit <- function(
     colors = colors,
     theme = theme,
     base_size = base_size,
-    detrend = detrend,
+    # NULL lets the method for the fitted model choose the default
+    detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
-    type = type,
+    # NULL lets the method for the fitted model choose the default
+    type = if (!missing(type)) type,
     residual_type = residual_type,
     ppc_range = ppc_range,
     verbose = verbose,
@@ -921,6 +935,7 @@ check_model.performance_simres <- function(
     model$fittedModel,
     size_dot = size_dot,
     size_line = size_line,
+    size_title = size_title,
     panel = panel,
     check = check,
     alpha = alpha,
@@ -929,13 +944,15 @@ check_model.performance_simres <- function(
     colors = colors,
     theme = theme,
     base_size = base_size,
-    detrend = detrend,
+    # NULL lets the method for the fitted model choose the default
+    detrend = if (!missing(detrend)) detrend,
     show_dots = show_dots,
     show_ci = show_ci,
     show_smooth = show_smooth,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
-    type = type,
+    # NULL lets the method for the fitted model choose the default
+    type = if (!missing(type)) type,
     residual_type = "simulated",
     ppc_range = ppc_range,
     verbose = verbose,

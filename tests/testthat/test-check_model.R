@@ -187,6 +187,105 @@ test_that("`check_model()` stores `show_smooth`", {
   }
 })
 
+test_that("`check_model()` forwards `type` and `size_title` for simulated residuals", {
+  skip_if_not_installed("DHARMa")
+  data(mtcars)
+  m <- glm(am ~ wt, data = mtcars, family = binomial)
+  p <- glm(carb ~ wt, data = mtcars, family = poisson)
+  sim_m <- simulate_residuals(m)
+
+  # the default for binary and count responses is used, as for the glm itself
+  expect_identical(attr(check_model(sim_m), "type"), "discrete_interval")
+  expect_identical(attr(check_model(simulate_residuals(p)), "type"), "discrete_interval")
+  expect_identical(
+    attr(check_model(DHARMa::simulateResiduals(m)), "type"),
+    "discrete_interval"
+  )
+
+  # user values are kept
+  expect_identical(attr(check_model(sim_m, type = "density"), "type"), "density")
+  expect_identical(attr(check_model(sim_m, size_title = 20), "title_size"), 20)
+})
+
+test_that("`check_model()` forwards `type` and `size_title` for `model_fit` objects", {
+  data(mtcars)
+  m <- glm(am ~ wt, data = mtcars, family = binomial)
+  # the class that parsnip gives its fits
+  obj <- structure(list(fit = m), class = "model_fit")
+
+  expect_identical(attr(check_model(obj), "type"), "discrete_interval")
+  expect_identical(attr(check_model(obj, type = "density"), "type"), "density")
+  expect_identical(attr(check_model(obj, size_title = 20), "title_size"), 20)
+})
+
+test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan models", {
+  skip_if_not_installed("rstanarm")
+  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("curl")
+  skip_if_not_installed("httr2")
+  skip_if_offline()
+  # bernoulli model of `vs ~ wt`; brms models use the same method
+  m <- insight::download_model("stanreg_glm_1")
+  skip_if(is.null(m))
+
+  out <- check_model(m)
+  expect_identical(attr(out, "type"), "discrete_interval")
+  # simulated residuals are not detrended by default
+  expect_false(attr(out, "detrend"))
+  expect_identical(attr(check_model(m, type = "density"), "type"), "density")
+  expect_identical(attr(check_model(m, size_title = 20), "title_size"), 20)
+  expect_true(attr(check_model(m, detrend = TRUE), "detrend"))
+
+  # the same when a `model_fit` object wraps the Stan model
+  out <- check_model(structure(list(fit = m), class = "model_fit"))
+  expect_identical(attr(out, "type"), "discrete_interval")
+  expect_false(attr(out, "detrend"))
+})
+
+test_that("`check_model()` forwards `detrend` for wrapped models", {
+  skip_if_not_installed("DHARMa")
+  data(mtcars)
+  m <- glm(am ~ wt, data = mtcars, family = binomial)
+  l <- lm(mpg ~ wt, data = mtcars)
+  sim_m <- simulate_residuals(m)
+
+  # simulated residuals are not detrended by default
+  expect_false(attr(check_model(sim_m), "detrend"))
+  expect_false(attr(check_model(DHARMa::simulateResiduals(m)), "detrend"))
+  expect_false(attr(check_model(simulate_residuals(l)), "detrend"))
+  expect_false(attr(check_model(l, residual_type = "simulated"), "detrend"))
+
+  # the defaults of the bare models, which `model_fit` objects now get too
+  expect_false(attr(check_model(m), "detrend"))
+  expect_true(attr(check_model(l), "detrend"))
+  expect_false(attr(
+    check_model(structure(list(fit = m), class = "model_fit")),
+    "detrend"
+  ))
+  expect_true(attr(check_model(structure(list(fit = l), class = "model_fit")), "detrend"))
+
+  # user values are kept
+  expect_true(attr(check_model(sim_m, detrend = TRUE), "detrend"))
+  expect_false(attr(
+    check_model(structure(list(fit = l), class = "model_fit"), detrend = FALSE),
+    "detrend"
+  ))
+})
+
+test_that("`check_model()` keeps the defaults for wrapped linear models", {
+  skip_if_not_installed("DHARMa")
+  data(mtcars)
+  l <- lm(mpg ~ wt, data = mtcars)
+  out <- list(
+    model_fit = check_model(structure(list(fit = l), class = "model_fit")),
+    simres = check_model(simulate_residuals(l))
+  )
+  for (x in out) {
+    expect_identical(attr(x, "type"), "density")
+    expect_identical(attr(x, "title_size"), 12)
+  }
+})
+
 test_that("every `check_model()` method has a `show_smooth` argument", {
   methods <- ls(asNamespace("performance"), pattern = "^check_model\\.")
   expect_gt(length(methods), 0)
@@ -364,6 +463,12 @@ test_that("`check_model()` falls back to Bayesian checks if brms conversion fail
   out <- suppressMessages(check_model(m, check = "vif", show_smooth = FALSE))
   expect_named(out, "VIF")
   expect_false(attr(out, "show_smooth"))
+
+  # the same when a `model_fit` object wraps the brms model
+  out <- suppressMessages(check_model(structure(list(fit = m), class = "model_fit")))
+  expect_named(out, c("VIF", "PP_CHECK"), ignore.order = TRUE)
+  expect_true(attr(out, "detrend"))
+  expect_identical(attr(out, "type"), "density")
 })
 
 test_that("`check_model()` fallback for brms models can be plotted", {
