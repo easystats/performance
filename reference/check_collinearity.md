@@ -72,9 +72,9 @@ confidence intervals), where `tolerance = 1/vif`.
 `check_collinearity()` calculates the generalized variance inflation
 factor (Fox & Monette 1992), which also returns valid results for
 categorical variables. The *adjusted* VIF is calculated as
-`VIF^(1/(2*<nlevels>)` (Fox & Monette 1992), which is identical to the
-square root of the VIF for numeric predictors, or for categorical
-variables with two levels.
+`VIF^(1/(2*<n>))` (Fox & Monette 1992), where `<n>` is the number of
+coefficients of the term. It is the square root of the VIF for terms
+with one coefficient.
 
 For multinomial models from
 [`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html),

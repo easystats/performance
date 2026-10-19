@@ -134,9 +134,9 @@ collinearity), and tolerance values (including confidence intervals), where
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>check_collinearity()</code> calculates the generalized variance inflation factor
 (Fox &amp; Monette 1992), which also returns valid results for categorical
-variables. The <em>adjusted</em> VIF is calculated as <code>VIF^(1/(2*&lt;nlevels&gt;)</code> (Fox &amp;
-Monette 1992), which is identical to the square root of the VIF for numeric
-predictors, or for categorical variables with two levels.</p>
+variables. The <em>adjusted</em> VIF is calculated as <code>VIF^(1/(2*&lt;n&gt;))</code> (Fox &amp;
+Monette 1992), where <code>&lt;n&gt;</code> is the number of coefficients of the term. It is
+the square root of the VIF for terms with one coefficient.</p>
 <p>For multinomial models from <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom()</a></code>, <code><a href="https://melff.github.io/mclogit/reference/mblogit.html" class="external-link">mclogit::mblogit()</a></code>,
 <code><a href="https://rdrr.io/pkg/brglm2/man/brmultinom.html" class="external-link">brglm2::brmultinom()</a></code> and <code><a href="https://rdrr.io/pkg/brglm2/man/bracl.html" class="external-link">brglm2::bracl()</a></code>, and for <code><a href="https://rdrr.io/pkg/VGAM/man/vglm.html" class="external-link">VGAM::vglm()</a></code> models
 with the multinomial or cumulative family, each term can have its own set
