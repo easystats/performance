@@ -12,10 +12,11 @@
 
 * `check_collinearity()` now computes the VIF of each term from the
   coefficients of that term. This applies to models from `mgcv::gam()` and
-  `mgcv::bam()`, and to `survreg()` and `coxph()` models from package
-  *survival*. Before, some VIFs of these models used the coefficients of other
-  terms, and `coxph()` models lost their first term. Smooth terms are named by their *mgcv* label and
-  come after the parametric terms. The scale parameters of `survreg()` models
+  `mgcv::bam()` with one linear predictor, and to `survreg()` and `coxph()`
+  models from package *survival*. Before, some VIFs of these models used the
+  coefficients of other terms, and `coxph()` models lost their first term.
+  Smooth terms are named by their *mgcv* label and come after the parametric
+  terms. The scale parameters of `survreg()` models
   are no longer part of the computation.
 
 * `check_model()` now applies its defaults for `type` and `detrend` to more

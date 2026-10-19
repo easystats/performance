@@ -1103,8 +1103,9 @@ check_collinearity.zerocount <- function(
       coef_assign[cols] <- length(parametric_labels) + i
     }
   } else if (inherits(x, "coxph")) {
-    # a list with the columns of each term, without `strata()` terms. The
-    # columns of `frailty()` terms come after the coefficients
+    # a list with the columns of each term, without `strata()` and
+    # `cluster()` terms. A sparse `frailty()` term has an index past the
+    # coefficients and no column, so it gets no VIF
     term_labels <- names(x$assign)
     coef_assign <- rep(NA_integer_, length(coef_names))
     for (i in seq_along(x$assign)) {
