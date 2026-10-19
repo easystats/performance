@@ -521,6 +521,14 @@ check_collinearity.zerocount <- function(
     if (!is.null(zi_formula)) {
       return(attr(stats::terms(zi_formula), "intercept") == 1)
     }
+    # glmmTMB models with `ziformula = ~1`, whose zero-inflation formula
+    # `find_formula()` drops, have only an intercept in that part
+    if (inherits(x, "glmmTMB")) {
+      zi_mm <- .safe(stats::model.matrix(x, component = "zi"))
+      if (!is.null(zi_mm)) {
+        return("(Intercept)" %in% colnames(zi_mm))
+      }
+    }
   }
   insight::has_intercept(x)
 }
