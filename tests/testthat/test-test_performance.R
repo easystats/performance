@@ -81,10 +81,18 @@ test_that("test_performance - lavaan", {
     structure1,
     data = lavaan::HolzingerSwineford1939[1:200, ]
   ))
-  expect_warning(expect_warning(expect_warning(expect_warning(
-    test_performance(m1, m3),
+  # lavaan's own lavTestLRT() warnings differ between lavaan versions
+  expect_warning(
+    withCallingHandlers(
+      test_performance(m1, m3),
+      warning = function(w) {
+        if (grepl("lavTestLRT", conditionMessage(w), fixed = TRUE)) {
+          invokeRestart("muffleWarning")
+        }
+      }
+    ),
     regex = "same observations"
-  ))))
+  )
   structure4 <- " visual  =~ x1 + x2
                   textual =~ x4 + x5 + x6
                   speed   =~ x7 + x8 + x9 "
