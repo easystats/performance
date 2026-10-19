@@ -78,7 +78,7 @@
 #'   when it is 0 the grouping variable carries no predictive information (`"within"`),
 #'   and when it is 1 the variable is perfectly predicted by the grouping variable (`"between"`).
 #'     - For numeric variables it is the square-root of the inter class correlation (ICC), aka the correlation ratio \eqn{\eta} (Ayres, 1920).
-#'     - For non-numeric variables it is a non-symmetric Cramer's _V_ (when `{effectsize}` is available)
+#'     - For non-numeric variables it is a non-symmetric Cramér's _V_ (when `{effectsize}` is available)
 #'
 #' @references Ayres, L. P. (1920). The correlation ratio. The Journal of Educational Research, 2(1), 452-456.
 #'
