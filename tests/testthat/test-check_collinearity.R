@@ -2283,3 +2283,47 @@ test_that("check_collinearity, multi-state coxph models keep the formula terms",
   out <- check_collinearity(m)
   expect_identical(out$Term, c("age", "sex", "mspike"))
 })
+
+test_that("check_collinearity, one rank-deficiency warning for aliased and NA columns", {
+  skip_if_not_installed("survival")
+  lung <- survival::lung
+  lung$age_sex <- lung$age + lung$sex
+  m <- survival::survreg(
+    survival::Surv(time, status) ~ age + sex + age_sex + ph.ecog + wt.loss,
+    data = lung
+  )
+  v <- stats::vcov(m)
+  v_na <- v
+  v_na["ph.ecog", ] <- NA
+  v_na[, "ph.ecog"] <- NA
+  testthat::local_mocked_bindings(
+    get_varcov = function(...) v_na,
+    .package = "insight"
+  )
+  warnings <- testthat::capture_warnings(out <- check_collinearity(m))
+  expect_length(warnings, 1)
+  expect_match(warnings, "Model matrix is rank deficient", fixed = TRUE)
+  expect_match(warnings, "age_sex", fixed = TRUE)
+  expect_match(warnings, "ph.ecog", fixed = TRUE)
+  expect_identical(out$Term, c("age", "sex", "wt.loss"))
+  expected <- .gvif_blocks(v, list("age", "sex", "wt.loss"))
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
+})
+
+test_that("check_collinearity, named term blocks skip the formula-based term assignment", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("survival")
+  # the formula-based assignment can rebuild the model data, which can warn,
+  # for example for mgcv models with `paraPen`
+  testthat::local_mocked_bindings(
+    .term_assignments = function(...) stop("not used for these models")
+  )
+  d <- .gam_test_data()
+  out <- check_collinearity(mgcv::gam(y ~ s(x1) + x2 + f, data = d))
+  expect_identical(out$Term, c("x2", "f", "s(x1)"))
+  out <- check_collinearity(survival::coxph(
+    survival::Surv(time, status) ~ age + sex,
+    data = survival::lung
+  ))
+  expect_identical(out$Term, c("age", "sex"))
+})

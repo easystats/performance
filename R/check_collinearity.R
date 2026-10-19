@@ -558,11 +558,17 @@ check_collinearity.zerocount <- function(
     return(NULL)
   }
 
-  term_assign <- .term_assignments(x, component, verbose = verbose)
+  # models with named term blocks build their assignment below
+  if (.has_named_term_blocks(x)) {
+    term_assign <- NULL
+  } else {
+    term_assign <- .term_assignments(x, component, verbose = verbose)
+  }
 
-  # names of the terms, for models whose terms are not the labels of their
-  # formula, see `.named_term_blocks()`
+  # names of the terms, and aliased coefficients, for models whose terms are
+  # not the labels of their formula, see `.named_term_blocks()`
   term_names <- NULL
+  aliased_cols <- NULL
 
   # any assignment found? multinomial models and models with named term blocks
   # build their own assignment below
@@ -727,9 +733,7 @@ check_collinearity.zerocount <- function(
     keep_idx <- !is.na(blocks$assign) & blocks$assign != 0 & !is_aliased
     term_assign <- blocks$assign[keep_idx]
     term_names <- blocks$terms
-    if (any(is_aliased) && isTRUE(verbose)) {
-      .warn_rank_deficient(colnames(v)[is_aliased])
-    }
+    aliased_cols <- colnames(v)[is_aliased]
     # Cox models have no intercept
     if (
       !any(blocks$assign == 0, na.rm = TRUE) && !inherits(x, "coxph") && isTRUE(verbose)
@@ -747,20 +751,20 @@ check_collinearity.zerocount <- function(
   }
 
   # we have rank-deficiency here. remove NA columns from assignment
-  if (isTRUE(attr(v, "rank_deficient")) || anyNA(v)) {
-    na_cols <- NULL
+  if (isTRUE(attr(v, "rank_deficient")) || anyNA(v) || length(aliased_cols)) {
+    na_cols <- aliased_cols
     if (!is.null(attr(v, "na_columns_index"))) {
       # If this attribute exists, then NA values were already removed from v.
       # Named term blocks are already matched to the columns of v
       if (is.null(term_names)) {
         term_assign <- term_assign[-attr(v, "na_columns_index")]
       }
-      na_cols <- names(attr(v, "na_columns_name"))
+      na_cols <- c(na_cols, names(attr(v, "na_columns_name")))
     } else if (anyNA(v)) {
       # If no attribute exists, then we need to identify NA columns manually
       ## FIXME: this should be fixed in insight::get_varcov() to avoid this step
       idx_na <- apply(is.na(v), 2, all)
-      na_cols <- colnames(v)[idx_na]
+      na_cols <- c(na_cols, colnames(v)[idx_na])
       keep_idx[idx_na] <- FALSE
     }
 
