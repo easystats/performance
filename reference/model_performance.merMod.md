@@ -11,6 +11,7 @@ model_performance(
   metrics = "all",
   estimator = "REML",
   verbose = TRUE,
+  null_model = NULL,
   ...
 )
 ```
@@ -43,6 +44,16 @@ model_performance(
 
   Toggle warnings and messages.
 
+- null_model:
+
+  Optional, a null model to compute the random effect variances, which
+  is passed to
+  [`insight::get_variance()`](https://easystats.github.io/insight/reference/get_variance.html).
+  Usually only required if calculation of r-squared or ICC fails when
+  `null_model` is not specified. If calculating the null model takes
+  longer and you already have fit the null model, you can pass it here,
+  too, to speed up the process.
+
 - ...:
 
   Arguments passed to or from other methods.
@@ -59,6 +70,13 @@ This method returns the *adjusted ICC* only, as this is typically of
 interest when judging the variance attributed to the random effects part
 of the model (see also
 [`icc()`](https://easystats.github.io/performance/reference/icc.md)).
+
+### Null model
+
+For non-Gaussian mixed models, both R2 and ICC need the null model. When
+both are requested, the null model is fitted only once and used for both
+indices. A null model that was already fitted can be passed via
+`null_model`, so that it is not fitted at all.
 
 ### REML versus ML estimator
 
