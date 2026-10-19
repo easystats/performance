@@ -86,7 +86,7 @@ test_that("test_performance - lavaan", {
     withCallingHandlers(
       test_performance(m1, m3),
       warning = function(w) {
-        if (grepl("lavTestLRT", conditionMessage(w), fixed = TRUE)) {
+        if (grepl("lavaan->lavTestLRT()", conditionMessage(w), fixed = TRUE)) {
           invokeRestart("muffleWarning")
         }
       }
