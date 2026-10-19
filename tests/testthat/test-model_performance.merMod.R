@@ -62,7 +62,12 @@ test_that("model_performance.merMod fits the null model once for R2 and ICC", {
   out <- model_performance(m, metrics = c("R2", "ICC"))
   expect_identical(n_fits, 1)
   # same results as R2 and ICC computed on their own
-  expect_equal(out$R2_conditional, r2_ref$R2_conditional, tolerance = 1e-8, ignore_attr = TRUE)
+  expect_equal(
+    out$R2_conditional,
+    r2_ref$R2_conditional,
+    tolerance = 1e-8,
+    ignore_attr = TRUE
+  )
   expect_equal(out$R2_marginal, r2_ref$R2_marginal, tolerance = 1e-8, ignore_attr = TRUE)
   expect_equal(out$ICC, icc_ref$ICC_adjusted, tolerance = 1e-8)
 
