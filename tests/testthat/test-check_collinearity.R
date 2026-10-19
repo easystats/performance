@@ -2006,3 +2006,164 @@ test_that("check_collinearity, pscl zero-inflation terms differ from the count t
     )
   }
 })
+
+.gam_test_data <- function(n = 200) {
+  set.seed(123)
+  d <- data.frame(x1 = stats::runif(n), f = factor(sample(letters[1:3], n, TRUE)))
+  d$x2 <- stats::rnorm(n) + 2 * d$x1
+  d$x3 <- stats::runif(n) + 0.5 * d$x1
+  d$y <- sin(2 * pi * d$x1) + 0.5 * d$x2 + 0.3 * (d$f == "b") + stats::rnorm(n, sd = 0.5)
+  d
+}
+
+# columns of each term in the variance-covariance matrix of an mgcv model,
+# picked by name: parametric terms by their coefficient names, smooths by
+# their label followed by a dot
+.gam_blocks <- function(m, parametric) {
+  v_names <- colnames(stats::vcov(m))
+  smooth_labels <- vapply(m$smooth, function(s) s$label, character(1))
+  smooth_blocks <- lapply(smooth_labels, function(l) {
+    v_names[startsWith(v_names, paste0(l, "."))]
+  })
+  stats::setNames(c(parametric, smooth_blocks), c(names(parametric), smooth_labels))
+}
+
+test_that("check_collinearity, mgcv models use the columns of each term", {
+  skip_if_not_installed("mgcv")
+  d <- .gam_test_data()
+  fits <- list(
+    smooth_first = mgcv::gam(y ~ s(x1) + x2 + f, data = d),
+    smooth_last = mgcv::gam(y ~ x2 + f + s(x1), data = d),
+    bam = mgcv::bam(y ~ s(x1) + x2 + f, data = d),
+    # `s(x1, k = 5)` has the label "s(x1)", and the label of `te(x1, x3)` has
+    # no space. The correlation matrix of this fit is close to singular, so
+    # the blocks keep the order of the coefficients
+    two_smooths = mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x1, x3), data = d),
+    # `by = f` gives one smooth for each level of f
+    by_factor = mgcv::gam(y ~ s(x1, by = f) + x2 * f, data = d)
+  )
+  parametric <- list(
+    smooth_first = list(x2 = "x2", f = c("fb", "fc")),
+    smooth_last = list(x2 = "x2", f = c("fb", "fc")),
+    bam = list(x2 = "x2", f = c("fb", "fc")),
+    two_smooths = list(x2 = "x2"),
+    by_factor = list(x2 = "x2", f = c("fb", "fc"), `x2:f` = c("x2:fb", "x2:fc"))
+  )
+  expected_terms <- list(
+    smooth_first = c("x2", "f", "s(x1)"),
+    smooth_last = c("x2", "f", "s(x1)"),
+    bam = c("x2", "f", "s(x1)"),
+    two_smooths = c("x2", "s(x1)", "te(x1,x3)"),
+    by_factor = c("x2", "f", "x2:f", "s(x1):fa", "s(x1):fb", "s(x1):fc")
+  )
+  for (i in names(fits)) {
+    m <- fits[[i]]
+    blocks <- .gam_blocks(m, parametric[[i]])
+    out <- check_collinearity(m)
+    expect_identical(out$Term, expected_terms[[i]], info = i)
+    expect_identical(names(blocks), expected_terms[[i]], info = i)
+    expect_equal(
+      out$VIF,
+      .gvif_blocks(stats::vcov(m), blocks),
+      tolerance = 1e-8,
+      info = i
+    )
+    expect_equal(
+      out$SE_factor,
+      out$VIF^(1 / (2 * unname(lengths(blocks)))),
+      tolerance = 1e-8,
+      info = i
+    )
+  }
+
+  # the order of the terms in the formula does not change the VIFs
+  out_first <- check_collinearity(fits$smooth_first)
+  out_last <- check_collinearity(fits$smooth_last)
+  expect_equal(
+    out_first$VIF[match(out_last$Term, out_first$Term)],
+    out_last$VIF,
+    tolerance = 1e-8
+  )
+})
+
+test_that("check_collinearity, mgcv model without smooths equals car::vif() of lm", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("car")
+  # a guard: this case also gives the right VIFs without the mgcv term blocks
+  d <- .gam_test_data()
+  m_gam <- mgcv::gam(y ~ x2 + f + x3, data = d)
+  m_lm <- stats::lm(y ~ x2 + f + x3, data = d)
+  out <- check_collinearity(m_gam)
+  expect_identical(out$Term, c("x2", "f", "x3"))
+  expect_equal(out$VIF, unname(car::vif(m_lm)[, "GVIF"]), tolerance = 1e-6)
+})
+
+test_that("check_collinearity, survreg leaves out the scale parameters", {
+  skip_if_not_installed("survival")
+  skip_if_not_installed("car")
+  lung <- survival::lung
+  fits <- list(
+    weibull = survival::survreg(
+      survival::Surv(time, status) ~ age + sex + ph.ecog,
+      data = lung
+    ),
+    # one scale parameter for each stratum
+    strata = survival::survreg(
+      survival::Surv(time, status) ~ age + ph.ecog + wt.loss + survival::strata(sex),
+      data = lung
+    )
+  )
+  expected_terms <- list(
+    weibull = c("age", "sex", "ph.ecog"),
+    strata = c("age", "ph.ecog", "wt.loss")
+  )
+  for (i in names(fits)) {
+    m <- fits[[i]]
+    expect_gt(ncol(stats::vcov(m)), length(stats::coef(m)))
+    out <- check_collinearity(m)
+    expect_identical(out$Term, expected_terms[[i]], info = i)
+    blocks <- as.list(setdiff(names(stats::coef(m)), "(Intercept)"))
+    expect_equal(
+      out$VIF,
+      .gvif_blocks(stats::vcov(m), blocks),
+      tolerance = 1e-8,
+      info = i
+    )
+  }
+
+  # a gaussian model of uncensored data has the coefficients of a linear model
+  d <- .gam_test_data()
+  m_surv <- survival::survreg(
+    survival::Surv(y) ~ x1 + x2 + f,
+    data = d,
+    dist = "gaussian"
+  )
+  m_lm <- stats::lm(y ~ x1 + x2 + f, data = d)
+  out <- check_collinearity(m_surv)
+  expect_identical(out$Term, c("x1", "x2", "f"))
+  expect_equal(out$VIF, unname(car::vif(m_lm)[, "GVIF"]), tolerance = 1e-6)
+})
+
+test_that("check_collinearity, coxph has no intercept to drop", {
+  skip_if_not_installed("survival")
+  skip_if_not_installed("car")
+  lung <- survival::lung
+  m <- survival::coxph(survival::Surv(time, status) ~ age + sex + ph.ecog, data = lung)
+  # a guard: the message about models without intercept does not apply to
+  # Cox models
+  expect_no_message(out <- check_collinearity(m), message = "Model without intercept")
+  expect_identical(out$Term, c("age", "sex", "ph.ecog"))
+  expect_equal(out$VIF, unname(suppressWarnings(car::vif(m))), tolerance = 1e-8)
+
+  m_strata <- survival::coxph(
+    survival::Surv(time, status) ~ age + factor(ph.ecog) + sex + survival::strata(inst),
+    data = lung
+  )
+  expect_no_message(
+    out <- check_collinearity(m_strata),
+    message = "Model without intercept"
+  )
+  expect_identical(out$Term, c("age", "factor(ph.ecog)", "sex"))
+  blocks <- list("age", paste0("factor(ph.ecog)", 1:3), "sex")
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m_strata), blocks), tolerance = 1e-8)
+})
