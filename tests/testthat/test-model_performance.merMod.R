@@ -33,6 +33,58 @@ test_that("model_performance.merMod", {
 })
 
 
+test_that("model_performance.merMod fits the null model once for R2 and ICC", {
+  skip_on_cran()
+  skip_if_not_installed("glmmTMB")
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
+    family = poisson,
+    data = Salamanders
+  )
+
+  # reference values from R2 and ICC computed on their own, before the mock,
+  # so that their null-model fits are not counted
+  r2_ref <- r2(m)
+  icc_ref <- icc(m)
+
+  # count the null-model fits
+  n_fits <- 0
+  null_model_orig <- insight::null_model
+  local_mocked_bindings(
+    null_model = function(model, ...) {
+      n_fits <<- n_fits + 1
+      null_model_orig(model, ...)
+    },
+    .package = "insight"
+  )
+
+  out <- model_performance(m, metrics = c("R2", "ICC"))
+  expect_identical(n_fits, 1)
+  # same results as R2 and ICC computed on their own
+  expect_equal(
+    out$R2_conditional,
+    r2_ref$R2_conditional,
+    tolerance = 1e-8,
+    ignore_attr = TRUE
+  )
+  expect_equal(out$R2_marginal, r2_ref$R2_marginal, tolerance = 1e-8, ignore_attr = TRUE)
+  expect_equal(out$ICC, icc_ref$ICC_adjusted, tolerance = 1e-8)
+
+  # a null model supplied by the user is used for both, and not refitted
+  nm <- null_model_orig(m)
+  n_fits <- 0
+  out_nm <- model_performance(m, metrics = c("R2", "ICC"), null_model = nm)
+  expect_identical(n_fits, 0)
+  expect_equal(out_nm, out, tolerance = 1e-8, ignore_attr = TRUE)
+
+  # only one of the two indices: nothing to share, fitted once as before
+  n_fits <- 0
+  model_performance(m, metrics = "R2")
+  expect_identical(n_fits, 1)
+})
+
+
 test_that("model_performance.merMod AICc", {
   skip_on_cran()
   skip_if_not_installed("lme4")

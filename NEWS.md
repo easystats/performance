@@ -1,5 +1,13 @@
 # performance (devel)
 
+## Changes
+
+* `model_performance()` for mixed models now fits the null model only once
+  when both R2 and ICC are requested, instead of once for each index. This
+  applies to non-Gaussian models, for which both indices need the null model.
+  A new `null_model` argument takes a null model that was already fitted, and
+  passes it to `r2()` and `icc()`.
+
 ## Bug fixes
 
 * `check_model()` now applies its defaults for `type` and `detrend` to more
