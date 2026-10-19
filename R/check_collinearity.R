@@ -372,7 +372,7 @@ check_collinearity.hurdle <- function(
   x,
   component = "all",
   ci = 0.95,
-  verbose = verbose,
+  verbose = TRUE,
   ...
 ) {
   component <- insight::validate_argument(
@@ -388,7 +388,7 @@ check_collinearity.zeroinfl <- function(
   x,
   component = "all",
   ci = 0.95,
-  verbose = verbose,
+  verbose = TRUE,
   ...
 ) {
   component <- insight::validate_argument(
@@ -404,7 +404,7 @@ check_collinearity.zerocount <- function(
   x,
   component = "all",
   ci = 0.95,
-  verbose = verbose,
+  verbose = TRUE,
   ...
 ) {
   component <- insight::validate_argument(
@@ -433,6 +433,11 @@ check_collinearity.zerocount <- function(
   if (component == "all") {
     cond <- .check_collinearity(x, "conditional", ci = ci, verbose = verbose)
     zi <- .check_collinearity(x, "zero_inflated", ci = ci, verbose = FALSE)
+    # the zero-inflation part is checked without messages, so say why it has
+    # no VIFs
+    if (is.null(zi) && isTRUE(verbose)) {
+      .alert_no_zi_vif(x)
+    }
     if (is.null(cond) && is.null(zi)) {
       return(NULL)
     }
@@ -467,6 +472,65 @@ check_collinearity.zerocount <- function(
   } else {
     .check_collinearity(x, component, ci = ci, verbose = verbose)
   }
+}
+
+
+.alert_no_zi_vif <- function(x) {
+  f <- insight::find_formula(x, verbose = FALSE)
+  zi_formula <- f$zero_inflated
+  if (is.null(zi_formula)) {
+    if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
+      # hurdle and zeroinfl models without a zero-inflation formula use the
+      # conditional formula for both parts
+      zi_formula <- f$conditional
+    } else {
+      # glmmTMB models with `ziformula = ~0` have no zero-inflation part, but
+      # `find_formula()` also drops an intercept-only `ziformula = ~1`
+      zi_mm <- .safe(stats::model.matrix(x, component = "zi"))
+      if (is.null(zi_mm) || ncol(zi_mm) == 0) {
+        return(invisible(NULL))
+      }
+    }
+  }
+  zi_terms <- character(0)
+  if (!is.null(zi_formula)) {
+    zi_terms <- .safe(labels(stats::terms(zi_formula)))
+  }
+  if (length(zi_terms) < 2) {
+    insight::format_alert(
+      "Not enough model terms in the zero-inflation part of the model to check for multicollinearity."
+    )
+  } else {
+    insight::format_alert(
+      "Could not compute VIFs for the zero-inflation part of the model.",
+      "Use `component = \"zero_inflated\"` to see why."
+    )
+  }
+}
+
+
+# the zero-inflation part has an intercept if its own formula has one, which
+# `insight::has_intercept()` does not check
+.component_has_intercept <- function(x, component) {
+  if (identical(component, "zero_inflated")) {
+    f <- insight::find_formula(x, verbose = FALSE)
+    zi_formula <- f$zero_inflated
+    if (is.null(zi_formula) && inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
+      zi_formula <- f$conditional
+    }
+    if (!is.null(zi_formula)) {
+      return(attr(stats::terms(zi_formula), "intercept") == 1)
+    }
+    # glmmTMB models with `ziformula = ~1`, whose zero-inflation formula
+    # `find_formula()` drops, have only an intercept in that part
+    if (inherits(x, "glmmTMB")) {
+      zi_mm <- .safe(stats::model.matrix(x, component = "zi"))
+      if (!is.null(zi_mm)) {
+        return("(Intercept)" %in% colnames(zi_mm))
+      }
+    }
+  }
+  insight::has_intercept(x)
 }
 
 
@@ -614,7 +678,7 @@ check_collinearity.zerocount <- function(
     }
   } else {
     keep_idx <- rep(TRUE, ncol(v))
-    if (insight::has_intercept(x)) {
+    if (.component_has_intercept(x, component)) {
       # Standard behavior: drop the first column/row (the singular intercept)
       keep_idx[1] <- FALSE
     } else if (isTRUE(verbose)) {
@@ -663,6 +727,10 @@ check_collinearity.zerocount <- function(
 
   if (inherits(x, "mixor")) {
     model_terms <- labels(x$terms)
+  } else if (is.null(f[[component]])) {
+    # for example glmmTMB models with `ziformula = ~1`, whose zero-inflation
+    # formula `find_formula()` drops
+    model_terms <- character(0)
   } else {
     model_terms <- labels(stats::terms(f[[component]]))
   }
@@ -894,6 +962,10 @@ check_collinearity.zerocount <- function(
 
 
 .term_assignments <- function(x, component, verbose = TRUE) {
+  # the fallback below would take the terms of the conditional formula
+  if (inherits(x, "glmmTMB") && component == "zero_inflated") {
+    return(.zi_term_assignment(x))
+  }
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
@@ -903,11 +975,7 @@ check_collinearity.zerocount <- function(
           zero_inflated = attr(insight::get_modelmatrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
-        term_assign <- switch(
-          component,
-          conditional = attr(insight::get_modelmatrix(x), "assign"),
-          zero_inflated = .zi_term_assignment(x, component, verbose = verbose)
-        )
+        term_assign <- attr(insight::get_modelmatrix(x), "assign")
       } else if (inherits(x, "MixMod")) {
         term_assign <- switch(
           component,
@@ -1043,17 +1111,10 @@ check_collinearity.zerocount <- function(
 }
 
 
-.zi_term_assignment <- function(x, component = "zero_inflated", verbose = TRUE) {
-  tryCatch(
-    {
-      rhs <- insight::find_formula(x)[[component]]
-      d <- insight::get_data(x, verbose = FALSE)
-      attr(insight::get_modelmatrix(rhs, data = d), "assign")
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+# the zero-inflation model matrix of glmmTMB has the fixed effects of the
+# zero-inflation formula, from the rows used in the fit
+.zi_term_assignment <- function(x) {
+  .safe(attr(stats::model.matrix(x, component = "zi"), "assign"))
 }
 
 # TRUE if the correlation matrix is singular after the columns of each term
