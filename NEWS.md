@@ -17,9 +17,10 @@
   failed with "'list' object cannot be coerced to type 'integer'" or gave VIFs
   for the wrong terms.
 
-* `check_collinearity()` now works for multinomial models from *nnet* and
-  *brglm2* with backticked variable names, such as `` `my x` ``. Before, it
-  returned `NULL` with "Could not extract model terms".
+* `check_collinearity()` now works for multinomial models from *nnet*,
+  *brglm2*, and *mclogit* with backticked variable names, such as
+  `` `my x` ``. Before, it returned `NULL` with "Could not extract model
+  terms".
 
 # performance 0.19.0
 

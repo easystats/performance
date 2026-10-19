@@ -1029,7 +1029,6 @@ test_that("check_collinearity, multinomial models with backticked names", {
   d <- .multinom_data()
   d$`my x` <- d$x1
   d$my_x <- d$x1
-  skip_if_not_installed("mclogit")
   fits <- list(
     nnet = nnet::multinom(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE),
     brmultinom = brglm2::brmultinom(y ~ `my x` + x2 + f + `my x`:f, data = d),
@@ -1038,9 +1037,6 @@ test_that("check_collinearity, multinomial models with backticked names", {
       y ~ `my x` + x2 + f + `my x`:f,
       data = d,
       parallel = TRUE
-    ),
-    mblogit = suppressWarnings(
-      mclogit::mblogit(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE)
     )
   )
   fits_renamed <- list(
@@ -1051,9 +1047,6 @@ test_that("check_collinearity, multinomial models with backticked names", {
       y ~ my_x + x2 + f + my_x:f,
       data = d,
       parallel = TRUE
-    ),
-    mblogit = suppressWarnings(
-      mclogit::mblogit(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE)
     )
   )
   for (i in names(fits)) {
@@ -1062,6 +1055,23 @@ test_that("check_collinearity, multinomial models with backticked names", {
     expect_identical(out$Term, c("my x", "x2", "f", "my x:f"), info = i)
     expect_equal(out$VIF, out_renamed$VIF, tolerance = 1e-8, info = i)
   }
+})
+
+test_that("check_collinearity, mclogit::mblogit with backticked names", {
+  skip_if_not_installed("mclogit")
+  d <- .multinom_data()
+  d$`my x` <- d$x1
+  d$my_x <- d$x1
+  m <- suppressWarnings(
+    mclogit::mblogit(y ~ `my x` + x2 + f + `my x`:f, data = d, trace = FALSE)
+  )
+  m_renamed <- suppressWarnings(
+    mclogit::mblogit(y ~ my_x + x2 + f + my_x:f, data = d, trace = FALSE)
+  )
+  out <- suppressMessages(check_collinearity(m))
+  out_renamed <- suppressMessages(check_collinearity(m_renamed))
+  expect_identical(out$Term, c("my x", "x2", "f", "my x:f"))
+  expect_equal(out$VIF, out_renamed$VIF, tolerance = 1e-8)
 })
 
 test_that("check_collinearity, multinomial models without intercept", {
