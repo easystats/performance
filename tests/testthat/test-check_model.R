@@ -485,7 +485,7 @@ test_that("`check_model()` overdispersion data for glm with na.exclude", {
 })
 
 
-test_that("`check_model()` overdispersion data for negative binomial and mixed models with na.exclude", {
+test_that("`check_model()` overdispersion data for glm.nb, glmmTMB, and glmer with na.exclude", {
   skip_if_not_installed("MASS")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
