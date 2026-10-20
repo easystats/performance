@@ -549,7 +549,7 @@
   if (.use_simulated_residuals(model, residual_type, faminfo)) {
     d <- .safe({
       simres <- simulate_residuals(model, ...)
-      predicted <- simres$fittedPredictedResponse
+      predicted <- .fitted_rows(simres$fittedPredictedResponse, model)
       # Use response-scale residuals (observed - predicted) so that Res2 and V
       # are on the same scale as the family variance formula.
       raw_res <- simres$observedResponse - predicted
@@ -571,11 +571,13 @@
 
   # data for poisson models
   if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d <- data.frame(
+      Predicted = .fitted_rows(stats::predict(model, type = "response"), model)
+    )
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    d$StdRes <- .fitted_rows(insight::get_residuals(model, type = "pearson"), model)
     if (!is.null(d$StdRes)) {
       d$StdRes <- d$StdRes / sqrt(.quasipoisson_dispersion(model, faminfo))
     }
@@ -583,16 +585,20 @@
 
   # data for negative binomial models
   if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d <- data.frame(
+      Predicted = .fitted_rows(stats::predict(model, type = "response"), model)
+    )
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    d$StdRes <- .fitted_rows(insight::get_residuals(model, type = "pearson"), model)
   }
 
   # data for zero-inflated poisson models
   if (faminfo$is_poisson && faminfo$is_zero_inflated) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d <- data.frame(
+      Predicted = .fitted_rows(stats::predict(model, type = "response"), model)
+    )
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     if (inherits(model, "glmmTMB")) {
@@ -600,33 +606,39 @@
     } else {
       ptype <- "zero"
     }
-    d$Prob <- stats::predict(model, type = ptype)
+    d$Prob <- .fitted_rows(stats::predict(model, type = ptype), model)
     d$V <- .expected_variance(model, faminfo, d)
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    d$StdRes <- .fitted_rows(insight::get_residuals(model, type = "pearson"), model)
   }
 
   # data for zero-inflated negative binomial models
   if (faminfo$is_negbin && faminfo$is_zero_inflated && !faminfo$is_dispersion) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d <- data.frame(
+      Predicted = .fitted_rows(stats::predict(model, type = "response"), model)
+    )
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    d$StdRes <- .fitted_rows(insight::get_residuals(model, type = "pearson"), model)
   }
 
   # data for zero-inflated negative binomial models with dispersion
   if (faminfo$is_negbin && faminfo$is_zero_inflated && faminfo$is_dispersion) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
+    d <- data.frame(
+      Predicted = .fitted_rows(stats::predict(model, type = "response"), model)
+    )
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    d$StdRes <- .fitted_rows(insight::get_residuals(model, type = "pearson"), model)
   }
 
   # fallback for remaining models
   if (is.null(d)) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
-    d$Residuals <- insight::get_residuals(model)
+    d <- data.frame(
+      Predicted = .fitted_rows(stats::predict(model, type = "response"), model)
+    )
+    d$Residuals <- .fitted_rows(insight::get_residuals(model), model)
     d$Res2 <- d$Residuals^2
     d$V <- .expected_variance(model, faminfo, d)
     d$StdRes <- d$Residuals / sqrt(pmax(d$V, 1e-6))
@@ -689,7 +701,7 @@
     if (inherits(model, "cpglmm")) {
       model@phi
     } else if (isTRUE(faminfo$is_dispersion)) {
-      stats::predict(model, type = "disp")
+      .fitted_rows(stats::predict(model, type = "disp"), model)
     } else {
       insight::get_sigma(model)
     }
@@ -698,7 +710,7 @@
   # Helper: get zero-inflation probability (glmmTMB uses "zprob", others "zero")
   .get_zprob <- function() {
     ptype <- if (inherits(model, "glmmTMB")) "zprob" else "zero"
-    stats::predict(model, type = ptype)
+    .fitted_rows(stats::predict(model, type = ptype), model)
   }
 
   # handle models without zero-inflation component
@@ -788,6 +800,23 @@
   }
 
   expected_var
+}
+
+
+# with `na.action = na.exclude`, predictions and residuals have NA rows for the
+# observations that the model did not use. This returns `x` with one row per
+# fitted observation, as `insight::get_response()` has.
+.fitted_rows <- function(x, model) {
+  model_frame <- .safe(stats::model.frame(model))
+  na_action <- attr(model_frame, "na.action", exact = TRUE)
+  if (
+    !is.null(x) &&
+      inherits(na_action, "exclude") &&
+      length(x) == nrow(model_frame) + length(na_action)
+  ) {
+    x <- x[-na_action]
+  }
+  x
 }
 
 
