@@ -416,6 +416,147 @@ test_that("`check_model()` overdispersion data use the quasipoisson dispersion",
 })
 
 
+# count data with zeros and with NA predictor values, for models fitted with
+# `na.action = na.exclude`
+.overdispersion_na_data <- function() {
+  withr::local_seed(123)
+  n <- 120
+  d <- data.frame(
+    x = stats::runif(n),
+    g = factor(rep(letters[1:6], each = n / 6))
+  )
+  group_effect <- rep(stats::rnorm(6, sd = 0.5), each = n / 6)
+  d$y <- stats::rpois(n, exp(0.5 + d$x + group_effect)) * stats::rbinom(n, 1, 0.8)
+  d$x[c(3, 50, 110)] <- NA
+  d
+}
+
+# `.model_diagnostic_overdispersion()` gives the same data with `na.exclude`
+# as with `na.omit`
+.expect_overdispersion_na_exclude <- function(fit, columns, ...) {
+  out_omit <- .model_diagnostic_overdispersion(fit(stats::na.omit), ...)
+  out_exclude <- expect_no_warning(
+    .model_diagnostic_overdispersion(fit(stats::na.exclude), ...)
+  )
+  expect_identical(nrow(out_exclude), nrow(out_omit))
+  for (column in columns) {
+    expect_false(is.null(out_exclude[[column]]), info = column)
+    expect_equal(
+      out_exclude[[column]],
+      out_omit[[column]],
+      tolerance = 1e-6,
+      ignore_attr = TRUE,
+      info = column
+    )
+  }
+}
+
+
+test_that("`check_model()` overdispersion data for glm with na.exclude", {
+  d <- .overdispersion_na_data()
+  columns <- c("Predicted", "Residuals", "Res2", "V", "StdRes")
+
+  .expect_overdispersion_na_exclude(
+    function(na_action) glm(y ~ x, family = poisson, data = d, na.action = na_action),
+    columns
+  )
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      glm(y ~ x, family = quasipoisson, data = d, na.action = na_action)
+    },
+    columns
+  )
+
+  # the `OVERDISPERSION` element of `check_model()`
+  m_omit <- glm(y ~ x, family = poisson, data = d, na.action = na.omit)
+  m_exclude <- glm(y ~ x, family = poisson, data = d, na.action = na.exclude)
+  out_omit <- suppressMessages(check_model(m_omit, check = "overdispersion"))
+  out_exclude <- suppressMessages(check_model(m_exclude, check = "overdispersion"))
+  for (column in columns) {
+    expect_false(is.null(out_exclude$OVERDISPERSION[[column]]), info = column)
+    expect_equal(
+      out_exclude$OVERDISPERSION[[column]],
+      out_omit$OVERDISPERSION[[column]],
+      tolerance = 1e-6,
+      ignore_attr = TRUE,
+      info = column
+    )
+  }
+})
+
+
+test_that("`check_model()` overdispersion data for negative binomial and mixed models with na.exclude", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+  d <- .overdispersion_na_data()
+  columns <- c("Predicted", "Residuals", "Res2", "V", "StdRes")
+
+  .expect_overdispersion_na_exclude(
+    function(na_action) MASS::glm.nb(y ~ x, data = d, na.action = na_action),
+    columns,
+    residual_type = "normal"
+  )
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      glmmTMB::glmmTMB(y ~ x, family = poisson, data = d, na.action = na_action)
+    },
+    columns,
+    residual_type = "normal"
+  )
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      glmmTMB::glmmTMB(
+        y ~ x,
+        ziformula = ~1,
+        family = poisson,
+        data = d,
+        na.action = na_action
+      )
+    },
+    c(columns, "Prob"),
+    residual_type = "normal"
+  )
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      glmmTMB::glmmTMB(
+        y ~ x,
+        ziformula = ~1,
+        family = glmmTMB::nbinom2,
+        data = d,
+        na.action = na_action
+      )
+    },
+    columns,
+    residual_type = "normal"
+  )
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      lme4::glmer(y ~ x + (1 | g), family = poisson, data = d, na.action = na_action)
+    },
+    columns,
+    residual_type = "normal"
+  )
+})
+
+
+test_that("`check_model()` overdispersion data for simulated residuals with na.exclude", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("DHARMa")
+  # a failure in the simulated branch errors instead of falling back to
+  # Pearson residuals
+  withr::local_options(easystats_errors = TRUE)
+  d <- .overdispersion_na_data()
+
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      glmmTMB::glmmTMB(y ~ x, family = poisson, data = d, na.action = na_action)
+    },
+    c("Predicted", "Residuals", "Res2", "V", "StdRes")
+  )
+})
+
+
 test_that("`check_model()` with transformed response when named as function", {
   data(mtcars)
   # rename variable, so it equals to a valid R function
