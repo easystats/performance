@@ -533,6 +533,20 @@ test_that("`check_model()` overdispersion data for glm.nb, glmmTMB, and glmer wi
     columns,
     residual_type = "normal"
   )
+  # a dispersion formula, so that the dispersion is predicted per row
+  .expect_overdispersion_na_exclude(
+    function(na_action) {
+      glmmTMB::glmmTMB(
+        y ~ x,
+        dispformula = ~x,
+        family = glmmTMB::nbinom2,
+        data = d,
+        na.action = na_action
+      )
+    },
+    columns,
+    residual_type = "normal"
+  )
   .expect_overdispersion_na_exclude(
     function(na_action) {
       lme4::glmer(y ~ x + (1 | g), family = poisson, data = d, na.action = na_action)
