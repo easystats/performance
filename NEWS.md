@@ -10,6 +10,12 @@
 
 ## Bug fixes
 
+* `check_model()` now gives the right data for the overdispersion plot of
+  models fitted with `na.action = na.exclude` to data with missing values.
+  Before, the function recycled the response against predictions with padded
+  missing values, so the residuals were wrong. This applies to `glm()` and
+  `MASS::glm.nb()` models, and to models from packages *glmmTMB* and *lme4*.
+
 * `check_model()` now applies its defaults for `type` and `detrend` to more
   objects. These are *rstanarm* and *brms* models that can be converted to a
   frequentist model, and `model_fit` objects from package *parsnip*. They are
