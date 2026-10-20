@@ -467,7 +467,10 @@ test_that("`check_model()` overdispersion data for glm with na.exclude", {
     columns
   )
 
-  # the `OVERDISPERSION` element of `check_model()`
+  # the `OVERDISPERSION` element of `check_model()`. With DHARMa installed,
+  # the na.omit fit gets simulated residuals, but `simulate_residuals()` fails
+  # for the na.exclude fit, which gets Pearson residuals. For a poisson glm,
+  # both give the same columns.
   m_omit <- glm(y ~ x, family = poisson, data = d, na.action = na.omit)
   m_exclude <- glm(y ~ x, family = poisson, data = d, na.action = na.exclude)
   out_omit <- suppressMessages(check_model(m_omit, check = "overdispersion"))

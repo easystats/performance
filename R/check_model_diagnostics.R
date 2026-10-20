@@ -807,7 +807,8 @@
 # observations that the model did not use. This returns `x` with one row per
 # fitted observation, as `insight::get_response()` has.
 .fitted_rows <- function(x, model) {
-  model_frame <- .safe(stats::model.frame(model))
+  # not `.safe()`, which lets errors through with `easystats_errors = TRUE`
+  model_frame <- tryCatch(stats::model.frame(model), error = function(e) NULL)
   na_action <- attr(model_frame, "na.action", exact = TRUE)
   if (
     !is.null(x) &&
