@@ -803,9 +803,8 @@
 }
 
 
-# with `na.action = na.exclude`, predictions and residuals have NA rows for the
-# observations that the model did not use. This returns `x` with one row per
-# fitted observation, as `insight::get_response()` has.
+# with `na.action = na.exclude`, predictions and residuals are padded with NA,
+# so we remove the rows that were not used to fit the model
 .fitted_rows <- function(x, model) {
   # not `.safe()`, which lets errors through with `easystats_errors = TRUE`
   model_frame <- tryCatch(stats::model.frame(model), error = function(e) NULL)
