@@ -2078,13 +2078,13 @@ test_that("check_collinearity, mgcv models use the columns of each term", {
 
   # a tensor smooth that shares `x1` with another smooth keeps its own term.
   # The correlation matrix of this fit is close to singular, so only the
-  # term blocks are compared
+  # term assignments are compared
   m_shared <- mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x1, x3), data = d)
   v_names <- colnames(stats::vcov(m_shared))
-  blocks <- performance:::.named_term_blocks(m_shared, v_names)
-  expect_identical(blocks$terms, c("x2", "s(x1)", "te(x1,x3)"))
+  named_assign <- performance:::.term_assignment_by_name(m_shared, v_names)
+  expect_identical(named_assign$terms, c("x2", "s(x1)", "te(x1,x3)"))
   expect_identical(
-    blocks$assign,
+    named_assign$assign,
     c(0L, 1L, rep(2L, 4), rep(3L, sum(startsWith(v_names, "te(x1,x3)."))))
   )
 
@@ -2101,7 +2101,7 @@ test_that("check_collinearity, mgcv models use the columns of each term", {
 test_that("check_collinearity, mgcv model without smooths equals car::vif() of lm", {
   skip_if_not_installed("mgcv")
   skip_if_not_installed("car")
-  # a guard: this case also gives the right VIFs without the mgcv term blocks
+  # a guard: this case also gives the right VIFs without the term assignment by name
   d <- .gam_test_data()
   m_gam <- mgcv::gam(y ~ x2 + f + x3, data = d)
   m_lm <- stats::lm(y ~ x2 + f + x3, data = d)
@@ -2291,7 +2291,7 @@ test_that("check_collinearity, multi-state coxph models keep the formula terms",
   )
   # each term has one coefficient for each transition, which the assignment of
   # the terms does not map
-  expect_false(performance:::.has_named_term_blocks(m))
+  expect_false(performance:::.has_term_assignment_by_name(m))
   out <- check_collinearity(m)
   expect_identical(out$Term, c("age", "sex", "mspike"))
 })
@@ -2330,7 +2330,7 @@ test_that("check_collinearity, one rank-deficiency warning for aliased and NA co
   expect_identical(out$Term, c("age", "sex", "wt.loss"))
 })
 
-test_that("check_collinearity, named term blocks skip .term_assignments()", {
+test_that("check_collinearity, term assignment by name skips .term_assignments()", {
   skip_if_not_installed("mgcv")
   skip_if_not_installed("survival")
   # for mgcv models, `.term_assignments()` can rebuild the model data from the

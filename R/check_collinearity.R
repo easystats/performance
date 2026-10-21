@@ -558,23 +558,22 @@ check_collinearity.zerocount <- function(
     return(NULL)
   }
 
-  # models with named term blocks build their assignment below
-  if (.has_named_term_blocks(x)) {
+  # mgcv, survreg and coxph models match coefficients to terms by name, below
+  if (.has_term_assignment_by_name(x)) {
     term_assign <- NULL
   } else {
     term_assign <- .term_assignments(x, component, verbose = verbose)
   }
 
-  # names of the terms, and aliased coefficients, for models whose
-  # coefficients are matched to terms by name, see `.named_term_blocks()`
+  # only used for models with a term assignment by name
   term_names <- NULL
   aliased_cols <- NULL
 
-  # any assignment found? multinomial models and models with named term blocks
-  # build their own assignment below
+  # any assignment found? multinomial models and models with a term assignment
+  # by name build their own assignment below
   if (
     !.is_multinom_model(x) &&
-      !.has_named_term_blocks(x) &&
+      !.has_term_assignment_by_name(x) &&
       (is.null(term_assign) || all(is.na(term_assign)))
   ) {
     if (verbose) {
@@ -711,12 +710,11 @@ check_collinearity.zerocount <- function(
     if (all(keep_idx) && isTRUE(verbose)) {
       insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
-  } else if (.has_named_term_blocks(x)) {
-    # mgcv, survreg and coxph models: the columns of the variance-covariance
-    # matrix that belong to each term are known by name. Other columns, like
-    # the scale parameters of survreg models, are not used
-    blocks <- .named_term_blocks(x, colnames(v))
-    if (is.null(blocks)) {
+  } else if (.has_term_assignment_by_name(x)) {
+    # mgcv, survreg and coxph models: match columns to terms by name. Other
+    # columns, like the scale parameters of survreg models, are dropped
+    named_assign <- .term_assignment_by_name(x, colnames(v))
+    if (is.null(named_assign)) {
       if (verbose) {
         insight::format_alert(
           sprintf(
@@ -729,14 +727,16 @@ check_collinearity.zerocount <- function(
     }
     # aliased coefficients have zero variance, not NA, so the check for NA
     # columns below does not find them
-    is_aliased <- colnames(v) %in% blocks$aliased
-    keep_idx <- !is.na(blocks$assign) & blocks$assign != 0 & !is_aliased
-    term_assign <- blocks$assign[keep_idx]
-    term_names <- blocks$terms
+    is_aliased <- colnames(v) %in% named_assign$aliased
+    keep_idx <- !is.na(named_assign$assign) & named_assign$assign != 0 & !is_aliased
+    term_assign <- named_assign$assign[keep_idx]
+    term_names <- named_assign$terms
     aliased_cols <- colnames(v)[is_aliased]
     # Cox models have no intercept
     if (
-      !any(blocks$assign == 0, na.rm = TRUE) && !inherits(x, "coxph") && isTRUE(verbose)
+      !any(named_assign$assign == 0, na.rm = TRUE) &&
+        !inherits(x, "coxph") &&
+        isTRUE(verbose)
     ) {
       insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
@@ -755,7 +755,7 @@ check_collinearity.zerocount <- function(
     na_cols <- aliased_cols
     if (!is.null(attr(v, "na_columns_index"))) {
       # If this attribute exists, then NA values were already removed from v.
-      # Named term blocks are already matched to the columns of v
+      # The term assignment by name already matches the columns of v
       if (is.null(term_names)) {
         term_assign <- term_assign[-attr(v, "na_columns_index")]
       }
@@ -777,7 +777,7 @@ check_collinearity.zerocount <- function(
   if (sum(keep_idx) < ncol(v)) {
     if (!is.null(term_names)) {
       # NA columns can have been removed from `keep_idx` above
-      term_assign <- blocks$assign[keep_idx]
+      term_assign <- named_assign$assign[keep_idx]
     } else if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
       term_assign <- term_assign[keep_idx]
     }
@@ -1086,8 +1086,8 @@ check_collinearity.zerocount <- function(
 
 
 # mgcv models, and survreg and coxph models of package survival, name the
-# coefficients of each term, see `.named_term_blocks()`
-.has_named_term_blocks <- function(x) {
+# coefficients of each term, see `.term_assignment_by_name()`
+.has_term_assignment_by_name <- function(x) {
   # multi-state Cox models have one coefficient of each term for each
   # transition, which `assign` does not map
   .is_mgcv_gam(x) ||
@@ -1107,7 +1107,7 @@ check_collinearity.zerocount <- function(
 # the intercept, NA for the scale parameters of survreg models, else the
 # position of the term in `terms`. `aliased` names the columns of aliased
 # coefficients. NULL if a coefficient or another column has no term
-.named_term_blocks <- function(x, col_names) {
+.term_assignment_by_name <- function(x, col_names) {
   coef_names <- names(stats::coef(x))
   if (.is_mgcv_gam(x)) {
     # the parametric terms, then one term for each smooth, with the columns
