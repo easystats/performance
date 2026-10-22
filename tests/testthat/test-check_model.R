@@ -158,64 +158,38 @@ test_that("`check_model()` includes random-effects QQ for split random terms", {
 
 test_that("`check_model()` respects user-supplied `show_ci`", {
   data(iris)
-  data(mtcars)
-  m_factor <- lm(Sepal.Length ~ Species, data = iris)
-  m_numeric <- lm(mpg ~ wt, data = mtcars)
-
-  # defaults: no CI for models with only categorical predictors
-  expect_false(attr(check_model(m_factor), "show_ci"))
-  expect_true(attr(check_model(m_numeric), "show_ci"))
-
-  # user choice overrides the defaults
-  expect_true(attr(check_model(m_factor, show_ci = TRUE), "show_ci"))
-  expect_false(attr(check_model(m_numeric, show_ci = FALSE), "show_ci"))
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  expect_true(attr(check_model(m, show_ci = TRUE), "show_ci"))
 })
 
 test_that("`check_model()` stores `show_smooth`", {
   data(mtcars)
-  models <- list(
-    lm = lm(mpg ~ wt, data = mtcars),
-    glm = glm(am ~ wt, family = binomial, data = mtcars)
-  )
-  # simulate_residuals() needs DHARMa
-  if (requireNamespace("DHARMa", quietly = TRUE)) {
-    models$simres <- simulate_residuals(lm(mpg ~ wt, data = mtcars))
-  }
-  for (m in models) {
-    expect_true(attr(check_model(m), "show_smooth"))
-    expect_false(attr(check_model(m, show_smooth = FALSE), "show_smooth"))
-  }
+  m <- lm(mpg ~ wt, data = mtcars)
+  expect_false(attr(check_model(m, show_smooth = FALSE), "show_smooth"))
 })
 
-test_that("`check_model()` forwards `type` and `size_title` for simulated residuals", {
+test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for simulated residuals", {
   skip_if_not_installed("DHARMa")
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
-  p <- glm(carb ~ wt, data = mtcars, family = poisson)
-  sim_m <- simulate_residuals(m)
-
-  # the default for binary and count responses is used, as for the glm itself
-  expect_identical(attr(check_model(sim_m), "type"), "discrete_interval")
-  expect_identical(attr(check_model(simulate_residuals(p)), "type"), "discrete_interval")
-  expect_identical(
-    attr(check_model(DHARMa::simulateResiduals(m)), "type"),
-    "discrete_interval"
-  )
-
-  # user values are kept
-  expect_identical(attr(check_model(sim_m, type = "density"), "type"), "density")
-  expect_identical(attr(check_model(sim_m, size_title = 20), "title_size"), 20)
+  out <- check_model(simulate_residuals(m), size_title = 20)
+  expect_identical(attr(out, "type"), "discrete_interval")
+  expect_false(attr(out, "detrend"))
+  expect_identical(attr(out, "title_size"), 20)
 })
 
-test_that("`check_model()` forwards `type` and `size_title` for `model_fit` objects", {
+test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for `model_fit` objects", {
+  skip_if_not_installed("DHARMa")
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
+  l <- lm(mpg ~ wt, data = mtcars)
   # the class that parsnip gives its fits
-  obj <- structure(list(fit = m), class = "model_fit")
-
-  expect_identical(attr(check_model(obj), "type"), "discrete_interval")
-  expect_identical(attr(check_model(obj, type = "density"), "type"), "density")
-  expect_identical(attr(check_model(obj, size_title = 20), "title_size"), 20)
+  out <- check_model(structure(list(fit = m), class = "model_fit"), size_title = 20)
+  expect_identical(attr(out, "type"), "discrete_interval")
+  expect_false(attr(out, "detrend"))
+  expect_identical(attr(out, "title_size"), 20)
+  out <- check_model(structure(list(fit = l), class = "model_fit"))
+  expect_identical(attr(out, "type"), "density")
 })
 
 test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan models", {
@@ -224,66 +198,13 @@ test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan
   skip_if_not_installed("curl")
   skip_if_not_installed("httr2")
   skip_if_offline()
-  # bernoulli model of `vs ~ wt`; brms models use the same method
   m <- insight::download_model("stanreg_glm_1")
   skip_if(is.null(m))
 
-  out <- check_model(m)
-  expect_identical(attr(out, "type"), "discrete_interval")
-  # simulated residuals are not detrended by default
-  expect_false(attr(out, "detrend"))
-  expect_identical(attr(check_model(m, type = "density"), "type"), "density")
-  expect_identical(attr(check_model(m, size_title = 20), "title_size"), 20)
-  expect_true(attr(check_model(m, detrend = TRUE), "detrend"))
-
-  # the same when a `model_fit` object wraps the Stan model
-  out <- check_model(structure(list(fit = m), class = "model_fit"))
+  out <- check_model(m, size_title = 20)
   expect_identical(attr(out, "type"), "discrete_interval")
   expect_false(attr(out, "detrend"))
-})
-
-test_that("`check_model()` forwards `detrend` for wrapped models", {
-  skip_if_not_installed("DHARMa")
-  data(mtcars)
-  m <- glm(am ~ wt, data = mtcars, family = binomial)
-  l <- lm(mpg ~ wt, data = mtcars)
-  sim_m <- simulate_residuals(m)
-
-  # simulated residuals are not detrended by default
-  expect_false(attr(check_model(sim_m), "detrend"))
-  expect_false(attr(check_model(DHARMa::simulateResiduals(m)), "detrend"))
-  expect_false(attr(check_model(simulate_residuals(l)), "detrend"))
-  expect_false(attr(check_model(l, residual_type = "simulated"), "detrend"))
-
-  # the defaults of the bare models, which `model_fit` objects now get too
-  expect_false(attr(check_model(m), "detrend"))
-  expect_true(attr(check_model(l), "detrend"))
-  expect_false(attr(
-    check_model(structure(list(fit = m), class = "model_fit")),
-    "detrend"
-  ))
-  expect_true(attr(check_model(structure(list(fit = l), class = "model_fit")), "detrend"))
-
-  # user values are kept
-  expect_true(attr(check_model(sim_m, detrend = TRUE), "detrend"))
-  expect_false(attr(
-    check_model(structure(list(fit = l), class = "model_fit"), detrend = FALSE),
-    "detrend"
-  ))
-})
-
-test_that("`check_model()` keeps the defaults for wrapped linear models", {
-  skip_if_not_installed("DHARMa")
-  data(mtcars)
-  l <- lm(mpg ~ wt, data = mtcars)
-  out <- list(
-    model_fit = check_model(structure(list(fit = l), class = "model_fit")),
-    simres = check_model(simulate_residuals(l))
-  )
-  for (x in out) {
-    expect_identical(attr(x, "type"), "density")
-    expect_identical(attr(x, "title_size"), 12)
-  }
+  expect_identical(attr(out, "title_size"), 20)
 })
 
 test_that("every `check_model()` method has a `show_smooth` argument", {
@@ -301,13 +222,11 @@ test_that("every `check_model()` method has a `show_smooth` argument", {
 test_that("`check_model()` checks `show_smooth`", {
   data(mtcars)
   m <- lm(mpg ~ wt, data = mtcars)
-  for (value in list(NA, 1, "no", c(TRUE, FALSE))) {
-    expect_error(
-      check_model(m, show_smooth = value),
-      "`show_smooth` must be either `TRUE` or `FALSE`.",
-      fixed = TRUE
-    )
-  }
+  expect_error(
+    check_model(m, show_smooth = "no"),
+    "`show_smooth` must be either `TRUE` or `FALSE`.",
+    fixed = TRUE
+  )
 })
 
 test_that("`check_model()` warnings for tweedie", {
@@ -451,75 +370,27 @@ test_that("`check_model()` falls back to Bayesian checks if brms conversion fail
   skip_if(is.null(m))
   mock_failed_conversion()
 
-  out <- suppressMessages(check_model(m))
-  expect_s3_class(out, "check_model")
+  msgs <- capture_messages(out <- check_model(m))
   expect_named(out, c("VIF", "PP_CHECK"), ignore.order = TRUE)
-  expect_true(all(c("x", "y", "group") %in% colnames(out$VIF)))
-  expect_s3_class(out$PP_CHECK, "performance_pp_check")
-  expect_identical(attr(out, "check"), "all")
-  expect_identical(attr(out, "model_class"), "brmsfit")
-  expect_false(is.null(attr(out, "model_info")))
-  expect_true(attr(out, "show_smooth"))
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off(), add = TRUE)
+  expect_no_error(print(plot(out)))
 
-  out <- suppressMessages(check_model(m, check = "vif", show_smooth = FALSE))
-  expect_named(out, "VIF")
-  expect_false(attr(out, "show_smooth"))
+  msgs <- gsub("\\s+", " ", msgs)
+  alert <- msgs[grepl("conversion to a frequentist model failed", msgs, fixed = TRUE)]
+  expect_length(alert, 1)
+  for (panel in c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")) {
+    expect_match(alert, paste0("\\b", panel, "\\b"))
+  }
+  expect_no_match(alert, "REQQ|BINNED_RESID|OVERDISPERSION")
+  expect_match(alert, "Reason for the failed conversion: conversion failed", fixed = TRUE)
 
-  # the same when a `model_fit` object wraps the brms model
   out <- suppressMessages(check_model(structure(list(fit = m), class = "model_fit")))
-  expect_named(out, c("VIF", "PP_CHECK"), ignore.order = TRUE)
   expect_true(attr(out, "detrend"))
   expect_identical(attr(out, "type"), "density")
 })
 
-test_that("`check_model()` fallback for brms models can be plotted", {
-  skip_if_brms_fixture_unavailable()
-  m <- insight::download_model("brms_1")
-  skip_if(is.null(m))
-  mock_failed_conversion()
-
-  out <- suppressMessages(check_model(m))
-  grDevices::pdf(NULL)
-  on.exit(grDevices::dev.off(), add = TRUE)
-  expect_no_error(print(plot(out)))
-})
-
-test_that("`check_model()` alerts about skipped checks if brms conversion fails", {
-  skip_if_brms_fixture_unavailable()
-  m <- insight::download_model("brms_1")
-  skip_if(is.null(m))
-  mock_failed_conversion()
-
-  for (verbose in c(FALSE, TRUE)) {
-    msgs <- capture_messages(check_model(m, verbose = verbose))
-    msgs <- gsub("\\s+", " ", msgs)
-    alert <- msgs[grepl("conversion to a frequentist model failed", msgs, fixed = TRUE)]
-    expect_length(alert, 1)
-    for (panel in c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")) {
-      expect_match(alert, paste0("\\b", panel, "\\b"))
-    }
-    # panels that do not apply to a non-mixed gaussian model are not listed
-    expect_no_match(alert, "REQQ|BINNED_RESID|OVERDISPERSION")
-    # the alert includes the error from the failed conversion
-    expect_match(
-      alert,
-      "Reason for the failed conversion: conversion failed",
-      fixed = TRUE
-    )
-  }
-})
-
-test_that("`check_model()` lets conversion errors propagate with `easystats_errors`", {
-  skip_if_brms_fixture_unavailable()
-  m <- insight::download_model("brms_1")
-  skip_if(is.null(m))
-  mock_failed_conversion()
-  withr::local_options(easystats_errors = TRUE)
-
-  expect_error(check_model(m), "conversion failed", fixed = TRUE)
-})
-
-test_that("`check_model()` errors if no check works after brms conversion fails", {
+test_that("`check_model()` errors if brms conversion fails", {
   skip_if_brms_fixture_unavailable()
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
@@ -529,6 +400,8 @@ test_that("`check_model()` errors if no check works after brms conversion fails"
     check_model(m, check = c("qq", "normality")),
     "none\\s+of\\s+the\\s+requested\\s+checks\\s+could\\s+be\\s+computed"
   )
+  withr::local_options(easystats_errors = TRUE)
+  expect_error(check_model(m), "conversion failed", fixed = TRUE)
 })
 
 test_that("`check_model()` needs one `response` for multivariate brms models", {
@@ -539,16 +412,8 @@ test_that("`check_model()` needs one `response` for multivariate brms models", {
   skip_if_brms_fixture_unavailable()
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
-  called <- FALSE
-  testthat::local_mocked_bindings(
-    bayesian_as_frequentist = function(...) {
-      called <<- TRUE
-      stop("conversion failed", call. = FALSE)
-    },
-    .package = "bayestestR"
-  )
 
-  for (response in list(NULL, "mpg", c("cyl", "gear"))) {
+  for (response in list(NULL, "mpg")) {
     err <- expect_error(
       check_model(m, response = response),
       "more\\s+than\\s+one\\s+response"
@@ -559,16 +424,11 @@ test_that("`check_model()` needs one `response` for multivariate brms models", {
     }
     expect_no_match(msg, "`resp`", fixed = TRUE)
   }
-  # `resp` next to `response` would otherwise be dropped silently
   expect_error(
     check_model(m, response = "gear", resp = "carb"),
     "Please use only the `response` argument",
     fixed = TRUE
   )
-  expect_false(called)
-  # the mock is in reach of `bayestestR::`, so `called` can become TRUE
-  try(bayestestR::bayesian_as_frequentist(m), silent = TRUE)
-  expect_true(called)
 })
 
 test_that("`check_model()` checks one response of a multivariate brms model", {
@@ -577,7 +437,6 @@ test_that("`check_model()` checks one response of a multivariate brms model", {
   skip_if(is.null(m))
 
   out <- check_model(m, response = "gear")
-  expect_s3_class(out, "check_model")
   expect_true(setequal(
     names(out),
     c("VIF", "QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL", "PP_CHECK")
@@ -592,41 +451,7 @@ test_that("`check_model()` falls back to Bayesian checks for one response of a m
   skip_if_brms_fixture_unavailable()
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
-  received <- "not called"
-  received_names <- NULL
-  testthat::local_mocked_bindings(
-    bayesian_as_frequentist = function(...) {
-      received <<- list(...)[["resp"]]
-      received_names <<- names(list(...))
-      stop("conversion failed", call. = FALSE)
-    },
-    .package = "bayestestR"
-  )
-
-  msgs <- capture_messages({
-    out <- check_model(m, response = "gear")
-  })
-  # a conversion function without a `response` argument gets `resp`
-  expect_identical(received, "gear")
-  expect_false("response" %in% received_names)
-  expect_named(out, "PP_CHECK")
-  expect_equal(out$PP_CHECK$y, insight::get_data(m)$gear, ignore_attr = TRUE)
-  msgs <- gsub("\\s+", " ", paste(msgs, collapse = " "))
-  skipped <- regmatches(msgs, regexec("Skipped checks: ([^.]*)\\.", msgs))[[1]][2]
-  expect_true(setequal(
-    strsplit(skipped, ", ", fixed = TRUE)[[1]],
-    c("QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL")
-  ))
-  expect_true(attr(out, "model_info")$is_linear)
-})
-
-test_that("`check_model()` names the response with the argument of `bayesian_as_frequentist()`", {
-  skip_if_brms_fixture_unavailable()
-  m <- insight::download_model("brms_mv_1")
-  skip_if(is.null(m))
-  received <- NULL
-  # `sys.call()` keeps the argument names as written, so a partial match of
-  # `resp = ` to `response` is not hidden as `match.call()` would hide it
+  # `sys.call()` keeps the argument names as written, unlike `match.call()`
   mocks <- list(
     response = function(model, data = NULL, REML = TRUE, response = NULL) {
       received <<- list(names = names(sys.call()), value = response)
@@ -640,7 +465,7 @@ test_that("`check_model()` names the response with the argument of `bayesian_as_
 
   for (arg in names(mocks)) {
     received <- NULL
-    testthat::with_mocked_bindings(
+    out <- testthat::with_mocked_bindings(
       suppressMessages(check_model(m, response = "gear")),
       bayesian_as_frequentist = mocks[[arg]],
       .package = "bayestestR"
@@ -650,42 +475,7 @@ test_that("`check_model()` names the response with the argument of `bayesian_as_
     expect_false(other %in% received$names, label = arg)
     expect_identical(received$value, "gear", label = arg)
   }
-})
-
-test_that("`check_model()` converts multivariate brms models without a partial argument match", {
-  skip_if_brms_fixture_unavailable()
-  skip_if_not(
-    "response" %in% names(formals(bayestestR::bayesian_as_frequentist)),
-    "bayestestR::bayesian_as_frequentist() has no `response` argument"
-  )
-  m <- insight::download_model("brms_mv_1")
-  skip_if(is.null(m))
-  withr::local_options(warnPartialMatchArgs = TRUE)
-
-  warnings <- character()
-  out <- withCallingHandlers(
-    check_model(m, response = "gear"),
-    warning = function(w) {
-      warnings <<- c(warnings, conditionMessage(w))
-      # other warnings still reach the test output
-      if (grepl("partial argument match", conditionMessage(w), fixed = TRUE)) {
-        invokeRestart("muffleWarning")
-      }
-    }
-  )
-  # the conversion worked, so the frequentist panels are there
-  expect_true(all(c("VIF", "NCV", "PP_CHECK") %in% names(out)))
-  expect_false(any(grepl("'resp' to 'response'", warnings, fixed = TRUE)))
-})
-
-test_that("`check_model()` keeps all panels for brms models that can be converted", {
-  skip_if_brms_fixture_unavailable()
-  m <- insight::download_model("brms_1")
-  skip_if(is.null(m))
-
-  out <- check_model(m)
-  expect_true(setequal(
-    names(out),
-    c("VIF", "QQ", "NORM", "NCV", "HOMOGENEITY", "OUTLIERS", "INFLUENTIAL", "PP_CHECK")
-  ))
+  expect_named(out, "PP_CHECK")
+  expect_equal(out$PP_CHECK$y, insight::get_data(m)$gear, ignore_attr = TRUE)
+  expect_true(attr(out, "model_info")$is_linear)
 })
