@@ -10,6 +10,10 @@
 
 ## Bug fixes
 
+* Collinearity severity groups and plot data now use `GVIF^(1/df)`, including
+  transformed confidence limits, so multi-coefficient terms are not classified
+  using raw GVIFs and one-coefficient VIF cutoffs. Tables retain raw GVIFs.
+
 * `check_model()` now applies its defaults for `type` and `detrend` to more
   objects. These are *rstanarm* and *brms* models that can be converted to a
   frequentist model, and `model_fit` objects from package *parsnip*. They are
