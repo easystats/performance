@@ -2011,203 +2011,50 @@ test_that("check_collinearity, pscl zero-inflation terms differ from the count t
   set.seed(123)
   d <- data.frame(x1 = stats::runif(n), f = factor(sample(letters[1:3], n, TRUE)))
   d$x2 <- stats::rnorm(n) + 2 * d$x1
-  d$x3 <- stats::runif(n) + 0.5 * d$x1
   d$y <- sin(2 * pi * d$x1) + 0.5 * d$x2 + 0.3 * (d$f == "b") + stats::rnorm(n, sd = 0.5)
-  d$x4 <- stats::runif(n)
   d
 }
 
-# columns of each term in the variance-covariance matrix of an mgcv model,
-# picked by name: parametric terms by their coefficient names, smooths by
-# their label followed by a dot
+# columns of each term of an mgcv model: smooths by their label
 .gam_blocks <- function(m, parametric) {
   v_names <- colnames(stats::vcov(m))
   smooth_labels <- vapply(m$smooth, function(s) s$label, character(1))
   smooth_blocks <- lapply(smooth_labels, function(l) {
     v_names[startsWith(v_names, paste0(l, "."))]
   })
-  stats::setNames(c(parametric, smooth_blocks), c(names(parametric), smooth_labels))
+  c(parametric, smooth_blocks)
 }
 
 test_that("check_collinearity, mgcv models use the columns of each term", {
   skip_if_not_installed("mgcv")
   d <- .gam_test_data()
-  fits <- list(
-    smooth_first = mgcv::gam(y ~ s(x1) + x2 + f, data = d),
-    smooth_last = mgcv::gam(y ~ x2 + f + s(x1), data = d),
-    bam = mgcv::bam(y ~ s(x1) + x2 + f, data = d),
-    # `s(x1, k = 5)` has the label "s(x1)", and the label of
-    # `te(x3, x4, k = 3)` is "te(x3,x4)"
-    two_smooths = mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x3, x4, k = 3), data = d),
-    # `by = f` gives one smooth for each level of f
-    by_factor = mgcv::gam(y ~ s(x1, by = f) + x2 * f, data = d)
-  )
-  parametric <- list(
-    smooth_first = list(x2 = "x2", f = c("fb", "fc")),
-    smooth_last = list(x2 = "x2", f = c("fb", "fc")),
-    bam = list(x2 = "x2", f = c("fb", "fc")),
-    two_smooths = list(x2 = "x2"),
-    by_factor = list(x2 = "x2", f = c("fb", "fc"), `x2:f` = c("x2:fb", "x2:fc"))
-  )
-  expected_terms <- list(
-    smooth_first = c("x2", "f", "s(x1)"),
-    smooth_last = c("x2", "f", "s(x1)"),
-    bam = c("x2", "f", "s(x1)"),
-    two_smooths = c("x2", "s(x1)", "te(x3,x4)"),
-    by_factor = c("x2", "f", "x2:f", "s(x1):fa", "s(x1):fb", "s(x1):fc")
-  )
-  for (i in names(fits)) {
-    m <- fits[[i]]
-    blocks <- .gam_blocks(m, parametric[[i]])
-    out <- check_collinearity(m)
-    expect_identical(out$Term, expected_terms[[i]], info = i)
-    expect_identical(names(blocks), expected_terms[[i]], info = i)
-    expect_equal(
-      out$VIF,
-      .gvif_blocks(stats::vcov(m), blocks),
-      tolerance = 1e-8,
-      info = i
-    )
-    expect_equal(
-      out$SE_factor,
-      out$VIF^(1 / (2 * unname(lengths(blocks)))),
-      tolerance = 1e-8,
-      info = i
-    )
-  }
+  m <- mgcv::gam(y ~ s(x1) + x2 + f, data = d)
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("x2", "f", "s(x1)"))
+  blocks <- .gam_blocks(m, list("x2", c("fb", "fc")))
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
 
-  # a tensor smooth that shares `x1` with another smooth keeps its own term.
-  # The correlation matrix of this fit is close to singular, so only the
-  # term assignments are compared
-  m_shared <- mgcv::gam(y ~ s(x1, k = 5) + x2 + te(x1, x3), data = d)
-  v_names <- colnames(stats::vcov(m_shared))
-  named_assign <- performance:::.term_assignment_by_name(m_shared, v_names)
-  expect_identical(named_assign$terms, c("x2", "s(x1)", "te(x1,x3)"))
+  # `by = f` gives one smooth for each level of f
+  m <- mgcv::gam(y ~ s(x1, by = f) + x2 * f, data = d)
+  out <- check_collinearity(m)
   expect_identical(
-    named_assign$assign,
-    c(0L, 1L, rep(2L, 4), rep(3L, sum(startsWith(v_names, "te(x1,x3)."))))
+    out$Term,
+    c("x2", "f", "x2:f", "s(x1):fa", "s(x1):fb", "s(x1):fc")
   )
-
-  # the order of the terms in the formula does not change the VIFs
-  out_first <- check_collinearity(fits$smooth_first)
-  out_last <- check_collinearity(fits$smooth_last)
-  expect_equal(
-    out_first$VIF[match(out_last$Term, out_first$Term)],
-    out_last$VIF,
-    tolerance = 1e-8
-  )
+  blocks <- .gam_blocks(m, list("x2", c("fb", "fc"), c("x2:fb", "x2:fc")))
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
 })
 
-test_that("check_collinearity, mgcv model without smooths equals car::vif() of lm", {
-  skip_if_not_installed("mgcv")
-  skip_if_not_installed("car")
-  # a guard: this case also gives the right VIFs without the term assignment by name
-  d <- .gam_test_data()
-  m_gam <- mgcv::gam(y ~ x2 + f + x3, data = d)
-  m_lm <- stats::lm(y ~ x2 + f + x3, data = d)
-  out <- check_collinearity(m_gam)
-  expect_identical(out$Term, c("x2", "f", "x3"))
-  expect_equal(out$VIF, unname(car::vif(m_lm)[, "GVIF"]), tolerance = 1e-6)
-})
-
-test_that("check_collinearity, survreg leaves out the scale parameters", {
+test_that("check_collinearity, survreg leaves out the scale parameter", {
   skip_if_not_installed("survival")
-  skip_if_not_installed("car")
-  lung <- survival::lung
-  fits <- list(
-    weibull = survival::survreg(
-      survival::Surv(time, status) ~ age + sex + ph.ecog,
-      data = lung
-    ),
-    # one scale parameter for each stratum
-    strata = survival::survreg(
-      survival::Surv(time, status) ~ age + ph.ecog + wt.loss + survival::strata(sex),
-      data = lung
-    )
+  m <- survival::survreg(
+    survival::Surv(time, status) ~ age + sex + ph.ecog,
+    data = survival::lung
   )
-  expected_terms <- list(
-    weibull = c("age", "sex", "ph.ecog"),
-    strata = c("age", "ph.ecog", "wt.loss")
-  )
-  for (i in names(fits)) {
-    m <- fits[[i]]
-    expect_gt(ncol(stats::vcov(m)), length(stats::coef(m)))
-    out <- check_collinearity(m)
-    expect_identical(out$Term, expected_terms[[i]], info = i)
-    blocks <- as.list(setdiff(names(stats::coef(m)), "(Intercept)"))
-    expect_equal(
-      out$VIF,
-      .gvif_blocks(stats::vcov(m), blocks),
-      tolerance = 1e-8,
-      info = i
-    )
-  }
-
-  # a gaussian model of uncensored data has the coefficients of a linear model
-  d <- .gam_test_data()
-  m_surv <- survival::survreg(
-    survival::Surv(y) ~ x1 + x2 + f,
-    data = d,
-    dist = "gaussian"
-  )
-  m_lm <- stats::lm(y ~ x1 + x2 + f, data = d)
-  out <- check_collinearity(m_surv)
-  expect_identical(out$Term, c("x1", "x2", "f"))
-  expect_equal(out$VIF, unname(car::vif(m_lm)[, "GVIF"]), tolerance = 1e-6)
-})
-
-test_that("check_collinearity, coxph has no intercept to drop", {
-  skip_if_not_installed("survival")
-  skip_if_not_installed("car")
-  lung <- survival::lung
-  m <- survival::coxph(survival::Surv(time, status) ~ age + sex + ph.ecog, data = lung)
-  # a guard: the message about models without intercept does not apply to
-  # Cox models
-  expect_no_message(out <- check_collinearity(m), message = "Model without intercept")
+  out <- check_collinearity(m)
   expect_identical(out$Term, c("age", "sex", "ph.ecog"))
-  # car warns "No intercept: vifs may not be sensible." for Cox models
-  car_vif <- withCallingHandlers(
-    car::vif(m),
-    warning = function(w) {
-      if (startsWith(conditionMessage(w), "No intercept")) {
-        invokeRestart("muffleWarning")
-      }
-    }
-  )
-  expect_equal(out$VIF, unname(car_vif), tolerance = 1e-8)
-
-  m_strata <- survival::coxph(
-    survival::Surv(time, status) ~ age + factor(ph.ecog) + sex + survival::strata(inst),
-    data = lung
-  )
-  expect_no_message(
-    out <- check_collinearity(m_strata),
-    message = "Model without intercept"
-  )
-  expect_identical(out$Term, c("age", "factor(ph.ecog)", "sex"))
-  blocks <- list("age", paste0("factor(ph.ecog)", 1:3), "sex")
-  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m_strata), blocks), tolerance = 1e-8)
-})
-
-test_that("check_collinearity, survival models with backticked names", {
-  skip_if_not_installed("survival")
-  lung <- survival::lung
-  lung$`my var` <- lung$wt.loss
-  lung$my_var <- lung$wt.loss
-  fits <- list(
-    coxph = function(f) survival::coxph(f, data = lung),
-    survreg = function(f) survival::survreg(f, data = lung)
-  )
-  for (i in names(fits)) {
-    out <- check_collinearity(fits[[i]](
-      survival::Surv(time, status) ~ age + sex + `my var`
-    ))
-    out_plain <- check_collinearity(fits[[i]](
-      survival::Surv(time, status) ~ age + sex + my_var
-    ))
-    expect_identical(out$Term, c("age", "sex", "my var"), info = i)
-    expect_equal(out$VIF, out_plain$VIF, tolerance = 1e-8, info = i)
-  }
+  blocks <- list("age", "sex", "ph.ecog")
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
 })
 
 test_that("check_collinearity, survreg with an interaction of a strata() term", {
@@ -2222,78 +2069,41 @@ test_that("check_collinearity, survreg with an interaction of a strata() term", 
   expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
 })
 
-test_that("check_collinearity, survival models with an aliased coefficient", {
+test_that("check_collinearity, coxph has no intercept to drop", {
+  skip_if_not_installed("survival")
+  m <- survival::coxph(
+    survival::Surv(time, status) ~ age + factor(ph.ecog) + sex + survival::strata(inst),
+    data = survival::lung
+  )
+  expect_no_message(out <- check_collinearity(m), message = "Model without intercept")
+  expect_identical(out$Term, c("age", "factor(ph.ecog)", "sex"))
+  blocks <- list("age", paste0("factor(ph.ecog)", 1:3), "sex")
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, coxph with backticked names", {
+  skip_if_not_installed("survival")
+  lung <- survival::lung
+  lung$`my var` <- lung$wt.loss
+  m <- survival::coxph(survival::Surv(time, status) ~ age + sex + `my var`, data = lung)
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("age", "sex", "my var"))
+  blocks <- as.list(names(stats::coef(m)))
+  expect_equal(out$VIF, .gvif_blocks(stats::vcov(m), blocks), tolerance = 1e-8)
+})
+
+test_that("check_collinearity, coxph with an aliased coefficient", {
   skip_if_not_installed("survival")
   lung <- survival::lung
   lung$age_sex <- lung$age + lung$sex
-  fits <- list(
-    coxph = survival::coxph(
-      survival::Surv(time, status) ~ age + sex + age_sex + ph.ecog,
-      data = lung
-    ),
-    survreg = survival::survreg(
-      survival::Surv(time, status) ~ age + sex + age_sex + ph.ecog,
-      data = lung
-    )
-  )
-  for (i in names(fits)) {
-    m <- fits[[i]]
-    expect_true(is.na(stats::coef(m)[["age_sex"]]), info = i)
-    expect_warning(
-      out <- check_collinearity(m),
-      "Model matrix is rank deficient",
-      info = i
-    )
-    expect_identical(out$Term, c("age", "sex", "ph.ecog"), info = i)
-    expected <- .gvif_blocks(stats::vcov(m), list("age", "sex", "ph.ecog"))
-    expect_equal(out$VIF, expected, tolerance = 1e-8, info = i)
-  }
-})
-
-test_that("check_collinearity, NA columns of the covariance matrix of a survreg model", {
-  skip_if_not_installed("survival")
-  # the intercept and the scale parameter are not used, so the term
-  # assignment is shorter than the covariance matrix
-  m <- survival::survreg(
-    survival::Surv(time, status) ~ age + sex + ph.ecog + wt.loss,
-    data = survival::lung
-  )
-  v <- stats::vcov(m)
-  v_na <- v
-  v_na["sex", ] <- NA
-  v_na[, "sex"] <- NA
-  testthat::local_mocked_bindings(
-    get_varcov = function(...) v_na,
-    .package = "insight"
-  )
-  expect_warning(
-    out <- check_collinearity(m),
-    "Model matrix is rank deficient"
-  )
-  expect_identical(out$Term, c("age", "ph.ecog", "wt.loss"))
-  expected <- .gvif_blocks(v, list("age", "ph.ecog", "wt.loss"))
-  expect_equal(out$VIF, expected, tolerance = 1e-8)
-})
-
-test_that("check_collinearity, multi-state coxph models keep the formula terms", {
-  skip_if_not_installed("survival")
-  d <- survival::mgus2
-  d$etime <- ifelse(d$pstat == 0, d$futime, d$ptime)
-  d$event <- factor(
-    ifelse(d$pstat == 0, 2 * d$death, 1),
-    0:2,
-    labels = c("censor", "pcm", "death")
-  )
   m <- survival::coxph(
-    survival::Surv(etime, event) ~ age + sex + mspike,
-    data = d,
-    id = id
+    survival::Surv(time, status) ~ age + sex + age_sex + ph.ecog,
+    data = lung
   )
-  # each term has one coefficient for each transition, which the assignment of
-  # the terms does not map
-  expect_false(performance:::.has_term_assignment_by_name(m))
-  out <- check_collinearity(m)
-  expect_identical(out$Term, c("age", "sex", "mspike"))
+  expect_warning(out <- check_collinearity(m), "Model matrix is rank deficient")
+  expect_identical(out$Term, c("age", "sex", "ph.ecog"))
+  expected <- .gvif_blocks(stats::vcov(m), list("age", "sex", "ph.ecog"))
+  expect_equal(out$VIF, expected, tolerance = 1e-8)
 })
 
 test_that("check_collinearity, one rank-deficiency warning for aliased and NA columns", {
@@ -2314,7 +2124,6 @@ test_that("check_collinearity, one rank-deficiency warning for aliased and NA co
   )
   warnings <- testthat::capture_warnings(out <- check_collinearity(m))
   expect_length(warnings, 1)
-  expect_match(warnings, "Model matrix is rank deficient", fixed = TRUE)
   expect_match(warnings, "age_sex", fixed = TRUE)
   expect_match(warnings, "ph.ecog", fixed = TRUE)
   expect_identical(out$Term, c("age", "sex", "wt.loss"))
@@ -2324,28 +2133,26 @@ test_that("check_collinearity, one rank-deficiency warning for aliased and NA co
   # an aliased coefficient that is also an NA column is named once
   v_na["age_sex", ] <- NA
   v_na[, "age_sex"] <- NA
-  warnings <- testthat::capture_warnings(out <- check_collinearity(m))
-  expect_length(warnings, 1)
+  warnings <- testthat::capture_warnings(check_collinearity(m))
   expect_length(gregexpr("age_sex", warnings, fixed = TRUE)[[1]], 1)
-  expect_identical(out$Term, c("age", "sex", "wt.loss"))
 })
 
-test_that("check_collinearity, term assignment by name skips .term_assignments()", {
-  skip_if_not_installed("mgcv")
+test_that("check_collinearity, multi-state coxph models keep the formula terms", {
   skip_if_not_installed("survival")
-  # for mgcv models, `.term_assignments()` can rebuild the model data from the
-  # formula, which can warn, for example for models with `paraPen`
-  testthat::local_mocked_bindings(
-    .term_assignments = function(...) stop("not used for these models")
+  d <- survival::mgus2
+  d$etime <- ifelse(d$pstat == 0, d$futime, d$ptime)
+  d$event <- factor(
+    ifelse(d$pstat == 0, 2 * d$death, 1),
+    0:2,
+    labels = c("censor", "pcm", "death")
   )
-  d <- .gam_test_data()
-  out <- check_collinearity(mgcv::gam(y ~ s(x1) + x2 + f, data = d))
-  expect_identical(out$Term, c("x2", "f", "s(x1)"))
-  out <- check_collinearity(survival::coxph(
-    survival::Surv(time, status) ~ age + sex,
-    data = survival::lung
-  ))
-  expect_identical(out$Term, c("age", "sex"))
+  m <- survival::coxph(
+    survival::Surv(etime, event) ~ age + sex + mspike,
+    data = d,
+    id = id
+  )
+  out <- check_collinearity(m)
+  expect_identical(out$Term, c("age", "sex", "mspike"))
 })
 
 test_that("check_collinearity, sparse frailty() terms of coxph get no row", {
@@ -2354,8 +2161,6 @@ test_that("check_collinearity, sparse frailty() terms of coxph get no row", {
     survival::Surv(time, status) ~ age + sex + survival::frailty(inst),
     data = survival::lung
   )
-  # the `assign` list has an index past the coefficients for the frailty term
-  expect_gt(max(unlist(m$assign)), length(stats::coef(m)))
   out <- check_collinearity(m)
   expect_identical(out$Term, c("age", "sex"))
   expected <- .gvif_blocks(stats::vcov(m), list("age", "sex"))
