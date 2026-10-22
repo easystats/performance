@@ -10,6 +10,10 @@
 
 ## Bug fixes
 
+* Fixed issue in the overdispersion plot of `check_model()`, which showed wrong
+  residuals for count models fitted with `na.action = na.exclude` to data with
+  missing values.
+
 * `check_model()` now applies its defaults for `type` and `detrend` to more
   objects. These are *rstanarm* and *brms* models that can be converted to a
   frequentist model, and `model_fit` objects from package *parsnip*. They are
