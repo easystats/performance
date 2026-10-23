@@ -2,7 +2,7 @@
 
 .model_diagnostic_vif <- function(model, verbose = TRUE) {
   out <- check_collinearity(model, verbose = verbose)
-  dat <- insight::compact_list(out)
+  dat <- insight::compact_list(attr(out, "data"))
   if (is.null(dat)) {
     return(NULL)
   }
@@ -12,7 +12,7 @@
 
   dat <- datawizard::data_select(
     dat,
-    select = c(x = "Term", y = "VIF", facet = "Component", group = "group"),
+    select = c(x = "Term", y = "VIF", facet = "Component", group = "group", df = "df"),
     verbose = FALSE
   )
 
