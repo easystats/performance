@@ -10,6 +10,13 @@
 
 ## Bug fixes
 
+* `check_heteroscedasticity()` now gives the same result whatever the units of
+  the response for mixed models (*lme4*, *glmmTMB*) and for `nlme::lme()` and
+  `nlme::gls()`. The squared residuals are now scaled by their mean, as in the
+  original Breusch-Pagan test, instead of by a residual variance derived from
+  `insight::get_deviance()`, which for these models is a likelihood-based
+  deviance. Results for `lm()` are unchanged (#997).
+
 * Fixed issue in the overdispersion plot of `check_model()`, which showed wrong
   residuals for count models fitted with `na.action = na.exclude` to data with
   missing values.
