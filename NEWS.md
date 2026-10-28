@@ -17,6 +17,15 @@
   `insight::get_deviance()`, which for these models is a likelihood-based
   deviance. Results for `lm()` are unchanged (#997).
 
+* Fixed issue in the overdispersion plot of `check_model()`, which showed wrong
+  residuals for count models fitted with `na.action = na.exclude` to data with
+  missing values.
+
+* Fixed issue in `check_collinearity()` for models from `mgcv::gam()`,
+  `mgcv::bam()`, `survival::survreg()` and `survival::coxph()`, where VIFs were
+  computed from the coefficients of other terms, and `coxph()` models lost
+  their first term. Smooth terms are now named by their *mgcv* label.
+
 * `check_model()` now applies its defaults for `type` and `detrend` to more
   objects. These are *rstanarm* and *brms* models that can be converted to a
   frequentist model, and `model_fit` objects from package *parsnip*. They are
