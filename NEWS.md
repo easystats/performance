@@ -10,6 +10,10 @@
 
 ## Bug fixes
 
+* Fixed issue in the overdispersion plot of `check_model()`, which showed wrong
+  residuals for count models fitted with `na.action = na.exclude` to data with
+  missing values.
+
 * Fixed issue in `check_collinearity()` for models from `mgcv::gam()`,
   `mgcv::bam()`, `survival::survreg()` and `survival::coxph()`, where VIFs were
   computed from the coefficients of other terms, and `coxph()` models lost
