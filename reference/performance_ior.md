@@ -80,7 +80,7 @@ performance_ior(m)
 #> Parameter   |   Group |         80% CI
 #> --------------------------------------
 #> (Intercept) | Subject | [0.00,   5.21]
-#> Days        | Subject | [0.01, 348.24]
+#> Days        | Subject | [0.01, 348.25]
 
 m <- suppressWarnings(lme4::glmer(
   high_reaction ~ Days + (1 | mygrp) + (1 | Subject),
@@ -95,7 +95,7 @@ performance_ior(m)
 #> Parameter   |   Group |         80% CI
 #> --------------------------------------
 #> (Intercept) | Subject | [0.00,   5.21]
-#> Days        | Subject | [0.01, 348.24]
+#> Days        | Subject | [0.01, 348.25]
 #> (Intercept) |   mygrp | [0.03,   0.03]
 #> Days        |   mygrp | [2.10,   2.10]
 ```

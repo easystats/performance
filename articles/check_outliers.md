@@ -687,7 +687,7 @@ Mahalanobis Distance.” *Journal of Experimental Social Psychology* 74:
 
 Leys, Christophe, Christophe Ley, Olivier Klein, Philippe Bernard, and
 Laurent Licata. 2013. “Detecting Outliers: Do Not Use Standard Deviation
-Around the Mean, Use Absolute Deviation Around the Median.” *Journal of
+around the Mean, Use Absolute Deviation around the Median.” *Journal of
 Experimental Social Psychology* 49 (4): 764–66.
 <https://doi.org/10.1016/j.jesp.2013.03.013>.
 

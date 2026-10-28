@@ -122,12 +122,13 @@ model <- lme4::glmer(
   data = cbpp,
   family = binomial()
 )
-#> boundary (singular) fit: see help('isSingular')
+#> Warning: Model failed to converge with max|grad| = 0.00736882 (tol = 0.002, component 1)
+#>   See ?lme4::convergence and ?lme4::troubleshooting.
 
 check_convergence(model)
-#> [1] TRUE
+#> [1] FALSE
 #> attr(,"gradient")
-#> [1] NA
+#> [1] 0.001793401
 
 # \donttest{
 model <- suppressWarnings(glmmTMB::glmmTMB(

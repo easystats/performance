@@ -766,7 +766,7 @@ CRAN release: 2025-01-15
 - [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
   with `method = "optics"` now returns a further refined cluster
   selection, by passing the `optics_xi` argument to
-  [`dbscan::extractXi()`](http://michael.hahsler.net/dbscan/reference/optics.md).
+  [`dbscan::extractXi()`](https://michael.hahsler.net/dbscan/reference/optics.html).
 
 - Deprecated arguments and alias-function-names have been removed.
 

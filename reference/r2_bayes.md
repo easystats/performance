@@ -144,7 +144,7 @@ model <- suppressWarnings(brms::brm(
 r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.826 (95% CI [0.759, 0.855])
+#>   Conditional R2: 0.826 (95% CI [0.761, 0.855])
 
 model <- suppressWarnings(brms::brm(
   Petal.Length ~ Petal.Width + (1 | Species),
@@ -156,6 +156,6 @@ r2_bayes(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
 #>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
-#>      Marginal R2: 0.383 (95% CI [0.169, 0.615])
+#>      Marginal R2: 0.382 (95% CI [0.169, 0.605])
 # }
 ```

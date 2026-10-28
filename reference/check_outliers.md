@@ -323,7 +323,7 @@ is re-scaled to range from 0 to 1.
   **dbscan** package to be installed, and that it takes some time to
   compute the results. Additionally, the `optics_xi` (default to 0.05)
   is passed to the
-  [`dbscan::extractXi()`](http://michael.hahsler.net/dbscan/reference/optics.md)
+  [`dbscan::extractXi()`](https://michael.hahsler.net/dbscan/reference/optics.html)
   function to further refine the cluster selection.
 
 - **Local Outlier Factor**: Based on a K nearest neighbors algorithm,
