@@ -10,6 +10,16 @@
 
 ## Bug fixes
 
+* Fixed issue in `fitted()` and `residuals()` for *BayesFactor* models, which
+  returned wrong values for models with continuous predictors. The predictions
+  were shifted, because continuous predictors were not centered the way
+  *BayesFactor* centers them. This also gave wrong results in
+  `check_heteroscedasticity()`, `check_normality()`,
+  `check_autocorrelation()`, `check_predictions()`, `binned_residuals()`,
+  `performance_rmse()`, `performance_mae()` and `performance_mse()`, and
+  wrong R2 from `r2_bayes()` for models with an interaction between a
+  continuous predictor and a factor, or with random slopes.
+
 * `check_heteroscedasticity()` now gives the same result whatever the units of
   the response for mixed models (*lme4*, *glmmTMB*) and for `nlme::lme()` and
   `nlme::gls()`. The squared residuals are now scaled by their mean, as in the

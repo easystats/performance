@@ -29,10 +29,36 @@ test_that("r2_BayesFactor", {
   r_BF <- r2(model, ci = 0.89)
   r_CI <- attr(r_BF, "CI")$R2_Bayes
 
-  expect_equal(r_BF$R2_Bayes, 0.36, tolerance = 0.05)
+  expect_equal(r_BF$R2_Bayes, 0.86, tolerance = 0.05)
   expect_equal(r_BF$R2_Bayes_marginal, 0.21, tolerance = 0.05)
-  expect_equal(r_CI$CI_low, 0.27, tolerance = 0.05)
-  expect_equal(r_CI$CI_high, 0.54, tolerance = 0.05)
+  expect_equal(r_CI$CI_low, 0.81, tolerance = 0.05)
+  expect_equal(r_CI$CI_high, 0.89, tolerance = 0.05)
+})
+
+test_that("residuals and R2 for BayesFactor models use centered predictors", {
+  skip_if_not_installed("BayesFactor")
+  set.seed(1)
+  # only continuous predictors
+  model <- BayesFactor::lmBF(mpg ~ wt * hp, data = mtcars, progress = FALSE)
+  expect_equal(
+    residuals(model),
+    residuals(lm(mpg ~ wt * hp, data = mtcars)),
+    tolerance = 0.2,
+    ignore_attr = TRUE
+  )
+  expect_equal(r2(model)$R2_Bayes, 0.87, tolerance = 0.05)
+
+  # continuous predictor in interaction with a factor
+  d <- mtcars
+  d$cyl <- factor(d$cyl)
+  model <- BayesFactor::lmBF(mpg ~ wt + cyl + wt:cyl, data = d, progress = FALSE)
+  expect_equal(
+    residuals(model),
+    residuals(lm(mpg ~ wt + cyl + wt:cyl, data = d)),
+    tolerance = 0.2,
+    ignore_attr = TRUE
+  )
+  expect_equal(r2(model)$R2_Bayes, 0.83, tolerance = 0.05)
 })
 
 test_that("r2_bayes", {
