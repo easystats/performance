@@ -19,3 +19,13 @@ test_that("r2 functions warn and return NULL for aggregated binomial models", {
   expect_warning(out <- r2_somers(m), "not Bernoulli", fixed = TRUE)
   expect_null(out)
 })
+
+
+test_that("r2 functions give values for Bernoulli models", {
+  m <- glm(am ~ factor(cyl), data = mtcars, family = binomial())
+  expect_equal(r2_efron(m), 0.2731479, tolerance = 1e-4)
+  expect_equal(r2_mckelvey(m), c(`McKelvey's R2` = 0.3122), tolerance = 1e-3)
+  skip_if_not_installed("correlation")
+  skip_if_not_installed("Hmisc")
+  expect_equal(r2_somers(m), c(`Somers' Dxy` = 0.5708502), tolerance = 1e-4)
+})

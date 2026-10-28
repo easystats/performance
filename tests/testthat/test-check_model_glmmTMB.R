@@ -56,6 +56,29 @@ test_that("check_model, glmmTMB outlier panel without random effects equals glm"
     tolerance = 1e-5,
     ignore_attr = TRUE
   )
+
+  m <- glmmTMB::glmmTMB(Reaction ~ Days, family = Gamma(link = "log"), data = sleepstudy)
+  g <- stats::glm(Reaction ~ Days, family = Gamma(link = "log"), data = sleepstudy)
+  out <- .influential(m)
+  expect_equal(out$Hat, stats::hatvalues(g), tolerance = 1e-6, ignore_attr = TRUE)
+  expect_equal(
+    out$Cooks_Distance,
+    stats::cooks.distance(g, dispersion = stats::sigma(m)^2),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
+  )
+
+  skip_if_not_installed("MASS")
+  m <- glmmTMB::glmmTMB(count ~ mined + spp, family = glmmTMB::nbinom2, data = Salamanders)
+  g <- MASS::glm.nb(count ~ mined + spp, data = Salamanders)
+  out <- .influential(m)
+  expect_equal(out$Hat, stats::hatvalues(g), tolerance = 1e-6, ignore_attr = TRUE)
+  expect_equal(
+    out$Cooks_Distance,
+    stats::cooks.distance(g),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
+  )
 })
 
 
@@ -105,6 +128,25 @@ test_that("check_model, glmmTMB outlier panel is skipped with a reason for unsup
       all = FALSE
     )
   }
+
+  # an offset in the dispersion formula, which `sigma()` ignores
+  d <- sleepstudy
+  d$off <- log(seq(1, 3, length.out = nrow(d)))
+  m <- glmmTMB::glmmTMB(
+    Reaction ~ Days + (1 | Subject),
+    dispformula = ~ 1 + offset(off),
+    data = d
+  )
+  msgs <- capture_messages(
+    out <- suppressWarnings(check_model(m, check = "outliers", verbose = TRUE))
+  )
+  expect_null(out$INFLUENTIAL)
+  expect_match(
+    gsub("\\s+", " ", msgs),
+    "not available for models with a dispersion formula",
+    fixed = TRUE,
+    all = FALSE
+  )
 })
 
 
@@ -177,4 +219,11 @@ test_that("check_model, glmmTMB outlier panel is skipped when the threshold fail
   out <- suppressMessages(check_model(m, check = "outliers", verbose = TRUE))
   expect_null(out$INFLUENTIAL)
   expect_identical(panel_calls, 0)
+})
+
+
+test_that("check_model, glmmTMB nbinom1 overdispersion data use V = mu (1 + phi)", {
+  m <- glmmTMB::glmmTMB(count ~ mined + (1 | site), family = glmmTMB::nbinom1, data = Salamanders)
+  out <- .model_diagnostic_overdispersion(m)
+  expect_equal(out$V, out$Predicted * (1 + stats::sigma(m)), tolerance = 1e-10)
 })

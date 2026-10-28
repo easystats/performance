@@ -278,3 +278,23 @@ test_that("check_outliers, glmmTMB Cook's distance for binomial models with a cb
     tolerance = 1e-6
   )
 })
+
+
+test_that("check_outliers, glmmTMB Cook's distance with zero-inflation equals refit formula", {
+  skip_on_cran()
+  data(Salamanders, package = "glmmTMB")
+  d <- Salamanders[1:100, ]
+  m <- glmmTMB::glmmTMB(
+    count ~ mined + (1 | site),
+    zi = ~mined,
+    family = poisson,
+    data = d
+  )
+  out <- suppressMessages(check_outliers(m, method = "cook"))
+  expect_equal(
+    as.data.frame(out)$Distance_Cook,
+    .test_cooks_refit(m, d),
+    tolerance = 1e-6
+  )
+  expect_lte(sum(is.na(as.data.frame(out)$Distance_Cook)), 2)
+})

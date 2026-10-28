@@ -297,6 +297,9 @@ test_that("compare_performance, no LOOIC weights for models fit to different num
     "different numbers of observations"
   )
   expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
+
+  out <- suppressWarnings(suppressMessages(compare_performance(m1, m2, rank = TRUE)))
+  expect_identical(nrow(out), 2L)
 })
 
 

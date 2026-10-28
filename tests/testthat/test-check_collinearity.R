@@ -1197,3 +1197,30 @@ test_that("check_collinearity, pscl zero-inflation terms differ from the count t
     )
   }
 })
+
+
+test_that("check_collinearity, glmmTMB zero-inflation formula with only an intercept", {
+  skip_if_not_installed("glmmTMB")
+  d <- .zi_test_data()
+  m <- glmmTMB::glmmTMB(y ~ x1 + f, ziformula = ~1, data = d, family = poisson())
+  out_cond <- check_collinearity(m, component = "conditional", verbose = FALSE)
+  expect_message(
+    out_all <- check_collinearity(m, component = "all"),
+    "Not enough model terms in the zero-inflat"
+  )
+  expect_identical(out_all$Term, out_cond$Term)
+  expect_equal(out_all$VIF, out_cond$VIF)
+  expect_null(check_collinearity(m, component = "zero_inflated", verbose = FALSE))
+  m <- glmmTMB::glmmTMB(y ~ x1, ziformula = ~1, data = d, family = poisson())
+  expect_null(check_collinearity(m, component = "all", verbose = FALSE))
+
+  # the zero-inflation part has an intercept, also when the conditional part
+  # has none
+  m <- glmmTMB::glmmTMB(y ~ 0 + x1 + f, ziformula = ~1, data = d, family = poisson())
+  msgs <- testthat::capture_messages(
+    out_zi <- check_collinearity(m, component = "zero_inflated")
+  )
+  expect_null(out_zi)
+  expect_false(any(grepl("Model without intercept", msgs)))
+  expect_true(any(grepl("Not enough model terms", msgs)))
+})

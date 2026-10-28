@@ -384,6 +384,8 @@ test_that("`check_model()` falls back to Bayesian checks if brms conversion fail
   }
   expect_no_match(alert, "REQQ|BINNED_RESID|OVERDISPERSION")
   expect_match(alert, "Reason for the failed conversion: conversion failed", fixed = TRUE)
+  msgs <- gsub("\\s+", " ", capture_messages(check_model(m, verbose = TRUE)))
+  expect_length(grep("conversion to a frequentist model failed", msgs, fixed = TRUE), 1)
 
   out <- suppressMessages(check_model(structure(list(fit = m), class = "model_fit")))
   expect_true(attr(out, "detrend"))

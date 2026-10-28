@@ -299,6 +299,12 @@ test_that("check_outliers, group data checks", {
     "is not the data the model was fitted on",
     fixed = TRUE
   )
+  d <- sleepstudy[-(1:30), ]
+  expect_error(
+    check_outliers(m, group = "Subject"),
+    "is not the data the model was fitted on",
+    fixed = TRUE
+  )
 
   d <- sleepstudy
   m <- lme4::lmer(Reaction ~ scale(Days) + (1 | Subject), d)
