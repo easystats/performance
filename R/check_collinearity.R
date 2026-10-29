@@ -558,10 +558,24 @@ check_collinearity.zerocount <- function(
     return(NULL)
   }
 
-  term_assign <- .term_assignments(x, component, verbose = verbose)
+  # mgcv, survreg and coxph models match coefficients to terms by name, below
+  if (.has_term_assignment_by_name(x)) {
+    term_assign <- NULL
+  } else {
+    term_assign <- .term_assignments(x, component, verbose = verbose)
+  }
 
-  # any assignment found? multinomial models build their own assignment below
-  if (!.is_multinom_model(x) && (is.null(term_assign) || all(is.na(term_assign)))) {
+  # only used for models with a term assignment by name
+  term_names <- NULL
+  aliased_cols <- NULL
+
+  # any assignment found? multinomial models and models with a term assignment
+  # by name build their own assignment below
+  if (
+    !.is_multinom_model(x) &&
+      !.has_term_assignment_by_name(x) &&
+      (is.null(term_assign) || all(is.na(term_assign)))
+  ) {
     if (verbose) {
       insight::format_alert(
         sprintf(
@@ -696,6 +710,36 @@ check_collinearity.zerocount <- function(
     if (all(keep_idx) && isTRUE(verbose)) {
       insight::format_alert("Model without intercept. VIFs may not be sensible.")
     }
+  } else if (.has_term_assignment_by_name(x)) {
+    # mgcv, survreg and coxph models: match columns to terms by name. Other
+    # columns, like the scale parameters of survreg models, are dropped
+    named_assign <- .term_assignment_by_name(x, colnames(v))
+    if (is.null(named_assign)) {
+      if (verbose) {
+        insight::format_alert(
+          sprintf(
+            "Could not extract model terms for the %s component of the model.",
+            component
+          )
+        )
+      }
+      return(NULL)
+    }
+    # aliased coefficients have zero variance, not NA, so the check for NA
+    # columns below does not find them
+    is_aliased <- colnames(v) %in% named_assign$aliased
+    keep_idx <- !is.na(named_assign$assign) & named_assign$assign != 0 & !is_aliased
+    term_assign <- named_assign$assign[keep_idx]
+    term_names <- named_assign$terms
+    aliased_cols <- colnames(v)[is_aliased]
+    # Cox models have no intercept
+    if (
+      !any(named_assign$assign == 0, na.rm = TRUE) &&
+        !inherits(x, "coxph") &&
+        isTRUE(verbose)
+    ) {
+      insight::format_alert("Model without intercept. VIFs may not be sensible.")
+    }
   } else {
     keep_idx <- rep(TRUE, ncol(v))
     if (.component_has_intercept(x, component)) {
@@ -707,17 +751,20 @@ check_collinearity.zerocount <- function(
   }
 
   # we have rank-deficiency here. remove NA columns from assignment
-  if (isTRUE(attr(v, "rank_deficient")) || anyNA(v)) {
-    na_cols <- NULL
+  if (isTRUE(attr(v, "rank_deficient")) || anyNA(v) || length(aliased_cols)) {
+    na_cols <- aliased_cols
     if (!is.null(attr(v, "na_columns_index"))) {
-      # If this attribute exists, then NA values were already removed from v
-      term_assign <- term_assign[-attr(v, "na_columns_index")]
-      na_cols <- names(attr(v, "na_columns_name"))
+      # If this attribute exists, then NA values were already removed from v.
+      # The term assignment by name already matches the columns of v
+      if (is.null(term_names)) {
+        term_assign <- term_assign[-attr(v, "na_columns_index")]
+      }
+      na_cols <- unique(c(na_cols, names(attr(v, "na_columns_name"))))
     } else if (anyNA(v)) {
       # If no attribute exists, then we need to identify NA columns manually
       ## FIXME: this should be fixed in insight::get_varcov() to avoid this step
       idx_na <- apply(is.na(v), 2, all)
-      na_cols <- colnames(v)[idx_na]
+      na_cols <- unique(c(na_cols, colnames(v)[idx_na]))
       keep_idx[idx_na] <- FALSE
     }
 
@@ -728,7 +775,10 @@ check_collinearity.zerocount <- function(
 
   # Safely subset the matrix
   if (sum(keep_idx) < ncol(v)) {
-    if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
+    if (!is.null(term_names)) {
+      # NA columns can have been removed from `keep_idx` above
+      term_assign <- named_assign$assign[keep_idx]
+    } else if (!is.null(term_assign) && length(term_assign) == ncol(v)) {
       term_assign <- term_assign[keep_idx]
     }
     v <- v[keep_idx, keep_idx, drop = FALSE]
@@ -764,6 +814,10 @@ check_collinearity.zerocount <- function(
 
   if ("instruments" %in% names(f)) {
     model_terms <- unique(c(model_terms, labels(stats::terms(f[["instruments"]]))))
+  }
+
+  if (!is.null(term_names)) {
+    model_terms <- term_names
   }
 
   n.terms <- length(model_terms)
@@ -1027,6 +1081,100 @@ check_collinearity.zerocount <- function(
     error = function(e) {
       .find_term_assignment(x, component, verbose = verbose)
     }
+  )
+}
+
+
+# mgcv models, and survreg and coxph models of package survival, name the
+# coefficients of each term, see `.term_assignment_by_name()`
+.has_term_assignment_by_name <- function(x) {
+  # multi-state Cox models have one coefficient of each term for each
+  # transition, which `assign` does not map
+  .is_mgcv_gam(x) ||
+    inherits(x, "survreg") ||
+    (inherits(x, "coxph") && !inherits(x, "coxphms"))
+}
+
+
+# mgcv models with one linear predictor. Models with a list of formulas, like
+# `family = gaulss()`, have a list of parametric terms
+.is_mgcv_gam <- function(x) {
+  inherits(x, "gam") && inherits(x$pterms, "terms") && is.list(x$smooth)
+}
+
+
+# the term of each column `col_names` of the variance-covariance matrix: 0 for
+# the intercept, NA for the scale parameters of survreg models, else the
+# position of the term in `terms`. `aliased` names the columns of aliased
+# coefficients. NULL if a coefficient or another column has no term
+.term_assignment_by_name <- function(x, col_names) {
+  coef_names <- names(stats::coef(x))
+  if (.is_mgcv_gam(x)) {
+    # the parametric terms, then one term for each smooth, with the columns
+    # from `first.para` to `last.para`. A smooth with `by = <factor>` is one
+    # smooth for each factor level
+    parametric_labels <- labels(x$pterms)
+    smooth_labels <- vapply(x$smooth, function(s) s$label, character(1))
+    term_labels <- c(parametric_labels, smooth_labels)
+    coef_assign <- rep(NA_integer_, length(coef_names))
+    coef_assign[seq_along(x$assign)] <- x$assign
+    for (i in seq_along(x$smooth)) {
+      cols <- x$smooth[[i]]$first.para:x$smooth[[i]]$last.para
+      coef_assign[cols] <- length(parametric_labels) + i
+    }
+  } else if (inherits(x, "coxph")) {
+    # a list with the columns of each term, without `strata()` and
+    # `cluster()` terms. A sparse `frailty()` term has an index past the
+    # coefficients and no column, so it gets no VIF
+    term_labels <- names(x$assign)
+    coef_assign <- rep(NA_integer_, length(coef_names))
+    for (i in seq_along(x$assign)) {
+      cols <- x$assign[[i]]
+      coef_assign[cols[cols <= length(coef_names)]] <- i
+    }
+  } else {
+    # survreg: the "assign" attribute of the model matrix skips `strata()` and
+    # `cluster()` terms, which have no columns. Their interactions with other
+    # variables, like `age:strata(sex)`, have columns
+    tt <- stats::terms(x)
+    factors <- attr(tt, "factors")
+    term_labels <- labels(tt)
+    specials <- unlist(attr(tt, "specials"), use.names = FALSE)
+    if (length(specials) && length(term_labels)) {
+      is_special <- colSums(factors[specials, , drop = FALSE] != 0) > 0 &
+        colSums(factors != 0) == 1
+      term_labels <- term_labels[!is_special]
+    }
+    coef_assign <- attr(.safe(stats::model.matrix(x)), "assign")
+  }
+
+  if (
+    length(coef_assign) != length(coef_names) ||
+      anyNA(coef_assign) ||
+      any(coef_assign > length(term_labels))
+  ) {
+    return(NULL)
+  }
+
+  # the column names from insight have no backticks, but coefficient names
+  # can keep them
+  col_clean <- gsub("`", "", col_names, fixed = TRUE)
+  coef_clean <- gsub("`", "", coef_names, fixed = TRUE)
+  col_assign <- coef_assign[match(col_clean, coef_clean)]
+
+  # a column without a term would be left out of the VIFs without notice
+  no_term <- is.na(col_assign)
+  if (inherits(x, "survreg")) {
+    no_term <- no_term & !startsWith(col_clean, "Log(scale")
+  }
+  if (any(no_term)) {
+    return(NULL)
+  }
+
+  list(
+    assign = col_assign,
+    terms = term_labels,
+    aliased = col_names[col_clean %in% coef_clean[is.na(stats::coef(x))]]
   )
 }
 

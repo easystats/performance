@@ -66,7 +66,11 @@ check_heteroscedasticity.default <- function(x, ...) {
   }
 
   r <- insight::get_residuals(x, type = "pearson")
-  S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
+  # Scale by the mean squared residual, as in the original Breusch-Pagan test.
+  # For `lm()` this equals df * sigma^2 / n, but it also keeps the statistic
+  # independent of the units of the response for mixed models and for models
+  # whose Pearson residuals are already divided by sigma (`lme()`, `gls()`).
+  S.sq <- mean(r^2, na.rm = TRUE)
 
   .U <- (r^2) / S.sq
   mod <- stats::lm(.U ~ stats::fitted(x))
@@ -153,33 +157,4 @@ print.check_heteroscedasticity <- function(x, ...) {
 plot.check_heteroscedasticity <- function(x, ...) {
   insight::check_if_installed("see", "for residual plots")
   NextMethod()
-}
-
-
-# utilities -----------------------
-
-.sigma <- function(x) {
-  UseMethod(".sigma")
-}
-
-.sigma.default <- function(x) {
-  s <- tryCatch(
-    {
-      estimates <- insight::get_parameters(x)$Estimate
-      sqrt(insight::get_deviance(x) / (insight::n_obs(x) - sum(!is.na(estimates))))
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
-  if (insight::is_empty_object(s)) {
-    s <- insight::get_variance_residual(x, verbose = FALSE)
-  }
-
-  s
-}
-
-.sigma.BFBayesFactor <- function(x) {
-  mean(.get_bfbf_predictions(x)[["sigma"]])
 }

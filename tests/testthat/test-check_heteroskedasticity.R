@@ -64,3 +64,31 @@ test_that("check_heteroskedasticity, count model", {
     fixed = TRUE
   )
 })
+
+test_that("check_heteroskedasticity, same result in any units of the response", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("nlme")
+  set.seed(123)
+  d <- data.frame(g = factor(rep(1:30, each = 10)), x = rnorm(300))
+  d$y <- 2 + 0.5 * d$x + rnorm(30)[d$g] + rnorm(300)
+  d$y100 <- d$y * 100
+
+  p_lmer <- as.vector(check_heteroscedasticity(lme4::lmer(y ~ x + (1 | g), data = d)))
+  p_lmer100 <- as.vector(check_heteroscedasticity(lme4::lmer(y100 ~ x + (1 | g), data = d)))
+  expect_equal(p_lmer100, p_lmer, tolerance = 1e-6)
+
+  p_tmb <- as.vector(check_heteroscedasticity(glmmTMB::glmmTMB(y ~ x + (1 | g), data = d)))
+  p_tmb100 <- as.vector(check_heteroscedasticity(glmmTMB::glmmTMB(y100 ~ x + (1 | g), data = d)))
+  expect_equal(p_tmb100, p_tmb, tolerance = 1e-4)
+
+  p_lme <- as.vector(check_heteroscedasticity(nlme::lme(y ~ x, random = ~ 1 | g, data = d)))
+  p_lme100 <- as.vector(check_heteroscedasticity(nlme::lme(y100 ~ x, random = ~ 1 | g, data = d)))
+  expect_equal(p_lme100, p_lme, tolerance = 1e-6)
+  # lmer() and lme() fit the same model here
+  expect_equal(p_lme, p_lmer, tolerance = 1e-4)
+
+  p_gls <- as.vector(check_heteroscedasticity(nlme::gls(y ~ x, data = d)))
+  p_gls100 <- as.vector(check_heteroscedasticity(nlme::gls(y100 ~ x, data = d)))
+  expect_equal(p_gls100, p_gls, tolerance = 1e-6)
+})
