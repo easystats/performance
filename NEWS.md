@@ -2,6 +2,13 @@
 
 ## Changes
 
+* New function `test_clusters()` uses the `matchednull` package to compare a
+  selected cluster count with the counts obtained from matched-null data that
+  keep the observed margins and approximately the observed correlations. It
+  reports one of three outcomes (no detected excess, departure from the
+  reference model, below the reference range) and validates the return values
+  of the clustering function.
+
 * `model_performance()` for mixed models now fits the null model only once
   when both R2 and ICC are requested, instead of once for each index. This
   applies to non-Gaussian models, for which both indices need the null model.
@@ -202,6 +209,27 @@
   in order of their degrees of freedom. `test_vuong()` and `test_wald()` now give
   a clear error for *lavaan* models instead of the same recursion (#427).
 
+## Changes
+
+* `check_model()` gets a `show_smooth` argument. With `show_smooth = FALSE`,
+  the Linearity and Homogeneity of Variance panels draw neither the LOESS
+  smoother nor the cell means, and the Influential Observations panel draws no
+  LOESS smoother. This needs *see* newer than 0.14.2. Older versions ignore the
+  setting.
+
+* `check_model()` and `check_predictions()` now work for multivariate models
+  from package *brms*. Use the `response` argument to name the response to
+  check. Without `response`, both functions give an error that lists the names
+  of the responses (#908).
+
+* `check_model()` now shows the plot of influential observations for models
+  from package *glmmTMB* with a gaussian, poisson, binomial, Gamma, or `nbinom2`
+  family, and without zero-inflation or a dispersion formula. The plot uses hat
+  values and a one-step approximation of Cook's distance, so the model is not
+  refit. For other *glmmTMB* models, the plot is skipped, and with
+  `verbose = TRUE` a message names the reason. For the same models,
+  `plot(check_outliers())` shows this plot with the Cook's distances from the
+  refits (#95).
 * `check_collinearity()` uses a new method for the confidence intervals of
   VIF and tolerance. The method inverts the noncentral F distribution of the
   auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed
