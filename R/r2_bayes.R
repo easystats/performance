@@ -416,7 +416,23 @@ as.data.frame.r2_bayes <- function(x, ...) {
   params_sigma <- sqrt(params[, colnames(params) == "sig2"])
 
   # Model Matrix
-  mm <- insight::get_modelmatrix(model[1])
+  # The posterior refers to a centered design matrix, so we center it the same
+  # way as BayesFactor: with only continuous predictors, each column of the
+  # design matrix is centered; else, continuous variables are centered before
+  # the design matrix is built
+  model1 <- model[1]
+  lm_model <- model1@numerator[[1]]
+  data_types <- lm_model@dataTypes
+  predictors <- all.vars(stats::formula(lm_model@identifier$formula)[[3]])
+  if (all(data_types[names(data_types) %in% predictors] == "continuous")) {
+    mm <- insight::get_modelmatrix(model1)
+    mm[, -1] <- scale(mm[, -1, drop = FALSE], scale = FALSE)
+  } else {
+    model1@data[] <- lapply(model1@data, function(x) {
+      if (is.factor(x)) x else x - mean(x)
+    })
+    mm <- insight::get_modelmatrix(model1)
+  }
   colnames(mm)[1] <- "mu"
 
   # match?
