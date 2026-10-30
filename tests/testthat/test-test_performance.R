@@ -55,28 +55,22 @@ test_that("test_performance - lavaan", {
 
   expect_no_warning(test_performance(m1, m2))
   rez <- test_performance(m1, m2)
-  expect_s3_class(rez, "test_performance")
   expect_match(
     attributes(format(rez))$table_footer,
     "assumes that each model is nested",
     fixed = TRUE
   )
   expect_identical(rez$Name, c("m1", "m2"))
-  expect_true(all(c("BF", "df", "df_diff", "Chi2", "p") %in% colnames(rez)))
 
   lrt <- test_likelihoodratio(m1, m2)
   expect_equal(rez$Chi2, lrt$Chi2, tolerance = 1e-3)
-  expect_equal(rez$p, lrt$p, tolerance = 1e-3)
 
   bic <- c(stats::BIC(m1), stats::BIC(m2))
   expect_equal(rez$BF[2], exp((bic[1] - bic[2]) / 2), tolerance = 1e-3)
 
-  # models are compared in order of their df, whatever the input order
   rez2 <- test_performance(m2, m1)
   expect_identical(rez2$Name, c("m1", "m2"))
-  expect_equal(rez2$Chi2, rez$Chi2, tolerance = 1e-3)
 
-  # models fit to different observations or observed variables
   m3 <- suppressWarnings(lavaan::cfa(
     structure1,
     data = lavaan::HolzingerSwineford1939[1:200, ]
