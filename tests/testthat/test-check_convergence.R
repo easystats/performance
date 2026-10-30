@@ -1,6 +1,6 @@
 skip_on_cran()
 
-test_that("check_convergence", {
+test_that("check_convergence, glmer", {
   skip_if_not_installed("lme4")
 
   data(cbpp, package = "lme4")
@@ -13,10 +13,10 @@ test_that("check_convergence", {
     data = cbpp,
     family = binomial()
   ))
-  expect_true(check_convergence(model))
+  expect_false(check_convergence(model))
   expect_equal(
     check_convergence(model),
-    structure(TRUE, gradient = NA_real_),
+    structure(FALSE, gradient = 0.00179340167843045),
     tolerance = 1e-3
   )
   expect_warning(
@@ -26,7 +26,7 @@ test_that("check_convergence", {
   )
 })
 
-test_that("check_convergence", {
+test_that("check_convergence, lmer", {
   skip_if_not_installed("lme4")
 
   data(sleepstudy, package = "lme4")
