@@ -10,6 +10,10 @@
 
 ## Bug fixes
 
+* Collinearity severity groups and plot data now use `GVIF^(1/df)`, including
+  transformed confidence limits, so multi-coefficient terms are not classified
+  using raw GVIFs and one-coefficient VIF cutoffs. Tables retain raw GVIFs.
+
 * Fixed issue in `fitted()` and `residuals()` for *BayesFactor* models, which
   returned wrong values for models with continuous predictors. The predictions
   were shifted, because continuous predictors were not centered the way

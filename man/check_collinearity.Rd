@@ -126,6 +126,12 @@ conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
 \emph{Zuur et al. (2010)} suggest using lower values, e.g. a VIF of 3 or larger
 may already no longer be considered as "low".
+
+Severity groups and plots use \code{GVIF^(1/df)}, the square of the adjusted
+VIF, where \code{df} is the number of coefficients of the term. This equals
+ordinary VIF for one-coefficient terms. The 5 and 10 cutoffs are heuristics
+on this dimension-adjusted scale. The table retains the raw GVIF and its
+confidence interval.
 }
 
 \section{Multicollinearity and Interaction Terms}{

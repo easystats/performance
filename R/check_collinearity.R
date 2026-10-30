@@ -100,6 +100,12 @@
 #' _Zuur et al. (2010)_ suggest using lower values, e.g. a VIF of 3 or larger
 #' may already no longer be considered as "low".
 #'
+#' Severity groups and plots use `GVIF^(1/df)`, the square of the adjusted
+#' VIF, where `df` is the number of coefficients of the term. This equals
+#' ordinary VIF for one-coefficient terms. The 5 and 10 cutoffs are heuristics
+#' on this dimension-adjusted scale. The table retains the raw GVIF and its
+#' confidence interval.
+#'
 #' @section Multicollinearity and Interaction Terms:
 #' If interaction terms are included in a model, high VIF values are expected.
 #' This portion of multicollinearity among the component terms of an
@@ -218,7 +224,7 @@ plot.check_collinearity <- function(x, ...) {
 
 
 .print_collinearity <- function(x) {
-  vifs <- x$VIF
+  vifs <- x$SE_factor^2
   low_vif <- which(vifs < 5)
   mid_vif <- which(vifs >= 5 & vifs < 10)
   high_vif <- which(vifs >= 10)
@@ -880,7 +886,7 @@ check_collinearity.zerocount <- function(
   }
 
   # check for interactions, VIF might be inflated...
-  if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
+  if (!is.null(insight::find_interactions(x)) && any(result^(1 / n_coef) > 10) && isTRUE(verbose)) {
     insight::format_alert(
       "Model has interaction terms. VIFs might be inflated.",
       "Try to center the variables used for the interaction, or check multicollinearity among predictors of a model without interaction terms." # nolint
@@ -914,16 +920,17 @@ check_collinearity.zerocount <- function(
   attr(out, "data") <- insight::text_remove_backticks(
     data.frame(
       Term = model_terms,
-      VIF = result,
+      VIF = result^(1 / n_coef),
       SE_factor = se_factor,
+      df = n_coef,
       stringsAsFactors = FALSE
     ),
     column = "Term"
   )
 
   attr(out, "CI") <- data.frame(
-    VIF_CI_low = 1 / (1 - conf_ints$CI_low),
-    VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+    VIF_CI_low = (1 / (1 - conf_ints$CI_low))^(1 / n_coef),
+    VIF_CI_high = (1 / (1 - conf_ints$CI_high))^(1 / n_coef),
     Tolerance_CI_low = 1 - conf_ints$CI_high,
     Tolerance_CI_high = 1 - conf_ints$CI_low,
     stringsAsFactors = FALSE
