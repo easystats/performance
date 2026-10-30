@@ -1,6 +1,159 @@
 # performance (devel)
 
+## Changes
+
+* New function `test_clusters()` uses the `matchednull` package to compare a
+  selected cluster count with the counts obtained from matched-null data that
+  keep the observed margins and approximately the observed correlations. It
+  reports one of three outcomes (no detected excess, departure from the
+  reference model, below the reference range) and validates the return values
+  of the clustering function.
+
+* `model_performance()` for mixed models now fits the null model only once
+  when both R2 and ICC are requested, instead of once for each index. This
+  applies to non-Gaussian models, for which both indices need the null model.
+  A new `null_model` argument takes a null model that was already fitted, and
+  passes it to `r2()` and `icc()`.
+
 ## Bug fixes
+
+* Collinearity severity groups and plot data now use `GVIF^(1/df)`, including
+  transformed confidence limits, so multi-coefficient terms are not classified
+  using raw GVIFs and one-coefficient VIF cutoffs. Tables retain raw GVIFs.
+
+* Fixed issue in `fitted()` and `residuals()` for *BayesFactor* models, which
+  returned wrong values for models with continuous predictors. The predictions
+  were shifted, because continuous predictors were not centered the way
+  *BayesFactor* centers them. This also gave wrong results in
+  `check_heteroscedasticity()`, `check_normality()`,
+  `check_autocorrelation()`, `check_predictions()`, `binned_residuals()`,
+  `performance_rmse()`, `performance_mae()` and `performance_mse()`, and
+  wrong R2 from `r2_bayes()` for models with an interaction between a
+  continuous predictor and a factor, or with random slopes.
+
+* `check_heteroscedasticity()` now gives the same result whatever the units of
+  the response for mixed models (*lme4*, *glmmTMB*) and for `nlme::lme()` and
+  `nlme::gls()`. The squared residuals are now scaled by their mean, as in the
+  original Breusch-Pagan test, instead of by a residual variance derived from
+  `insight::get_deviance()`, which for these models is a likelihood-based
+  deviance. Results for `lm()` are unchanged (#997).
+
+* Fixed issue in the overdispersion plot of `check_model()`, which showed wrong
+  residuals for count models fitted with `na.action = na.exclude` to data with
+  missing values.
+
+* Fixed issue in `check_collinearity()` for models from `mgcv::gam()`,
+  `mgcv::bam()`, `survival::survreg()` and `survival::coxph()`, where VIFs were
+  computed from the coefficients of other terms, and `coxph()` models lost
+  their first term. Smooth terms are now named by their *mgcv* label.
+
+* `check_model()` now applies its defaults for `type` and `detrend` to more
+  objects. These are *rstanarm* and *brms* models that can be converted to a
+  frequentist model, and `model_fit` objects from package *parsnip*. They are
+  also objects from `simulate_residuals()` or package *DHARMa*. Models with a
+  binary, count, ordinal, categorical, or multinomial response thus get the
+  `"discrete_interval"` posterior predictive check. Q-Q plots of simulated
+  residuals are no longer detrended by default. Before, these objects always got
+  `type = "density"` and `detrend = TRUE` by default. These objects also ignored
+  `size_title`, which is now passed on.
+
+* `check_collinearity()` now computes the adjusted VIF (`SE_factor`) of each
+  term from its number of coefficients, as `car::vif()` does. Before,
+  polynomial and spline terms and interaction terms got the square root of the
+  VIF, as did factors converted inside the formula when the model also had a
+  polynomial or spline term. The first factor in a model without intercept used
+  one coefficient less than it has.
+
+* `compare_performance()` no longer returns wrong LOOIC weights for models fit
+  to different numbers of observations. Before, it recycled the pointwise LOO
+  values of the smaller model to the length of the larger one. Now all LOOIC
+  weights are `NA`, with a warning.
+
+* `check_collinearity()` now uses only the location slopes of `ordinal::clm()`
+  models with scale effects. Before, the VIF of a location slope also used the
+  scale effect with the same name. For `clm()` models with scale or nominal
+  effects, a message names the effects that the VIFs leave out.
+
+* `check_collinearity()` now works for `VGAM::vglm()` models with the
+  `sratio()`, `cratio()`, `acat()`, and `poissonff()` families. Before, it
+  failed with "'list' object cannot be coerced to type 'integer'" or gave VIFs
+  for the wrong terms.
+
+* `check_collinearity()` now works for multinomial models from *nnet*,
+  *brglm2*, and *mclogit* with backticked variable names, such as
+  `` `my x` ``. Before, it returned `NULL` with "Could not extract model
+  terms".
+
+* `check_collinearity()` now returns correct VIFs for the zero-inflation
+  component of *glmmTMB* models whose zero-inflation formula differs from the
+  conditional formula. Before, the zero-inflation terms used the term blocks of
+  the conditional formula, so rows were missing or had the VIF of another term.
+  For *glmmTMB* and *pscl* models, the zero-inflation component now keeps or
+  drops its intercept by its own formula, not by the conditional formula. If
+  the zero-inflation component gets no VIFs with `component = "all"` and
+  `verbose = TRUE`, a message now says so.
+
+* If `check_collinearity()` has a message to give for a *pscl* model, for
+  example for a count formula with one term, it no longer fails with "promise
+  already under evaluation".
+
+# performance 0.19.0
+
+## Changes
+
+* `check_model()` gets a `show_smooth` argument. With `show_smooth = FALSE`,
+  the Linearity and Homogeneity of Variance panels draw neither the LOESS
+  smoother nor the cell means, and the Influential Observations panel draws no
+  LOESS smoother. This needs *see* newer than 0.14.2. Older versions ignore the
+  setting.
+
+* `check_model()` and `check_predictions()` now work for multivariate models
+  from package *brms*. Use the `response` argument to name the response to
+  check. Without `response`, both functions give an error that lists the names
+  of the responses (#908).
+
+* `check_model()` now shows the plot of influential observations for models
+  from package *glmmTMB* with a gaussian, poisson, binomial, Gamma, or `nbinom2`
+  family, and without zero-inflation or a dispersion formula. The plot uses hat
+  values and a one-step approximation of Cook's distance, so the model is not
+  refit. For other *glmmTMB* models, the plot is skipped, and with
+  `verbose = TRUE` a message names the reason. For the same models,
+  `plot(check_outliers())` shows this plot with the Cook's distances from the
+  refits (#95).
+
+* `check_outliers()` now computes the default threshold for Cook's distance as
+  `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the number of
+  fixed effects of the conditional model, and `n` is the number of
+  observations in the fit. Before, `p` was the number of numeric variables in
+  the data. If `n - p` is less than 1, `method = "cook"` gives an error.
+
+* `check_outliers()` gets a `group` argument for models from packages
+  *glmmTMB* and *lme4*. It gives Cook's distance for each level of a grouping
+  variable. The model is refit without each level in turn. With `G` the
+  number of levels, levels above `4 / G` are flagged (#95).
+
+* `check_outliers()` now supports models from package *glmmTMB*. Cook's
+  distance is computed by refitting the model without each observation, and
+  all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
+  well (#95).
+
+* `model_performance()` now supports models fitted to multiple imputed data
+  sets with package *lavaan.mi*. The fit indices are pooled across imputations
+  by `lavaan::fitMeasures()`, and pooling arguments such as `pool.method` can
+  be passed through `...` (#888).
+
+* `check_overdispersion()` now warns for models with a `quasipoisson` or
+  `quasibinomial` family. These models already estimate a dispersion
+  parameter, so their standard errors account for overdispersion. When over- or
+  underdispersion is detected, the printed conclusion also says so (#734).
+
+## Bug fixes
+
+* `check_collinearity()` now gives the correct adjusted VIF (`SE_factor`) for
+  factor terms in models with a factor response, such as logistic and ordinal
+  models, and in mixed models with grouping factors. Before, these models got
+  the square root of the VIF for every term, also for factors with more than
+  two levels.
 
 * `check_collinearity()` now gives the correct VIFs for ordinal models from
   `MASS::polr()`, `survey::svyolr()`, `ordinal::clm2()`, `ordinal::clmm2()`, and
@@ -58,13 +211,6 @@
 
 ## Changes
 
-* New function `test_clusters()` uses the `matchednull` package to compare a
-  selected cluster count with the counts obtained from matched-null data that
-  keep the observed margins and approximately the observed correlations. It
-  reports one of three outcomes (no detected excess, departure from the
-  reference model, below the reference range) and validates the return values
-  of the clustering function.
-
 * `check_model()` gets a `show_smooth` argument. With `show_smooth = FALSE`,
   the Linearity and Homogeneity of Variance panels draw neither the LOESS
   smoother nor the cell means, and the Influential Observations panel draws no
@@ -84,34 +230,45 @@
   `verbose = TRUE` a message names the reason. For the same models,
   `plot(check_outliers())` shows this plot with the Cook's distances from the
   refits (#95).
+* `check_collinearity()` uses a new method for the confidence intervals of
+  VIF and tolerance. The method inverts the noncentral F distribution of the
+  auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed
+  predictors (Kelley 2007). The old interval had an infinite upper limit for
+  VIFs close to 1, and no upper limit for a VIF of exactly 1 (#597).
 
-* `check_outliers()` now computes the default threshold for Cook's distance as
-  `qf(0.5, p, n - p)`, as the documentation states. Here `p` is the number of
-  fixed effects of the conditional model, and `n` is the number of
-  observations in the fit. Before, `p` was the number of numeric variables in
-  the data. If `n - p` is less than 1, `method = "cook"` gives an error.
+* `check_overdispersion()` now uses the residual degrees of freedom of the
+  model (`df.residual()`) for `glm` and *fixest* models, but not for `svyglm()`
+  models (package *survey*). Before, it subtracted the number of coefficients
+  from the number of observations. That was wrong for models with aliased
+  coefficients and for *fixest* models with fixed effects. Now, the dispersion
+  ratio of `quasipoisson` and `quasibinomial` `glm` models with aliased
+  coefficients matches `summary(model)$dispersion` up to the fitting tolerance.
+  It already did so for other `stats::glm()` models. Other classes that inherit
+  from `glm` now also use their own `df.residual()`. For example, `gam()`
+  models (package *mgcv*) use the effective degrees of freedom.
 
-* `check_outliers()` gets a `group` argument for models from packages
-  *glmmTMB* and *lme4*. It gives Cook's distance for each level of a grouping
-  variable. The model is refit without each level in turn. With `G` the
-  number of levels, levels above `4 / G` are flagged (#95).
+* `check_overdispersion()` now gives correct results for models from package
+  *glmx* with a negative binomial family, or with a binomial family and more
+  than one trial. *glmx* has no method for Pearson residuals, so its stored
+  deviance contributions were used before. Bernoulli models and other *glmx*
+  families give an error.
 
-* `check_outliers()` now supports models from package *glmmTMB*. Cook's
-  distance is computed by refitting the model without each observation, and
-  all data-based methods (like `"zscore_robust"` or `"mahalanobis"`) work as
-  well (#95).
+* If a model has no Pearson residuals, `check_overdispersion()` now gives an
+  error. Before, it used the formula for Poisson models, which is wrong for
+  other families.
 
-* `model_performance()` now supports models fitted to multiple imputed data
-  sets with package *lavaan.mi*. The fit indices are pooled across imputations
-  by `lavaan::fitMeasures()`, and pooling arguments such as `pool.method` can
-  be passed through `...` (#888).
+* The overdispersion plot of `check_model()` now uses the estimated dispersion
+  for `quasipoisson` `glm` models. Before, it showed the variance of a Poisson
+  model.
 
-* `check_overdispersion()` now warns for models with a `quasipoisson` or
-  `quasibinomial` family. These models already estimate a dispersion
-  parameter, so their standard errors account for overdispersion. When over- or
-  underdispersion is detected, the printed conclusion also says so (#734).
+* Fixed issue in `check_predictions()` for *brms* models with `dec()` response
+  (Wiener and RT-choice families); the RT part of the model is now checked.
 
-## Bug fixes
+* `test_performance()` now works for models from package *lavaan*. Before, it
+  failed with an infinite recursion. It returns the Bayes factor and the
+  likelihood-ratio test from `lavaan::lavTestLRT()`, and compares the models
+  in order of their degrees of freedom. `test_vuong()` and `test_wald()` now give
+  a clear error for *lavaan* models instead of the same recursion (#427).
 
 * `check_collinearity()` now gives correct VIFs for multinomial models from
   package *brglm2* (`brmultinom()`, and `bracl()` for adjacent-category

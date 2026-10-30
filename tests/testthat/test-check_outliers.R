@@ -485,10 +485,7 @@ test_that("check_outliers numeric, z-score", {
 
 test_that("influential observations plot data uses standardized residuals for lmer models", {
   skip_if_not_installed("lme4")
-
-  # the plot draws Cook's distance contours from leverage, standardized
-  # residuals and the number of parameters, so these must reproduce the
-  # Cook's distance that check_outliers() tests (#857)
+  # see #857
   m <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = lme4::sleepstudy)
   out <- check_outliers(m)
   d <- attributes(out)$influential_obs
@@ -503,8 +500,7 @@ test_that("influential observations plot data uses standardized residuals for lm
 
 
 test_that("influential observations plot data uses the Cook's distance threshold for lm models", {
-  # the contour lines must follow the threshold that check_outliers() uses,
-  # including a user-supplied threshold (#916)
+  # see #916
   m <- lm(disp ~ mpg + hp, data = mtcars)
   for (th in list(NULL, list(cook = 2))) {
     out <- check_outliers(m, method = "cook", threshold = th)

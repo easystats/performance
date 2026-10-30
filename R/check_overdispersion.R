@@ -10,7 +10,7 @@
 #' for overdispersion tests. For mixed models, the default is `"simulated"`,
 #' which uses simulated residuals. These are based on [`simulate_residuals()`],
 #' using the **DHARMa** package. For `glm`, the default is `"simulated"` for
-#' bernoulli, binomial and negative-binomial models. Set `residual_type = "normal"`
+#' Bernoulli, binomial and negative-binomial models. Set `residual_type = "normal"`
 #' to always use regular (i.e. non-simulated) residuals to assess overdispersion.
 #' @param verbose Toggle warnings and messages.
 #'

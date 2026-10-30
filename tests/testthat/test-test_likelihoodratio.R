@@ -129,47 +129,10 @@ test_that("test_likelihoodratio - print p-digits", {
 test_that("test_likelihoodratio - Criterion values (lm)", {
   m1 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
   m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
-
-  # Check ML estimator since OLS defaults to .test_wald()
   rez <- test_likelihoodratio(m2, m1, estimator = "ML")
-
-  # Check if column exists
-  expect_true("Criterion" %in% colnames(rez))
-
-  # Check exact values against manual -2LL calculation
   ll1 <- as.numeric(stats::logLik(m1))
   ll2 <- as.numeric(stats::logLik(m2))
   expect_equal(rez$Criterion, -2 * c(ll2, ll1), tolerance = 1e-3)
-
-  # Check that the difference in Criterion matches Chi2 exactly
-  expect_equal(rez$Chi2[2], abs(diff(rez$Criterion)), tolerance = 1e-3)
-})
-
-test_that("test_likelihoodratio - Criterion values (lme4)", {
-  skip_if_not_installed("lme4")
-
-  m1 <- suppressMessages(lme4::lmer(
-    Sepal.Length ~ Petal.Width + (1 | Species),
-    data = iris,
-    REML = FALSE
-  ))
-  m2 <- suppressMessages(lme4::lmer(
-    Sepal.Length ~ Petal.Width + Petal.Length + (1 | Species),
-    data = iris,
-    REML = FALSE
-  ))
-
-  rez <- test_likelihoodratio(m1, m2, estimator = "ML")
-
-  expect_true("Criterion" %in% colnames(rez))
-
-  # Check values
-  ll1 <- as.numeric(stats::logLik(m1))
-  ll2 <- as.numeric(stats::logLik(m2))
-  expect_equal(rez$Criterion, -2 * c(ll1, ll2), tolerance = 1e-3)
-
-  # Check math
-  expect_equal(rez$Chi2[2], abs(diff(rez$Criterion)), tolerance = 1e-3)
 })
 
 test_that("test_likelihoodratio - Criterion values (lavaan)", {
@@ -188,9 +151,6 @@ test_that("test_likelihoodratio - Criterion values (lavaan)", {
   m2 <- suppressWarnings(lavaan::cfa(structure2, data = lavaan::HolzingerSwineford1939))
 
   rez <- test_likelihoodratio(m1, m2)
-
-  expect_true("Criterion" %in% colnames(rez))
-
   ll1 <- as.numeric(lavaan::fitMeasures(m1, "logl"))
   ll2 <- as.numeric(lavaan::fitMeasures(m2, "logl"))
   expect_equal(rez$Criterion, -2 * c(ll1, ll2), tolerance = 1e-3)

@@ -24,7 +24,7 @@ from \code{nbinom1} or \code{nbinom2} family.}
 for overdispersion tests. For mixed models, the default is \code{"simulated"},
 which uses simulated residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}},
 using the \strong{DHARMa} package. For \code{glm}, the default is \code{"simulated"} for
-bernoulli, binomial and negative-binomial models. Set \code{residual_type = "normal"}
+Bernoulli, binomial and negative-binomial models. Set \code{residual_type = "normal"}
 to always use regular (i.e. non-simulated) residuals to assess overdispersion.}
 
 \item{verbose}{Toggle warnings and messages.}

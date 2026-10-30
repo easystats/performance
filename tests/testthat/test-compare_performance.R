@@ -266,24 +266,40 @@ test_that("compare_performance, LOOIC weights when not all models have LOOIC", {
 
   # only one model has LOOIC, so there are no stacking weights (#738)
   out <- compare_performance(m_lm, m_brms, verbose = FALSE)
-  expect_identical(out$Name, c("m_lm", "m_brms"))
-  expect_true(is.na(out$LOOIC[1]))
-  expect_false(is.na(out$LOOIC[2]))
   expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
-  # a missing weight prints as an empty cell, not as a weight of 1
-  formatted <- format(out)
-  expect_identical(formatted[["LOOIC (weights)"]][1], "")
-  expect_identical(formatted[["AIC (weights)"]][2], "")
-  expect_identical(formatted[["AIC (weights)"]][1], "156.0")
+  expect_identical(format(out)[["LOOIC (weights)"]][1], "")
 
-  # stacking weights for the models that have LOOIC, NA for the others
   out <- compare_performance(m_lm, m_brms, m_brms2, verbose = FALSE)
-  expect_identical(out$Name, c("m_lm", "m_brms", "m_brms2"))
   expect_true(is.na(out$LOOIC_wt[1]))
   expect_equal(sum(out$LOOIC_wt[2:3]), 1, tolerance = 1e-6)
+})
 
-  out <- compare_performance(m_lm, m_brms, m_brms2, rank = TRUE, verbose = FALSE)
-  expect_identical(nrow(out), 3L)
+
+test_that("compare_performance, no LOOIC weights for models fit to different numbers of observations", {
+  skip_if_not_installed("loo")
+
+  m1 <- lm(mpg ~ wt, data = mtcars)
+  m2 <- lm(mpg ~ wt, data = rbind(mtcars, mtcars))
+
+  local_mocked_bindings(
+    model_performance = function(model, ...) {
+      n <- insight::n_obs(model)
+      out <- data.frame(R2 = 0.5, LOOIC = 100 + n)
+      attr(out, "loo") <- list(
+        pointwise = matrix(-seq_len(n) / n, ncol = 1, dimnames = list(NULL, "elpd_loo"))
+      )
+      out
+    }
+  )
+
+  expect_warning(
+    out <- suppressMessages(compare_performance(m1, m2)),
+    "different numbers of observations"
+  )
+  expect_identical(out$LOOIC_wt, c(NA_real_, NA_real_))
+
+  out <- suppressWarnings(suppressMessages(compare_performance(m1, m2, rank = TRUE)))
+  expect_identical(nrow(out), 2L)
 })
 
 

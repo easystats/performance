@@ -27,7 +27,8 @@
 #'   where `delta_ic` is the difference between the model's IC value and the
 #'   smallest IC value in the model set (Burnham and Anderson, 2002).
 #'   For LOOIC, weights are computed as "stacking weights" using
-#'   [loo::stacking_weights()].
+#'   [loo::stacking_weights()]. LOOIC weights are `NA` when the models were
+#'   fit to different numbers of observations.
 #' }
 #'
 #' \subsection{Ranking Models}{
@@ -161,9 +162,25 @@ compare_performance <- function(
     has_loo <- !vapply(attri, function(x) is.null(x$loo), logical(1))
     dfs$LOOIC_wt <- NA_real_
     if (sum(has_loo) > 1) {
-      lpd_point <- do.call(cbind, lapply(attri[has_loo], function(x) x$loo$pointwise[, "elpd_loo"]))
-      loo_names <- vapply(m[has_loo], function(x) x$Name[1], character(1))
-      dfs$LOOIC_wt[match(loo_names, dfs$Name)] <- as.numeric(loo::stacking_weights(lpd_point))
+      # stacking weights need the same observations in all models. We can only
+      # check that the counts match, else cbind() recycles the shorter columns
+      # and the weights are wrong
+      n_loo <- vapply(attri[has_loo], function(x) nrow(x$loo$pointwise), integer(1))
+      if (length(unique(n_loo)) > 1) {
+        if (isTRUE(verbose)) {
+          insight::format_warning(paste0(
+            "The models with LOOIC were fit to different numbers of observations (",
+            datawizard::text_concatenate(sort(unique(n_loo))),
+            "), so no LOOIC weights are reported."
+          ))
+        }
+      } else {
+        lpd_point <- lapply(attri[has_loo], function(x) x$loo$pointwise[, "elpd_loo"])
+        lpd_point <- do.call(cbind, lpd_point)
+        loo_names <- vapply(m[has_loo], function(x) x$Name[1], character(1))
+        loo_wt <- as.numeric(loo::stacking_weights(lpd_point))
+        dfs$LOOIC_wt[match(loo_names, dfs$Name)] <- loo_wt
+      }
     }
   }
 

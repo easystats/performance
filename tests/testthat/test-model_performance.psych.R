@@ -4,6 +4,7 @@ skip_if_not_installed("parameters")
 skip_if_not_installed("GPArotation")
 
 test_that("model_performance.psych", {
+  skip_if_not_installed("discovr")
   raq_items <- as.data.frame(discovr::raq)
   raq_items$id <- NULL
 

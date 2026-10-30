@@ -55,18 +55,18 @@ auxiliary regression of each term on the other terms (Kelley 2007).
 \details{
 \code{check_collinearity()} calculates the generalized variance inflation factor
 (Fox & Monette 1992), which also returns valid results for categorical
-variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} (Fox &
-Monette 1992), which is identical to the square root of the VIF for numeric
-predictors, or for categorical variables with two levels.
+variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<n>))} (Fox &
+Monette 1992), where \verb{<n>} is the number of coefficients of the term. It is
+the square root of the VIF for terms with one coefficient.
 
 For multinomial models from \code{nnet::multinom()}, \code{mclogit::mblogit()},
 \code{brglm2::brmultinom()} and \code{brglm2::bracl()}, and for \code{VGAM::vglm()} models
-with the multinomial or cumulative family, each term can have its own set
-of slopes for each outcome level except one.
+with the multinomial, cumulative, sratio, cratio, or acat family, each term
+can have its own set of slopes for each outcome level except one.
 These models get one VIF per term, computed from the slopes of that term
 across all outcome levels, so the VIF does not depend on the reference
-level. Parallel models, such as \code{bracl(parallel = TRUE)}, have one slope
-per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
+level. Parallel models, such as \code{bracl(parallel = TRUE)}, and \code{vglm()}
+models with the poissonff family have one slope per model matrix column. The adjusted VIF is then \verb{VIF^(1/(2*<n>))}, where
 \verb{<n>} is the number of slopes of the term across all outcome levels.
 
 The confidence interval of a VIF is an interval for the population R2 of the
@@ -126,6 +126,12 @@ conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
 \emph{Zuur et al. (2010)} suggest using lower values, e.g. a VIF of 3 or larger
 may already no longer be considered as "low".
+
+Severity groups and plots use \code{GVIF^(1/df)}, the square of the adjusted
+VIF, where \code{df} is the number of coefficients of the term. This equals
+ordinary VIF for one-coefficient terms. The 5 and 10 cutoffs are heuristics
+on this dimension-adjusted scale. The table retains the raw GVIF and its
+confidence interval.
 }
 
 \section{Multicollinearity and Interaction Terms}{
