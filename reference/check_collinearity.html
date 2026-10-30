@@ -19,7 +19,7 @@ auxiliary regression of each term on the other terms (Kelley 2007)."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.19.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -204,6 +204,11 @@ conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
 <em>Zuur et al. (2010)</em> suggest using lower values, e.g. a VIF of 3 or larger
 may already no longer be considered as "low".</p>
+<p>Severity groups and plots use <code>GVIF^(1/df)</code>, the square of the adjusted
+VIF, where <code>df</code> is the number of coefficients of the term. This equals
+ordinary VIF for one-coefficient terms. The 5 and 10 cutoffs are heuristics
+on this dimension-adjusted scale. The table retains the raw GVIF and its
+confidence interval.</p>
     </div>
     <div class="section level2">
     <h2 id="multicollinearity-and-interaction-terms">Multicollinearity and Interaction Terms<a class="anchor" aria-label="anchor" href="#multicollinearity-and-interaction-terms"></a></h2>
