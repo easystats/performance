@@ -380,7 +380,11 @@ check_model.default <- function(
   }
 
   # did Q-Q plot work with simulated residuals?
-  if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
+  if (
+    any(c("all", "qq") %in% check) &&
+      is.null(assumptions_data$QQ) &&
+      residual_type == "simulated"
+  ) {
     insight::format_alert(paste0(
       "Cannot simulate residuals for models of class `",
       class(model)[1],
