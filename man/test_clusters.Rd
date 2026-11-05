@@ -65,11 +65,9 @@ number of components. A user-supplied \code{cluster_function} receives the same
 preprocessed data matrix as the default pipeline. Its return value is
 checked on the observed data and on every twin: it must be a single finite
 number, and any other value (\code{NA}, a character string, a factor, a logical
-value, a vector of length two, \code{NULL}) is an error. The check runs here so
-that invalid values are rejected whatever matchednull version is installed:
-matchednull 0.2.1 dropped missing twin values from the exceedance
-probability without notice, and later versions stop with an error of their
-own.
+value, a vector of length two, \code{NULL}) is an error. The check runs here, on
+the raw return value, so that the error names \code{cluster_function} and what it
+returned.
 \subsection{Reference model}{
 
 Each twin is drawn from a Gaussian copula whose latent correlation matrix
@@ -148,7 +146,7 @@ test_clusters(iris[, 1:4], cluster_function = select_k, iterations = 19)
 \references{
 \itemize{
 \item Meng, M. (2026). matchednull: Matched-null tests for cluster-count claims.
-R package version 0.2.1. \url{https://CRAN.R-project.org/package=matchednull}
+R package version 0.2.2. \url{https://CRAN.R-project.org/package=matchednull}
 \item Meng, M. (2026). Types Without Taxa: A Covariance-Matched-Null Multiverse
 Test of Categorical Versus Continuous Personality Structure.
 Preregistration, Open Science Framework. \doi{10.17605/OSF.IO/2EKCG}

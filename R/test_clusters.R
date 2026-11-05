@@ -44,11 +44,9 @@
 #' preprocessed data matrix as the default pipeline. Its return value is
 #' checked on the observed data and on every twin: it must be a single finite
 #' number, and any other value (`NA`, a character string, a factor, a logical
-#' value, a vector of length two, `NULL`) is an error. The check runs here so
-#' that invalid values are rejected whatever matchednull version is installed:
-#' matchednull 0.2.1 dropped missing twin values from the exceedance
-#' probability without notice, and later versions stop with an error of their
-#' own.
+#' value, a vector of length two, `NULL`) is an error. The check runs here, on
+#' the raw return value, so that the error names `cluster_function` and what it
+#' returned.
 #'
 #' ## Reference model
 #'
@@ -121,7 +119,7 @@
 #'
 #' @references
 #' - Meng, M. (2026). matchednull: Matched-null tests for cluster-count claims.
-#'   R package version 0.2.1. <https://CRAN.R-project.org/package=matchednull>
+#'   R package version 0.2.2. <https://CRAN.R-project.org/package=matchednull>
 #'
 #' - Meng, M. (2026). Types Without Taxa: A Covariance-Matched-Null Multiverse
 #'   Test of Categorical Versus Continuous Personality Structure.
@@ -138,7 +136,7 @@ test_clusters <- function(
   standardize = TRUE,
   ...
 ) {
-  insight::check_if_installed("matchednull", minimum_version = "0.2.1")
+  insight::check_if_installed("matchednull", minimum_version = "0.2.2")
 
   if (!is.logical(standardize) || length(standardize) != 1L || is.na(standardize)) {
     insight::format_error("`standardize` must be `TRUE` or `FALSE`.")
@@ -246,9 +244,8 @@ print.test_clusters <- function(x, digits = 3, ...) {
 
 
 # matchednull calls the clustering function once on the observed data and once
-# per twin. matchednull 0.2.1 dropped missing twin values from the exceedance
-# probability without notice, so the wrapper checks the raw return value
-# itself, before any coercion, whatever version is installed.
+# per twin. The wrapper checks the raw return value itself, before any
+# coercion, so that the error speaks of `cluster_function`.
 .checked_cluster_function <- function(cluster_function) {
   function(data) {
     value <- cluster_function(data)

@@ -1,5 +1,5 @@
 test_that("test_clusters supports a custom cluster function", {
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
 
   set.seed(12)
   x <- matrix(rnorm(120), ncol = 3)
@@ -44,7 +44,7 @@ test_that("test_clusters supports a custom cluster function", {
 
 
 test_that("test_clusters reports counts above and below the reference range", {
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
 
   set.seed(5)
   x <- matrix(rnorm(120), ncol = 3)
@@ -85,7 +85,7 @@ test_that("test_clusters reports counts above and below the reference range", {
 
 
 test_that("test_clusters is reproducible from a seed", {
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
 
   set.seed(3)
   x <- matrix(rnorm(180), ncol = 3)
@@ -102,7 +102,7 @@ test_that("test_clusters is reproducible from a seed", {
 
 
 test_that("default mclust pipeline distinguishes null and positive controls", {
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
   skip_if_not_installed("mclust")
 
   set.seed(42)
@@ -136,7 +136,7 @@ test_that("default mclust pipeline works in a clean session without attaching mc
   # fails when mclust is not attached, so it has to be checked in a fresh
   # process against the installed package.
   skip_on_cran()
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
   skip_if_not_installed("mclust")
 
   # the child needs every library the parent sees, not only the first one:
@@ -203,7 +203,7 @@ test_that("default mclust pipeline works in a clean session without attaching mc
 
 
 test_that("test_clusters validates the raw return value of cluster_function", {
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
 
   set.seed(8)
   x <- matrix(rnorm(60), ncol = 2)
@@ -232,8 +232,7 @@ test_that("test_clusters validates the raw return value of cluster_function", {
   )
   expect_error(test_clusters(x, returns(NA_real_), iterations = 3), "`NA`")
 
-  # the check also runs on every twin, where matchednull would otherwise drop
-  # a missing value from the exceedance probability
+  # the check also runs on every twin
   calls <- 0
   na_on_twins <- function(data) {
     calls <<- calls + 1
@@ -261,7 +260,7 @@ test_that("test_clusters validates the raw return value of cluster_function", {
 
 
 test_that("test_clusters validates its inputs", {
-  skip_if_not_installed("matchednull", minimum_version = "0.2.1")
+  skip_if_not_installed("matchednull", minimum_version = "0.2.2")
 
   x <- matrix(rnorm(40), ncol = 2)
   expect_error(test_clusters(1:10), "matrix or data frame")
