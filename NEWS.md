@@ -10,6 +10,10 @@
 
 ## Bug fixes
 
+* `check_model()` no longer says that it cannot simulate residuals when
+  `check` does not include the Q-Q plot, for example
+  `check_model(model, check = "homogeneity")` for a binomial model.
+
 * Collinearity severity groups and plot data now use `GVIF^(1/df)`, including
   transformed confidence limits, so multi-coefficient terms are not classified
   using raw GVIFs and one-coefficient VIF cutoffs. Tables retain raw GVIFs.
