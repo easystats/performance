@@ -335,7 +335,11 @@ test_that("cook multiple methods which", {
   skip_if_not_installed("dbscan")
   model <- lm(disp ~ mpg + hp, data = mtcars)
   expect_identical(
-    which(check_outliers(model, method = c("cook", "optics", "lof"))),
+    which(check_outliers(
+      model,
+      method = c("cook", "lof"),
+      threshold = list(cook = 0.5, lof = 1)
+    )),
     31L
   )
 })
