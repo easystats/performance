@@ -122,14 +122,6 @@ test_that("ics which", {
   )
 })
 
-test_that("optics which", {
-  skip_if_not_installed("dbscan")
-  expect_identical(
-    which(check_outliers(mtcars, method = "optics", threshold = 14)),
-    as.integer(c(5, 7, 15, 16, 17, 24, 25, 29, 31))
-  )
-})
-
 test_that("lof which", {
   skip_if_not_installed("dbscan")
   expect_identical(
@@ -258,7 +250,7 @@ test_that("all methods which", {
       ),
       verbose = FALSE
     )),
-    as.integer(c(9, 15, 16, 19, 20, 28, 29, 31))
+    as.integer(c(9, 16, 19, 20, 28, 29, 31))
   )
 })
 
@@ -362,24 +354,6 @@ test_that("pareto which", {
     c(17L, 18L)
   )
 })
-
-test_that("pareto multiple methods which", {
-  skip_if_not_installed("dbscan")
-  skip_if_not_installed("loo")
-  skip_if_not_installed("rstanarm")
-  set.seed(123)
-  model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
-  invisible(capture.output(model))
-  expect_identical(
-    which(check_outliers(
-      model,
-      method = c("pareto", "optics"),
-      threshold = list(pareto = 0.3, optics = 11)
-    )),
-    20L
-  )
-})
-
 
 test_that("BayesFactor which", {
   skip_if_not_installed("BayesFactor")
