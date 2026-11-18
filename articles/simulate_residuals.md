@@ -72,7 +72,7 @@ zero-inflation.
 `#> Model is underfitting zeros (probable zero-inflation) (p < .001).`\
 \
 [`check_outliers`](https://easystats.github.io/performance/reference/check_outliers.md)`(``simulated_residuals``)`\
-`#> DHARMa:testOutliers with type = binomial may have inflated Type I error rates for integer-valued distributions. To get a more exact result, it is recommended to re-run testOutliers with type = 'bootstrap'. See ?testOutliers for details`\
+`#> DHARMa::testOutliers: type = 'binomial' may have inflated Type I error rates for integer-valued distributions. To get a more exact result, it is recommended to re-run testOutliers with type = 'bootstrap'. See ?testOutliers for details`\
 `#> # Outliers detection`\
 `#> `\
 `#>   Proportion of observed outliers: 5.12%`\
@@ -124,11 +124,11 @@ predictive checks).
 `#>   ..- attr(*, "names")= chr [1:8] "(Intercept)" "minedno" "sppPR" "sppDM" ...`\
 `#>  $ fittedResiduals        : Named num [1:644] -0.2139 -0.7867 -0.0828 -0.2951 -0.2951 ...`\
 `#>   ..- attr(*, "names")= chr [1:644] "1" "2" "3" "4" ...`\
-`#>  $ method                 : chr [1:2] "PIT" "traditional"`\
+`#>  $ method                 : chr "PIT"`\
 `#>  $ simulatedResponse      : num [1:644, 1:250] 0 1 0 4 5 0 3 4 3 1 ...`\
 `#>   ..- attr(*, "dimnames")=List of 2`\
 `#>  $ scaledResiduals        : num [1:644] 0.416 0.171 0.867 0.447 0.431 ...`\
-`#>  $ time                   : 'proc_time' Named num [1:5] 0.075 0.006 0.082 0 0`\
+`#>  $ time                   : 'proc_time' Named num [1:5] 0.058 0.006 0.064 0 0`\
 `#>   ..- attr(*, "names")= chr [1:5] "user.self" "sys.self" "elapsed" "user.child" ...`\
 `#>  $ randomState            :List of 4`\
 `#>  - attr(*, "class")= chr [1:3] "performance_simres" "see_performance_simres" "DHARMa"`
