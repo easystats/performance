@@ -6,7 +6,7 @@ test_that("zscore negative threshold", {
 })
 
 test_that("lof illegal threshold", {
-  skip_if_not_installed("dbscan")
+  skip_if_not_installed("dbscan", minimum_version = "1.3.0")
   expect_error(
     check_outliers(mtcars$mpg, method = "lof", threshold = -1),
     "The `threshold` argument"
@@ -123,7 +123,7 @@ test_that("ics which", {
 })
 
 test_that("lof which", {
-  skip_if_not_installed("dbscan")
+  skip_if_not_installed("dbscan", minimum_version = "1.3.0")
   expect_identical(
     which(check_outliers(mtcars, method = "lof", threshold = 0.005)),
     31L
@@ -212,7 +212,7 @@ test_that("multiple methods which", {
 test_that("all methods which", {
   skip_if_not_installed("bigutilsr")
   skip_if_not_installed("MASS")
-  skip_if_not_installed("dbscan")
+  skip_if_not_installed("dbscan", minimum_version = "1.3.0")
   skip_if_not_installed("ICS")
   skip_if_not_installed("ICSOutlier")
   skip_if_not_installed("loo")
@@ -259,7 +259,7 @@ test_that("all methods which", {
 test_that("multiple methods with ID", {
   skip_if_not_installed("bigutilsr")
   skip_if_not_installed("MASS")
-  skip_if_not_installed("dbscan")
+  skip_if_not_installed("dbscan", minimum_version = "1.3.0")
   skip_if_not_installed("ICS")
   skip_if_not_installed("ICSOutlier")
   skip_if_not_installed("loo")
@@ -332,7 +332,7 @@ test_that("cook which", {
 # })
 
 test_that("cook multiple methods which", {
-  skip_if_not_installed("dbscan")
+  skip_if_not_installed("dbscan", minimum_version = "1.3.0")
   model <- lm(disp ~ mpg + hp, data = mtcars)
   expect_identical(
     which(check_outliers(
@@ -346,7 +346,7 @@ test_that("cook multiple methods which", {
 
 test_that("pareto which", {
   skip_on_cran()
-  skip_if_not_installed("dbscan")
+  skip_if_not_installed("dbscan", minimum_version = "1.3.0")
   skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
   set.seed(123)
