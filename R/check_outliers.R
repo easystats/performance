@@ -2197,7 +2197,9 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 .check_outliers_group <- function(x, group, threshold = NULL, verbose = TRUE) {
   if (!is.character(group) || length(group) != 1 || is.na(group)) {
-    insight::format_error("`group` must be a single character string, the name of a variable.")
+    insight::format_error(
+      "`group` must be a single character string, the name of a variable."
+    )
   }
   # the data given to the model function, so that refits compute terms like
   # scale() or poly() on the same rows as the model, and variables that are
@@ -2527,7 +2529,12 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     tryCatch(
       suppressWarnings(suppressMessages(
         if (inherits(x, "merMod")) {
-          .update_model(x, data = model_data, start = start, subset = model_rows & !in_level)
+          .update_model(
+            x,
+            data = model_data,
+            start = start,
+            subset = model_rows & !in_level
+          )
         } else {
           level_weights <- prior_weights
           level_weights[in_level] <- 0
@@ -2546,7 +2553,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
   # a refit that leaves nothing out must give the fixed effects of the model.
   # If it does not, the data changed after the model was fitted.
-  same_data <- .cooks_distance_from_refit(refit_without(rep(FALSE, nrow(model_data))), full)
+  same_data <- .cooks_distance_from_refit(
+    refit_without(rep(FALSE, nrow(model_data))),
+    full
+  )
   if (!is.na(same_data) && same_data > 1e-6) {
     return(list(levels = levels, distance = NULL))
   }
@@ -2554,7 +2564,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   distance <- vapply(
     seq_along(levels),
     function(i) {
-      .cooks_distance_from_refit(refit_without(!is.na(level_index) & level_index == i), full)
+      .cooks_distance_from_refit(
+        refit_without(!is.na(level_index) & level_index == i),
+        full
+      )
     },
     numeric(1)
   )
@@ -2990,6 +3003,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   }
 
   insight::check_if_installed("dbscan")
+
+  ## TODO: since version 1.3.0, dbscan sets argument `eps` to Inf. This breaks
+  ##       tests, because behaviour/results changed. We need to check if we
+  ##       want to allow passing `eps` via `...`, or if we set a specific
+  ##       value in the code.
 
   # Compute
   rez <- dbscan::optics(x, minPts = threshold)

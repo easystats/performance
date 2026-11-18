@@ -366,6 +366,7 @@ test_that("check_overdispersion, print notes quasi families", {
 
 test_that("check_overdispersion, fixest_multi forwards verbose", {
   skip_if_not_installed("fixest")
+  fixest::setFixest_nthreads(1)
   m_fixest_multi <- fixest::feglm(
     c(DriversKilled, VanKilled) ~ PetrolPrice,
     data = as.data.frame(Seatbelts),

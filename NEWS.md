@@ -10,6 +10,8 @@
 
 ## Bug fixes
 
+* Fix failing tests due to latest *dbscan* update.
+
 * `check_model()` no longer says that it cannot simulate residuals when
   `check` does not include the Q-Q plot, for example
   `check_model(model, check = "homogeneity")` for a binomial model.
