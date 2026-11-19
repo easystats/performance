@@ -584,7 +584,11 @@
     })
     if (!is.null(d)) {
       d$V <- .expected_variance(
-        model, faminfo, d, trials = trials, response_scale = response_scale
+        model,
+        faminfo,
+        d,
+        trials = trials,
+        response_scale = response_scale
       )
       # Pearson-like standardized residuals: divide by sqrt of expected variance.
       # Use 1e-6 floor to avoid division by near-zero values when predicted
@@ -810,7 +814,8 @@
       p <- d$Predicted / ifelse(n > 0, n, 1)
       expected_var <- response_scale^2 * trials * stats::family(model)$variance(p)
       if (faminfo$is_zero_inflated) {
-        expected_var <- (1 - prob) * expected_var +
+        expected_var <- (1 - prob) *
+          expected_var +
           response_scale^2 * trials^2 * p^2 * prob * (1 - prob)
       }
     }

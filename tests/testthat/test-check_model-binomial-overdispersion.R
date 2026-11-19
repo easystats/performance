@@ -38,7 +38,13 @@ test_that("simulated binomial diagnostics align counts and per-row trials", {
 
   models <- list(
     glm(cbind(k, n - k) ~ x, family = binomial, data = dat, na.action = na.exclude),
-    glm(proportion ~ x, weights = n, family = binomial, data = dat, na.action = na.exclude)
+    glm(
+      proportion ~ x,
+      weights = n,
+      family = binomial,
+      data = dat,
+      na.action = na.exclude
+    )
   )
   keep <- !is.na(dat$x)
   local_mocked_bindings(
@@ -77,10 +83,12 @@ test_that("weighted matrix responses retain the scale of simulated observations"
   local_mocked_bindings(
     .use_simulated_residuals = function(...) TRUE,
     .binomial_fitted = function(model) stats::fitted(model),
-    simulate_residuals = function(...) list(
-      fittedPredictedResponse = p,
-      observedResponse = w * k
-    )
+    simulate_residuals = function(...) {
+      list(
+        fittedPredictedResponse = p,
+        observedResponse = w * k
+      )
+    }
   )
   out <- .model_diagnostic_overdispersion(m, residual_type = "simulated")
   expect_equal(out$Predicted, w * n * p, ignore_attr = TRUE)
@@ -124,10 +132,12 @@ test_that("simulated Bernoulli overdispersion stays on the binary scale", {
   local_mocked_bindings(
     .use_simulated_residuals = function(...) TRUE,
     .binomial_fitted = function(model) stats::fitted(model),
-    simulate_residuals = function(...) list(
-      fittedPredictedResponse = p,
-      observedResponse = dat$y
-    )
+    simulate_residuals = function(...) {
+      list(
+        fittedPredictedResponse = p,
+        observedResponse = dat$y
+      )
+    }
   )
   out <- .model_diagnostic_overdispersion(m, residual_type = "simulated")
   expect_equal(out$Predicted, p, ignore_attr = TRUE)
