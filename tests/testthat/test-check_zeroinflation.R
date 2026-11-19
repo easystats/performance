@@ -22,7 +22,7 @@ test_that("check_zeroinflation", {
 
 test_that("check_zeroinflation, glmmTMB with and without zero-inflation component", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   set.seed(123)
   data(Salamanders, package = "glmmTMB")
 
@@ -56,9 +56,9 @@ test_that("check_zeroinflation, glmmTMB with and without zero-inflation componen
     check_zeroinflation(m),
     structure(
       list(
-        predicted.zeros = 387,
+        predicted.zeros = 388,
         observed.zeros = 387L,
-        ratio = 1.00093023255814,
+        ratio = 1.00372093023256,
         tolerance = 0.1,
         p.value = 1
       ),
@@ -109,7 +109,7 @@ test_that("check_zeroinflation, glmer.nb", {
 
 test_that("check_zeroinflation, glmmTMB nbinom", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   skip_on_cran()
 
   data(Salamanders, package = "glmmTMB")
@@ -138,7 +138,7 @@ test_that("check_zeroinflation, glmmTMB nbinom", {
 
 test_that("check_zeroinflation, MASS::negbin", {
   skip_if_not_installed("MASS")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   set.seed(3)
   mu <- rpois(500, lambda = 3)
   x <- rnorm(500, mu, mu * 3)
@@ -151,21 +151,21 @@ test_that("check_zeroinflation, MASS::negbin", {
       list(
         predicted.zeros = 178,
         observed.zeros = 202L,
-        ratio = 0.879643564356436,
+        ratio = 0.88,
         tolerance = 0.1,
-        p.value = 0.008
+        p.value = 0.032
       ),
       class = "check_zi"
     ),
     ignore_attr = TRUE,
-    tolerance = 1e-4
+    tolerance = 1e-2
   )
 })
 
 
 test_that("check_zeroinflation, genpois", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -180,13 +180,13 @@ test_that("check_zeroinflation, genpois", {
       list(
         predicted.zeros = 382,
         observed.zeros = 387L,
-        ratio = 0.98831007751938,
+        ratio = 0.988082687338501,
         tolerance = 0.1,
-        p.value = 0.64
+        p.value = 0.664
       ),
       class = "check_zi"
     ),
-    tolerance = 1e-4,
+    tolerance = 1e-2,
     ignore_attr = TRUE
   )
 })

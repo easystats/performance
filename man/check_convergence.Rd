@@ -92,11 +92,11 @@ set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
 cbpp$x2 <- runif(nrow(cbpp))
 
-model <- lme4::glmer(
+model <- suppressWarnings(lme4::glmer(
   cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
   data = cbpp,
   family = binomial()
-)
+))
 
 check_convergence(model)
 
