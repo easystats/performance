@@ -10,6 +10,9 @@
 
 ## Bug fixes
 
+* Fixed the overdispersion plot for binomial models with grouped successes and
+  trials, including proportion responses with trial weights.
+
 * Fix failing tests due to latest *dbscan* update.
 
 * `check_model()` no longer says that it cannot simulate residuals when
