@@ -117,13 +117,11 @@ set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
 cbpp$x2 <- runif(nrow(cbpp))
 
-model <- lme4::glmer(
+model <- suppressWarnings(lme4::glmer(
   cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
   data = cbpp,
   family = binomial()
-)
-#> Warning: Model failed to converge with max|grad| = 0.00736882 (tol = 0.002, component 1)
-#>   See ?lme4::convergence and ?lme4::troubleshooting.
+))
 
 check_convergence(model)
 #> [1] FALSE
