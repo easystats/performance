@@ -19,10 +19,14 @@ test_that("binomial expected variance uses the scale of the diagnostic", {
     .expected_variance(m, info, data.frame(Predicted = p), trials = 1),
     p * (1 - p)
   )
+  expect_equal(
+    .expected_variance(m, info, data.frame(Predicted = 0), trials = 0),
+    0
+  )
 })
 
 
-test_that("simulated binomial overdispersion uses counts and per-row trials", {
+test_that("simulated binomial diagnostics align counts and per-row trials", {
   set.seed(1)
   dat <- data.frame(
     n = sample(5:40, 100, replace = TRUE),
@@ -59,6 +63,41 @@ test_that("simulated binomial overdispersion uses counts and per-row trials", {
       })
     }
   }
+})
+
+
+test_that("weighted matrix responses retain the scale of simulated observations", {
+  set.seed(3)
+  n <- sample(5:40, 100, replace = TRUE)
+  x <- rnorm(100)
+  k <- rbinom(100, n, plogis(x / 2))
+  w <- sample(2:4, 100, replace = TRUE)
+  m <- glm(cbind(k, n - k) ~ x, weights = w, family = binomial)
+  p <- unname(fitted(m))
+  local_mocked_bindings(
+    .use_simulated_residuals = function(...) TRUE,
+    .binomial_fitted = function(model) stats::fitted(model),
+    simulate_residuals = function(...) list(
+      fittedPredictedResponse = p,
+      observedResponse = w * k
+    )
+  )
+  out <- .model_diagnostic_overdispersion(m, residual_type = "simulated")
+  expect_equal(out$Predicted, w * n * p, ignore_attr = TRUE)
+  expect_equal(out$Residuals, w * (k - n * p), ignore_attr = TRUE)
+  expect_equal(out$V, w^2 * n * p * (1 - p), ignore_attr = TRUE)
+})
+
+
+test_that("zero-inflated binomial variance accounts for the mixture", {
+  m <- glm(cbind(k, 10 - k) ~ 1, family = binomial, data = data.frame(k = 0:10))
+  info <- insight::model_info(m)
+  info$is_zero_inflated <- TRUE
+  local_mocked_bindings(predict = function(...) 0.5, .package = "stats")
+  expect_equal(
+    .expected_variance(m, info, data.frame(Predicted = 2.5), trials = 10),
+    7.5
+  )
 })
 
 
