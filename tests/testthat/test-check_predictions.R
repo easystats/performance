@@ -315,7 +315,9 @@ test_that("check_predictions, multivariate brms models with `trials()` responses
   skip_if_offline()
 
   # responses are `outcome1 | trials(trials1)` and so on
-  model <- insight::download_model("brms_mv_7")
+  suppressWarnings({
+    model <- insight::download_model("brms_mv_7")
+  })
   skip_if(is.null(model))
 
   out <- check_predictions(model, response = "outcome2", iterations = 5)
