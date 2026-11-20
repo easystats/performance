@@ -56,13 +56,13 @@ To cite performance in publications use:
 \
 [`citation`](https://rdrr.io/r/utils/citation.html)`(``"performance"``)`\
 `#> To cite package 'performance' in publications use:`\
-`#> `\
+`#>`\
 `#>   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and`\
 `#>   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.`\
 `#>   https://doi.org/10.21105/joss.03139`\
-`#> `\
+`#>`\
 `#> A BibTeX entry for LaTeX users is`\
-`#> `\
+`#>`\
 `#>   @Article{,`\
 `#>     title = {{performance}: An {R} Package for Assessment, Comparison and Testing of Statistical Models},`\
 `#>     author = {Daniel Lüdecke and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner and Dominique Makowski},`\
@@ -141,7 +141,7 @@ computes the *mean* random effect variances, thus
 [`r2()`](https://easystats.github.io/performance/reference/r2.md) is
 also appropriate for mixed models with more complex random effects
 structures, like random slopes or nested random effects (Johnson 2014;
-Nakagawa, Johnson, and Schielzeth 2017).
+Nakagawa et al. 2017).
 
 \
 [`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`\
@@ -155,7 +155,7 @@ Nakagawa, Johnson, and Schielzeth 2017).
 \
 [`r2`](https://easystats.github.io/performance/reference/r2.md)`(``model``)`\
 `#> # Bayesian R2 with Compatibility Interval`\
-`#> `\
+`#>`\
 `#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])`\
 `#>      Marginal R2: 0.414 (95% CI [0.204, 0.644])`\
 \
@@ -163,7 +163,7 @@ Nakagawa, Johnson, and Schielzeth 2017).
 `model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
 [`r2`](https://easystats.github.io/performance/reference/r2.md)`(``model``)`\
 `#> # R2 for Mixed Models`\
-`#> `\
+`#>`\
 `#>   Conditional R2: 0.799`\
 `#>      Marginal R2: 0.279`
 
@@ -182,7 +182,7 @@ models.
 `model`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
 [`icc`](https://easystats.github.io/performance/reference/icc.md)`(``model``)`\
 `#> # Intraclass Correlation Coefficient`\
-`#> `\
+`#>`\
 `#>     Adjusted ICC: 0.722`\
 `#>   Unadjusted ICC: 0.521`
 
@@ -196,7 +196,7 @@ models.
 \
 [`icc`](https://easystats.github.io/performance/reference/icc.md)`(``model``)`\
 `#> # Intraclass Correlation Coefficient`\
-`#> `\
+`#>`\
 `#>     Adjusted ICC: 0.930`\
 `#>   Unadjusted ICC: 0.771`
 
@@ -217,7 +217,7 @@ not.
 `model`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(``count`` ``~`` ``spp`` ``+`` ``mined``, family ``=`` ``poisson``, data ``=`` ``Salamanders``)`\
 [`check_overdispersion`](https://easystats.github.io/performance/reference/check_overdispersion.md)`(``model``)`\
 `#> # Overdispersion test`\
-`#> `\
+`#>`\
 `#>        dispersion ratio =    2.946`\
 `#>   Pearson's Chi-Squared = 1873.710`\
 `#>                 p-value =  < 0.001`
@@ -242,7 +242,7 @@ to check if zero-inflation is present in the fitted model.
 `model`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(``count`` ``~`` ``spp`` ``+`` ``mined``, family ``=`` ``poisson``, data ``=`` ``Salamanders``)`\
 [`check_zeroinflation`](https://easystats.github.io/performance/reference/check_zeroinflation.md)`(``model``)`\
 `#> # Check for zero-inflation`\
-`#> `\
+`#>`\
 `#>    Observed zeros: 387`\
 `#>   Predicted zeros: 298`\
 `#>             Ratio: 0.77`
@@ -331,10 +331,10 @@ ICC or LOOIC.
 `m1`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(``mpg`` ``~`` ``wt`` ``+`` ``cyl``, data ``=`` ``mtcars``)`\
 [`model_performance`](https://easystats.github.io/performance/reference/model_performance.md)`(``m1``)`\
 `#> # Indices of model performance`\
-`#> `\
-`#> AIC     |    AICc |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma`\
-`#> ---------------------------------------------------------------`\
-`#> 156.010 | 157.492 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568`
+`#>`\
+`#> AIC   |  AICc |   BIC |    R2 | R2 (adj.) |  RMSE | Sigma`\
+`#> ---------------------------------------------------------`\
+`#> 156.0 | 157.5 | 161.9 | 0.830 |     0.819 | 2.444 | 2.568`
 
 #### Logistic regression
 
@@ -342,10 +342,10 @@ ICC or LOOIC.
 `m2`` ``<-`` `[`glm`](https://rdrr.io/r/stats/glm.html)`(``vs`` ``~`` ``wt`` ``+`` ``mpg``, data ``=`` ``mtcars``, family ``=`` ``"binomial"``)`\
 [`model_performance`](https://easystats.github.io/performance/reference/model_performance.md)`(``m2``)`\
 `#> # Indices of model performance`\
-`#> `\
-`#> AIC    |   AICc |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP`\
-`#> -----------------------------------------------------------------------------------------------------`\
-`#> 31.298 | 32.155 | 35.695 |     0.478 | 0.359 | 1.000 |    0.395 |   -14.903 |           0.095 | 0.743`
+`#>`\
+`#> AIC  | AICc |  BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP`\
+`#> -----------------------------------------------------------------------------------------------`\
+`#> 31.3 | 32.2 | 35.7 |     0.478 | 0.359 |     1 |    0.395 |   -14.903 |           0.095 | 0.743`
 
 #### Linear mixed model
 
@@ -354,10 +354,10 @@ ICC or LOOIC.
 `m3`` ``<-`` `[`lmer`](https://rdrr.io/pkg/lme4/man/lmer.html)`(``Reaction`` ``~`` ``Days`` ``+`` ``(``1`` ``+`` ``Days`` ``|`` ``Subject``)``, data ``=`` ``sleepstudy``)`\
 [`model_performance`](https://easystats.github.io/performance/reference/model_performance.md)`(``m3``)`\
 `#> # Indices of model performance`\
-`#> `\
-`#> AIC      |     AICc |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma`\
-`#> ----------------------------------------------------------------------------------`\
-`#> 1755.628 | 1756.114 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592`
+`#>`\
+`#> AIC    |   AICc |    BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma`\
+`#> ----------------------------------------------------------------------------`\
+`#> 1755.6 | 1756.1 | 1774.8 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592`
 
 ### Models comparison
 
@@ -374,26 +374,26 @@ models (including models of different types).
 \
 [`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``m1``, ``m2``, ``m3``, ``m4``, verbose ``=`` ``FALSE``)`\
 `#> # Comparison of Model Performance Indices`\
-`#> `\
+`#>`\
 `#> Name |   Model |  AIC (weights) | AICc (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log`\
 `#> -----------------------------------------------------------------------------------------------`\
-`#> m1   |      lm |  156.0 (<.001) |  157.5 (<.001) |  161.9 (<.001) |  2.444 |  2.568 |          `\
+`#> m1   |      lm |  156.0 (<.001) |  157.5 (<.001) |  161.9 (<.001) |  2.444 |  2.568 |`\
 `#> m2   |     glm |   31.3 (>.999) |   32.2 (>.999) |   35.7 (>.999) |  0.359 |  1.000 |   -14.903`\
-`#> m3   | lmerMod | 1764.0 (<.001) | 1764.5 (<.001) | 1783.1 (<.001) | 23.438 | 25.592 |          `\
+`#> m3   | lmerMod | 1764.0 (<.001) | 1764.5 (<.001) | 1783.1 (<.001) | 23.438 | 25.592 |`\
 `#> m4   |     glm |   56.8 (<.001) |   76.8 (<.001) |   57.7 (<.001) |  3.043 |  1.000 |    -2.598`\
-`#> `\
+`#>`\
 `#> Name | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.)`\
 `#> ---------------------------------------------------------------------------------------------------`\
-`#> m1   |                 | 0.830 |     0.819 |           |          |       |            |           `\
-`#> m2   |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |           `\
+`#> m1   |                 | 0.830 |     0.819 |           |          |       |            |`\
+`#> m2   |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |`\
 `#> m3   |                 |       |           |           |          |       |      0.799 |      0.279`\
-`#> m4   |           0.324 |       |           |           |          |       |            |           `\
-`#> `\
+`#> m4   |           0.324 |       |           |           |          |       |            |`\
+`#>`\
 `#> Name |   ICC | Nagelkerke's R2`\
 `#> ------------------------------`\
-`#> m1   |       |                `\
-`#> m2   |       |                `\
-`#> m3   | 0.722 |                `\
+`#> m1   |       |`\
+`#> m2   |       |`\
+`#> m3   | 0.722 |`\
 `#> m4   |       |           0.657`
 
 #### General index of model performance
@@ -405,7 +405,7 @@ of model performance and sort the models from the best one to the worse.
 \
 [`compare_performance`](https://easystats.github.io/performance/reference/compare_performance.md)`(``m1``, ``m2``, ``m3``, ``m4``, rank ``=`` ``TRUE``, verbose ``=`` ``FALSE``)`\
 `#> # Comparison of Model Performance Indices`\
-`#> `\
+`#>`\
 `#> Name |   Model |   RMSE |  Sigma | AIC weights | AICc weights | BIC weights | Performance-Score`\
 `#> -----------------------------------------------------------------------------------------------`\
 `#> m2   |     glm |  0.359 |  1.000 |       1.000 |        1.000 |       1.000 |           100.00%`\
@@ -442,7 +442,7 @@ are nested or not).
 [`test_performance`](https://easystats.github.io/performance/reference/test_performance.md)`(``lm1``, ``lm2``, ``lm3``, ``lm4``)`\
 `#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)`\
 `#> ------------------------------------------------------------`\
-`#> lm1  |    lm |        |        |            |       |       `\
+`#> lm1  |    lm |        |        |            |       |`\
 `#> lm2  |    lm | > 1000 |   0.69 |     < .001 | -6.25 | < .001`\
 `#> lm3  |    lm | > 1000 |   0.36 |     < .001 | -3.44 | < .001`\
 `#> lm4  |    lm | > 1000 |   0.73 |     < .001 | -7.77 | < .001`\
@@ -450,13 +450,13 @@ are nested or not).
 \
 [`test_bf`](https://easystats.github.io/performance/reference/test_performance.md)`(``lm1``, ``lm2``, ``lm3``, ``lm4``)`\
 `#> Bayes Factors for Model Comparison`\
-`#> `\
-`#>       Model                                                    BF`\
-`#> [lm2] Species + Petal.Length                             3.45e+26`\
-`#> [lm3] Species * Sepal.Width                              4.69e+07`\
-`#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.58e+29`\
-`#> `\
-`#> * Against Denominator: [lm1] Species`\
+`#>`\
+`#>     Model                                                    BF`\
+`#> [2] Species + Petal.Length                             3.45e+26`\
+`#> [3] Species * Sepal.Width                              4.69e+07`\
+`#> [4] Species * Sepal.Width + Petal.Length + Petal.Width 7.58e+29`\
+`#>`\
+`#> * Against Denominator: [1] Species`\
 `#> *   Bayes Factor Type: BIC approximation`
 
 ### Plotting Functions
@@ -484,14 +484,14 @@ Please follow contributing guidelines mentioned here:
 
 Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
 and Multilevel/Hierarchical Models*. Analytical Methods for Social
-Research. Cambridge ; New York: Cambridge University Press.
+Research. Cambridge University Press.
 
 Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
-ed. Quantitative Methodology Series. New York: Routledge.
+ed. Quantitative Methodology Series. Routledge.
 
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
-to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
-Ecology and Evolution* 5 (9): 944–46.
+to Random Slopes Models.” *Methods in Ecology and Evolution* 5 (9):
+944–46.
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation

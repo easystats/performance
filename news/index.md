@@ -1,5 +1,151 @@
 # Changelog
 
+## performance 0.20.0
+
+### Changes
+
+- [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+  for mixed models now fits the null model only once when both R2 and
+  ICC are requested, instead of once for each index. This applies to
+  non-Gaussian models, for which both indices need the null model. A new
+  `null_model` argument takes a null model that was already fitted, and
+  passes it to
+  [`r2()`](https://easystats.github.io/performance/reference/r2.md) and
+  [`icc()`](https://easystats.github.io/performance/reference/icc.md).
+
+### Bug fixes
+
+- Fixed the overdispersion plot for binomial models with grouped
+  successes and trials, including proportion responses with trial
+  weights.
+
+- Fix failing tests due to latest *dbscan* update.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  no longer says that it cannot simulate residuals when `check` does not
+  include the Q-Q plot, for example
+  `check_model(model, check = "homogeneity")` for a binomial model.
+
+- Collinearity severity groups and plot data now use `GVIF^(1/df)`,
+  including transformed confidence limits, so multi-coefficient terms
+  are not classified using raw GVIFs and one-coefficient VIF cutoffs.
+  Tables retain raw GVIFs.
+
+- Fixed issue in
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html) and
+  [`residuals()`](https://rdrr.io/r/stats/residuals.html) for
+  *BayesFactor* models, which returned wrong values for models with
+  continuous predictors. The predictions were shifted, because
+  continuous predictors were not centered the way *BayesFactor* centers
+  them. This also gave wrong results in
+  [`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md),
+  [`check_normality()`](https://easystats.github.io/performance/reference/check_normality.md),
+  [`check_autocorrelation()`](https://easystats.github.io/performance/reference/check_autocorrelation.md),
+  [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md),
+  [`binned_residuals()`](https://easystats.github.io/performance/reference/binned_residuals.md),
+  [`performance_rmse()`](https://easystats.github.io/performance/reference/performance_rmse.md),
+  [`performance_mae()`](https://easystats.github.io/performance/reference/performance_mae.md)
+  and
+  [`performance_mse()`](https://easystats.github.io/performance/reference/performance_mse.md),
+  and wrong R2 from
+  [`r2_bayes()`](https://easystats.github.io/performance/reference/r2_bayes.md)
+  for models with an interaction between a continuous predictor and a
+  factor, or with random slopes.
+
+- [`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
+  now gives the same result whatever the units of the response for mixed
+  models (*lme4*, *glmmTMB*) and for
+  [`nlme::lme()`](https://rdrr.io/pkg/nlme/man/lme.html) and
+  [`nlme::gls()`](https://rdrr.io/pkg/nlme/man/gls.html). The squared
+  residuals are now scaled by their mean, as in the original
+  Breusch-Pagan test, instead of by a residual variance derived from
+  [`insight::get_deviance()`](https://easystats.github.io/insight/reference/get_deviance.html),
+  which for these models is a likelihood-based deviance. Results for
+  [`lm()`](https://rdrr.io/r/stats/lm.html) are unchanged
+  ([\#997](https://github.com/easystats/performance/issues/997)).
+
+- Fixed issue in the overdispersion plot of
+  [`check_model()`](https://easystats.github.io/performance/reference/check_model.md),
+  which showed wrong residuals for count models fitted with
+  `na.action = na.exclude` to data with missing values.
+
+- Fixed issue in
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  for models from
+  [`mgcv::gam()`](https://rdrr.io/pkg/mgcv/man/gam.html),
+  [`mgcv::bam()`](https://rdrr.io/pkg/mgcv/man/bam.html),
+  [`survival::survreg()`](https://rdrr.io/pkg/survival/man/survreg.html)
+  and
+  [`survival::coxph()`](https://rdrr.io/pkg/survival/man/coxph.html),
+  where VIFs were computed from the coefficients of other terms, and
+  `coxph()` models lost their first term. Smooth terms are now named by
+  their *mgcv* label.
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  now applies its defaults for `type` and `detrend` to more objects.
+  These are *rstanarm* and *brms* models that can be converted to a
+  frequentist model, and `model_fit` objects from package *parsnip*.
+  They are also objects from
+  [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md)
+  or package *DHARMa*. Models with a binary, count, ordinal,
+  categorical, or multinomial response thus get the
+  `"discrete_interval"` posterior predictive check. Q-Q plots of
+  simulated residuals are no longer detrended by default. Before, these
+  objects always got `type = "density"` and `detrend = TRUE` by default.
+  These objects also ignored `size_title`, which is now passed on.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now computes the adjusted VIF (`SE_factor`) of each term from its
+  number of coefficients, as
+  [`car::vif()`](https://rdrr.io/pkg/car/man/vif.html) does. Before,
+  polynomial and spline terms and interaction terms got the square root
+  of the VIF, as did factors converted inside the formula when the model
+  also had a polynomial or spline term. The first factor in a model
+  without intercept used one coefficient less than it has.
+
+- [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
+  no longer returns wrong LOOIC weights for models fit to different
+  numbers of observations. Before, it recycled the pointwise LOO values
+  of the smaller model to the length of the larger one. Now all LOOIC
+  weights are `NA`, with a warning.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now uses only the location slopes of
+  [`ordinal::clm()`](https://rdrr.io/pkg/ordinal/man/clm.html) models
+  with scale effects. Before, the VIF of a location slope also used the
+  scale effect with the same name. For `clm()` models with scale or
+  nominal effects, a message names the effects that the VIFs leave out.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now works for [`VGAM::vglm()`](https://rdrr.io/pkg/VGAM/man/vglm.html)
+  models with the
+  [`sratio()`](https://paulbuerkner.com/brms/reference/brmsfamily.html),
+  [`cratio()`](https://paulbuerkner.com/brms/reference/brmsfamily.html),
+  [`acat()`](https://paulbuerkner.com/brms/reference/brmsfamily.html),
+  and `poissonff()` families. Before, it failed with “‘list’ object
+  cannot be coerced to type ‘integer’” or gave VIFs for the wrong terms.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now works for multinomial models from *nnet*, *brglm2*, and *mclogit*
+  with backticked variable names, such as `` `my x` ``. Before, it
+  returned `NULL` with “Could not extract model terms”.
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  now returns correct VIFs for the zero-inflation component of *glmmTMB*
+  models whose zero-inflation formula differs from the conditional
+  formula. Before, the zero-inflation terms used the term blocks of the
+  conditional formula, so rows were missing or had the VIF of another
+  term. For *glmmTMB* and *pscl* models, the zero-inflation component
+  now keeps or drops its intercept by its own formula, not by the
+  conditional formula. If the zero-inflation component gets no VIFs with
+  `component = "all"` and `verbose = TRUE`, a message now says so.
+
+- If
+  [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  has a message to give for a *pscl* model, for example for a count
+  formula with one term, it no longer fails with “promise already under
+  evaluation”.
+
 ## performance 0.19.0
 
 CRAN release: 2026-10-18
