@@ -39,6 +39,7 @@ test_that("icc-3", {
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
+  skip_on_os(c("linux", "solaris", "os"))
   m2 <- insight::download_model("stanreg_lmerMod_1")
   skip_if(is.null(m2))
   expect_equal(
