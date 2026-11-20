@@ -363,6 +363,7 @@ test_that("check_predictions, brms-wiener", {
   skip_if_not_installed("rstan")
   skip_if_not_installed("RWiener")
   skip_if_not_installed("rtdists")
+  skip_on_os(c("linux", "solaris", "mac"))
 
   m <- insight::download_model("brms_wiener_1")
   skip_if(is.null(m))
