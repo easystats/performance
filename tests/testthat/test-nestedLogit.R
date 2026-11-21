@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "linux"))
+skip_on_os("mac")
 skip_if_not_installed("nestedLogit")
 skip_if_not_installed("carData")
 
@@ -63,5 +63,5 @@ test_that("r2", {
 
 
 test_that("model_performance", {
-  expect_snapshot(model_performance(mnl))
+  expect_snapshot(model_performance(mnl), variant = snapshot_variant())
 })
