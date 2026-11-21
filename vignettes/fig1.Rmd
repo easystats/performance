@@ -1,0 +1,145 @@
+
+```{r fig1_prep}
+
+update_geom_defaults("point", aes(size = 3, color = "black", fill = "grey80", stroke = 1))
+
+theme_set(
+  theme_classic() +
+    theme(
+      axis.line = element_blank(),
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = rel(2)),
+      legend.position = "bottom",
+      plot.title.position = "plot"
+    )
+)
+
+# Data --------------------------------------------------------------------
+
+data("women", package = "datasets")
+
+# Convert units to metric
+women$height <- women$height * 2.54
+women$weight <- women$weight / 2.205
+
+# Make some more data
+set.seed(42)
+women <- rbind(
+  women,
+  # duplicate with jitter
+  apply(women, 2, jitter, factor = 5),
+  # short and overweight
+  c(155, 73),
+  # just tall
+  c(230, 103)
+)
+
+# Descriptives
+ranges <- lapply(women, range)
+M <- sapply(women[, 1:2], mean)
+V <- cov(women[, 1:2])
+s <- sqrt(diag(V))
+
+
+
+
+# Plot constants
+L <- list(
+  scale_shape_manual(NULL, labels = c("Not an Outlier", "Outlier"), values = c(20, 24)),
+  coord_cartesian(ranges[["height"]], ranges[["weight"]]),
+  labs(x = "Height [cm]", y = "Weight [kg]")
+)
+
+
+# Univariate methods ------------------------------------------------------
+
+women[["univ_outlier"]] <- check_outliers(women, method = "zscore")
+
+Z <- c(-3.290527, -2, -1, 0, 1, 2, 3.290527)
+
+uni_thresholds <- data.frame(
+  X = M["height"] + s["height"] * Z,
+  Y = M["weight"] + s["weight"] * Z,
+  Z_lab = Z |>
+    format_value(digits = "signif3",
+                 style_positive = "plus",
+                 style_negative = "minus") |>
+    paste0(" SD") |>
+    replace(4, "Mean")
+)
+
+p_uni <- ggplot(women, aes(height, weight)) +
+  geom_texthline(aes(yintercept = Y, label = Z_lab), data = uni_thresholds,
+                 hjust = 0.8, halign = "center",
+                 color = "grey60", size = 3) +
+
+  geom_point(aes(shape = univ_outlier)) +
+  L +
+  labs(title = "(A) Univariate")
+
+
+
+# Multivariate methods --------------------------------------------
+
+women[["multiv_outlier"]] <- check_outliers(women[,1:2], method = "mahalanobis")
+
+multi_thresholds <- qchisq(p = 0.001, df = 2, lower.tail = FALSE)
+Ds <- c(1, 2, sqrt(multi_thresholds))
+
+ellipses <- lapply(setNames(nm = Ds), function(.D) {
+  coords <- ellipse(
+    center = M,
+    shape = V,
+    radius = .D,
+    segments = 100,
+    draw = FALSE
+  )
+  coords <- as.data.frame(coords)
+  coords[["D"]] <- .D
+  coords
+})
+ellipses <- do.call("rbind", ellipses)
+colnames(ellipses)[1:2] <- colnames(women)[1:2]
+ellipses[["D_lab"]] <- format_value(ellipses[["D"]], digits = "signif3")
+
+
+p_multi <-
+  ggplot(women, aes(height, weight)) +
+  geom_point(aes(x = M["height"], y = M["weight"]),
+             color = "grey60", size = 4) +
+  geom_textcontour(aes(group = D_lab, label = D_lab), data = ellipses,
+                   stat = "identity", hjust = 0.17,
+                   color = "grey60", size = 3) +
+
+  geom_point(aes(shape = multiv_outlier)) +
+  L +
+  labs(title = "(B) Multivariate")
+
+
+# Model-specific methods ------------------------------------------------
+
+model <- lm(weight ~ height, data = women)
+
+women[["model_outlier"]] <- check_outliers(model, method = "cook")
+women[["y_hat"]] <- fitted(model)
+
+a <- coef(model)[1]
+b <- coef(model)[2]
+
+p_model <-
+  ggplot(women, aes(height, weight)) +
+  geom_abline(intercept = a, slope = b, color = "grey60") +
+  geom_segment(aes(xend = height, yend = y_hat),
+               color = "grey60") +
+  geom_point(aes(shape = model_outlier)) +
+  L +
+  labs(title = "(C) Model")
+
+# Combine plots ---------------------------------------------------
+
+no_y <- theme(axis.text.y = element_blank(),
+              axis.title.y = element_blank())
+
+fig1 <- p_uni + (p_multi + no_y) + (p_model + no_y) +
+  plot_layout(nrow = 1, guides = "collect")
+
+```
