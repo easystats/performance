@@ -1,6 +1,6 @@
 test_that("bootstrapped icc ci_methods", {
   skip_on_cran()
-  skip_on_os(c("mac", "linux"))
+  skip_on_os("mac")
   skip_if_not_installed("lme4")
 
   data(sleepstudy, package = "lme4")
@@ -34,15 +34,15 @@ test_that("bootstrapped icc ci_methods", {
     ignore_attr = TRUE
   )
 
-  expect_snapshot(print(out1))
-  expect_snapshot(print(out2))
-  expect_snapshot(print(out3))
+  expect_snapshot(print(out1), variant = snapshot_variant())
+  expect_snapshot(print(out2), variant = snapshot_variant())
+  expect_snapshot(print(out3), variant = snapshot_variant())
 })
 
 
 test_that("bootstrapped r2_nakagawa ci_methods", {
   skip_on_cran()
-  skip_on_os(c("mac", "linux"))
+  skip_on_os("mac")
   skip_if_not_installed("lme4")
 
   data(sleepstudy, package = "lme4")
@@ -76,7 +76,7 @@ test_that("bootstrapped r2_nakagawa ci_methods", {
     ignore_attr = TRUE
   )
 
-  expect_snapshot(print(out1))
-  expect_snapshot(print(out2))
-  expect_snapshot(print(out3))
+  expect_snapshot(print(out1), variant = snapshot_variant())
+  expect_snapshot(print(out2), variant = snapshot_variant())
+  expect_snapshot(print(out3), variant = snapshot_variant())
 })

@@ -441,14 +441,27 @@ test_that("check_outliers with DHARMa", {
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
-  expect_identical(
-    capture.output(print(out)),
-    c(
-      "# Outliers detection",
-      "",
-      "  Proportion of observed outliers: 2.94%",
-      "  Proportion of expected outliers: 0.80%, 95% CI [0.07, 15.33]",
-      ""
+  switch(
+    snapshot_variant(),
+    windows = expect_identical(
+      capture.output(print(out)),
+      c(
+        "# Outliers detection",
+        "",
+        "  Proportion of observed outliers: 2.94%",
+        "  Proportion of expected outliers: 0.80%, 95% CI [0.07, 15.33]",
+        ""
+      )
+    ),
+    expect_identical(
+      capture.output(print(out)),
+      c(
+        "# Outliers detection",
+        "",
+        "  Proportion of observed outliers: 0.00%",
+        "  Proportion of expected outliers: 0.80%, 95% CI [0.00, 10.28]",
+        ""
+      )
     )
   )
 })
