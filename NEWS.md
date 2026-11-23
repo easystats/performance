@@ -13,6 +13,9 @@
 
 * Fix parameter count k in `performance_aicc()` for Arima models.
 
+* Fixed issue where `check_overdispersion()` for models of package *lme4* could
+  fail when they were fitted using `na.action = na.exclude`.
+
 # performance 0.20.0
 
 ## Changes
