@@ -1,3 +1,11 @@
+# performance (devel)
+
+## Bug fixes
+
+* Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
+
+* Fix parameter count k in `performance_aicc()` for Arima models.
+
 # performance 0.20.0
 
 ## Changes

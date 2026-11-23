@@ -137,8 +137,7 @@ test_vuong.ListLavaan <- function(objects, ...) {
   if (nested) {
     dfs <- c(
       insight::get_df(object1, type = "residual"),
-      insight::get_df(object2),
-      type = "residual"
+      insight::get_df(object2, type = "residual")
     )
     if (order(dfs)[1] == 2) {
       temp <- object2

@@ -260,8 +260,10 @@ performance_aicc.lmerMod <- function(x, estimator = "REML", ...) {
 performance_aicc.bife <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))
   ll <- insight::get_loglikelihood(x, check_response = TRUE)
-  nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
-  k <- n - nparam
+  k <- attr(ll, "df")
+  if (is.null(k)) {
+    k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+  }
 
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
