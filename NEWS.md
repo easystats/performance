@@ -1,3 +1,9 @@
+# performance (devel)
+
+## Bug fixes
+
+* Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
+
 # performance 0.20.0
 
 ## Changes
