@@ -1,5 +1,10 @@
 # performance (devel)
 
+## Changes
+
+* The `ci` argument in `binned_residuals()` is now recognized for
+  `ci_method = "exact"`.
+
 ## Bug fixes
 
 * Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
