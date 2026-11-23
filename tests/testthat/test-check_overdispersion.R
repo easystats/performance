@@ -518,3 +518,42 @@ test_that("check_overdispersion, svyglm keeps the observation-based df", {
     as.integer(stats::nobs(m_svy) - length(stats::coef(m_svy)))
   )
 })
+
+
+test_that("check_overdispersion, merMod and negbin handle na.action = na.exclude", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("MASS")
+
+  d <- lme4::cbpp
+  d$incidence[1] <- NA
+
+  m_omit <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = d,
+    family = binomial,
+    na.action = na.omit
+  )
+  m_excl <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = d,
+    family = binomial,
+    na.action = na.exclude
+  )
+
+  res_omit <- check_overdispersion(m_omit, residual_type = "normal")
+  res_excl <- check_overdispersion(m_excl, residual_type = "normal")
+  expect_false(is.na(res_excl$chisq_statistic))
+  expect_equal(res_excl$chisq_statistic, res_omit$chisq_statistic, tolerance = 1e-6)
+  expect_equal(res_excl$dispersion_ratio, res_omit$dispersion_ratio, tolerance = 1e-6)
+  expect_equal(res_excl$p_value, res_omit$p_value, tolerance = 1e-6)
+
+  d_nb <- MASS::quine
+  d_nb$Days[1] <- NA
+  nb_omit <- MASS::glm.nb(Days ~ Sex + Age, data = d_nb, na.action = na.omit)
+  nb_excl <- MASS::glm.nb(Days ~ Sex + Age, data = d_nb, na.action = na.exclude)
+
+  nb_res_omit <- check_overdispersion(nb_omit, residual_type = "normal")
+  nb_res_excl <- check_overdispersion(nb_excl, residual_type = "normal")
+  expect_false(is.na(nb_res_excl$chisq_statistic))
+  expect_equal(nb_res_excl$chisq_statistic, nb_res_omit$chisq_statistic, tolerance = 1e-6)
+})

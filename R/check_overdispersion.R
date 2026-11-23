@@ -432,7 +432,8 @@ check_overdispersion.merMod <- function(x, residual_type = NULL, ...) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
-  Pearson.chisq <- sum(rp^2)
+  # residuals of models with `na.action = na.exclude` are padded with NA
+  Pearson.chisq <- sum(rp^2, na.rm = TRUE)
   prat <- Pearson.chisq / rdf
   pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
 
