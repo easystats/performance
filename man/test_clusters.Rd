@@ -14,7 +14,8 @@ test_clusters(
 )
 }
 \arguments{
-\item{x}{A numeric matrix or data frame with no missing or infinite values.}
+\item{x}{A numeric matrix or data frame with at least two columns, no
+constant columns, and no missing or infinite values.}
 
 \item{cluster_function}{A function that takes a numeric matrix and returns a
 single finite number, typically the selected number of clusters. By

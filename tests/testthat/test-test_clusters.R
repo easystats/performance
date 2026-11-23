@@ -266,8 +266,16 @@ test_that("test_clusters validates its inputs", {
   expect_error(test_clusters(1:10), "matrix or data frame")
   expect_error(test_clusters(data.frame(x = 1:3, y = letters[1:3])), "numeric")
   expect_error(test_clusters(cbind(x, NA_real_)), "missing or infinite")
+  expect_error(test_clusters(x[, 1, drop = FALSE]), "two columns")
   expect_error(test_clusters(cbind(x, 1)), "constant columns")
+  expect_error(
+    test_clusters(cbind(x, 1), standardize = FALSE),
+    "constant columns"
+  )
   expect_error(test_clusters(x, cluster_function = 1), "must be a function")
   expect_error(test_clusters(x, iterations = 1.5), "positive integer")
+  expect_error(test_clusters(x, iterations = Inf), "positive integer")
+  expect_error(test_clusters(x, iterations = 1e12), "positive integer")
   expect_error(test_clusters(x, n_max = 0), "positive integer")
+  expect_error(test_clusters(x, n_max = Inf), "positive integer")
 })

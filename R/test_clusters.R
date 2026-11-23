@@ -11,7 +11,8 @@
 #' question from [`check_clusterstructure()`], which evaluates clustering
 #' tendency against a spatial-uniformity null.
 #'
-#' @param x A numeric matrix or data frame with no missing or infinite values.
+#' @param x A numeric matrix or data frame with at least two columns, no
+#'   constant columns, and no missing or infinite values.
 #' @param cluster_function A function that takes a numeric matrix and returns a
 #'   single finite number, typically the selected number of clusters. By
 #'   default, `mclust::Mclust()` selects the number of mixture components by
@@ -292,11 +293,17 @@ print.test_clusters <- function(x, digits = 3, ...) {
   if (!is.numeric(x)) {
     insight::format_error("`x` must contain only numeric values.")
   }
-  if (nrow(x) < 2L || ncol(x) < 1L) {
-    insight::format_error("`x` must contain at least two rows and one column.")
+  if (nrow(x) < 2L || ncol(x) < 2L) {
+    insight::format_error("`x` must contain at least two rows and two columns.")
   }
   if (anyNA(x) || !all(is.finite(x))) {
     insight::format_error("`x` must not contain missing or infinite values.")
+  }
+  # the twins are built from the correlation matrix, which is undefined for a
+  # constant column whether or not the data are standardized
+  column_sd <- apply(x, 2L, stats::sd)
+  if (!all(is.finite(column_sd)) || any(column_sd == 0)) {
+    insight::format_error("`x` cannot contain constant columns.")
   }
   x
 }
@@ -306,13 +313,6 @@ print.test_clusters <- function(x, digits = 3, ...) {
   if (!standardize) {
     return(x)
   }
-
-  column_sd <- apply(x, 2L, stats::sd)
-  if (!all(is.finite(column_sd)) || any(column_sd == 0)) {
-    insight::format_error(
-      "`x` cannot contain constant columns when `standardize = TRUE`."
-    )
-  }
   scale(x)
 }
 
@@ -320,7 +320,8 @@ print.test_clusters <- function(x, digits = 3, ...) {
 .is_positive_integer <- function(x) {
   is.numeric(x) &&
     length(x) == 1L &&
-    !is.na(x) &&
+    is.finite(x) &&
     x >= 1L &&
+    x <= .Machine$integer.max &&
     x %% 1 == 0
 }
