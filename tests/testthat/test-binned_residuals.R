@@ -318,3 +318,20 @@ test_that("binned_residuals, binomial (non-Bernoulli) uses deviance as default",
   expect_equal(out1$xbar, out2$xbar, tolerance = 1e-5)
   expect_equal(out1$ybar, out2$ybar, tolerance = 1e-5)
 })
+
+
+test_that("binned_residuals, exact CI respects ci argument", {
+  data(mtcars)
+  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+  res_95 <- binned_residuals(model, ci = 0.95, ci_type = "exact")
+  res_50 <- binned_residuals(model, ci = 0.50, ci_type = "exact")
+
+  widths_95 <- res_95$CI_high - res_95$CI_low
+  widths_50 <- res_50$CI_high - res_50$CI_low
+
+  expect_true(all(widths_50 < widths_95))
+
+  # Bin 1 has n = 6, sum(y0) = 0; width should equal diff(binom.test(0, 6, conf.level = 0.5)$conf.int)
+  expected_width_1 <- diff(stats::binom.test(0, res_50$n[1], conf.level = 0.50)$conf.int)
+  expect_equal(widths_50[1], expected_width_1, tolerance = 1e-6)
+})
