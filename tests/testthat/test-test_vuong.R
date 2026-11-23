@@ -48,3 +48,19 @@ test_that("test_vuong - non-nested", {
   expect_equal(rez[3L, "LR"], ref$LRTstat)
   expect_equal(rez[3L, "p_LR"], ref$p_LRT$A)
 })
+
+test_that("test_vuong - nested compares residual df numerically", {
+  skip_if_not_installed("CompQuadForm")
+
+  # Residual df = 10 vs 9: lexicographic sort puts "10" < "9", numeric sort puts 9 < 10
+  d <- mtcars[1:12, ]
+  m_small <- lm(mpg ~ wt, data = d)
+  m_full <- lm(mpg ~ wt + hp, data = d)
+
+  rez_asc <- test_vuong(m_small, m_full)
+  rez_desc <- test_vuong(m_full, m_small)
+
+  expect_equal(rez_asc[2L, "LR"], rez_desc[2L, "LR"], tolerance = 1e-6)
+  expect_equal(rez_asc[2L, "p_LR"], rez_desc[2L, "p_LR"], tolerance = 1e-6)
+  expect_gt(rez_asc[2L, "LR"], 0)
+})
