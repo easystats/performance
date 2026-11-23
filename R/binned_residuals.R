@@ -196,7 +196,7 @@ binned_residuals <- function(
           sd = sdev / sqrt(n)
         ),
         exact = {
-          out <- stats::binom.test(sum(y0[items]), n)$conf.int
+          out <- stats::binom.test(sum(y0[items]), n, conf.level = ci)$conf.int
           # center CIs around point estimate
           out <- out - (min(out) - ybar) - (diff(out) / 2)
           out
