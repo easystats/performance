@@ -67,9 +67,9 @@ check_model(
   `"reqq"`, `"pp_check"`, `"binned_residuals"` or `"overdispersion"`.
   Note that not all check apply to all type of models (see 'Details').
   `"reqq"` is a QQ-plot for random effects and only available for mixed
-  models. `"ncv"` is an alias for `"linearity"`, and checks for
-  non-constant variance, i.e. for heteroscedasticity, as well as the
-  linear relationship. By default, all possible checks are performed and
+  models. `"linearity"` and `"ncv"` select the same
+  residuals-versus-fitted plot. `"homogeneity"` selects a separate
+  scale-location plot. By default, all possible checks are performed and
   plotted.
 
 - detrend:
@@ -223,16 +223,12 @@ for further details.
 
 ## Linearity Assumption
 
-The plot **Linearity** checks the assumption of linear relationship.
-However, the spread of dots also indicate possible heteroscedasticity
-(i.e. non-constant variance, hence, the alias `"ncv"` for this plot),
-thus it shows if residuals have non-linear patterns. This plot helps to
-see whether predictors may have a non-linear relationship with the
-outcome, in which case the reference line may roughly indicate that
-relationship. A straight and horizontal line indicates that the model
-specification seems to be ok. But for instance, if the line would be
-U-shaped, some of the predictors probably should better be modeled as
-quadratic term. See
+The **Linearity** plot shows residuals against fitted values. A curved
+trend in the residuals may indicate that the model misses a non-linear
+relationship. A change in the vertical spread may indicate non-constant
+variance (heteroscedasticity), which is why `"ncv"` also selects this
+plot. Use `"homogeneity"` to inspect the spread with a separate
+scale-location plot. See
 [`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
 for further details.
 
