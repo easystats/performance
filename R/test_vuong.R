@@ -67,31 +67,32 @@ test_vuong.ListLavaan <- function(objects, ...) {
 # - CompQuadForm::imhof()
 
 .test_vuong <- function(objects, nested = FALSE, reference = NULL, ...) {
+  n <- length(objects)
   out <- data.frame(
-    Omega2 = NA,
-    p_Omega2 = NA,
-    LR = NA,
-    p_LR = NA,
+    Omega2 = rep(NA_real_, n),
+    p_Omega2 = rep(NA_real_, n),
+    LR = rep(NA_real_, n),
+    p_LR = rep(NA_real_, n),
     stringsAsFactors = FALSE
   )
 
-  for (i in 2:length(objects)) {
+  for (i in seq_len(n)) {
     if (is.null(reference)) {
-      ref <- objects[[i - 1]]
+      if (i == 1L) {
+        next
+      }
+      ref <- objects[[i - 1L]]
     } else {
+      if (i == reference) {
+        next
+      }
       ref <- objects[[reference]]
     }
     rez <- .test_vuong_pairs(ref, objects[[i]], nested = nested, adj = "none")
-    out <- rbind(
-      out,
-      data.frame(
-        Omega2 = rez$Omega2,
-        p_Omega2 = rez$p_Omega2,
-        LR = rez$LRTstat,
-        p_LR = rez$p_LRT,
-        stringsAsFactors = FALSE
-      )
-    )
+    out$Omega2[i] <- rez$Omega2
+    out$p_Omega2[i] <- rez$p_Omega2
+    out$LR[i] <- rez$LRTstat
+    out$p_LR[i] <- rez$p_LRT
   }
 
   out <- cbind(.test_performance_init(objects), out)
