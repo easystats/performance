@@ -48,10 +48,10 @@ and plotted. May be one or more of \code{"all"}, \code{"vif"}, \code{"qq"}, \cod
 \code{"linearity"}, \code{"ncv"}, \code{"homogeneity"}, \code{"outliers"}, \code{"reqq"}, \code{"pp_check"},
 \code{"binned_residuals"} or \code{"overdispersion"}. Note that not all check apply
 to all type of models (see 'Details'). \code{"reqq"} is a QQ-plot for random
-effects and only available for mixed models. \code{"ncv"} is an alias for
-\code{"linearity"}, and checks for non-constant variance, i.e. for
-heteroscedasticity, as well as the linear relationship. By default, all
-possible checks are performed and plotted.}
+effects and only available for mixed models. \code{"linearity"} and \code{"ncv"}
+select the same residuals-versus-fitted plot. \code{"homogeneity"} selects a
+separate scale-location plot. By default, all possible checks are performed
+and plotted.}
 
 \item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
 \code{TRUE} for linear models or when \code{residual_type = "normal"}. Defaults to
@@ -169,16 +169,12 @@ for further details.
 
 \section{Linearity Assumption}{
 
-The plot \strong{Linearity} checks the assumption of linear relationship.
-However, the spread of dots also indicate possible heteroscedasticity (i.e.
-non-constant variance, hence, the alias \code{"ncv"} for this plot), thus it shows
-if residuals have non-linear patterns. This plot helps to see whether
-predictors may have a non-linear relationship with the outcome, in which case
-the reference line may roughly indicate that relationship. A straight and
-horizontal line indicates that the model specification seems to be ok. But
-for instance, if the line would be U-shaped, some of the predictors probably
-should better be modeled as quadratic term. See \code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}}
-for further details.
+The \strong{Linearity} plot shows residuals against fitted values. A curved
+trend in the residuals may indicate that the model misses a non-linear
+relationship. A change in the vertical spread may indicate non-constant
+variance (heteroscedasticity), which is why \code{"ncv"} also selects this plot.
+Use \code{"homogeneity"} to inspect the spread with a separate scale-location
+plot. See \code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}} for further details.
 
 \strong{Some caution is needed} when interpreting these plots. Although these
 plots are helpful to check model assumptions, they do not necessarily indicate
