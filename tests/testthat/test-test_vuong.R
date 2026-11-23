@@ -49,6 +49,31 @@ test_that("test_vuong - non-nested", {
   expect_equal(rez[3L, "p_LR"], ref$p_LRT$A)
 })
 
+test_that("test_vuong - non-nested respects reference != 1", {
+  skip_if_not_installed("CompQuadForm")
+
+  m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+  m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+  m3 <- lm(Sepal.Length ~ Species, data = iris)
+
+  rez <- test_vuong(m1, m2, m3, reference = 2)
+
+  # Reference row (row 2) should be NA
+  expect_true(all(is.na(rez[2L, c("Omega2", "p_Omega2", "LR", "p_LR")])))
+
+  # Row 1 should compare m2 (ref) vs m1, matching test_vuong(m2, m1) row 2
+  pair_21 <- test_vuong(m2, m1)
+  expect_equal(rez[1L, "Omega2"], pair_21[2L, "Omega2"], tolerance = 1e-6)
+  expect_equal(rez[1L, "LR"], pair_21[2L, "LR"], tolerance = 1e-6)
+  expect_equal(rez[1L, "p_LR"], pair_21[2L, "p_LR"], tolerance = 1e-6)
+
+  # Row 3 should compare m2 (ref) vs m3, matching test_vuong(m2, m3) row 2
+  pair_23 <- test_vuong(m2, m3)
+  expect_equal(rez[3L, "Omega2"], pair_23[2L, "Omega2"], tolerance = 1e-6)
+  expect_equal(rez[3L, "LR"], pair_23[2L, "LR"], tolerance = 1e-6)
+  expect_equal(rez[3L, "p_LR"], pair_23[2L, "p_LR"], tolerance = 1e-6)
+})
+
 test_that("test_vuong - nested compares residual df numerically", {
   skip_if_not_installed("CompQuadForm")
 
