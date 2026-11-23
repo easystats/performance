@@ -155,11 +155,17 @@ as.double.performance_roc <- function(x, ...) {
   }
 
   x <- .recode_to_zero(x)
-  x <- x[order(predictions, decreasing = TRUE)]
+  ord <- order(predictions, decreasing = TRUE)
+  x <- x[ord]
+  predictions <- predictions[ord]
+
+  tp <- cumsum(x)
+  fp <- cumsum(!x)
+  keep <- !duplicated(predictions, fromLast = TRUE)
 
   res <- data.frame(
-    Sensitivity = c(0, cumsum(x) / sum(x), 1),
-    Specificity = c(0, cumsum(!x) / sum(!x), 1)
+    Sensitivity = c(0, tp[keep] / sum(x)),
+    Specificity = c(0, fp[keep] / sum(!x))
   )
 
   class(res) <- c("performance_roc", "see_performance_roc", "data.frame")
