@@ -178,6 +178,13 @@ test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for simu
   expect_identical(attr(out, "title_size"), 20)
 })
 
+test_that("`check_model()` does not warn about simulated residuals without QQ plot", {
+  skip_if_not_installed("DHARMa")
+  data(mtcars)
+  m <- glm(am ~ wt, data = mtcars, family = binomial)
+  expect_silent(check_model(m, check = "homogeneity", residual_type = "simulated"))
+})
+
 test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for `model_fit` objects", {
   skip_if_not_installed("DHARMa")
   data(mtcars)

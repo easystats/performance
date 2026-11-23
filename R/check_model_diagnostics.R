@@ -547,9 +547,32 @@
   d <- NULL
 
   if (.use_simulated_residuals(model, residual_type, faminfo)) {
+    trials <- NULL
+    response_scale <- 1
     d <- .safe({
       simres <- simulate_residuals(model, ...)
       predicted <- .fitted_rows(simres$fittedPredictedResponse, model)
+      if (identical(faminfo$family, "binomial")) {
+        model_frame <- stats::model.frame(model)
+        response <- stats::model.response(model_frame)
+        matrix_response <- is.matrix(response) && ncol(response) == 2
+        trials <- if (matrix_response) {
+          rowSums(response)
+        } else {
+          1
+        }
+        weights <- stats::model.weights(model_frame)
+        if (!is.null(weights)) {
+          if (matrix_response) {
+            response_scale <- weights
+          } else {
+            trials <- weights
+          }
+        }
+        # DHARMa versions differ on whether fittedPredictedResponse is a
+        # proportion or a count; getFitted() consistently returns proportions.
+        predicted <- .binomial_fitted(model) * trials * response_scale
+      }
       # Use response-scale residuals (observed - predicted) so that Res2 and V
       # are on the same scale as the family variance formula.
       raw_res <- simres$observedResponse - predicted
@@ -560,7 +583,13 @@
       )
     })
     if (!is.null(d)) {
-      d$V <- .expected_variance(model, faminfo, d)
+      d$V <- .expected_variance(
+        model,
+        faminfo,
+        d,
+        trials = trials,
+        response_scale = response_scale
+      )
       # Pearson-like standardized residuals: divide by sqrt of expected variance.
       # Use 1e-6 floor to avoid division by near-zero values when predicted
       # means are very small, while keeping the value practically interpretable.
@@ -648,6 +677,11 @@
 }
 
 
+.binomial_fitted <- function(model) {
+  .fitted_rows(DHARMa::getFitted(model), model)
+}
+
+
 # helpers ----------------------------------
 
 .use_simulated_residuals <- function(model, residual_type, faminfo) {
@@ -693,7 +727,7 @@
 }
 
 
-.expected_variance <- function(model, faminfo, d) {
+.expected_variance <- function(model, faminfo, d, trials = NULL, response_scale = 1) {
   expected_var <- NULL
 
   # Helper: get per-observation dispersion (if dispersion model) or scalar sigma
@@ -770,8 +804,27 @@
 
   # fallback for all other families
   if (is.null(expected_var)) {
+    if (!is.null(trials) && identical(faminfo$family, "binomial")) {
+      # For success counts, Var(Y) = n * p * (1 - p).
+      n <- trials * response_scale
+      if (faminfo$is_zero_inflated) {
+        prob <- .get_zprob()
+        n <- n * (1 - prob)
+      }
+      p <- d$Predicted / ifelse(n > 0, n, 1)
+      expected_var <- response_scale^2 * trials * stats::family(model)$variance(p)
+      if (faminfo$is_zero_inflated) {
+        expected_var <- (1 - prob) *
+          expected_var +
+          response_scale^2 * trials^2 * p^2 * prob * (1 - prob)
+      }
+    }
     # find required arguments
-    formal_args <- .safe(formals(stats::family(model)$variance))
+    formal_args <- if (is.null(expected_var)) {
+      .safe(formals(stats::family(model)$variance))
+    } else {
+      NULL
+    }
     # error when not supported
     if (!is.null(formal_args)) {
       fun_args <- list()

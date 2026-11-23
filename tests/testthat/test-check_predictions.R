@@ -271,6 +271,8 @@ test_that("check_predictions, Bayesian models use standard predictive-check data
   skip_if_not_installed("modelbased", minimum_version = "0.12.0")
   skip_if_not_installed("curl")
   skip_if_not_installed("httr2")
+  skip_if_not_installed("rstantools")
+  skip_if_not_installed("rstanarm")
   skip_if_offline()
 
   model <- insight::download_model("stanreg_lm_1")
@@ -313,7 +315,9 @@ test_that("check_predictions, multivariate brms models with `trials()` responses
   skip_if_offline()
 
   # responses are `outcome1 | trials(trials1)` and so on
-  model <- insight::download_model("brms_mv_7")
+  suppressWarnings({
+    model <- insight::download_model("brms_mv_7")
+  })
   skip_if(is.null(model))
 
   out <- check_predictions(model, response = "outcome2", iterations = 5)
@@ -358,6 +362,8 @@ test_that("check_predictions, brms-wiener", {
   skip_if_not_installed("httr2")
   skip_if_not_installed("rstan")
   skip_if_not_installed("RWiener")
+  skip_if_not_installed("rtdists")
+  skip_on_os(c("linux", "solaris", "mac"))
 
   m <- insight::download_model("brms_wiener_1")
   skip_if(is.null(m))

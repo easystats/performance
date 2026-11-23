@@ -1,5 +1,11 @@
 # performance (devel)
 
+## Bug fixes
+
+* Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
+
+# performance 0.20.0
+
 ## Changes
 
 * New function `test_clusters()` uses the `matchednull` package to compare a
@@ -16,6 +22,15 @@
   passes it to `r2()` and `icc()`.
 
 ## Bug fixes
+
+* Fixed the overdispersion plot for binomial models with grouped successes and
+  trials, including proportion responses with trial weights.
+
+* Fix failing tests due to latest *dbscan* update.
+
+* `check_model()` no longer says that it cannot simulate residuals when
+  `check` does not include the Q-Q plot, for example
+  `check_model(model, check = "homogeneity")` for a binomial model.
 
 * Collinearity severity groups and plot data now use `GVIF^(1/df)`, including
   transformed confidence limits, so multi-coefficient terms are not classified
