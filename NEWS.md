@@ -14,6 +14,8 @@
 
 * Support `stats::binomial("cloglog")` link in `r2_mckelvey()`.
 
+* Skip fitted-value diagnostics for constant predictions in `check_model()`.
+
 ## Bug fixes
 
 * `performance_cv()` with `method = "loo"` no longer uses the hat-value
