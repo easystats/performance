@@ -105,12 +105,13 @@ plot.check_clusterstructure <- function(x, ...) {
 
 #' @keywords internal
 .clusterstructure_hopkins <- function(x, distance = "euclidean") {
-  # This is based on the hopkins() function from the clustertend package
+  # Based on Hopkins' statistic (Lawson & Jurs, 1990)
   if (is.data.frame(x)) {
     x <- as.matrix(x)
   }
 
-  n <- nrow(x) - 1
+  nr <- nrow(x)
+  n <- nr - 1L
 
   cc <- apply(x, 2, min) # minimum value per column
   d <- apply(x, 2, max)
@@ -118,27 +119,16 @@ plot.check_clusterstructure <- function(x, ...) {
   for (i in seq_len(ncol(x))) {
     p[, i] <- stats::runif(n, min = cc[i], max = d[i])
   }
-  k <- round(stats::runif(n, 1, nrow(x)))
-  qq <- as.matrix(x[k, ])
-  distp <- rep(0, nrow(x))
-  distq <- 0
-  minp <- rep(0, n)
-  minq <- rep(0, n)
-  for (i in 1:n) {
-    distp[1] <- stats::dist(rbind(p[i, ], x[1, ]), method = distance)
-    minqi <- stats::dist(rbind(qq[i, ], x[1, ]), method = distance)
-    for (j in 2:nrow(x)) {
-      distp[j] <- stats::dist(rbind(p[i, ], x[j, ]), method = distance)
-      error <- qq[i, ] - x[j, ]
-      if (sum(abs(error)) != 0) {
-        distq <- stats::dist(rbind(qq[i, ], x[j, ]), method = distance)
-        if (distq < minqi) {
-          minqi <- distq
-        }
-      }
-    }
-    minp[i] <- min(distp)
-    minq[i] <- minqi
-  }
+  k <- sample.int(nr, n)
+
+  dist_all <- as.matrix(stats::dist(rbind(p, x), method = distance))
+  dist_px <- dist_all[seq_len(n), (n + 1L):(n + nr), drop = FALSE]
+  dist_xx <- dist_all[(n + 1L):(n + nr), (n + 1L):(n + nr), drop = FALSE]
+  dist_xx[dist_xx == 0] <- Inf
+
+  minp <- apply(dist_px, 1, min)
+  minq <- apply(dist_xx[k, , drop = FALSE], 1, min)
+  minq[!is.finite(minq)] <- 0
+
   sum(minq) / (sum(minp) + sum(minq))
 }
