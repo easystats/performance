@@ -260,14 +260,6 @@
   in order of their degrees of freedom. `test_vuong()` and `test_wald()` now give
   a clear error for *lavaan* models instead of the same recursion (#427).
 
-## Changes
-
-* `check_model()` gets a `show_smooth` argument. With `show_smooth = FALSE`,
-  the Linearity and Homogeneity of Variance panels draw neither the LOESS
-  smoother nor the cell means, and the Influential Observations panel draws no
-  LOESS smoother. This needs *see* newer than 0.14.2. Older versions ignore the
-  setting.
-
 * `check_model()` and `check_predictions()` now work for multivariate models
   from package *brms*. Use the `response` argument to name the response to
   check. Without `response`, both functions give an error that lists the names
