@@ -63,3 +63,10 @@ test_that("r2_nagelkerke, multinom, correct base-model with NA", {
   out2 <- r2_mcfadden(m2)
   expect_equal(out1$R2, out2$R2, tolerance = 1e-4, ignore_attr = TRUE)
 })
+
+test_that("r2_nagelkerke.DirichletRegModel dispatches to r2_nagelkerke.clm, not r2_coxsnell.clm", {
+  expect_identical(
+    utils::getS3method("r2_nagelkerke", "DirichletRegModel"),
+    utils::getS3method("r2_nagelkerke", "clm")
+  )
+})
