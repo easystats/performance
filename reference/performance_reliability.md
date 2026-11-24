@@ -129,7 +129,7 @@ df <- read.csv(url)
 m <- lme4::lmer(RT ~ (1 | Participant), data = df)
 performance_reliability(m)
 #>         Group   Parameter Reliability
-#> 1 Participant (Intercept)    0.155448
+#> 1 Participant (Intercept)   0.9781019
 performance_dvour(m)
 #>         Group   Parameter    D_vour
 #> 1 Participant (Intercept) 0.9781019
@@ -137,7 +137,7 @@ performance_dvour(m)
 m <- glmmTMB::glmmTMB(RT ~ (1 | Participant), data = df)
 performance_reliability(m)
 #>         Group   Parameter Reliability
-#> 1 Participant (Intercept)   0.1528589
+#> 1 Participant (Intercept)   0.9776726
 performance_dvour(m)
 #>         Group   Parameter    D_vour
 #> 1 Participant (Intercept) 0.9603575
@@ -145,8 +145,8 @@ performance_dvour(m)
 m <- lme4::lmer(RT ~ (1 | Participant) + (1 | Trial), data = df)
 performance_reliability(m)
 #>         Group   Parameter Reliability
-#> 1       Trial (Intercept) 0.005897166
-#> 2 Participant (Intercept) 0.156391605
+#> 1       Trial (Intercept)   0.5294690
+#> 2 Participant (Intercept)   0.9782564
 performance_dvour(m)
 #>         Group   Parameter    D_vour
 #> 1 Participant (Intercept) 0.9777044
@@ -155,8 +155,8 @@ performance_dvour(m)
 m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
 performance_reliability(m)
 #>         Group   Parameter Reliability
-#> 1 Participant (Intercept)  0.15386342
-#> 2       Trial (Intercept)  0.00588784
+#> 1 Participant (Intercept)   0.9778423
+#> 2       Trial (Intercept)   0.5290723
 performance_dvour(m)
 #> Cannot extract confidence intervals for random variance parameters from
 #>   models with more than one grouping factor.
@@ -171,14 +171,14 @@ m <- lme4::lmer(
 )
 performance_reliability(m)
 #>         Group           Parameter Reliability
-#> 1       Trial         (Intercept) 0.005869419
-#> 3 Participant         (Intercept) 0.221945495
-#> 4 Participant Illusion_Difference 0.170468211
+#> 1       Trial         (Intercept)   0.5283132
+#> 3 Participant         (Intercept)   0.9857683
+#> 4 Participant Illusion_Difference   0.9803505
 performance_dvour(m)
 #>         Group           Parameter    D_vour
-#> 1 Participant         (Intercept) 0.9673865
-#> 2 Participant Illusion_Difference 0.7655621
-#> 3       Trial         (Intercept) 0.5648742
+#> 1 Participant         (Intercept) 0.9673864
+#> 2 Participant Illusion_Difference 0.7655605
+#> 3       Trial         (Intercept) 0.5648554
 
 m <- glmmTMB::glmmTMB(
   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
@@ -186,9 +186,9 @@ m <- glmmTMB::glmmTMB(
 )
 performance_reliability(m)
 #>         Group           Parameter Reliability
-#> 1 Participant         (Intercept) 0.218590368
-#> 2 Participant Illusion_Difference 0.166705433
-#> 3       Trial         (Intercept) 0.005854992
+#> 1 Participant         (Intercept)   0.9854873
+#> 2 Participant Illusion_Difference   0.9798235
+#> 3       Trial         (Intercept)   0.5277450
 performance_dvour(m)
 #> Cannot extract confidence intervals for random variance parameters from
 #>   models with more than one grouping factor.
