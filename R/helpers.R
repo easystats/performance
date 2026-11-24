@@ -85,21 +85,6 @@
 }
 
 
-.std <- function(x) {
-  if (!is.numeric(x)) {
-    return(x)
-  }
-  # remove missings
-  tmp <- x[!is.na(x)]
-  # standardize
-  tmp <- (tmp - mean(tmp)) / stats::sd(tmp)
-  # and fill in values in original vector
-  x[!is.na(x)] <- tmp
-
-  x
-}
-
-
 # recode numeric vector, so lowest value stats with 0
 # factors are coerced to numeric
 .recode_to_zero <- function(x) {
