@@ -33,7 +33,7 @@ help addressing this."><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,7 +139,9 @@ fluctuations.</p>
 <p>To account for <strong>trial count (\(L\))</strong>, reliability is adjusted following:</p>
 <p>$$E(r) = \frac{\gamma^2}{\gamma^2 + 1/L}$$</p>
 <p>where \(L\) is the number of <strong>observations per random effect level</strong> (note
-that Rouder (2024) recommends 2/L to adjust for contrast effects).</p>
+that Rouder (2024) recommends 2/L to adjust for contrast effects), which
+is:</p>
+<p>$$\text{E(r)} = \frac{\sigma_B^2}{\sigma_B^2 + \frac{\sigma_W^2}{L}}$$</p>
 </div>
 
 <div class="section">

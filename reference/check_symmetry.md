@@ -27,6 +27,6 @@ check_symmetry(x, ...)
 ``` r
 V <- suppressWarnings(wilcox.test(mtcars$mpg))
 check_symmetry(V)
-#> OK: Data appears symmetrical (p = 0.119).
+#> OK: Data appears symmetrical (p = 0.269).
 #> 
 ```

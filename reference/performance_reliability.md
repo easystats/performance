@@ -65,7 +65,11 @@ following:
 \$\$E(r) = \frac{\gamma^2}{\gamma^2 + 1/L}\$\$
 
 where \\(L\\) is the number of **observations per random effect level**
-(note that Rouder (2024) recommends 2/L to adjust for contrast effects).
+(note that Rouder (2024) recommends 2/L to adjust for contrast effects),
+which is:
+
+\$\$\text{E(r)} = \frac{\sigma_B^2}{\sigma_B^2 +
+\frac{\sigma_W^2}{L}}\$\$
 
 ### Variability-Over-Uncertainty Ratio (d-vour)
 
