@@ -18,6 +18,9 @@
   left-out observation. The shortcut is still used for `lm()` and Gaussian
   `glm()` with identity link, where it is exact.
 
+* Fix self-distance and sampling bugs, and performance-improvements in
+  `check_clusterstructure()`.
+
 * Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
 
 * Fixed bug in `test_vuong()` when `reference` was not `1`.
