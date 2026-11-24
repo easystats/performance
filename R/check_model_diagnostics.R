@@ -461,13 +461,13 @@
 }
 
 
-.has_constant_fitted <- function(model, fitted) {
-  if (!is.numeric(fitted) || !is.null(dim(fitted))) {
+.has_constant_fitted <- function(model, fitted_values) {
+  if (!is.numeric(fitted_values) || !is.null(dim(fitted_values))) {
     return(FALSE)
   }
 
-  fitted <- fitted[!is.na(fitted)]
-  if (!length(fitted) || any(!is.finite(fitted))) {
+  fitted_values <- fitted_values[!is.na(fitted_values)]
+  if (!length(fitted_values) || any(!is.finite(fitted_values))) {
     return(FALSE)
   }
 
@@ -480,7 +480,7 @@
     return(TRUE)
   }
 
-  insight::has_single_value(fitted)
+  insight::has_single_value(fitted_values)
 }
 
 
@@ -489,9 +489,9 @@
 .model_diagnostic_ncv <- function(model, verbose = TRUE) {
   ncv <- tryCatch(
     {
-      fitted <- stats::fitted(model)
+      fitted_values <- stats::fitted(model)
       data.frame(
-        x = as.numeric(fitted),
+        x = as.numeric(fitted_values),
         y = as.numeric(stats::residuals(model))
       )
     },
@@ -510,7 +510,7 @@
     return(NULL)
   }
 
-  if (.has_constant_fitted(model, fitted)) {
+  if (.has_constant_fitted(model, fitted_values)) {
     return(NULL)
   }
 
@@ -565,13 +565,13 @@
     return(NULL)
   }
 
-  fitted <- stats::fitted(model)
-  if (.has_constant_fitted(model, fitted)) {
+  fitted_values <- stats::fitted(model)
+  if (.has_constant_fitted(model, fitted_values)) {
     return(NULL)
   }
 
   data.frame(
-    x = fitted,
+    x = fitted_values,
     y = sqrt(abs(r))
   )
 }
