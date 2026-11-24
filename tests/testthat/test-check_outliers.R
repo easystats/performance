@@ -410,7 +410,7 @@ test_that("check_outliers on numeric data only", {
 
 
 test_that("check_outliers with DHARMa", {
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   mt1 <- mtcars[, c(1, 3, 4)]
   # create some fake outliers and attach outliers to main df
   mt2 <- rbind(
@@ -430,11 +430,11 @@ test_that("check_outliers with DHARMa", {
     out,
     structure(
       list(
-        Coefficient = 0.0294117647058824,
+        Coefficient = 0,
         Expected = 0.00796812749003984,
-        CI_low = 0.000744364234690261,
-        CI_high = 0.153267669560318,
-        p_value = 0.238146844116552
+        CI_low = 0,
+        CI_high = 0.102817924259013,
+        p_value = 1
       ),
       class = c("check_outliers_simres", "list")
     ),
