@@ -220,7 +220,7 @@ r2_nagelkerke.censReg <- r2_nagelkerke.clm
 r2_nagelkerke.truncreg <- r2_nagelkerke.clm
 
 #' @export
-r2_nagelkerke.DirichletRegModel <- r2_coxsnell.clm
+r2_nagelkerke.DirichletRegModel <- r2_nagelkerke.clm
 
 
 # Nagelkerke's R2 based on LogLik stored in model object ----------------

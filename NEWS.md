@@ -5,16 +5,37 @@
 * The `ci` argument in `binned_residuals()` is now recognized for
   `ci_method = "exact"`.
 
+* Support `stats::binomial("cloglog")` link in `r2_mckelvey()`.
+
 ## Bug fixes
+
+* `performance_cv()` with `method = "loo"` no longer uses the hat-value
+  shortcut for models where it is not exact (e.g. mixed models from *lme4*,
+  robust regression, or Gaussian models with a non-identity link). For mixed
+  models, the shortcut over-stated out-of-sample accuracy, because the hat
+  values condition on variance parameters estimated with the left-out
+  observation included. These models are now refitted for each
+  left-out observation. The shortcut is still used for `lm()` and Gaussian
+  `glm()` with identity link, where it is exact.
 
 * Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
 
 * Fixed bug in `test_vuong()` when `reference` was not `1`.
 
+* Fix `standardize = TRUE` in `item_reliability()` and `item_discrimination()`
+  when input was a data frame or matrix.
+
 * Fix parameter count k in `performance_aicc()` for Arima models.
 
 * Fixed issue where `check_overdispersion()` for models of package *lme4* could
   fail when they were fitted using `na.action = na.exclude`.
+
+* Fix Rouder & Mehrvarz reliability formula in `performance_reliability()`.
+
+* Fix two-sided p-value and asymptotic variance in `check_symmetry()`.
+
+* Fixed `performance_roc()` to collapse tied predicted probabilities into a
+  single ROC curve point, making the curve and AUC invariant to row order.
 
 # performance 0.20.0
 

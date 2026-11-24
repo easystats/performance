@@ -26,10 +26,8 @@ check_symmetry.numeric <- function(x, ...) {
   n <- length(x)
   s <- stats::sd(x)
 
-  D <- n * (m - a) / s
-
-  z <- sqrt(2 * n) * (m - a) / s
-  out <- stats::pnorm(abs(z), lower.tail = FALSE)
+  z <- sqrt(n / (pi / 2 - 1)) * (m - a) / s
+  out <- 2 * stats::pnorm(abs(z), lower.tail = FALSE)
   class(out) <- c("check_symmetry", "numeric")
   attr(out, "object_name") <- substitute(x)
   out
