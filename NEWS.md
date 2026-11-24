@@ -21,6 +21,8 @@
 
 * Fix Rouder & Mehrvarz reliability formula in `performance_reliability()`.
 
+* Fix two-sided p-value and asymptotic variance in `check_symmetry()`.
+
 # performance 0.20.0
 
 ## Changes
