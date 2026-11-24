@@ -5,6 +5,8 @@
 * The `ci` argument in `binned_residuals()` is now recognized for
   `ci_method = "exact"`.
 
+* Support `stats::binomial("cloglog")` link in `r2_mckelvey()`.
+
 ## Bug fixes
 
 * Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
