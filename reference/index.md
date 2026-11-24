@@ -187,6 +187,8 @@
 
 - [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
   : Compare performance of different models
+- [`test_clusters()`](https://easystats.github.io/performance/reference/test_clusters.md)
+  : Test a cluster count against matched-null data
 - [`test_bf()`](https://easystats.github.io/performance/reference/test_performance.md)
   [`test_likelihoodratio()`](https://easystats.github.io/performance/reference/test_performance.md)
   [`test_lrt()`](https://easystats.github.io/performance/reference/test_performance.md)
