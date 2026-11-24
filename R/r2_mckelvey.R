@@ -58,6 +58,7 @@ r2_mckelvey.default <- function(model) {
       faminfo$link_function,
       probit = 1,
       logit = pi^2 / 3,
+      cloglog = pi^2 / 6,
       clogloglink = pi^2 / 6,
       NA
     )

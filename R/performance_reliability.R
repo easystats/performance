@@ -47,7 +47,10 @@
 #' \deqn{E(r) = \frac{\gamma^2}{\gamma^2 + 1/L}}
 #'
 #' where \eqn{L} is the number of **observations per random effect level** (note
-#' that Rouder (2024) recommends 2/L to adjust for contrast effects).
+#' that Rouder (2024) recommends 2/L to adjust for contrast effects), which
+#' is:
+#'
+#' \deqn{\text{E(r)} = \frac{\sigma_B^2}{\sigma_B^2 + \frac{\sigma_W^2}{L}}}
 #'
 #' ## Variability-Over-Uncertainty Ratio (d-vour)
 #'
@@ -188,7 +191,7 @@ performance_reliability.default <- function(x, ...) {
 
       # Adjusted index:
       # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
-      rez$Reliability <- var_between / (var_between + v$var.residual + 1 / L)
+      rez$Reliability <- var_between / (var_between + v$var.residual / L)
 
       # The parameter γ is the signal-to-noise standard-deviation ratio. It is
       # often convenient for communication as standard deviations are sometimes
