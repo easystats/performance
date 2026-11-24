@@ -60,7 +60,10 @@ To account for \strong{trial count (\eqn{L})}, reliability is adjusted following
 \deqn{E(r) = \frac{\gamma^2}{\gamma^2 + 1/L}}
 
 where \eqn{L} is the number of \strong{observations per random effect level} (note
-that Rouder (2024) recommends 2/L to adjust for contrast effects).
+that Rouder (2024) recommends 2/L to adjust for contrast effects), which
+is:
+
+\deqn{\text{E(r)} = \frac{\sigma_B^2}{\sigma_B^2 + \frac{\sigma_W^2}{L}}}
 }
 
 \subsection{Variability-Over-Uncertainty Ratio (d-vour)}{

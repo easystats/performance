@@ -31,3 +31,22 @@ test_that("performance_aic lme4 default", {
   expect_equal(performance_aic(m2, estimator = "REML"), 128.0054, tolerance = 1e-2)
   expect_message(performance_aic(m2), regex = "was not fitted")
 })
+
+test_that("performance_aicc works for Arima models", {
+  m <- stats::arima(lh, order = c(1, 0, 0))
+  ll <- stats::logLik(m)
+  k <- attr(ll, "df")
+  n <- stats::nobs(m)
+  expected_aicc <- -2 * as.numeric(ll) + 2 * k * (n / (n - k - 1))
+
+  expect_equal(performance_aicc(m), expected_aicc, tolerance = 1e-6)
+  expect_gt(performance_aicc(m), stats::AIC(m))
+
+  m_diff <- stats::arima(lh, order = c(1, 1, 0))
+  ll_diff <- stats::logLik(m_diff)
+  k_diff <- attr(ll_diff, "df")
+  n_diff <- stats::nobs(m_diff)
+  expected_aicc_diff <- -2 * as.numeric(ll_diff) + 2 * k_diff * (n_diff / (n_diff - k_diff - 1))
+
+  expect_equal(performance_aicc(m_diff), expected_aicc_diff, tolerance = 1e-6)
+})

@@ -65,7 +65,7 @@ item_reliability <- function(x, standardize = FALSE, digits = 3, verbose = TRUE)
     # Check whether items should be scaled. Needed,
     # when items have different measures / scales
     if (standardize) {
-      x <- .std(x)
+      x <- datawizard::standardize(x)
     }
 
     # calculate cronbach-if-deleted

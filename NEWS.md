@@ -1,8 +1,29 @@
 # performance (devel)
 
+## Changes
+
+* The `ci` argument in `binned_residuals()` is now recognized for
+  `ci_method = "exact"`.
+
+* Support `stats::binomial("cloglog")` link in `r2_mckelvey()`.
+
 ## Bug fixes
 
 * Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
+
+* Fixed bug in `test_vuong()` when `reference` was not `1`.
+
+* Fix `standardize = TRUE` in `item_reliability()` and `item_discrimination()`
+  when input was a data frame or matrix.
+
+* Fix parameter count k in `performance_aicc()` for Arima models.
+
+* Fixed issue where `check_overdispersion()` for models of package *lme4* could
+  fail when they were fitted using `na.action = na.exclude`.
+
+* Fix Rouder & Mehrvarz reliability formula in `performance_reliability()`.
+
+* Fix two-sided p-value and asymptotic variance in `check_symmetry()`.
 
 # performance 0.20.0
 
