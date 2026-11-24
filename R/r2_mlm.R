@@ -69,9 +69,14 @@ r2_mlm <- function(model, ...) {
 
 #' @export
 r2_mlm.mlm <- function(model, verbose = TRUE, ...) {
+  mm <- insight::get_modelmatrix(model)
+  intercept_col <- which(colnames(mm) == "(Intercept)")
+  if (length(intercept_col) > 0) {
+    mm <- mm[, -intercept_col, drop = FALSE]
+  }
   rho2_vec <- 1 -
     stats::cancor(
-      insight::get_predictors(model),
+      mm,
       insight::get_response(model)
     )$cor^2
   R_xy <- 1 - Reduce(`*`, rho2_vec, 1)
