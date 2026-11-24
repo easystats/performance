@@ -1,25 +1,36 @@
 test_that("check_residuals and simulate_residuals", {
   skip_on_cran()
-  skip_if_not_installed("DHARMa", minimum_version = "0.5.0")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   set.seed(123)
   dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
   m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
   res <- simulate_residuals(m)
   expect_identical(
     capture.output(print(res)),
-    c(
-      "Simulated residuals from a model of class `glm` based on 250",
-      "  simulations. Use `check_residuals()` to check uniformity of residuals or",
-      "  `residuals()` to extract simulated residuals. It is recommended to refer",
-      "  to `?DHARMa::simulateResiudals` and `vignette(\"DHARMa\")` for more",
-      "  information about different settings in particular situations or for",
-      "  particular models."
+    switch(
+      snapshot_variant(),
+      linux = c(
+        "Simulated residuals from a model of class `glm` based on 250 simulations.",
+        "  Use `check_residuals()` to check uniformity of residuals or `residuals()`",
+        "  to extract simulated residuals. It is recommended to refer to",
+        "  `?DHARMa::simulateResiudals` and `vignette(\"DHARMa\")` for more",
+        "  information about different settings in particular situations or for",
+        "  particular models."
+      ),
+      c(
+        "Simulated residuals from a model of class `glm` based on 250",
+        "  simulations. Use `check_residuals()` to check uniformity of residuals or",
+        "  `residuals()` to extract simulated residuals. It is recommended to refer",
+        "  to `?DHARMa::simulateResiudals` and `vignette(\"DHARMa\")` for more",
+        "  information about different settings in particular situations or for",
+        "  particular models."
+      )
     )
   )
   # check raw residuals
   expect_equal(
     head(residuals(res)),
-    c(0.01815, 0.7062, 0.56076, 0.19282, 0.31423, 0.10115),
+    c(0.01412, 0.53685, 0.43647, 0.04743, 0.32595, 0.13989),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
