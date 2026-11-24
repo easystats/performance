@@ -188,7 +188,7 @@ performance_reliability.default <- function(x, ...) {
 
       # Adjusted index:
       # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
-      rez$Reliability <- var_between / (var_between + v$var.residual + 1 / L)
+      rez$Reliability <- var_between / (var_between + v$var.residual / L)
 
       # The parameter γ is the signal-to-noise standard-deviation ratio. It is
       # often convenient for communication as standard deviations are sometimes
