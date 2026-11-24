@@ -67,7 +67,7 @@ performance_roc <- function(x, ..., predictions, new_data) {
 
   object_names <- c(
     insight::safe_deparse_symbol(substitute(x)),
-    sapply(match.call(expand.dots = FALSE)$`...`, insight::safe_deparse)
+    sapply(match.call(expand.dots = FALSE)[["..."]], insight::safe_deparse)
   )
 
   if (insight::is_model(x)) {
@@ -159,13 +159,13 @@ as.double.performance_roc <- function(x, ...) {
   x <- x[ord]
   predictions <- predictions[ord]
 
-  tp <- cumsum(x)
-  fp <- cumsum(!x)
+  true_positives <- cumsum(x)
+  false_positives <- cumsum(!x)
   keep <- !duplicated(predictions, fromLast = TRUE)
 
   res <- data.frame(
-    Sensitivity = c(0, tp[keep] / sum(x)),
-    Specificity = c(0, fp[keep] / sum(!x))
+    Sensitivity = c(0, true_positives[keep] / sum(x)),
+    Specificity = c(0, false_positives[keep] / sum(!x))
   )
 
   class(res) <- c("performance_roc", "see_performance_roc", "data.frame")

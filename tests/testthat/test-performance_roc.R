@@ -19,7 +19,7 @@ test_that("performance_roc-mixed-1", {
 
 test_that("performance_roc-2", {
   set.seed(123)
-  d <- iris[sample(1:nrow(iris), size = 50), ]
+  d <- iris[sample.int(nrow(iris), size = 50), ]
   d$y <- as.factor(rbinom(nrow(d), size = 1, 0.3))
   dat <<- d
 
@@ -48,7 +48,7 @@ test_that("performance_roc-2", {
 test_that("performance_roc, as.numeric", {
   data(iris)
   set.seed(123)
-  iris$y <- rbinom(nrow(iris), size = 1, .3)
+  iris$y <- rbinom(nrow(iris), size = 1, 0.3)
   folds <- sample(nrow(iris), size = nrow(iris) / 8, replace = FALSE)
   test_data <- iris[folds, ]
   train_data <- iris[-folds, ]
@@ -80,18 +80,21 @@ test_that("performance_roc collapses tied predictions (row-order invariant)", {
   expect_equal(auc_fwd, auc_rev, tolerance = 1e-8)
   expect_equal(auc_fwd, 2 / 9, tolerance = 1e-8)
 
-  skip_if_not_installed("pROC")
-  expect_equal(auc_fwd, as.numeric(pROC::auc(y, p, quiet = TRUE)), tolerance = 1e-8)
-
   # Discrete predictor model with many tied predictions
   d1 <- mtcars
   d2 <- mtcars[rev(seq_len(nrow(mtcars))), ]
   m1 <- glm(vs ~ cyl, data = d1, family = "binomial")
   m2 <- glm(vs ~ cyl, data = d2, family = "binomial")
-  expect_equal(as.numeric(performance_roc(m1)), as.numeric(performance_roc(m2)), tolerance = 1e-8)
   expect_equal(
     as.numeric(performance_roc(m1)),
-    as.numeric(pROC::auc(d1$vs, stats::predict(m1, type = "response"), quiet = TRUE)),
+    as.numeric(performance_roc(m2)),
     tolerance = 1e-8
   )
+
+  preds <- stats::predict(m1, type = "response")
+  n_pos <- sum(d1$vs == 1)
+  n_neg <- sum(d1$vs == 0)
+  expected_auc <- (sum(rank(preds)[d1$vs == 1]) - n_pos * (n_pos + 1) / 2) /
+    (n_pos * n_neg)
+  expect_equal(as.numeric(performance_roc(m1)), expected_auc, tolerance = 1e-8)
 })

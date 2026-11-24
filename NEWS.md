@@ -25,6 +25,9 @@
 
 * Fix two-sided p-value and asymptotic variance in `check_symmetry()`.
 
+* Fixed `performance_roc()` to collapse tied predicted probabilities into a
+  single ROC curve point, making the curve and AUC invariant to row order.
+
 # performance 0.20.0
 
 ## Changes
