@@ -19,6 +19,8 @@
 * Fixed issue where `check_overdispersion()` for models of package *lme4* could
   fail when they were fitted using `na.action = na.exclude`.
 
+* Fix Rouder & Mehrvarz reliability formula in `performance_reliability()`.
+
 # performance 0.20.0
 
 ## Changes
