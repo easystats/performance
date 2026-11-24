@@ -260,10 +260,22 @@
   in order of their degrees of freedom. `test_vuong()` and `test_wald()` now give
   a clear error for *lavaan* models instead of the same recursion (#427).
 
-* `check_model()` and `check_predictions()` now work for multivariate models
-  from package *brms*. Use the `response` argument to name the response to
-  check. Without `response`, both functions give an error that lists the names
-  of the responses (#908).
+* `check_collinearity()` uses a new method for the confidence intervals of
+  VIF and tolerance. The method inverts the noncentral F distribution of the
+  auxiliary regression of each term, as `MBESS::ci.R2()` does for fixed
+  predictors (Kelley 2007). The old interval had an infinite upper limit for
+  VIFs close to 1, and no upper limit for a VIF of exactly 1 (#597).
+
+* `check_overdispersion()` now uses the residual degrees of freedom of the
+  model (`df.residual()`) for `glm` and *fixest* models, but not for `svyglm()`
+  models (package *survey*). Before, it subtracted the number of coefficients
+  from the number of observations. That was wrong for models with aliased
+  coefficients and for *fixest* models with fixed effects. Now, the dispersion
+  ratio of `quasipoisson` and `quasibinomial` `glm` models with aliased
+  coefficients matches `summary(model)$dispersion` up to the fitting tolerance.
+  It already did so for other `stats::glm()` models. Other classes that inherit
+  from `glm` now also use their own `df.residual()`. For example, `gam()`
+  models (package *mgcv*) use the effective degrees of freedom.
 
 * `check_overdispersion()` now gives correct results for models from package
   *glmx* with a negative binomial family, or with a binomial family and more
