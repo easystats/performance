@@ -461,14 +461,40 @@
 }
 
 
+.has_constant_fitted <- function(model, fitted) {
+  if (!is.numeric(fitted) || !is.null(dim(fitted))) {
+    return(FALSE)
+  }
+
+  fitted <- fitted[!is.na(fitted)]
+  if (!length(fitted) || any(!is.finite(fitted))) {
+    return(FALSE)
+  }
+
+  # The QR fit can introduce rounding differences in an intercept-only lm.
+  if (
+    identical(class(model), "lm") &&
+      identical(names(model$coefficients), "(Intercept)") &&
+      (is.null(model$offset) || insight::has_single_value(model$offset))
+  ) {
+    return(TRUE)
+  }
+
+  insight::has_single_value(fitted)
+}
+
+
 # prepare data for non-constant variance plot ----------------------------------
 
 .model_diagnostic_ncv <- function(model, verbose = TRUE) {
   ncv <- tryCatch(
-    data.frame(
-      x = as.numeric(stats::fitted(model)),
-      y = as.numeric(stats::residuals(model))
-    ),
+    {
+      fitted <- stats::fitted(model)
+      data.frame(
+        x = as.numeric(fitted),
+        y = as.numeric(stats::residuals(model))
+      )
+    },
     error = function(e) {
       NULL
     }
@@ -481,6 +507,10 @@
         class(model)[1]
       ))
     }
+    return(NULL)
+  }
+
+  if (.has_constant_fitted(model, fitted)) {
     return(NULL)
   }
 
@@ -535,8 +565,13 @@
     return(NULL)
   }
 
+  fitted <- stats::fitted(model)
+  if (.has_constant_fitted(model, fitted)) {
+    return(NULL)
+  }
+
   data.frame(
-    x = stats::fitted(model),
+    x = fitted,
     y = sqrt(abs(r))
   )
 }
