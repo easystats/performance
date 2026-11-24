@@ -110,7 +110,7 @@ test_that("zero-inflated binomial variance accounts for the mixture", {
 
 
 test_that("grouped binomial diagnostics work with DHARMa", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   set.seed(1)
   n <- sample(5:40, 100, replace = TRUE)
   x <- rnorm(100)
