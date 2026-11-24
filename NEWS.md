@@ -9,6 +9,18 @@
 
 ## Bug fixes
 
+* `performance_cv()` with `method = "loo"` no longer uses the hat-value
+  shortcut for models where it is not exact (e.g. mixed models from *lme4*,
+  robust regression, or Gaussian models with a non-identity link). For mixed
+  models, the shortcut over-stated out-of-sample accuracy, because the hat
+  values condition on variance parameters estimated with the left-out
+  observation included. These models are now refitted for each
+  left-out observation. The shortcut is still used for `lm()` and Gaussian
+  `glm()` with identity link, where it is exact.
+
+* Fix self-distance and sampling bugs, and performance-improvements in
+  `check_clusterstructure()`.
+
 * Fixed bug in `test_vuong()`, which returned wrong residual degrees of freedom.
 
 * Fixed bug in `test_vuong()` when `reference` was not `1`.
@@ -24,6 +36,9 @@
 * Fix Rouder & Mehrvarz reliability formula in `performance_reliability()`.
 
 * Fix two-sided p-value and asymptotic variance in `check_symmetry()`.
+
+* Fixed `performance_roc()` to collapse tied predicted probabilities into a
+  single ROC curve point, making the curve and AUC invariant to row order.
 
 # performance 0.20.0
 

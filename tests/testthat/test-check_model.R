@@ -169,7 +169,7 @@ test_that("`check_model()` stores `show_smooth`", {
 })
 
 test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for simulated residuals", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
   out <- check_model(simulate_residuals(m), size_title = 20)
@@ -179,14 +179,14 @@ test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for simu
 })
 
 test_that("`check_model()` does not warn about simulated residuals without QQ plot", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
   expect_silent(check_model(m, check = "homogeneity", residual_type = "simulated"))
 })
 
 test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for `model_fit` objects", {
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   data(mtcars)
   m <- glm(am ~ wt, data = mtcars, family = binomial)
   l <- lm(mpg ~ wt, data = mtcars)
@@ -201,7 +201,7 @@ test_that("`check_model()` forwards `type`, `detrend`, and `size_title` for `mod
 
 test_that("`check_model()` forwards `type`, `size_title`, and `detrend` for Stan models", {
   skip_if_not_installed("rstanarm")
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   skip_if_not_installed("curl")
   skip_if_not_installed("httr2")
   skip_if_offline()
@@ -435,7 +435,7 @@ test_that("`check_model()` overdispersion data for glm.nb and glmmTMB with na.ex
 
 test_that("`check_model()` overdispersion data for simulated residuals with na.exclude", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("DHARMa")
+  skip_if_not_installed("DHARMa", minimum_version = "0.5.2")
   # errors in the simulated branch are not caught
   withr::local_options(easystats_errors = TRUE)
   d <- .overdispersion_na_data()

@@ -116,10 +116,11 @@ performance_cv <- function(
     )
     test_resd <- test_resp - test_pred
 
-    # Branch C: Leave-One-Out (LOO) Fast Approximation for Linear Models
-  } else if (method == "loo" && !info$is_bayesian) {
-    # Mathematical shortcut for exact LOO MSE using hat values (leverage),
-    # avoiding the need to refit the model N times.
+    # Branch C: Leave-One-Out (LOO) shortcut for least-squares models
+  } else if (method == "loo" && .loo_hat_shortcut_is_exact(model)) {
+    # Shortcut for exact LOO MSE using hat values (leverage), avoiding the
+    # need to refit the model N times. Exact only when the fit is a linear
+    # smoother whose hat matrix does not depend on y (see helper below).
     model_response <- insight::get_response(model)
     MSE <- mean(
       insight::get_residuals(model, weighted = TRUE)^2 / (1 - stats::hatvalues(model))^2
@@ -224,6 +225,21 @@ performance_cv <- function(
 
   class(out) <- c("performance_cv", "data.frame")
   out
+}
+
+# The identity e_loo = e / (1 - h) holds only when the fitted values are a
+# fixed linear function of y, i.e. ordinary or weighted least squares. For
+# mixed models, the hat values condition on variance parameters estimated with
+# y_i included (which makes the shortcut optimistic), and for robust or
+# non-identity-link fits on IRLS weights that depend on y_i. Such models are
+# refitted instead.
+.loo_hat_shortcut_is_exact <- function(model) {
+  if (identical(class(model), "lm")) {
+    return(TRUE)
+  }
+  identical(class(model), c("glm", "lm")) &&
+    stats::family(model)$family == "gaussian" &&
+    stats::family(model)$link == "identity"
 }
 
 # TODO: implement performance::log_lik() function for deviance/elpd metrics ...
