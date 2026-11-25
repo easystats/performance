@@ -88,8 +88,64 @@ test_that("model_performance.lavaan, fit measures without likelihood", {
   ))
   model <- lavaan::cfa(structure, data = ordinal, ordered = TRUE)
   out <- model_performance(model)
-  expect_named(out, unname(.lavaan_fit_map()))
+  # ordered indicators use the WLSMV estimator, which has a robust test
+  expect_named(out, c(unname(.lavaan_fit_map()), unname(.lavaan_robust_fit_map())))
   expect_identical(out$Loglikelihood, NA_real_)
+  expect_identical(out$CFI_robust, unname(lavaan::fitMeasures(model)[["cfi.robust"]]))
+})
+
+test_that("model_performance.lavaan, robust estimators", {
+  data(HolzingerSwineford1939, package = "lavaan")
+  structure <- " visual  =~ x1 + x2 + x3
+                textual =~ x4 + x5 + x6
+                speed   =~ x7 + x8 + x9 "
+  # columns and the lavaan::fitMeasures() entries they come from
+  robust <- c(
+    Chi2_scaled = "chisq.scaled",
+    Chi2_scaled_df = "df.scaled",
+    p_Chi2_scaled = "pvalue.scaled",
+    CFI_robust = "cfi.robust",
+    NNFI_robust = "tli.robust",
+    RMSEA_robust = "rmsea.robust",
+    RMSEA_robust_CI_low = "rmsea.ci.lower.robust",
+    RMSEA_robust_CI_high = "rmsea.ci.upper.robust",
+    p_RMSEA_robust = "rmsea.pvalue.robust"
+  )
+
+  for (estimator in c("MLR", "MLM")) {
+    model <- lavaan::cfa(structure, data = HolzingerSwineford1939, estimator = estimator)
+    measures <- lavaan::fitMeasures(model)
+    out <- expect_silent(model_performance(model))
+    expect_named(out, c(unname(.lavaan_fit_map()), names(robust)))
+    for (i in names(robust)) {
+      expect_identical(out[[i]], unname(measures[[robust[[i]]]]), info = i)
+    }
+    # the standard indices are unchanged
+    expect_identical(out$Chi2, unname(measures[["chisq"]]))
+    expect_identical(out$CFI, unname(measures[["cfi"]]))
+  }
+
+  # "robust" selects only the scaled and robust indices
+  out <- model_performance(model, metrics = "robust")
+  expect_named(out, names(robust))
+  out <- model_performance(model, metrics = c("CFI", "robust", "SRMR"))
+  expect_named(out, c("CFI", names(robust), "SRMR"))
+  out <- model_performance(model, metrics = c("CFI", "CFI_robust"))
+  expect_named(out, c("CFI", "CFI_robust"))
+
+  # the scaled test is printed like the standard one
+  printed <- capture.output(print(model_performance(model, metrics = "robust")))
+  expect_true(any(grepl("Chi2_scaled(24)", printed, fixed = TRUE)))
+  expect_true(any(grepl("p (Chi2_scaled)", printed, fixed = TRUE)))
+  expect_true(any(grepl("p (RMSEA_robust)", printed, fixed = TRUE)))
+  expect_true(any(grepl("< .001", printed, fixed = TRUE)))
+
+  # models without a robust test statistic have no robust indices
+  model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  expect_named(model_performance(model), unname(.lavaan_fit_map()))
+  out <- model_performance(model, metrics = "robust")
+  expect_named(out, names(robust))
+  expect_true(all(is.na(unlist(out))))
 })
 
 
@@ -144,6 +200,23 @@ test_that("model_performance.lavaan.mi", {
   skip_if(all(converged), "all imputations of the partial fixture converged")
   out <- model_performance(model)
   expect_identical(out$Chi2, unname(lavaan::fitMeasures(model)[["chisq"]]))
+})
+
+test_that("model_performance.lavaan.mi, robust estimator", {
+  skip_if_not_installed("lavaan.mi")
+  withr::local_package("lavaan.mi")
+  data(HS20imps, package = "lavaan.mi")
+  model <- lavaan.mi::cfa.mi(lavaan_mi_structure, data = HS20imps[1:5], estimator = "MLM")
+  skip_if_lavaan_mi_broken(model)
+
+  expect_no_warning({
+    out <- model_performance(model)
+  })
+  measures <- lavaan::fitMeasures(model)
+  expect_named(out, c(unname(.lavaan_fit_map()), unname(.lavaan_robust_fit_map())))
+  expect_identical(out$Chi2_scaled, unname(measures[["chisq.scaled"]]))
+  expect_identical(out$CFI_robust, unname(measures[["cfi.robust"]]))
+  expect_identical(out$RMSEA_robust, unname(measures[["rmsea.robust"]]))
 })
 
 test_that("model_performance.lavaan.mi, no imputation converged", {

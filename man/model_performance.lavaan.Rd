@@ -13,12 +13,17 @@
 \item{model}{A \strong{lavaan} model, or a \strong{lavaan.mi} model fitted to
 multiple imputed data sets.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be
-computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Baseline"},
+\item{metrics}{Can be \code{"all"}, \code{"robust"} or a character vector of metrics
+to be computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Baseline"},
 \code{"Baseline_df"}, \code{"p_Baseline"}, \code{"GFI"}, \code{"AGFI"}, \code{"NFI"}, \code{"NNFI"},
 \code{"CFI"}, \code{"RMSEA"}, \code{"RMSEA_CI_low"}, \code{"RMSEA_CI_high"}, \code{"p_RMSEA"},
 \code{"RMR"}, \code{"SRMR"}, \code{"RFI"}, \code{"PNFI"}, \code{"IFI"}, \code{"RNI"}, \code{"Loglikelihood"},
-\code{"AIC"}, \code{"BIC"}, and \code{"BIC_adjusted"}.}
+\code{"AIC"}, \code{"BIC"}, \code{"BIC_adjusted"}, \code{"Chi2_scaled"}, \code{"Chi2_scaled_df"},
+\code{"p_Chi2_scaled"}, \code{"CFI_robust"}, \code{"NNFI_robust"}, \code{"RMSEA_robust"},
+\code{"RMSEA_robust_CI_low"}, \code{"RMSEA_robust_CI_high"}, and
+\code{"p_RMSEA_robust"}). \code{"all"} includes the scaled and robust indices only
+for models fitted with a robust estimator, and \code{"robust"} selects only
+these indices (see section 'Robust estimators').}
 
 \item{verbose}{Toggle off warnings.}
 
@@ -83,6 +88,26 @@ reported: The model \strong{chi-square}, the \strong{RMSEA}, the \strong{CFI}
 and the \strong{SRMR}.
 }
 }
+\section{Robust estimators}{
+
+For models fitted with a robust estimator (for example,
+\code{estimator = "MLM"}, \code{"MLR"}, \code{"MLMV"} or \code{"WLSMV"}), \strong{lavaan} also
+computes a scaled test statistic and robust versions of some indices. For
+these models, \code{metrics = "all"} adds the scaled chi-squared test
+(\code{Chi2_scaled}, \code{Chi2_scaled_df}, \code{p_Chi2_scaled}) and the robust CFI, NNFI
+(TLI) and RMSEA, with confidence interval and p-value for the RMSEA
+(\code{CFI_robust}, \code{NNFI_robust}, \code{RMSEA_robust}, \code{RMSEA_robust_CI_low},
+\code{RMSEA_robust_CI_high}, \code{p_RMSEA_robust}). The scaled test is the one in
+the second column of \code{summary(model, fit.measures = TRUE)}, and the robust
+indices are the rows that start with "Robust", for example "Robust
+Comparative Fit Index (CFI)" (Brosseau-Liard et al., 2012; Brosseau-Liard
+and Savalei, 2014). The scaled CFI, TLI and RMSEA that \strong{lavaan} prints in
+the second column, next to the standard values, are not returned. The
+standard indices (\code{Chi2}, \code{CFI}, \code{RMSEA}, ...) stay unchanged. For models
+without a robust test statistic, the scaled and robust indices are only
+returned when requested in \code{metrics}, and they are \code{NA}.
+}
+
 \section{Models fitted to multiple imputed data}{
 
 For \strong{lavaan.mi} models (for example, from \code{lavaan.mi::sem.mi()} or
@@ -105,10 +130,20 @@ structure <- " visual  =~ x1 + x2 + x3
                speed   =~ x7 + x8 + x9 "
 model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 model_performance(model)
+
+# robust estimator: only the scaled and robust indices
+model <- lavaan::cfa(structure, data = HolzingerSwineford1939, estimator = "MLR")
+model_performance(model, metrics = "robust")
 \dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
+\item Brosseau-Liard, P. E., Savalei, V., and Li, L. (2012). An investigation
+of the sample performance of two nonnormality corrections for RMSEA.
+Multivariate Behavioral Research, 47(6), 904-930.
+\item Brosseau-Liard, P. E., and Savalei, V. (2014). Adjusting incremental fit
+indices for nonnormality. Multivariate Behavioral Research, 49(5),
+460-470.
 \item Byrne, B. M. (1994). Structural equation modeling with EQS and
 EQS/Windows. Thousand Oaks, CA: Sage Publications.
 \item Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for

@@ -5,12 +5,17 @@
 #'
 #' @param model A **lavaan** model, or a **lavaan.mi** model fitted to
 #'   multiple imputed data sets.
-#' @param metrics Can be `"all"` or a character vector of metrics to be
-#'   computed (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"Baseline"`,
+#' @param metrics Can be `"all"`, `"robust"` or a character vector of metrics
+#'   to be computed (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"Baseline"`,
 #'   `"Baseline_df"`, `"p_Baseline"`, `"GFI"`, `"AGFI"`, `"NFI"`, `"NNFI"`,
 #'   `"CFI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, `"p_RMSEA"`,
 #'   `"RMR"`, `"SRMR"`, `"RFI"`, `"PNFI"`, `"IFI"`, `"RNI"`, `"Loglikelihood"`,
-#'   `"AIC"`, `"BIC"`, and `"BIC_adjusted"`.
+#'   `"AIC"`, `"BIC"`, `"BIC_adjusted"`, `"Chi2_scaled"`, `"Chi2_scaled_df"`,
+#'   `"p_Chi2_scaled"`, `"CFI_robust"`, `"NNFI_robust"`, `"RMSEA_robust"`,
+#'   `"RMSEA_robust_CI_low"`, `"RMSEA_robust_CI_high"`, and
+#'   `"p_RMSEA_robust"`). `"all"` includes the scaled and robust indices only
+#'   for models fitted with a robust estimator, and `"robust"` selects only
+#'   these indices (see section 'Robust estimators').
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods. For **lavaan** and
 #'   **lavaan.mi** models, they are passed to `lavaan::fitMeasures()` (except
@@ -19,6 +24,24 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see
 #'   `metrics`). An index that `lavaan::fitMeasures()` does not return is `NA`.
+#'
+#' @section Robust estimators:
+#' For models fitted with a robust estimator (for example,
+#' `estimator = "MLM"`, `"MLR"`, `"MLMV"` or `"WLSMV"`), **lavaan** also
+#' computes a scaled test statistic and robust versions of some indices. For
+#' these models, `metrics = "all"` adds the scaled chi-squared test
+#' (`Chi2_scaled`, `Chi2_scaled_df`, `p_Chi2_scaled`) and the robust CFI, NNFI
+#' (TLI) and RMSEA, with confidence interval and p-value for the RMSEA
+#' (`CFI_robust`, `NNFI_robust`, `RMSEA_robust`, `RMSEA_robust_CI_low`,
+#' `RMSEA_robust_CI_high`, `p_RMSEA_robust`). The scaled test is the one in
+#' the second column of `summary(model, fit.measures = TRUE)`, and the robust
+#' indices are the rows that start with "Robust", for example "Robust
+#' Comparative Fit Index (CFI)" (Brosseau-Liard et al., 2012; Brosseau-Liard
+#' and Savalei, 2014). The scaled CFI, TLI and RMSEA that **lavaan** prints in
+#' the second column, next to the standard values, are not returned. The
+#' standard indices (`Chi2`, `CFI`, `RMSEA`, ...) stay unchanged. For models
+#' without a robust test statistic, the scaled and robust indices are only
+#' returned when requested in `metrics`, and they are `NA`.
 #'
 #' @section Models fitted to multiple imputed data:
 #' For **lavaan.mi** models (for example, from `lavaan.mi::sem.mi()` or
@@ -94,7 +117,19 @@
 #' model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 #' model_performance(model)
 #'
+#' # robust estimator: only the scaled and robust indices
+#' model <- lavaan::cfa(structure, data = HolzingerSwineford1939, estimator = "MLR")
+#' model_performance(model, metrics = "robust")
+#'
 #' @references
+#'
+#' - Brosseau-Liard, P. E., Savalei, V., and Li, L. (2012). An investigation
+#'   of the sample performance of two nonnormality corrections for RMSEA.
+#'   Multivariate Behavioral Research, 47(6), 904-930.
+#'
+#' - Brosseau-Liard, P. E., and Savalei, V. (2014). Adjusting incremental fit
+#'   indices for nonnormality. Multivariate Behavioral Research, 49(5),
+#'   460-470.
 #'
 #' - Byrne, B. M. (1994). Structural equation modeling with EQS and
 #'   EQS/Windows. Thousand Oaks, CA: Sage Publications.
@@ -162,14 +197,8 @@ model_performance.lavaan.mi <- function(model, metrics = "all", verbose = TRUE, 
   ...
 ) {
   # All possible metrics that this function can return.
-  all_metric_names <- unname(.lavaan_fit_map())
-
-  # extract valid column names based on metrics
-  if (is.character(metrics) && !all(metrics == "all")) {
-    out_names <- intersect(metrics, all_metric_names)
-  } else {
-    out_names <- all_metric_names
-  }
+  standard_names <- unname(.lavaan_fit_map())
+  robust_names <- unname(.lavaan_robust_fit_map())
 
   # process dots - we need to remove some arguments not supported in 'lavaan',
   # e.g. argument 'estimator' from "compare_performance()"
@@ -186,14 +215,31 @@ model_performance.lavaan.mi <- function(model, metrics = "all", verbose = TRUE, 
       measures <- suppressWarnings(do.call(lavaan::fitmeasures, fun_args))
     }
     out <- .lavaan_fit_indices(measures)
+    # lavaan returns scaled and robust indices only for robust estimators
+    has_robust <- "chisq.scaled" %in% names(measures)
   } else {
     if (verbose) {
       insight::format_warning(not_converged)
     }
     out <- as.data.frame(stats::setNames(
-      rep(list(NA), length(out_names)),
-      out_names
+      rep(list(NA), length(standard_names) + length(robust_names)),
+      c(standard_names, robust_names)
     ))
+    has_robust <- FALSE
+  }
+
+  # extract valid column names based on metrics
+  if (is.character(metrics) && !all(metrics == "all")) {
+    # "robust" is a shortcut for all scaled and robust indices
+    metrics <- unlist(
+      lapply(metrics, function(i) if (identical(i, "robust")) robust_names else i),
+      use.names = FALSE
+    )
+    out_names <- intersect(metrics, c(standard_names, robust_names))
+  } else if (has_robust) {
+    out_names <- c(standard_names, robust_names)
+  } else {
+    out_names <- standard_names
   }
 
   # select only the requested metrics
@@ -236,9 +282,26 @@ model_performance.lavaan.mi <- function(model, metrics = "all", verbose = TRUE, 
 }
 
 
+# entries of lavaan::fitmeasures() that only models with a robust test
+# statistic have (e.g. estimator "MLM", "MLR" or "WLSMV"), and their columns
+.lavaan_robust_fit_map <- function() {
+  c(
+    chisq.scaled = "Chi2_scaled",
+    df.scaled = "Chi2_scaled_df",
+    pvalue.scaled = "p_Chi2_scaled",
+    cfi.robust = "CFI_robust",
+    tli.robust = "NNFI_robust",
+    rmsea.robust = "RMSEA_robust",
+    rmsea.ci.lower.robust = "RMSEA_robust_CI_low",
+    rmsea.ci.upper.robust = "RMSEA_robust_CI_high",
+    rmsea.pvalue.robust = "p_RMSEA_robust"
+  )
+}
+
+
 # one-row data frame of fit indices, `NA` for entries missing in `measures`
 .lavaan_fit_indices <- function(measures) {
-  fit_map <- .lavaan_fit_map()
+  fit_map <- c(.lavaan_fit_map(), .lavaan_robust_fit_map())
   measures <- unclass(measures)
   # lavaan >= 0.7 (and lavaan.mi) return "agfi_lisrel" but no "agfi"
   if (!"agfi" %in% names(measures) && "agfi_lisrel" %in% names(measures)) {

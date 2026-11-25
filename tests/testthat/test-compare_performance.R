@@ -235,6 +235,48 @@ test_that("compare_performance, lavaan", {
 })
 
 
+test_that("compare_performance, lavaan with robust estimator", {
+  skip_on_cran()
+  skip_if_not_installed("lavaan")
+
+  data(HolzingerSwineford1939, package = "lavaan")
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9 "
+  model_ml <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  model_mlr <- lavaan::cfa(structure, data = HolzingerSwineford1939, estimator = "MLR")
+
+  out <- suppressMessages(compare_performance(model_ml, model_mlr))
+  measures <- lavaan::fitMeasures(model_mlr)
+  expect_identical(out$Name, c("model_ml", "model_mlr"))
+  expect_identical(out$CFI_robust, c(NA, unname(measures[["cfi.robust"]])))
+  expect_identical(out$Chi2_scaled, c(NA, unname(measures[["chisq.scaled"]])))
+
+  out <- suppressMessages(
+    compare_performance(model_ml, model_mlr, metrics = c("CFI", "robust"))
+  )
+  expect_named(
+    out,
+    c(
+      "Name",
+      "Model",
+      "CFI",
+      "Chi2_scaled",
+      "Chi2_scaled_df",
+      "p_Chi2_scaled",
+      "CFI_robust",
+      "NNFI_robust",
+      "RMSEA_robust",
+      "RMSEA_robust_CI_low",
+      "RMSEA_robust_CI_high",
+      "p_RMSEA_robust"
+    )
+  )
+  printed <- capture.output(print(out, table_width = Inf))
+  expect_true(any(grepl("Chi2_scaled(24) | p (Chi2_scaled)", printed, fixed = TRUE)))
+})
+
+
 test_that("compare_performance, Log_loss ranks in the right direction", {
   data(mtcars)
   m_best <- glm(am ~ mpg + hp + wt, data = mtcars, family = binomial())

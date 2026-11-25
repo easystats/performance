@@ -16,6 +16,12 @@
 
 * Skip fitted-value diagnostics for constant predictions in `check_model()`.
 
+* `model_performance()` and `compare_performance()` for *lavaan* models fitted
+  with a robust estimator (e.g. `"MLM"`, `"MLR"` or `"WLSMV"`) now also return
+  the scaled chi-squared test and the robust CFI, NNFI (TLI) and RMSEA
+  (`Chi2_scaled`, `CFI_robust`, `NNFI_robust`, `RMSEA_robust`, ...).
+  `metrics = "robust"` selects only these indices (#378).
+
 ## Bug fixes
 
 * `performance_cv()` with `method = "loo"` no longer uses the hat-value
