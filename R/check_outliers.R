@@ -1852,7 +1852,7 @@ check_outliers.fixest_multi <- function(
   ID = NULL,
   ...
 ) {
-  lapply(x, check_outliers.fixest)
+  lapply(x, check_outliers.fixest, method = method, threshold = threshold, ...)
 }
 
 

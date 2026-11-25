@@ -23,6 +23,9 @@
   default method (Pareto k) only works for Bayesian models. Before, it reported
   "No outliers detected" although no check was run.
 
+* `check_outliers()` for `fixest_multi` objects now passes `method` and
+  `threshold` on to each model. Before, both arguments were ignored.
+
 * `performance_cv()` with `method = "loo"` no longer uses the hat-value
   shortcut for models where it is not exact (e.g. mixed models from *lme4*,
   robust regression, or Gaussian models with a non-identity link). For mixed

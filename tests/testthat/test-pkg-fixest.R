@@ -78,6 +78,8 @@ test_that("fixest_multi: outliers", {
   fixest::setFixest_nthreads(1)
   res <- fixest::feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | species, base_iris)
   expect_error(check_outliers(res), "None of the requested methods")
+  outliers_list <- check_outliers(res, method = "zscore_robust")[[1]]
+  expect_identical(attr(outliers_list, "method"), "zscore_robust")
 })
 
 test_that("fixest_multi: model_performance", {
