@@ -25,16 +25,7 @@ test_that("check_autocorrelation works with simulated residuals", {
   expect_type(out, "double")
   expect_s3_class(out, "check_autocorrelation")
 
-  switch(
-    snapshot_variant(),
-    windows = expect_equal(
-      as.vector(out),
-      0.2211415,
-      tolerance = 1e-3,
-      ignore_attr = TRUE
-    ),
-    expect_equal(as.vector(out), 0.6558933, tolerance = 1e-3, ignore_attr = TRUE)
-  )
+  expect_equal(as.vector(out), 0.6558933, tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 

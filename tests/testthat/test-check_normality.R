@@ -88,32 +88,15 @@ test_that("check_normality | simulated residuals", {
   res <- simulate_residuals(m)
   out <- check_normality(res)
 
-  switch(
-    snapshot_variant(),
-    windows = expect_equal(
-      as.numeric(out),
-      0.2969038,
-      tolerance = 1e-3,
-      ignore_attr = TRUE
-    ),
-    expect_equal(
-      as.numeric(out),
-      0.1481319,
-      tolerance = 1e-3,
-      ignore_attr = TRUE
-    )
+  expect_equal(
+    as.numeric(out),
+    0.1481319,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
   )
-
-  switch(
-    snapshot_variant(),
-    windows = expect_identical(
-      capture.output(print(out)),
-      "OK: residuals appear as normally distributed (p = 0.297)."
-    ),
-    expect_identical(
-      capture.output(print(out)),
-      "OK: residuals appear as normally distributed (p = 0.148)."
-    )
+  expect_identical(
+    capture.output(print(out)),
+    "OK: residuals appear as normally distributed (p = 0.148)."
   )
 
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
