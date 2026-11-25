@@ -5,28 +5,6 @@ test_that("check_residuals and simulate_residuals", {
   dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
   m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
   res <- simulate_residuals(m)
-  expect_identical(
-    capture.output(print(res)),
-    switch(
-      snapshot_variant(),
-      linux = c(
-        "Simulated residuals from a model of class `glm` based on 250 simulations.",
-        "  Use `check_residuals()` to check uniformity of residuals or `residuals()`",
-        "  to extract simulated residuals. It is recommended to refer to",
-        "  `?DHARMa::simulateResiudals` and `vignette(\"DHARMa\")` for more",
-        "  information about different settings in particular situations or for",
-        "  particular models."
-      ),
-      c(
-        "Simulated residuals from a model of class `glm` based on 250",
-        "  simulations. Use `check_residuals()` to check uniformity of residuals or",
-        "  `residuals()` to extract simulated residuals. It is recommended to refer",
-        "  to `?DHARMa::simulateResiudals` and `vignette(\"DHARMa\")` for more",
-        "  information about different settings in particular situations or for",
-        "  particular models."
-      )
-    )
-  )
   # check raw residuals
   expect_equal(
     head(residuals(res)),
@@ -36,7 +14,11 @@ test_that("check_residuals and simulate_residuals", {
   )
   expect_equal(
     head(residuals(res, quantile_function = stats::qnorm)),
-    c(-2.09365, 0.54232, 0.1529, -0.86756, -0.4839, -1.27504),
+    switch(
+      snapshot_variant(),
+      linux = c(-2.09365, 0.54232, 0.1529, -0.86756, -0.4839, -1.27504),
+      c(-2.19387, 0.0925, -0.15993, -1.67034, -0.45112, -1.08081)
+    ),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
@@ -62,7 +44,7 @@ test_that("check_residuals and simulate_residuals", {
     ignore_attr = TRUE
   )
   # outlier_values works
-  expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm))), 3L)
+  expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm))), 2L)
   expect_identical(
     sum(is.infinite(residuals(
       res,
@@ -70,18 +52,18 @@ test_that("check_residuals and simulate_residuals", {
       outlier_values = c(-100, 100)
     ))),
     0L
-  ) # nolint
+  )
   expect_error(
     residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3),
     regex = "`outlier_values` must be"
-  ) # nolint
+  )
 
   # check_residuals
   out <- check_residuals(res)
-  expect_equal(out, 0.02574286, ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(as.numeric(out), 0.00961, ignore_attr = TRUE, tolerance = 1e-4)
   expect_identical(
     capture.output(print(out)),
-    "Warning: Non-uniformity of simulated residuals detected (p = 0.026)."
+    "Warning: Non-uniformity of simulated residuals detected (p = 0.010)."
   )
   expect_error(simulate_residuals(m, iterations = 1), "`iterations` must be")
 

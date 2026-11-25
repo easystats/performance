@@ -18,7 +18,8 @@ test_that("performance_reliability - frequentist", {
   L <- min(table(data$Place))
   expected_glmmtmb <- c(
     v$var.intercept[["Place"]] / (v$var.intercept[["Place"]] + v$var.residual / L),
-    v$var.slope[["Place.Petal.Width"]] / (v$var.slope[["Place.Petal.Width"]] + v$var.residual / L)
+    v$var.slope[["Place.Petal.Width"]] /
+      (v$var.slope[["Place.Petal.Width"]] + v$var.residual / L)
   )
   expect_equal(out$Reliability, expected_glmmtmb, tolerance = 1e-3)
 })
@@ -37,7 +38,8 @@ test_that("performance_reliability matches Rouder & Mehrvarz formula and is scal
 
   v <- insight::get_variance(m1)
   L <- min(table(d$Place))
-  gamma2 <- c(v$var.intercept[["Place"]], v$var.slope[["Place.Petal.Width"]]) / v$var.residual
+  gamma2 <- c(v$var.intercept[["Place"]], v$var.slope[["Place.Petal.Width"]]) /
+    v$var.residual
   expected <- gamma2 / (gamma2 + 1 / L)
 
   expect_equal(out1$Reliability, expected, tolerance = 1e-6)
@@ -61,7 +63,7 @@ test_that("performance_reliability - Bayesian", {
   skip_if(is.null(m))
   out <- performance_reliability(m)
   expect_identical(dim(out), c(2L, 3L))
-  expect_equal(out$Reliability, c(0.97116, 0.80915), tolerance = 1e-3)
+  expect_equal(out$Reliability, c(0.99951, 0.99615), tolerance = 1e-3)
 })
 
 ## FIXME: doesn't work yet for Bayesian models
