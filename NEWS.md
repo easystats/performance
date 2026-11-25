@@ -18,6 +18,11 @@
 
 ## Bug fixes
 
+* `check_outliers()` now gives an error when none of the requested methods can
+  be used, e.g. for models from *fixest* or *nlme* (`gls()`, `lme()`), whose
+  default method (Pareto k) only works for Bayesian models. Before, it reported
+  "No outliers detected" although no check was run.
+
 * `performance_cv()` with `method = "loo"` no longer uses the hat-value
   shortcut for models where it is not exact (e.g. mixed models from *lme4*,
   robust regression, or Gaussian models with a non-identity link). For mixed

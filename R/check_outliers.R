@@ -480,6 +480,7 @@ check_outliers.default <- function(
     ),
     several.ok = TRUE
   )
+  method_requested <- method
 
   # Get model information
   m_info <- insight::model_info(x)
@@ -665,6 +666,24 @@ check_outliers.default <- function(
   } else {
     method <- method[method != "pareto"]
   }
+
+  # Cook's distance and Pareto k were the only methods, but cannot be used
+  if (!length(method)) {
+    insight::format_error(paste0(
+      "None of the requested methods can be used for models of class `",
+      class(x)[1],
+      "`. ",
+      if ("cook" %in% method_requested) {
+        "Cook's distance is not available for this model. "
+      },
+      if ("pareto" %in% method_requested) {
+        "Pareto k is only available for Bayesian models. "
+      },
+      "Use a method that checks the model data instead, e.g. ",
+      "`method = \"zscore_robust\"`."
+    ))
+  }
+
   if (is.null(my_df)) {
     my_df <- data.frame(Row = seq_len(nrow(my_data)))
   }
