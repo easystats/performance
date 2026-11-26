@@ -240,10 +240,11 @@ analyse random-effect-variances for non-Gaussian models. It is then
 possible to compare variances across models, also by specifying
 different group-level terms via the `re_formula`-argument.
 
-Sometimes, when the variance of the posterior predictive distribution is
-very large, the variance ratio in the output makes no sense, e.g.
-because it is negative. In such cases, it might help to use
-`robust = TRUE`.
+The ratio, or its credible interval, can be negative when the random
+effect variance is close to zero. The two variances are then about
+equal, and because they come from separate draws, the one without random
+effects is sometimes the larger. A negative ratio can be interpreted as
+0.
 
 ## Supported models and model families
 
