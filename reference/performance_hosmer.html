@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0.18</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">performance_hosmer</span><span class="op">(</span><span class="va">model</span>, n_bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">performance_hosmer</span><span class="op">(</span><span class="va">model</span>, n_bins <span class="op">=</span> <span class="fl">10</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,18 +74,29 @@
 <dt id="arg-n-bins">n_bins<a class="anchor" aria-label="anchor" href="#arg-n-bins"></a></dt>
 <dd><p>Numeric, the number of bins to divide the data.</p></dd>
 
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Toggle messages.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>hoslem_test</code> with following values:
+    <p>An object of class <code>performance_hosmer</code> with following values:
 <code>chisq</code>, the Hosmer-Lemeshow chi-squared statistic; <code>df</code>, degrees
-of freedom and <code>p.value</code> the p-value for the goodness-of-fit test.</p>
+of freedom and <code>p.value</code> the p-value for the goodness-of-fit test. The
+observed and expected counts for each group are returned as attributes
+<code>observed</code> and <code>expected</code>, matrices with one row per group and one
+column each for the response values 0 and 1.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A well-fitting model shows <em>no</em> significant difference between
 the model and the observed data, i.e. the reported p-value should be
 greater than 0.05.</p>
+<p>If fitted values are tied, some cut points between groups are the same.
+Each of these is used once, and empty groups are dropped, so there can be
+fewer groups than <code>n_bins</code>. The degrees of freedom are then based on the
+number of groups that were formed.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
