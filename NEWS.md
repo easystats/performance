@@ -19,7 +19,7 @@
 ## Bug fixes
 
 * `performance_hosmer()` no longer fails with "'breaks' are not unique" when
-  fitted values are tied. Like Stata, it now merges the tied groups, bases the
+  fitted values are tied. It now uses each tied cut point once, bases the
   degrees of freedom on the number of groups formed, and gives a message when
   there are fewer groups than `n_bins`. The observed and expected counts per
   group are returned as attributes (#578).

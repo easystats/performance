@@ -11,7 +11,7 @@ performance_hosmer(model, n_bins = 10, verbose = TRUE)
 
 \item{n_bins}{Numeric, the number of bins to divide the data.}
 
-\item{verbose}{Toggle warnings and messages.}
+\item{verbose}{Toggle messages.}
 }
 \value{
 An object of class \code{performance_hosmer} with following values:
@@ -28,8 +28,8 @@ A well-fitting model shows \emph{no} significant difference between
 the model and the observed data, i.e. the reported p-value should be
 greater than 0.05.
 
-If fitted values are tied, groups with the same cut points are merged,
-so there can be fewer groups than \code{n_bins}. The degrees of freedom are
+If fitted values are tied, some cut points between groups are the same.
+Each of these is used once, so there can be fewer groups than \code{n_bins}. The degrees of freedom are
 then based on the number of groups that were formed.
 }
 \examples{

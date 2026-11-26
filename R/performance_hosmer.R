@@ -5,7 +5,7 @@
 #'
 #' @param model A `glm`-object with binomial-family.
 #' @param n_bins Numeric, the number of bins to divide the data.
-#' @param verbose Toggle warnings and messages.
+#' @param verbose Toggle messages.
 #'
 #' @return An object of class `performance_hosmer` with following values:
 #'   `chisq`, the Hosmer-Lemeshow chi-squared statistic; `df`, degrees
@@ -17,8 +17,8 @@
 #'   the model and the observed data, i.e. the reported p-value should be
 #'   greater than 0.05.
 #'
-#'   If fitted values are tied, groups with the same cut points are merged,
-#'   so there can be fewer groups than `n_bins`. The degrees of freedom are
+#'   If fitted values are tied, some cut points between groups are the same.
+#'   Each of these is used once, so there can be fewer groups than `n_bins`. The degrees of freedom are
 #'   then based on the number of groups that were formed.
 #'
 #' @references
@@ -48,13 +48,12 @@ performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
     yhat <- stats::fitted(model)
   }
 
-  # tied fitted values give repeated quantiles. Like Stata's "estat gof",
-  # we merge them, so that we may get fewer groups than requested
-  cutyhat <- cut(
-    yhat,
-    breaks = unique(stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins))),
-    include.lowest = TRUE
-  )
+  # each observation goes into the group of the first cut point at or above
+  # its fitted value. Tied fitted values give repeated cut points, which we
+  # use once, so that we may get fewer groups than requested
+  cut_points <- stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins))
+  cut_points <- unique(cut_points[-c(1, length(cut_points))])
+  cutyhat <- cut(yhat, breaks = c(-Inf, cut_points, Inf))
   cutyhat <- droplevels(cutyhat)
   n_groups <- nlevels(cutyhat)
 
