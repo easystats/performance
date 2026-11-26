@@ -18,6 +18,12 @@
 
 ## Bug fixes
 
+* `performance_hosmer()` no longer fails with "'breaks' are not unique" when
+  fitted values are tied. Like Stata, it now merges the tied groups, bases the
+  degrees of freedom on the number of groups formed, and gives a message when
+  there are fewer groups than `n_bins`. The observed and expected counts per
+  group are returned as attributes (#578).
+
 * `check_outliers()` now gives an error when none of the requested methods can
   be used, e.g. for models from *fixest* or *nlme* (`gls()`, `lme()`), whose
   default method (Pareto k) only works for Bayesian models. Before, it reported

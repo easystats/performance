@@ -5,14 +5,21 @@
 #'
 #' @param model A `glm`-object with binomial-family.
 #' @param n_bins Numeric, the number of bins to divide the data.
+#' @param verbose Toggle warnings and messages.
 #'
-#' @return An object of class `hoslem_test` with following values:
+#' @return An object of class `performance_hosmer` with following values:
 #'   `chisq`, the Hosmer-Lemeshow chi-squared statistic; `df`, degrees
-#'   of freedom and `p.value` the p-value for the goodness-of-fit test.
+#'   of freedom and `p.value` the p-value for the goodness-of-fit test. The
+#'   observed and expected counts for each group are returned as attributes
+#'   `observed` and `expected`.
 #'
 #' @details A well-fitting model shows *no* significant difference between
 #'   the model and the observed data, i.e. the reported p-value should be
 #'   greater than 0.05.
+#'
+#'   If fitted values are tied, groups with the same cut points are merged,
+#'   so there can be fewer groups than `n_bins`. The degrees of freedom are
+#'   then based on the number of groups that were formed.
 #'
 #' @references
 #' Hosmer, D. W., and Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
