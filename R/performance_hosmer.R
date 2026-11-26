@@ -18,8 +18,9 @@
 #'   greater than 0.05.
 #'
 #'   If fitted values are tied, some cut points between groups are the same.
-#'   Each of these is used once, so there can be fewer groups than `n_bins`. The degrees of freedom are
-#'   then based on the number of groups that were formed.
+#'   Each of these is used once, and empty groups are dropped, so there can be
+#'   fewer groups than `n_bins`. The degrees of freedom are then based on the
+#'   number of groups that were formed.
 #'
 #' @references
 #' Hosmer, D. W., and Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
