@@ -18,6 +18,14 @@
 
 ## Bug fixes
 
+* `check_outliers()` now gives an error when none of the requested methods can
+  be used, e.g. for models from *fixest* or *nlme* (`gls()`, `lme()`), whose
+  default method (Pareto k) only works for Bayesian models. Before, it reported
+  "No outliers detected" although no check was run.
+
+* `check_outliers()` for `fixest_multi` objects now passes `method` and
+  `threshold` on to each model. Before, both arguments were ignored.
+
 * The documentation of `variance_decomposition()` no longer suggests
   `robust = TRUE` for negative variance ratios, since it is already the
   default. It now explains that a negative ratio can be interpreted as 0,

@@ -32,8 +32,10 @@ test_that("fixest: outliers", {
   skip_if_not_installed("fixest")
   fixest::setFixest_nthreads(1)
   res <- fixest::feols(y1 ~ x1 + x2 + x2^2 | species, base_iris)
-  outliers_list <- suppressMessages(check_outliers(res))
-  expect_identical(attr(outliers_list, "outlier_count"), list())
+  # see #429
+  expect_error(check_outliers(res), "None of the requested methods")
+  outliers_list <- check_outliers(res, method = "zscore_robust")
+  expect_identical(attr(outliers_list, "method"), "zscore_robust")
 })
 
 test_that("fixest: model_performance", {
@@ -75,8 +77,9 @@ test_that("fixest_multi: outliers", {
   skip_if_not_installed("fixest")
   fixest::setFixest_nthreads(1)
   res <- fixest::feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | species, base_iris)
-  outliers_list <- suppressMessages(check_outliers(res)[[1]])
-  expect_identical(attr(outliers_list, "outlier_count"), list())
+  expect_error(check_outliers(res), "None of the requested methods")
+  outliers_list <- check_outliers(res, method = "zscore_robust")[[1]]
+  expect_identical(attr(outliers_list, "method"), "zscore_robust")
 })
 
 test_that("fixest_multi: model_performance", {
