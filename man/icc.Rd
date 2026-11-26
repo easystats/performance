@@ -199,16 +199,10 @@ random-effect-variances for non-Gaussian models. It is then possible to
 compare variances across models, also by specifying different group-level
 terms via the \code{re_formula}-argument.
 
-The variance ratio, or the limits of its credible interval, can be
-negative. This happens when the random effect variance is close to zero,
-and a negative ratio can then be interpreted as 0. The ratio is 1 minus the
-variance \emph{not conditioned} on group-level terms divided by the variance
-\emph{conditioned} on all random effects. When the random effects add almost no
-variance, these two variances are about equal. Because they are computed
-from separate draws, the first one is larger in some draws, and the ratio
-for those draws is below 0. With \code{robust = TRUE} (the default), the ratio
-is summarized by the median across draws, which is less affected by a few
-such draws than the mean (\code{robust = FALSE}).
+The ratio, or its credible interval, can be negative when the random effect
+variance is close to zero. The two variances are then about equal, and
+because they come from separate draws, the one without random effects is
+sometimes the larger. A negative ratio can be interpreted as 0.
 }
 }
 \section{Supported models and model families}{
