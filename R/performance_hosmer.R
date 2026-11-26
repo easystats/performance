@@ -22,7 +22,7 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_hosmer(model)
 #' @export
-performance_hosmer <- function(model, n_bins = 10) {
+performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
   if (inherits(model, "merMod")) {
     insight::check_if_installed("lme4")
   }
@@ -41,24 +41,47 @@ performance_hosmer <- function(model, n_bins = 10) {
     yhat <- stats::fitted(model)
   }
 
+  # tied fitted values give repeated quantiles. Like Stata's "estat gof",
+  # we merge them, so that we may get fewer groups than requested
   cutyhat <- cut(
     yhat,
-    breaks = stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins)),
+    breaks = unique(stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins))),
     include.lowest = TRUE
   )
+  cutyhat <- droplevels(cutyhat)
+  n_groups <- nlevels(cutyhat)
+
+  if (n_groups < 3) {
+    insight::format_error(
+      "The Hosmer-Lemeshow test cannot be computed, because fewer than 3 groups could be formed from the fitted values."
+    )
+  }
+  if (verbose && n_groups < n_bins) {
+    insight::format_alert(paste0(
+      "Fitted values could only be divided into ",
+      n_groups,
+      " groups instead of ",
+      n_bins,
+      ", e.g. because of tied fitted values. Degrees of freedom are based on ",
+      n_groups,
+      " groups."
+    ))
+  }
 
   obs <- stats::xtabs(cbind(1 - y, y) ~ cutyhat)
   expect <- stats::xtabs(cbind(1 - yhat, yhat) ~ cutyhat)
   chisq <- sum((obs - expect)^2 / expect)
-  p.value <- 1 - stats::pchisq(chisq, n_bins - 2)
+  p.value <- 1 - stats::pchisq(chisq, n_groups - 2)
 
   hoslem <- list(
     chisq = chisq,
-    df = n_bins - 2,
+    df = n_groups - 2,
     p.value = p.value
   )
 
   class(hoslem) <- c("performance_hosmer", "list")
+  attr(hoslem, "observed") <- obs
+  attr(hoslem, "expected") <- expect
   hoslem
 }
 
