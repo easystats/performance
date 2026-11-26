@@ -153,9 +153,14 @@
 #' compare variances across models, also by specifying different group-level
 #' terms via the `re_formula`-argument.
 #'
-#' Sometimes, when the variance of the posterior predictive distribution is
-#' very large, the variance ratio in the output makes no sense, e.g. because
-#' it is negative. In such cases, it might help to use `robust = TRUE`.
+#' The variance ratio, or its credible interval, can be negative. The two
+#' posterior predictive distributions are estimated separately, so when the
+#' random effect variance is close to zero, the variance conditioned on fixed
+#' effects only can be larger than the variance conditioned on the random
+#' effects in some or many draws. A negative ratio can then be interpreted
+#' as 0. By default (`robust = TRUE`), the ratio is based on the median across
+#' draws, which is less affected by a few such draws than the mean
+#' (`robust = FALSE`).
 #'
 #' @seealso [`performance_ior()`], [`performance_mor()`] and [`performance_poor()`]
 #' as additional metrics specifically for logistic multilevel regression models.

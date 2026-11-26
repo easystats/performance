@@ -18,6 +18,11 @@
 
 ## Bug fixes
 
+* The documentation of `variance_decomposition()` no longer suggests
+  `robust = TRUE` for negative variance ratios, since it is already the
+  default. It now explains that a negative ratio can be interpreted as 0,
+  because it arises from a random effect variance close to zero (#204).
+
 * `performance_cv()` with `method = "loo"` no longer uses the hat-value
   shortcut for models where it is not exact (e.g. mixed models from *lme4*,
   robust regression, or Gaussian models with a non-identity link). For mixed
