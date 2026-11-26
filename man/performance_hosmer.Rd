@@ -4,17 +4,22 @@
 \alias{performance_hosmer}
 \title{Hosmer-Lemeshow goodness-of-fit test}
 \usage{
-performance_hosmer(model, n_bins = 10)
+performance_hosmer(model, n_bins = 10, verbose = TRUE)
 }
 \arguments{
 \item{model}{A \code{glm}-object with binomial-family.}
 
 \item{n_bins}{Numeric, the number of bins to divide the data.}
+
+\item{verbose}{Toggle messages.}
 }
 \value{
-An object of class \code{hoslem_test} with following values:
+An object of class \code{performance_hosmer} with following values:
 \code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
-of freedom and \code{p.value} the p-value for the goodness-of-fit test.
+of freedom and \code{p.value} the p-value for the goodness-of-fit test. The
+observed and expected counts for each group are returned as attributes
+\code{observed} and \code{expected}, matrices with one row per group and one
+column each for the response values 0 and 1.
 }
 \description{
 Check model quality of logistic regression models.
@@ -23,6 +28,11 @@ Check model quality of logistic regression models.
 A well-fitting model shows \emph{no} significant difference between
 the model and the observed data, i.e. the reported p-value should be
 greater than 0.05.
+
+If fitted values are tied, some cut points between groups are the same.
+Each of these is used once, and empty groups are dropped, so there can be
+fewer groups than \code{n_bins}. The degrees of freedom are then based on the
+number of groups that were formed.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

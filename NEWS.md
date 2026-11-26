@@ -16,7 +16,16 @@
 
 * Skip fitted-value diagnostics for constant predictions in `check_model()`.
 
+* `performance_hosmer()` returns the observed and expected counts per group as
+  attributes `observed` and `expected` (#578).
+
 ## Bug fixes
+
+* `performance_hosmer()` no longer fails with "'breaks' are not unique" when
+  fitted values are tied. It now uses each tied cut point once, bases the
+  degrees of freedom on the number of groups formed, and gives a message when
+  there are fewer groups than `n_bins`, which `verbose = FALSE` turns off
+  (#578).
 
 * `check_outliers()` now gives an error when none of the requested methods can
   be used, e.g. for models from *fixest* or *nlme* (`gls()`, `lme()`), whose

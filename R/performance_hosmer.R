@@ -5,14 +5,23 @@
 #'
 #' @param model A `glm`-object with binomial-family.
 #' @param n_bins Numeric, the number of bins to divide the data.
+#' @param verbose Toggle messages.
 #'
-#' @return An object of class `hoslem_test` with following values:
+#' @return An object of class `performance_hosmer` with following values:
 #'   `chisq`, the Hosmer-Lemeshow chi-squared statistic; `df`, degrees
-#'   of freedom and `p.value` the p-value for the goodness-of-fit test.
+#'   of freedom and `p.value` the p-value for the goodness-of-fit test. The
+#'   observed and expected counts for each group are returned as attributes
+#'   `observed` and `expected`, matrices with one row per group and one
+#'   column each for the response values 0 and 1.
 #'
 #' @details A well-fitting model shows *no* significant difference between
 #'   the model and the observed data, i.e. the reported p-value should be
 #'   greater than 0.05.
+#'
+#'   If fitted values are tied, some cut points between groups are the same.
+#'   Each of these is used once, and empty groups are dropped, so there can be
+#'   fewer groups than `n_bins`. The degrees of freedom are then based on the
+#'   number of groups that were formed.
 #'
 #' @references
 #' Hosmer, D. W., and Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
@@ -22,7 +31,7 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_hosmer(model)
 #' @export
-performance_hosmer <- function(model, n_bins = 10) {
+performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
   if (inherits(model, "merMod")) {
     insight::check_if_installed("lme4")
   }
@@ -41,24 +50,48 @@ performance_hosmer <- function(model, n_bins = 10) {
     yhat <- stats::fitted(model)
   }
 
-  cutyhat <- cut(
-    yhat,
-    breaks = stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins)),
-    include.lowest = TRUE
-  )
+  # each observation goes into the group of the first cut point at or above
+  # its fitted value. Tied fitted values give repeated cut points, which we
+  # use once, so that we may get fewer groups than requested
+  cut_points <- stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins))
+  cut_points <- unique(cut_points[-c(1, length(cut_points))])
+  cutyhat <- cut(yhat, breaks = c(-Inf, cut_points, Inf))
+  cutyhat <- droplevels(cutyhat)
+  n_groups <- nlevels(cutyhat)
+
+  if (n_groups < 3) {
+    insight::format_error(
+      "The Hosmer-Lemeshow test cannot be computed, because fewer than 3 groups could be formed from the fitted values."
+    )
+  }
+  if (verbose && n_groups < n_bins) {
+    insight::format_alert(paste0(
+      "Fitted values could only be divided into ",
+      n_groups,
+      " groups instead of ",
+      n_bins,
+      ", e.g. because of tied fitted values. Degrees of freedom are based on ",
+      n_groups,
+      " groups."
+    ))
+  }
 
   obs <- stats::xtabs(cbind(1 - y, y) ~ cutyhat)
   expect <- stats::xtabs(cbind(1 - yhat, yhat) ~ cutyhat)
   chisq <- sum((obs - expect)^2 / expect)
-  p.value <- 1 - stats::pchisq(chisq, n_bins - 2)
+  p.value <- 1 - stats::pchisq(chisq, n_groups - 2)
 
   hoslem <- list(
     chisq = chisq,
-    df = n_bins - 2,
+    df = n_groups - 2,
     p.value = p.value
   )
 
+  # plain matrices with one column per response value
+  table_names <- list(Group = levels(cutyhat), Response = c("0", "1"))
   class(hoslem) <- c("performance_hosmer", "list")
+  attr(hoslem, "observed") <- matrix(obs, ncol = 2, dimnames = table_names)
+  attr(hoslem, "expected") <- matrix(expect, ncol = 2, dimnames = table_names)
   hoslem
 }
 
