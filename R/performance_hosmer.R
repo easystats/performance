@@ -11,7 +11,8 @@
 #'   `chisq`, the Hosmer-Lemeshow chi-squared statistic; `df`, degrees
 #'   of freedom and `p.value` the p-value for the goodness-of-fit test. The
 #'   observed and expected counts for each group are returned as attributes
-#'   `observed` and `expected`.
+#'   `observed` and `expected`, matrices with one row per group and one
+#'   column each for the response values 0 and 1.
 #'
 #' @details A well-fitting model shows *no* significant difference between
 #'   the model and the observed data, i.e. the reported p-value should be
@@ -86,9 +87,11 @@ performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
     p.value = p.value
   )
 
+  # plain matrices with one column per response value
+  table_names <- list(Group = levels(cutyhat), Response = c("0", "1"))
   class(hoslem) <- c("performance_hosmer", "list")
-  attr(hoslem, "observed") <- obs
-  attr(hoslem, "expected") <- expect
+  attr(hoslem, "observed") <- matrix(obs, ncol = 2, dimnames = table_names)
+  attr(hoslem, "expected") <- matrix(expect, ncol = 2, dimnames = table_names)
   hoslem
 }
 

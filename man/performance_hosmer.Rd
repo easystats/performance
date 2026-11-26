@@ -18,7 +18,8 @@ An object of class \code{performance_hosmer} with following values:
 \code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
 of freedom and \code{p.value} the p-value for the goodness-of-fit test. The
 observed and expected counts for each group are returned as attributes
-\code{observed} and \code{expected}.
+\code{observed} and \code{expected}, matrices with one row per group and one
+column each for the response values 0 and 1.
 }
 \description{
 Check model quality of logistic regression models.
