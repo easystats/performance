@@ -88,7 +88,7 @@ withr::with_environment(
     )
     m <- glmmTMB::glmmTMB(counts ~ outcome + treatment, family = poisson(), data = d)
     out <- r2(m)
-    expect_equal(out[[1]], 0.6571698, tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(out[[1]], 0.4557463, tolerance = 1e-3, ignore_attr = TRUE)
     # validate against glm
     m2 <- glm(counts ~ outcome + treatment, family = poisson(), data = d)
     out2 <- r2(m2)

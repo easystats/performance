@@ -114,23 +114,39 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  dev <- stats::deviance(model)
-
-  # if no deviance, return NA
-  if (is.null(dev)) {
-    return(NULL)
-  }
-
+  n <- insight::n_obs(model, disaggregate = TRUE)
   null_mod <- suppressWarnings(insight::null_model(model))
-  null_dev <- stats::deviance(null_mod)
-  r2cox <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
-
-  if (is.na(r2cox) || is.null(r2cox)) {
-    return(NULL)
+  # Use log-likelihood when available, as in r2_nagelkerke.glm()
+  l_full <- .safe(as.numeric(stats::logLik(model)))
+  l_base <- if (length(l_full) == 1L && is.finite(l_full)) {
+    .safe(as.numeric(stats::logLik(null_mod)))
   }
 
-  r2_nagelkerke <- r2cox /
-    (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
+  if (length(l_base) == 1L && is.finite(l_base)) {
+    r2cox <- as.vector(1 - exp(-2 * (l_full - l_base) / n))
+    # Nagelkerke's rescaling (1 - L0^(2/n)) applies when L0 <= 1 (l_base < 0)
+    if (l_base < 0) {
+      r2_nagelkerke <- r2cox / (1 - exp(2 * l_base / n))
+    } else {
+      r2_nagelkerke <- r2cox
+    }
+  } else {
+    dev <- stats::deviance(model)
+
+    # if no deviance, return NA
+    if (is.null(dev)) {
+      return(NULL)
+    }
+
+    null_dev <- stats::deviance(null_mod)
+    r2cox <- (1 - exp((dev - null_dev) / n))
+
+    if (is.na(r2cox) || is.null(r2cox)) {
+      return(NULL)
+    }
+
+    r2_nagelkerke <- r2cox / (1 - exp(-null_dev / n))
+  }
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }

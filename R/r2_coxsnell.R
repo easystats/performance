@@ -130,13 +130,23 @@ r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
     }
     return(NULL)
   }
-  dev <- stats::deviance(model)
-  # if no deviance, return NULL
-  if (is.null(dev)) {
-    return(NULL)
+  n <- insight::n_obs(model, disaggregate = TRUE)
+  # Use log-likelihood when available, as in r2_coxsnell.glm()
+  l_full <- .safe(as.numeric(stats::logLik(model)))
+  l_base <- if (length(l_full) == 1L && is.finite(l_full)) {
+    .safe(as.numeric(stats::logLik(suppressWarnings(insight::null_model(model)))))
   }
-  null_dev <- stats::deviance(insight::null_model(model))
-  r2_coxsnell <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
+  if (length(l_base) == 1L && is.finite(l_base)) {
+    r2_coxsnell <- as.vector(1 - exp(-2 * (l_full - l_base) / n))
+  } else {
+    dev <- stats::deviance(model)
+    # if no deviance, return NULL
+    if (is.null(dev)) {
+      return(NULL)
+    }
+    null_dev <- stats::deviance(insight::null_model(model))
+    r2_coxsnell <- 1 - exp((dev - null_dev) / n)
+  }
   names(r2_coxsnell) <- "Cox & Snell's R2"
   r2_coxsnell
 }
