@@ -70,3 +70,26 @@ test_that("r2_nagelkerke.DirichletRegModel dispatches to r2_nagelkerke.clm, not 
     utils::getS3method("r2_nagelkerke", "clm")
   )
 })
+
+test_that("r2_nagelkerke.glm uses log-likelihood for Poisson and glm.nb", {
+  d <- data.frame(
+    counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12),
+    outcome = gl(3, 1, 9),
+    treatment = gl(3, 3)
+  )
+  m_pois <- glm(counts ~ outcome + treatment, data = d, family = poisson())
+  m_pois0 <- glm(counts ~ 1, data = d, family = poisson())
+  ll1 <- as.numeric(logLik(m_pois))
+  ll0 <- as.numeric(logLik(m_pois0))
+  expected_pois <- (1 - exp(-2 * (ll1 - ll0) / nrow(d))) / (1 - exp(2 * ll0 / nrow(d)))
+  expect_equal(as.numeric(r2_nagelkerke(m_pois)), expected_pois, tolerance = 1e-6)
+
+  skip_if_not_installed("MASS")
+  m_nb <- MASS::glm.nb(Days ~ Sex + Age, data = MASS::quine)
+  m_nb0 <- MASS::glm.nb(Days ~ 1, data = MASS::quine)
+  ll1_nb <- as.numeric(logLik(m_nb))
+  ll0_nb <- as.numeric(logLik(m_nb0))
+  n_nb <- nrow(MASS::quine)
+  expected_nb <- (1 - exp(-2 * (ll1_nb - ll0_nb) / n_nb)) / (1 - exp(2 * ll0_nb / n_nb))
+  expect_equal(as.numeric(r2_nagelkerke(m_nb)), expected_nb, tolerance = 1e-6)
+})

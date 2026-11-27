@@ -62,14 +62,34 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  r2cox <- r2_coxsnell(model)
-
-  if (is.na(r2cox) || is.null(r2cox)) {
-    return(NULL)
+  n <- insight::n_obs(model, disaggregate = TRUE)
+  l_full <- .safe(as.numeric(stats::logLik(model)))
+  l_base <- if (length(l_full) == 1L && is.finite(l_full)) {
+    .safe(as.numeric(stats::logLik(suppressWarnings(insight::null_model(model)))))
   }
 
-  r2_nagelkerke <- r2cox /
-    (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
+  if (
+    length(l_base) == 1L &&
+      is.finite(l_base) &&
+      !(isTRUE(info$is_betabinomial) &&
+        grepl("cbind", insight::find_response(model), fixed = TRUE))
+  ) {
+    r2cox <- as.vector(1 - exp(-2 * (l_full - l_base) / n))
+    # Nagelkerke's rescaling (1 - L0^(2/n)) applies when L0 <= 1 (l_base < 0)
+    if (l_base < 0) {
+      r2_nagelkerke <- r2cox / (1 - exp(2 * l_base / n))
+    } else {
+      r2_nagelkerke <- r2cox
+    }
+  } else {
+    r2cox <- r2_coxsnell(model)
+
+    if (is.na(r2cox) || is.null(r2cox)) {
+      return(NULL)
+    }
+
+    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / n))
+  }
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }

@@ -91,14 +91,22 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
     }
     return(NULL)
   }
-  # if no deviance, return NULL
-  if (is.null(model$deviance)) {
-    return(NULL)
+  n <- insight::n_obs(model, disaggregate = TRUE)
+  # Use log-likelihood when available (deviance is unscaled for families with
+  # estimated dispersion such as gaussian, Gamma, inverse.gaussian, and glm.nb)
+  l_full <- .safe(as.numeric(stats::logLik(model)))
+  l_base <- if (length(l_full) == 1L && is.finite(l_full)) {
+    .safe(as.numeric(stats::logLik(suppressWarnings(insight::null_model(model)))))
   }
-  r2_coxsnell <- (1 -
-    exp(
-      (model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)
-    ))
+  if (length(l_base) == 1L && is.finite(l_base)) {
+    r2_coxsnell <- as.vector(1 - exp(-2 * (l_full - l_base) / n))
+  } else {
+    # if no deviance, return NULL
+    if (is.null(model$deviance)) {
+      return(NULL)
+    }
+    r2_coxsnell <- 1 - exp((model$deviance - model$null.deviance) / n)
+  }
   names(r2_coxsnell) <- "Cox & Snell's R2"
   r2_coxsnell
 }
