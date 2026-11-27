@@ -21,6 +21,12 @@
 
 ## Bug fixes
 
+* `performance_hosmer()` returned wrong results for models with a
+  `cbind(successes, failures)` response, or with proportions and the number of
+  trials as weights, because it counted each row as one observation. It now
+  counts each trial, so the results match those for the data with one row per
+  trial.
+
 * `performance_hosmer()` no longer fails with "'breaks' are not unique" when
   fitted values are tied. It now uses each tied cut point once, bases the
   degrees of freedom on the number of groups formed, and gives a message when

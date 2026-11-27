@@ -23,6 +23,11 @@
 #'   fewer groups than `n_bins`. The degrees of freedom are then based on the
 #'   number of groups that were formed.
 #'
+#'   For a response given as `cbind(successes, failures)`, or as proportions
+#'   with the number of trials as `weights`, each trial counts as one
+#'   observation, so the result is the same as for the data with one row per
+#'   trial.
+#'
 #' @references
 #' Hosmer, D. W., and Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
 #' NJ, USA: John Wiley and Sons, Inc. \doi{10.1002/0471722146}
@@ -44,16 +49,24 @@ performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
   # mixed models (lme4)
   if (inherits(model, "glmerMod")) {
     y <- lme4::getME(model, "y")
-    yhat <- stats::fitted(model)
   } else {
     y <- model$y
-    yhat <- stats::fitted(model)
+  }
+  yhat <- stats::fitted(model)
+
+  # for a response given as cbind(successes, failures), or as proportions with
+  # weights, y holds proportions and the prior weights are the number of
+  # trials. Each trial counts as one observation, as in the same data with one
+  # row per trial
+  n_trials <- rep(1, length(y))
+  if (is.matrix(stats::model.response(stats::model.frame(model))) || any(!y %in% c(0, 1))) {
+    n_trials <- stats::weights(model, type = "prior")
   }
 
   # each observation goes into the group of the first cut point at or above
   # its fitted value. Tied fitted values give repeated cut points, which we
   # use once, so that we may get fewer groups than requested
-  cut_points <- stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins))
+  cut_points <- .weighted_quantile(yhat, n_trials, probs = seq(0, 1, 1 / n_bins))
   cut_points <- unique(cut_points[-c(1, length(cut_points))])
   cutyhat <- cut(yhat, breaks = c(-Inf, cut_points, Inf))
   cutyhat <- droplevels(cutyhat)
@@ -76,8 +89,8 @@ performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
     ))
   }
 
-  obs <- stats::xtabs(cbind(1 - y, y) ~ cutyhat)
-  expect <- stats::xtabs(cbind(1 - yhat, yhat) ~ cutyhat)
+  obs <- stats::xtabs(n_trials * cbind(1 - y, y) ~ cutyhat)
+  expect <- stats::xtabs(n_trials * cbind(1 - yhat, yhat) ~ cutyhat)
   chisq <- sum((obs - expect)^2 / expect)
   p.value <- 1 - stats::pchisq(chisq, n_groups - 2)
 
@@ -93,6 +106,25 @@ performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
   attr(hoslem, "observed") <- matrix(obs, ncol = 2, dimnames = table_names)
   attr(hoslem, "expected") <- matrix(expect, ncol = 2, dimnames = table_names)
   hoslem
+}
+
+
+# quantiles (type 7) of x with each value repeated w times
+.weighted_quantile <- function(x, w, probs) {
+  if (all(w == 1)) {
+    return(stats::quantile(x, probs = probs))
+  }
+  o <- order(x)
+  x <- x[o]
+  cw <- cumsum(w[o])
+  h <- (cw[length(cw)] - 1) * probs + 1
+  # value at position k of the sorted, repeated values
+  value_at <- function(k) {
+    x[pmin(findInterval(k, cw, left.open = TRUE) + 1, length(x))]
+  }
+  lo <- value_at(floor(h))
+  hi <- value_at(ceiling(h))
+  lo + (h - floor(h)) * (hi - lo)
 }
 
 
