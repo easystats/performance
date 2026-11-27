@@ -59,7 +59,9 @@ performance_hosmer <- function(model, n_bins = 10, verbose = TRUE) {
   # trials. Each trial counts as one observation, as in the same data with one
   # row per trial
   n_trials <- rep(1, length(y))
-  if (is.matrix(stats::model.response(stats::model.frame(model))) || any(!y %in% c(0, 1))) {
+  if (
+    is.matrix(stats::model.response(stats::model.frame(model))) || !all(y %in% c(0, 1))
+  ) {
     n_trials <- stats::weights(model, type = "prior")
   }
 
