@@ -9,7 +9,7 @@ by independent variables in a model."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +95,14 @@ model response is normal distributed, else Fligner-Killeen test is used.</p></dd
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Invisibly returns the p-value of the test statistics. A p-value &lt;
 0.05 indicates a significant difference in the variance between the groups.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Each unique value of a predictor, or each combination of values
+for more than one predictor, forms a group. The Bartlett and
+Fligner-Killeen tests need at least 2 observations in each group, so they
+cannot be used for models with continuous predictors. Use
+<code><a href="check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for these models.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

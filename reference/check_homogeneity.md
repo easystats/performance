@@ -38,6 +38,15 @@ check_homogeneity(x, method = "levene", ...)
 Invisibly returns the p-value of the test statistics. A p-value \< 0.05
 indicates a significant difference in the variance between the groups.
 
+## Details
+
+Each unique value of a predictor, or each combination of values for more
+than one predictor, forms a group. The Bartlett and Fligner-Killeen
+tests need at least 2 observations in each group, so they cannot be used
+for models with continuous predictors. Use
+[`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
+for these models.
+
 ## Note
 
 There is also a
