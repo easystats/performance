@@ -27,6 +27,13 @@
   counts each trial, so the results match those for the data with one row per
   trial.
 
+* `check_homogeneity()` now gives an informative error when a group formed by
+  the predictors has fewer than 2 observations, as with continuous predictors,
+  or when the model has no predictors. Before, the Bartlett test failed with
+  an unclear error, and the Fligner-Killeen test returned a p-value that was
+  not valid, because each value of a continuous predictor was treated as its
+  own group.
+
 * `performance_hosmer()` no longer fails with "'breaks' are not unique" when
   fitted values are tied. It now uses each tied cut point once, bases the
   degrees of freedom on the number of groups formed, and gives a message when

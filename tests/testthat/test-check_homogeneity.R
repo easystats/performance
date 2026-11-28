@@ -68,3 +68,20 @@ test_that("check_homogeneity | t-test", {
     ignore_attr = TRUE
   )
 })
+
+test_that("check_homogeneity | groups with one observation", {
+  data(mtcars)
+  m <- lm(mpg ~ wt, data = mtcars)
+  expect_error(check_homogeneity(m), "fewer than 2")
+  expect_error(check_homogeneity(m, method = "fligner"), "fewer than 2")
+
+  m <- lm(mpg ~ 1, data = mtcars)
+  expect_error(check_homogeneity(m), "has no predictors")
+
+  m <- lm(len ~ supp + dose, data = ToothGrowth)
+  expect_equal(
+    check_homogeneity(m, method = "fligner"),
+    stats::fligner.test(len ~ interaction(supp, dose), data = ToothGrowth)$p.value,
+    ignore_attr = TRUE
+  )
+})

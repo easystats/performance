@@ -30,6 +30,13 @@ Invisibly returns the p-value of the test statistics. A p-value <
 Check model for homogeneity of variances between groups described
 by independent variables in a model.
 }
+\details{
+Each unique value of a predictor, or each combination of values
+for more than one predictor, forms a group. The Bartlett and
+Fligner-Killeen tests need at least 2 observations in each group, so they
+cannot be used for models with continuous predictors. Use
+\code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}} for these models.
+}
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
 implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
