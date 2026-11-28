@@ -16,6 +16,12 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value <
 #'   0.05 indicates a significant difference in the variance between the groups.
 #'
+#' @details Each unique value of a predictor, or each combination of values
+#'   for more than one predictor, forms a group. The Bartlett and
+#'   Fligner-Killeen tests need at least 2 observations in each group, so they
+#'   cannot be used for models with continuous predictors. Use
+#'   [`check_heteroscedasticity()`] for these models.
+#'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
@@ -46,6 +52,12 @@ check_homogeneity.default <- function(x, method = "bartlett", ...) {
 
   resp <- insight::find_response(x)
   pred <- insight::find_predictors(x, component = "conditional", flatten = TRUE)
+
+  if (!length(pred)) {
+    insight::format_error(
+      "The model has no predictors, so there are no groups to compare variances between."
+    )
+  }
 
   # edge case, whitespace in name, so surround with backticks
   ws_pred <- pred != make.names(pred)
@@ -79,6 +91,18 @@ check_homogeneity.default <- function(x, method = "bartlett", ...) {
     }
 
     method <- ifelse(check < 0.05, "fligner", "bartlett")
+  }
+
+  # each unique value of a predictor is a group, so continuous predictors give
+  # groups with one observation, which have no variance
+  if (method != "levene") {
+    model_data <- stats::model.frame(f, data = insight::get_data(x, verbose = FALSE))
+    if (any(table(factor(model_data[[2]])) < 2)) {
+      insight::format_error(
+        "Some groups formed by the predictors have fewer than 2 observations, so their variances cannot be compared.",
+        "This happens with continuous predictors. Use `check_heteroscedasticity()` for such models."
+      )
+    }
   }
 
   if (method == "fligner") {
