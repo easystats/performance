@@ -97,6 +97,10 @@ greater than 0.05.</p>
 Each of these is used once, and empty groups are dropped, so there can be
 fewer groups than <code>n_bins</code>. The degrees of freedom are then based on the
 number of groups that were formed.</p>
+<p>For a response given as <code>cbind(successes, failures)</code>, or as proportions
+with the number of trials as <code>weights</code>, each trial counts as one
+observation, so the result is the same as for the data with one row per
+trial.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

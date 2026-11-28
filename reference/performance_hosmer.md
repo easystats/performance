@@ -42,6 +42,11 @@ Each of these is used once, and empty groups are dropped, so there can
 be fewer groups than `n_bins`. The degrees of freedom are then based on
 the number of groups that were formed.
 
+For a response given as `cbind(successes, failures)`, or as proportions
+with the number of trials as `weights`, each trial counts as one
+observation, so the result is the same as for the data with one row per
+trial.
+
 ## References
 
 Hosmer, D. W., and Lemeshow, S. (2000). Applied Logistic Regression.
