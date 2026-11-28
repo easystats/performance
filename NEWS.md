@@ -21,6 +21,12 @@
 
 ## Bug fixes
 
+* `performance_hosmer()` returned wrong results for models with a
+  `cbind(successes, failures)` response, or with proportions and the number of
+  trials as weights, because it counted each row as one observation. It now
+  counts each trial, so the results match those for the data with one row per
+  trial.
+
 * `check_homogeneity()` now gives an informative error when a group formed by
   the predictors has fewer than 2 observations, as with continuous predictors,
   or when the model has no predictors. Before, the Bartlett test failed with
